@@ -167,7 +167,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 		recursionBreak.set(Boolean.TRUE);
 		try {
 			var nonWhitelisted = getNonWhitelistedStackFrames();
-			System.err.println("=> " + nonWhitelisted);
+//			System.err.println("=> " + nonWhitelisted);
 			if (!nonWhitelisted.isEmpty()) {
 				var first = nonWhitelisted.get(0);
 				throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
@@ -232,7 +232,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
-		INSTANCE.checkThreadGroup();
+//		INSTANCE.checkThreadGroup();
 		String token = INSTANCE.generateAccessToken();
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = configuration;
@@ -250,7 +250,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.isPartlyDisabled = false;
 
 		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
-		INSTANCE.checkThreadGroup();
+//		INSTANCE.checkThreadGroup();
 	}
 
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {
