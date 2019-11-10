@@ -1,5 +1,6 @@
 package de.tum.in.test.api.locked;
 
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -7,11 +8,13 @@ import java.util.Objects;
 
 final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfiguration {
 	private final Class<?> testClass;
+	private final Method testMethod;
 	private final Path executionPath;
 	private final List<String> whitelistedClassNames;
 
-	ArtemisSecurityConfigurationImpl(Class<?> testClass, Path executionPath, Collection<String> whitelistedClassNames) {
+	ArtemisSecurityConfigurationImpl(Class<?> testClass, Method testMethod, Path executionPath, Collection<String> whitelistedClassNames) {
 		this.testClass = Objects.requireNonNull(testClass);
+		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
 		this.whitelistedClassNames = List.copyOf(whitelistedClassNames);
 	}
@@ -19,6 +22,11 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	@Override
 	public final Class<?> testClass() {
 		return testClass;
+	}
+	
+	@Override
+	public Method testMethod() {
+		return testMethod;
 	}
 
 	@Override
@@ -56,6 +64,6 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 
 	@Override
 	public String shortDesc() {
-		return String.format("ASC-Impl [executionPath=%s, testClass=%s]", executionPath, testClass);
+		return String.format("ASC-Impl [executionPath=%s, testClass=%s]", executionPath, testMethod);
 	}
 }

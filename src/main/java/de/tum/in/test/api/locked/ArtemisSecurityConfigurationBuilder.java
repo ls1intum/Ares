@@ -1,5 +1,6 @@
 package de.tum.in.test.api.locked;
 
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 public final class ArtemisSecurityConfigurationBuilder {
 	private Class<?> testClass;
+	private Method testMethod;
 	private Path executionPath;
 	private Set<String> whitelistedClassNames = new HashSet<>();
 
@@ -33,8 +35,14 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public ArtemisSecurityConfigurationBuilder withTestMethod(Method testMethod) {
+		this.testMethod = Objects.requireNonNull(testMethod);
+		return this;
+	}
+
 	public ArtemisSecurityConfigurationBuilder configureFromContext(ExtensionContext context) {
 		this.testClass = context.getRequiredTestClass();
+		this.testMethod = context.getRequiredTestMethod();
 		return this;
 	}
 
@@ -48,7 +56,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfiguration build() {
-		return new ArtemisSecurityConfigurationImpl(testClass, executionPath, whitelistedClassNames);
+		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames);
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {
