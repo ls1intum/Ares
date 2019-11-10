@@ -3,6 +3,7 @@ package de.tum.in.test.api.locked;
 import static de.tum.in.test.api.localization.Messages.*;
 
 import java.awt.AWTPermission;
+import java.io.PrintStream;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
 import java.lang.management.ManagementPermission;
@@ -36,6 +37,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
 	private static final String PACKAGE_NAME = ArtemisSecurityManager.class.getPackageName();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
+	private static final PrintStream LOG_OUTPUT = System.err;
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -168,7 +170,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 		recursionBreak.set(Boolean.TRUE);
 		try {
 			var nonWhitelisted = getNonWhitelistedStackFrames();
-//			System.err.println("=> " + nonWhitelisted);
+			LOG_OUTPUT.println("==> " + nonWhitelisted);
 			if (!nonWhitelisted.isEmpty()) {
 				var first = nonWhitelisted.get(0);
 				throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
@@ -209,16 +211,11 @@ final class ArtemisSecurityManager extends SecurityManager {
 			try {
 				thread.join(100);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				e.printStackTrace(LOG_OUTPUT);
 				exception.addSuppressed(e);
+				Thread.currentThread().interrupt();
 			}
 		}
-		/*
-		 * Disabled for now, because it seems to cause many problems with runners and
-		 * similar throw new IllegalStateException(
-		 * formatLocalized("security.error_threads_still_active",
-		 * Arrays.toString(theads))); //$NON-NLS-1$
-		 */
 		throw exception;
 	}
 
@@ -231,21 +228,20 @@ final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
-		System.err.format("[%s] Trying to install SecurityManager on Thread %s with config %s%n", Instant.now(),
+		LOG_OUTPUT.format("[%s] Trying to install SecurityManager on Thread %s with config %s%n", Instant.now(),
 				Thread.currentThread(), configuration.shortDesc());
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
-//		INSTANCE.checkThreadGroup();
 		String token = INSTANCE.generateAccessToken();
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = configuration;
-		System.err.format("[%s] Successfully installed SecurityManager on Thread %s with config %s%n", Instant.now(),
+		LOG_OUTPUT.format("[%s] Successfully installed SecurityManager on Thread %s with config %s%n", Instant.now(),
 				Thread.currentThread(), configuration.shortDesc());
 		return token;
 	}
 
 	public static synchronized void uninstall(String accessToken) {
-		System.err.format("[%s] Trying to UN-install SecurityManager on Thread %s with config %s%n", Instant.now(),
+		LOG_OUTPUT.format("[%s] Trying to UN-install SecurityManager on Thread %s with config %s%n", Instant.now(),
 				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
@@ -258,7 +254,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 
 		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
 		INSTANCE.checkThreadGroup();
-		System.err.format("[%s] Successfully UN-installed SecurityManager on Thread %s with config %s%n", Instant.now(),
+		LOG_OUTPUT.format("[%s] Successfully UN-installed SecurityManager on Thread %s with config %s%n", Instant.now(),
 				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 	}
 
