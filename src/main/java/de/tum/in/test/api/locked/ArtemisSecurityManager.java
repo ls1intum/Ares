@@ -38,6 +38,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 	private static final String PACKAGE_NAME = ArtemisSecurityManager.class.getPackageName();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final PrintStream LOG_OUTPUT = System.err;
+	private static final Thread MAIN_THREAD = Thread.currentThread();
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -75,6 +76,10 @@ final class ArtemisSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkExit(int status) {
+		if (Thread.currentThread() == MAIN_THREAD && getNonWhitelistedStackFrames().isEmpty()) {
+			// always allow maven to exit
+			return;
+		}
 		throw new SecurityException(localized("security.error_system_exit")); //$NON-NLS-1$
 	}
 
@@ -195,28 +200,34 @@ final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void checkThreadGroup() {
-		if (testThreadGroup.activeCount() == 0)
-			return; // everything ok
-		Thread[] theads = new Thread[testThreadGroup.activeCount()];
+	private Thread[] checkThreadGroup() {
+		int originalCount = testThreadGroup.activeCount();
+		if (originalCount == 0)
+			return new Thread[0]; // everything ok
+		Thread[] theads = new Thread[originalCount];
 		testThreadGroup.enumerate(theads);
-		IllegalStateException exception = new IllegalStateException(
-				formatLocalized("security.error_threads_still_active", Arrays.toString(theads)));
+		SecurityException exception = new SecurityException(
+				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(theads)));
 		for (Thread thread : theads) {
+			if (thread == null)
+				continue;
 			/*
 			 * we definitely want to forcefully terminate all threads (otherwise, next tests
 			 * will fail)
 			 */
 			thread.stop();
 			try {
-				thread.join(100);
+				thread.join(500 / originalCount);
 			} catch (InterruptedException e) {
 				e.printStackTrace(LOG_OUTPUT);
 				exception.addSuppressed(e);
 				Thread.currentThread().interrupt();
 			}
 		}
-		throw exception;
+//		exception.printStackTrace(LOG_OUTPUT);
+		if (testThreadGroup.activeCount() > 0)
+			throw exception;
+		return theads;
 	}
 
 	static boolean isStaticWhitelisted(String name) {
@@ -245,17 +256,22 @@ final class ArtemisSecurityManager extends SecurityManager {
 				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
+
 		INSTANCE.checkAccess(accessToken);
 		if (INSTANCE.isPartlyDisabled)
 			throw new IllegalStateException(localized("security.already_disabled")); //$NON-NLS-1$
+
+		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
+		Thread[] active = INSTANCE.checkThreadGroup();
 		INSTANCE.isPartlyDisabled = true;
 		System.setSecurityManager(ORIGINAL);
 		INSTANCE.isPartlyDisabled = false;
 
-		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
-		INSTANCE.checkThreadGroup();
 		LOG_OUTPUT.format("[%s] Successfully UN-installed SecurityManager on Thread %s with config %s%n", Instant.now(),
 				Thread.currentThread(), INSTANCE.configuration.shortDesc());
+		if (active.length > 0)
+			throw new IllegalStateException(
+					formatLocalized("security.error_threads_still_active", Arrays.toString(active)));
 	}
 
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {

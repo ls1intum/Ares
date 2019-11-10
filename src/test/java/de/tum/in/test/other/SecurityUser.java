@@ -156,4 +156,16 @@ public class SecurityUser {
 			e.printStackTrace();
 		}
 	}
+
+	@PublicTest
+	public void unstoppable() {
+		long t = System.currentTimeMillis();
+		while (System.currentTimeMillis() - t < 1000) {
+			try {
+				Thread.sleep(100);
+			} catch (Throwable e) {
+				// ignore
+			}
+		}
+	}
 }
