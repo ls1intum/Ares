@@ -15,12 +15,13 @@ import org.junit.jupiter.api.TestMethodOrder;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.HiddenTest;
+import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.PublicTest;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 
-//@MirrorOutput
+@MirrorOutput
 @Deadline("2019-10-31 05:00")
 @ExtendedDeadline("1h 30m")
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)

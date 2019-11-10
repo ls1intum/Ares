@@ -232,6 +232,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
+		INSTANCE.checkThreadGroup();
 		String token = INSTANCE.generateAccessToken();
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = configuration;
