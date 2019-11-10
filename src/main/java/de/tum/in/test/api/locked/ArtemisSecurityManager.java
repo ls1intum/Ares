@@ -197,15 +197,28 @@ final class ArtemisSecurityManager extends SecurityManager {
 			return; // everything ok
 		Thread[] theads = new Thread[testThreadGroup.activeCount()];
 		testThreadGroup.enumerate(theads);
+		IllegalStateException exception = new IllegalStateException(
+				formatLocalized("security.error_threads_still_active", Arrays.toString(theads)));
 		for (Thread thread : theads) {
 			/*
 			 * we definitely want to forcefully terminate all threads (otherwise, next tests
 			 * will fail)
 			 */
 			thread.stop();
+			try {
+				thread.join(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				exception.addSuppressed(e);
+			}
 		}
-		throw new IllegalStateException(
-				formatLocalized("security.error_threads_still_active", Arrays.toString(theads))); //$NON-NLS-1$
+		/*
+		 * Disabled for now, because it seems to cause many problems with runners and
+		 * similar throw new IllegalStateException(
+		 * formatLocalized("security.error_threads_still_active",
+		 * Arrays.toString(theads))); //$NON-NLS-1$
+		 */
+		throw exception;
 	}
 
 	static boolean isStaticWhitelisted(String name) {
