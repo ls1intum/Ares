@@ -53,4 +53,9 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 				"ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s, testClass=%s]",
 				whitelistedClassNames, executionPath, testClass);
 	}
+
+	@Override
+	public String shortDesc() {
+		return String.format("ASC-Impl [executionPath=%s, testClass=%s]", executionPath, testClass);
+	}
 }

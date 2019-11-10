@@ -232,7 +232,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
 		System.err.format("[%s] Trying to install SecurityManager on Thread %s with config %s", Instant.now(),
-				Thread.currentThread(), configuration);
+				Thread.currentThread(), configuration.shortDesc());
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
 //		INSTANCE.checkThreadGroup();
@@ -240,13 +240,13 @@ final class ArtemisSecurityManager extends SecurityManager {
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = configuration;
 		System.err.format("[%s] Successfully installed SecurityManager on Thread %s with config %s", Instant.now(),
-				Thread.currentThread(), configuration);
+				Thread.currentThread(), configuration.shortDesc());
 		return token;
 	}
 
 	public static synchronized void uninstall(String accessToken) {
 		System.err.format("[%s] Trying to UN-install SecurityManager on Thread %s with config %s", Instant.now(),
-				Thread.currentThread(), INSTANCE.configuration);
+				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
 		INSTANCE.checkAccess(accessToken);
@@ -259,7 +259,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
 		INSTANCE.checkThreadGroup();
 		System.err.format("[%s] Successfully UN-installed SecurityManager on Thread %s with config %s", Instant.now(),
-				Thread.currentThread(), INSTANCE.configuration);
+				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 	}
 
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {

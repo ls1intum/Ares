@@ -12,4 +12,6 @@ public interface ArtemisSecurityConfiguration {
 	default List<String> whitelistedClassNames() {
 		return List.of();
 	}
+
+	String shortDesc();
 }
