@@ -116,11 +116,11 @@ public class SecurityUser {
 	@PublicTest
 	public void exceedTimeLimit(IOTester tester) {
 		while (true) {
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// ignore
-//			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// ignore
+			}
 		}
 	}
 

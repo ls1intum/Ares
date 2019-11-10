@@ -32,7 +32,6 @@ JUnit:
     - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
     - mvn $MAVEN_CLI_OPTS clean test
   artifacts:
-    when: on_failure
     expire_in: 1 week
     reports:
       junit: target/surefire-reports/TEST-*.xml
