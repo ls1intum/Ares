@@ -205,6 +205,19 @@ final class ArtemisSecurityManager extends SecurityManager {
 			return new Thread[0]; // everything ok
 		Thread[] theads = new Thread[originalCount];
 		testThreadGroup.enumerate(theads);
+		// try gentle shutdown
+		for (Thread thread : theads) {
+			if (thread == null)
+				continue;
+			try {
+				thread.join(100 / originalCount);
+			} catch (@SuppressWarnings("unused") InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		if (testThreadGroup.activeCount() == 0)
+			return new Thread[0];
+		// try forceful shutdown
 		SecurityException exception = new SecurityException(
 				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(theads)));
 		for (Thread thread : theads) {
