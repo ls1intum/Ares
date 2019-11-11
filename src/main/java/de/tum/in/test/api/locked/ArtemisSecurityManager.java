@@ -210,7 +210,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 			if (thread == null)
 				continue;
 			try {
-				thread.join(100 / originalCount);
+				thread.join(500 / originalCount);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
