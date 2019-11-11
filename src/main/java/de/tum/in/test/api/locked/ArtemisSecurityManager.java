@@ -205,7 +205,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 			return new Thread[0]; // everything ok
 		Thread[] theads = new Thread[originalCount];
 		testThreadGroup.enumerate(theads);
-		// try gentle shutdown
+		// try gentle shutdown; without that, runs on CI might fail because of previous.
 		for (Thread thread : theads) {
 			if (thread == null)
 				continue;
