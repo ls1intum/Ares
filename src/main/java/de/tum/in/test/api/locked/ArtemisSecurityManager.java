@@ -15,7 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 import java.security.SecurityPermission;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -52,7 +51,7 @@ final class ArtemisSecurityManager extends SecurityManager {
 	private final ThreadLocal<Boolean> recursionBreak = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
 	private List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//			"org.eclipse.", "com.intellij", // $NON-NLS-1$ //$NON-NLS-2$
+			"org.eclipse.", "com.intellij", "org.assertj", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.api", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
@@ -175,8 +174,8 @@ final class ArtemisSecurityManager extends SecurityManager {
 		recursionBreak.set(Boolean.TRUE);
 		try {
 			var nonWhitelisted = getNonWhitelistedStackFrames();
-			LOG_OUTPUT.println("==> " + nonWhitelisted);
 			if (!nonWhitelisted.isEmpty()) {
+				LOG_OUTPUT.println("==> " + nonWhitelisted);
 				var first = nonWhitelisted.get(0);
 				throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
 						first.getLineNumber(), first.getFileName()));
@@ -224,7 +223,6 @@ final class ArtemisSecurityManager extends SecurityManager {
 				Thread.currentThread().interrupt();
 			}
 		}
-//		exception.printStackTrace(LOG_OUTPUT);
 		if (testThreadGroup.activeCount() > 0)
 			throw exception;
 		return theads;
@@ -239,21 +237,15 @@ final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
-		LOG_OUTPUT.format("[%s] Trying to install SecurityManager on Thread %s with config %s%n", Instant.now(),
-				Thread.currentThread(), configuration.shortDesc());
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
 		String token = INSTANCE.generateAccessToken();
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = configuration;
-		LOG_OUTPUT.format("[%s] Successfully installed SecurityManager on Thread %s with config %s%n", Instant.now(),
-				Thread.currentThread(), configuration.shortDesc());
 		return token;
 	}
 
 	public static synchronized void uninstall(String accessToken) {
-		LOG_OUTPUT.format("[%s] Trying to UN-install SecurityManager on Thread %s with config %s%n", Instant.now(),
-				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
 
@@ -267,8 +259,6 @@ final class ArtemisSecurityManager extends SecurityManager {
 		System.setSecurityManager(ORIGINAL);
 		INSTANCE.isPartlyDisabled = false;
 
-		LOG_OUTPUT.format("[%s] Successfully UN-installed SecurityManager on Thread %s with config %s%n", Instant.now(),
-				Thread.currentThread(), INSTANCE.configuration.shortDesc());
 		if (active.length > 0)
 			throw new IllegalStateException(
 					formatLocalized("security.error_threads_still_active", Arrays.toString(active)));

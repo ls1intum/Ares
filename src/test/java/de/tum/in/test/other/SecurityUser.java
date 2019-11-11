@@ -15,13 +15,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.HiddenTest;
-import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.PublicTest;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 
-@MirrorOutput
+//@MirrorOutput
 @Deadline("2019-10-31 05:00")
 @ExtendedDeadline("1h 30m")
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
@@ -157,15 +156,21 @@ public class SecurityUser {
 		}
 	}
 
-	@PublicTest
-	public void unstoppable() {
-		long t = System.currentTimeMillis();
-		while (System.currentTimeMillis() - t < 1000) {
-			try {
-				Thread.sleep(100);
-			} catch (Throwable e) {
-				// ignore
-			}
-		}
-	}
+	/**
+	 * This can be used to check for Threads that are not stoppable. This should
+	 * never happen, but it could. Note that this test beaks all further ones,
+	 * because the security manager will not be uninstalled and block everything. It
+	 * works by catching the {@link ThreadDeath}.
+	 */
+//	@PublicTest
+//	public void zz_unstoppable() {
+//		long t = System.currentTimeMillis();
+//		while (System.currentTimeMillis() - t < 1000) {
+//			try {
+//				Thread.sleep(100);
+//			} catch (Throwable e) {
+//				// ignore
+//			}
+//		}
+//	}
 }
