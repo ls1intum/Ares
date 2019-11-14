@@ -30,9 +30,11 @@ import org.apiguardian.api.API.Status;
  * case, we allow replacing the <code>T</code> with a space, to improve
  * readability. So this can be e.g.
  * 
+ * <ul>
  * <li><code>2019-09-09 06:00</code></li>
  * <li><code>2019-09-09T06:00</code></li>
  * <li><code>2019-09-09T06:00:01</code></li>
+ * </ul>
  * 
  * @author Christian Femers
  * @since 0.1.0

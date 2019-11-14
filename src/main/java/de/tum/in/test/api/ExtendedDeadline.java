@@ -20,10 +20,12 @@ import de.tum.in.test.api.locked.ArtemisTestGuard;
  * combined. A test annotated with {@link ExtendedDeadline} must be hidden.
  * <p>
  * The format has to be like (spaces in between required)
+ * <ul>
  * <li><code>2d</code></li>
  * <li><code>12h 30m</code></li>
  * <li><code>1d 5h</code></li>
  * <li><code>1d 5h 8m</code></li>
+ * </ul>
  * 
  * @see Deadline
  * @author Christian Femers
