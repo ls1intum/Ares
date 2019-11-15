@@ -15,8 +15,9 @@ import de.tum.in.test.api.locked.ArtemisTestGuard;
 
 /**
  * Obfuscates the name of {@link HiddenTest}s before the {@link Deadline}, using
- * some basic hash code. <b>This has not been tested in conjunction with
- * Artemis!</b>
+ * some basic hash code.
+ * <p>
+ * <b>This has not been tested in conjunction with Artemis!</b>
  * 
  * @author Christian Femers
  * @since 0.1.0
