@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
+import de.tum.in.test.api.ActivateHiddenBefore;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.HiddenTest;
@@ -103,9 +104,14 @@ public final class ArtemisTestGuard implements InvocationInterceptor, DisplayNam
 				throw new AnnotationFormatError(
 						formatLocalized("test_guard.test_cannot_be_public_and_hidden", context.getDisplayName())); //$NON-NLS-1$
 
+			LocalDateTime now = LocalDateTime.now();
 			LocalDateTime finalDeadline = extractDeadline(context);
 			// check if now is after the deadline including extensions
-			if (LocalDateTime.now().isAfter(finalDeadline))
+			if (now.isAfter(finalDeadline))
+				return;
+			// check if now is in the activate hidden tests period
+			Optional<LocalDateTime> activationBefore = getActivationBeforeOf(context.getElement());
+			if (activationBefore.map(now::isBefore).orElse(false))
 				return;
 			fail(localized("test_guard.hidden_test_before_deadline_message")); //$NON-NLS-1$
 		} else {
@@ -152,6 +158,11 @@ public final class ArtemisTestGuard implements InvocationInterceptor, DisplayNam
 	static Optional<Duration> getExtensionDurationOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, ExtendedDeadline.class).map(ExtendedDeadline::value)
 				.map(ArtemisTestGuard::parseDuration);
+	}
+
+	static Optional<LocalDateTime> getActivationBeforeOf(Optional<? extends AnnotatedElement> element) {
+		return findAnnotation(element, ActivateHiddenBefore.class).map(ActivateHiddenBefore::value)
+				.map(ArtemisTestGuard::parseDeadline);
 	}
 
 	static LocalDateTime parseDeadline(String deadlineString) {
