@@ -110,7 +110,7 @@ public final class ArtemisTestGuard implements InvocationInterceptor, DisplayNam
 			if (now.isAfter(finalDeadline))
 				return;
 			// check if now is in the activate hidden tests period
-			Optional<LocalDateTime> activationBefore = getActivationBeforeOf(context.getElement());
+			Optional<LocalDateTime> activationBefore = extractActivationBefore(context);
 			if (activationBefore.map(now::isBefore).orElse(false))
 				return;
 			fail(localized("test_guard.hidden_test_before_deadline_message")); //$NON-NLS-1$
@@ -149,6 +149,11 @@ public final class ArtemisTestGuard implements InvocationInterceptor, DisplayNam
 				.map(ArtemisTestGuard::parseDuration);
 		return classLevel.map(dl -> dl.plus(classDelta.orElse(Duration.ZERO)))
 				.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
+	}
+
+	static Optional<LocalDateTime> extractActivationBefore(ExtensionContext context) {
+		var methodLevel = getActivationBeforeOf(context.getTestMethod());
+		return methodLevel.or(() -> getActivationBeforeOf(context.getTestClass()));
 	}
 
 	static Optional<LocalDateTime> getDeadlineOf(Optional<? extends AnnotatedElement> element) {
