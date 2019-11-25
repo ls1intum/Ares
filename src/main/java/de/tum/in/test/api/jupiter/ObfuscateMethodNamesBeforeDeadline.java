@@ -1,4 +1,4 @@
-package de.tum.in.test.api;
+package de.tum.in.test.api.jupiter;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -11,7 +11,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.DisplayNameGeneration;
 
-import de.tum.in.test.api.locked.ArtemisTestGuard;
+import de.tum.in.test.api.Deadline;
 
 /**
  * Obfuscates the name of {@link HiddenTest}s before the {@link Deadline}, using
@@ -27,7 +27,7 @@ import de.tum.in.test.api.locked.ArtemisTestGuard;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
-@DisplayNameGeneration(ArtemisTestGuard.class)
+@DisplayNameGeneration(JupiterTestGuard.class)
 public @interface ObfuscateMethodNamesBeforeDeadline {
 	// marker only
 }

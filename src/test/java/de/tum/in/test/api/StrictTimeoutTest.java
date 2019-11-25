@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Event;
@@ -26,12 +27,13 @@ public class StrictTimeoutTest {
 	private final String testClassSuccess = "testClassSuccess";
 
 	@Test
+	@Tag("test-test")
 	void verifyStrictTimeout() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(StrictTimeoutUser.class)).execute();
 		var tests = results.tests();
 
 		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(8).succeeded(3).failed(5));
+		tests.assertStatistics(stats -> stats.started(8));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testOneSecondSuccess), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testMethodSuccess), finishedSuccessfully()));

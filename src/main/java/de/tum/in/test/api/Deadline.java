@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.jupiter.HiddenTest;
+import de.tum.in.test.api.jupiter.PublicTest;
+
 /**
  * Set a Deadline for {@link HiddenTest}, must be present. After this deadline,
  * hidden tests will be executed if there are no relevant

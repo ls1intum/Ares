@@ -4,6 +4,8 @@ package de.tum.in.test.other;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -14,11 +16,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
-import de.tum.in.test.api.HiddenTest;
-import de.tum.in.test.api.PublicTest;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
+import de.tum.in.test.api.jupiter.HiddenTest;
+import de.tum.in.test.api.jupiter.PublicTest;
 
 //@MirrorOutput
 @Deadline("2019-10-31 05:00")
@@ -140,6 +143,7 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+//	@MirrorOutput
 	public void useReflectionTrick() {
 		Penguin.useReflection2();
 		Circumvention.thrown.ifPresent(e -> {
@@ -154,6 +158,22 @@ public class SecurityUser {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@PublicTest
+	public void accessPathNormal() throws IOException {
+		Penguin.accessPath(Path.of("pom.xml"));
+	}
+
+	@PublicTest
+	public void weAccessPath() throws IOException {
+		Files.readString(Path.of("pom.xml"));
+	}
+
+	@PublicTest
+	@WhitelistPath("")
+	public void accessPathAllowed() throws IOException {
+		Penguin.accessPath(Path.of("pom.xml"));
 	}
 
 	/**

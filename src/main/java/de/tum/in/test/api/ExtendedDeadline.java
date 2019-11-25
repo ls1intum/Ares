@@ -9,9 +9,8 @@ import java.lang.annotation.Target;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import de.tum.in.test.api.locked.ArtemisTestGuard;
+import de.tum.in.test.api.jupiter.HiddenTest;
 
 /**
  * Extends a {@link Deadline} for a {@link HiddenTest}, is optional. This can be
@@ -30,13 +29,12 @@ import de.tum.in.test.api.locked.ArtemisTestGuard;
  * @see Deadline
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
-@ExtendWith(ArtemisTestGuard.class)
 public @interface ExtendedDeadline {
 	String value();
 }

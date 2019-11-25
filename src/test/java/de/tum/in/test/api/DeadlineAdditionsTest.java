@@ -7,6 +7,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.in
 import java.lang.annotation.AnnotationFormatError;
 
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Event;
@@ -31,6 +32,7 @@ public class DeadlineAdditionsTest {
 	private final String testPublicExtended = "testPublicExtended";
 
 	@Test
+	@Tag("test-test")
 	void verifyExtendedDeadline() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
@@ -50,6 +52,7 @@ public class DeadlineAdditionsTest {
 	}
 
 	@Test
+	@Tag("test-test")
 	void verifyActivateHiddenBefore() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
@@ -69,6 +72,7 @@ public class DeadlineAdditionsTest {
 	}
 
 	@Test
+	@Tag("test-test")
 	void verifyDeadlineAdditionsMixed() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
@@ -91,6 +95,7 @@ public class DeadlineAdditionsTest {
 	}
 
 	@Test
+	@Tag("test-test")
 	void verifyStatistics() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();

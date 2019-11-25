@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.jupiter.HiddenTest;
+
 /**
  * This is the counterpart to {@link Deadline}. It specifies a date before which
  * {@link HiddenTest}s will always be executed. The format of the String has to

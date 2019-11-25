@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import de.tum.in.test.api.locked.StrictTimeoutExtension;
+import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
 
 /**
  * Works like
@@ -32,7 +32,7 @@ import de.tum.in.test.api.locked.StrictTimeoutExtension;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
-@ExtendWith(StrictTimeoutExtension.class)
+@ExtendWith(JupiterStrictTimeoutExtension.class)
 public @interface StrictTimeout {
 	/**
 	 * The duration of this timeout. <i>(per default in seconds)</i>
@@ -41,7 +41,7 @@ public @interface StrictTimeout {
 
 	/**
 	 * The time unit of this timeout, <b>defaults to seconds</b>.
-	 * 
+	 *
 	 * @see TimeUnit
 	 */
 	TimeUnit unit() default TimeUnit.SECONDS;

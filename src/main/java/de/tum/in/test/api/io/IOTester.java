@@ -12,7 +12,7 @@ import java.util.List;
  * 
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class IOTester {
 
@@ -81,6 +81,12 @@ public final class IOTester {
 		System.setErr(oldErr);
 
 		isInstalled = false;
+	}
+	
+	public synchronized void reset() {
+		inTester.reset();
+		outTester.resetOutput();
+		errTester.resetOutput();
 	}
 
 	public IOTester provideInputLines(String... givenInputLines) {

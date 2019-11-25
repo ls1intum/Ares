@@ -1,5 +1,9 @@
 package de.tum.in.test.other;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.apache.xyz.Circumvention;
 
 public class Penguin extends MiniJava {
@@ -15,7 +19,7 @@ public class Penguin extends MiniJava {
 		write("Ausgabe:");
 		write(b);
 	}
-	
+
 	public static void readTwoTimes() {
 		int a = readInt("Zahl eingeben:");
 		int b = readInt("Nächste");
@@ -29,7 +33,7 @@ public class Penguin extends MiniJava {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void useReflection2() {
 		Thread d = new Circumvention();
 		d.start();
@@ -38,5 +42,9 @@ public class Penguin extends MiniJava {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void accessPath(Path p) throws IOException {
+		Files.readString(p);
 	}
 }

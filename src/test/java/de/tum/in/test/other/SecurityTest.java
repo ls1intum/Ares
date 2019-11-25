@@ -11,7 +11,6 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Event;
 import org.opentest4j.AssertionFailedError;
 
-
 public class SecurityTest {
 
 	private final String doSystemExit = "doSystemExit";
@@ -28,6 +27,9 @@ public class SecurityTest {
 	private final String useReflectionNormal = "useReflectionNormal";
 	private final String useReflectionTrick = "useReflectionTrick";
 	private final String weUseReflection = "weUseReflection";
+	private final String accessPathNormal = "accessPathNormal";
+	private final String accessPathAllowed = "accessPathAllowed";
+	private final String weAccessPath = "weAccessPath";
 
 	@Test
 	void verifySecurity() {
@@ -35,16 +37,19 @@ public class SecurityTest {
 		var tests = results.tests();
 
 		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
-//		tests.assertStatistics(stats -> stats.started(13).succeeded(4).failed(9));
+		tests.assertStatistics(stats -> stats.started(17));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfully()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));
-//		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionTrick, SecurityException.class)); // TODO FIXME
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionTrick, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathNormal, SecurityException.class));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(exceedTimeLimit, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));

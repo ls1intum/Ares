@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tum.in</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>0.1.4-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>Artemis Java Test Sandbox</name>
 	<description>JUnit 5 Extension API for Artemis Java Testing</description>
 	<inceptionYear>2019</inceptionYear>
@@ -109,12 +109,25 @@
 			<artifactId>hamcrest</artifactId>
 			<version>2.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.14.0</version>
+		</dependency>
 		<!-- For testing we use a test framework testing framework -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-testkit</artifactId>
 			<scope>test</scope>
 			<version>1.5.2</version>
+		</dependency>
+		<!-- For testing we use a test framework testing framework -->
+		<dependency>
+			<groupId>net.jqwik</groupId>
+			<artifactId>jqwik</artifactId>
+			<version>1.2.1</version>
+			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

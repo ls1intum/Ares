@@ -6,27 +6,69 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.extension.ExtensionContext;
+import de.tum.in.test.api.util.TestContext;
+import de.tum.in.test.api.util.TimeoutUtils;
 
 public final class ArtemisSecurityConfigurationBuilder {
 	private Class<?> testClass;
 	private Method testMethod;
 	private Path executionPath;
 	private Set<String> whitelistedClassNames = new HashSet<>();
+	private Set<Path> whitelistedPaths;
+	private boolean whitelistFirstThread;
 
 	private ArtemisSecurityConfigurationBuilder() {
 
 	}
 
+	public Class<?> getTestClass() {
+		return testClass;
+	}
+
+	public Method getTestMethod() {
+		return testMethod;
+	}
+
+	public Path getExecutionPath() {
+		return executionPath;
+	}
+
+	public Set<String> getWhitelistedClassNames() {
+		return whitelistedClassNames;
+	}
+
+	public boolean isWhitelistFirstThread() {
+		return whitelistFirstThread;
+	}
+
+	public Set<Path> getWhitelistedPaths() {
+		return whitelistedPaths;
+	}
+
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
-		this.executionPath = Path.of(".");
+		this.executionPath = Path.of("");
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPath(Path executionPath) {
 		this.executionPath = Objects.requireNonNull(executionPath);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<Path> whitelistedPaths) {
+		this.whitelistedPaths = whitelistedPaths.stream().map(Path::toAbsolutePath).collect(Collectors.toSet());
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withPathWhitelist(
+			Optional<? extends Collection<Path>> whitelistedPaths) {
+		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> {
+			this.whitelistedPaths = null;
+		});
 		return this;
 	}
 
@@ -40,9 +82,20 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder configureFromContext(ExtensionContext context) {
-		this.testClass = context.getRequiredTestClass();
-		this.testMethod = context.getRequiredTestMethod();
+	public ArtemisSecurityConfigurationBuilder withWhitelistFirstThread(boolean whitelistFirstThread) {
+		this.whitelistFirstThread = whitelistFirstThread;
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withFirstThreadWhitelisted() {
+		this.whitelistFirstThread = true;
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
+		this.testClass = context.testClass().get();
+		this.testMethod = context.testMethod().get();
+		this.whitelistFirstThread = TimeoutUtils.findTimeout(context).isPresent();
 		return this;
 	}
 
@@ -56,7 +109,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfiguration build() {
-		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames);
+		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames,
+				whitelistFirstThread, Optional.ofNullable(whitelistedPaths));
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {

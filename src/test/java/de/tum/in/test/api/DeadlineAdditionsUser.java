@@ -1,5 +1,8 @@
 package de.tum.in.test.api;
 
+import de.tum.in.test.api.jupiter.HiddenTest;
+import de.tum.in.test.api.jupiter.PublicTest;
+
 @Deadline("2000-01-01 00:00")
 public class DeadlineAdditionsUser {
 

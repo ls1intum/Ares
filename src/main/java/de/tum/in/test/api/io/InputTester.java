@@ -13,7 +13,7 @@ import java.util.List;
  * @see IOTester
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class InputTester implements LineProvider {
 
@@ -45,5 +45,10 @@ public final class InputTester implements LineProvider {
 
 	public void addLinesToInput(String... lines) {
 		Arrays.stream(lines).map(Line::of).forEach(this::addExpectedLine);
+	}
+	
+	public void reset() {
+		expectedInput.clear();
+		position = 0;
 	}
 }

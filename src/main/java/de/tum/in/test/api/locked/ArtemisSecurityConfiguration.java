@@ -3,11 +3,17 @@ package de.tum.in.test.api.locked;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.INTERNAL)
 public interface ArtemisSecurityConfiguration {
 
 	Class<?> testClass();
-	
+
 	Method testMethod();
 
 	Path executionPath();
@@ -17,4 +23,10 @@ public interface ArtemisSecurityConfiguration {
 	}
 
 	String shortDesc();
+
+	boolean whitelistFirstThread();
+
+	default Optional<Set<Path>> whitelistedPaths() {
+		return Optional.empty();
+	}
 }

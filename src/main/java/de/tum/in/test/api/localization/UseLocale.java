@@ -14,7 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Used to specify a specific locale for a test class.
- * 
+ * <p>
+ * <i>Does not work for jqwick.</i>
+ *
  * @see Locale#Locale(String)
  * @author Christian Femers
  * @since 0.1.0

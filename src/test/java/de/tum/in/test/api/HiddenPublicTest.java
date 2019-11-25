@@ -13,18 +13,19 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Event;
 import org.opentest4j.AssertionFailedError;
 
-public class DeadlineTest {
-
+public class HiddenPublicTest {
 	private final String testHiddenCustomDeadlineFuture = "testHiddenCustomDeadlineFuture";
 	private final String testHiddenCustomDeadlinePast = "testHiddenCustomDeadlinePast";
 	private final String testHiddenNormal = "testHiddenNormal";
+	private final String testHiddenIncomplete = "testHiddenIncomplete";
 	private final String testPublicCustomDeadline = "testPublicCustomDeadline";
 	private final String testPublicNormal = "testPublicNormal";
+	private final String testPublicIncomplete = "testPublicIncomplete";
 
 	@Test
 	@Tag("test-test")
 	void verifyDeadline() {
-		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineUser.class)).execute();
+		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(HiddenPublicUser.class)).execute();
 		var tests = results.tests();
 
 		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
@@ -37,6 +38,8 @@ public class DeadlineTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicCustomDeadline, AnnotationFormatError.class));
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(testHiddenCustomDeadlineFuture, AssertionFailedError.class));
+		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));
+		tests.assertThatEvents().doNotHave(event(test(testPublicIncomplete)));
 	}
 
 	private static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {

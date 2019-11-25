@@ -2,39 +2,55 @@ package de.tum.in.test.api;
 
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 
-import de.tum.in.test.api.jupiter.HiddenTest;
-import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.jupiter.Hidden;
+import de.tum.in.test.api.jupiter.Public;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @Deadline("2200-01-01 16:00")
 @TestMethodOrder(Alphanumeric.class)
-public class DeadlineUser {
+public class HiddenPublicUser {
 
-	@HiddenTest
+	@Hidden
+	void testHiddenIncomplete() {
+		// nothing
+	}
+
+	@Public
+	void testPublicIncomplete() {
+		// nothing
+	}
+	
+	@Hidden
+	@Test
 	void testHiddenNormal() {
 		// nothing
 	}
 
-	@PublicTest
+	@Public
+	@Test
 	void testPublicNormal() {
 		// nothing
 	}
 
-	@HiddenTest
+	@Hidden
+	@Test
 	@Deadline("2000-01-01 16:00")
 	void testHiddenCustomDeadlinePast() {
 		// nothing
 	}
 
-	@HiddenTest
+	@Hidden
+	@Test
 	@Deadline("2200-01-01 16:00")
 	void testHiddenCustomDeadlineFuture() {
 		// nothing
 	}
 
-	@PublicTest
-	@Deadline("2000-01-01 16:00")
+	@Public
+	@Test
+	@Deadline("2200-01-01 16:00")
 	void testPublicCustomDeadline() {
 		// nothing
 	}

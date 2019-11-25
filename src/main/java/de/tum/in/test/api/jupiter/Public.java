@@ -1,4 +1,4 @@
-package de.tum.in.test.api;
+package de.tum.in.test.api.jupiter;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -10,21 +10,26 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**
  * Marks a <b>PUBLIC</b> test case, uses the PdgpSecurityManager, can declare
  * {@link IOTester} as parameter.
+ * <p>
+ * <b>This annotation must be accompanied by some JUnit 5 test annotation, it
+ * will not cause test execution by itself!</b> This makes it usable with
+ * different JUnit 5 runners.
  * 
  * @author Christian Femers
- * @since 0.1.0
+ * @since 0.2.0
  * @version 1.0.0
  */
 @API(status = Status.MAINTAINED)
-@Documented()
+@Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@GeneralArtemisTest
-public @interface PublicTest {
-	// maker only
+@JupiterArtemisTest(TestType.PUBLIC)
+public @interface Public {
+	// marker only
 }
