@@ -4,6 +4,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.Objects;
 
 public enum PathType {
 	/**
@@ -12,7 +13,7 @@ public enum PathType {
 	EXACT() {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			return Path.of(s).toAbsolutePath()::equals;
+			return Path.of(s).toAbsolutePath().normalize()::equals;
 		}
 	},
 	/**
@@ -21,8 +22,8 @@ public enum PathType {
 	STARTS_WITH {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			Path begin = Path.of(s).toAbsolutePath();
-			return p -> p.startsWith(begin);
+			Path begin = Path.of(s).toAbsolutePath().normalize();
+			return p -> p.normalize().startsWith(begin);
 		}
 	},
 	/**
@@ -34,7 +35,7 @@ public enum PathType {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + s);
-			return p -> pm.matches(CURRENT_PATH.relativize(p));
+			return p -> pm.matches(relativizeSafe(p, CURRENT_PATH));
 		}
 	},
 	/**
@@ -46,7 +47,7 @@ public enum PathType {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
-			return p -> pm.matches(CURRENT_PATH.relativize(p));
+			return p -> pm.matches(relativizeSafe(p, CURRENT_PATH));
 		}
 	},
 	/**
@@ -57,7 +58,8 @@ public enum PathType {
 	GLOB_ABSOLUTE {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			return DEFAULT_FS.getPathMatcher("glob:" + s);
+			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + s);
+			return p -> pm.matches(p.normalize());
 		}
 	},
 	/**
@@ -68,11 +70,12 @@ public enum PathType {
 	REGEX_ABSOLUTE {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			return DEFAULT_FS.getPathMatcher("regex:" + s);
+			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
+			return p -> pm.matches(p.normalize());
 		}
 	};
 
-	static final Path CURRENT_PATH = Path.of("").toAbsolutePath();
+	static final Path CURRENT_PATH = Path.of("");
 	static final FileSystem DEFAULT_FS = FileSystems.getDefault();
 
 	/**
@@ -81,4 +84,10 @@ public enum PathType {
 	 * @author Christian Femers
 	 */
 	public abstract PathMatcher convertToPathMatcher(String s);
+
+	private static Path relativizeSafe(Path p, Path target) {
+		if (p.isAbsolute() && !Objects.equals(p.getRoot(), target.getRoot()))
+			return p.normalize();
+		return target.relativize(p).normalize();
+	}
 }
