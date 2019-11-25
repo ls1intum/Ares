@@ -2,6 +2,7 @@ package de.tum.in.test.api.locked;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +27,11 @@ public interface ArtemisSecurityConfiguration {
 
 	boolean whitelistFirstThread();
 
-	default Optional<Set<Path>> whitelistedPaths() {
+	default Optional<Set<PathMatcher>> whitelistedPaths() {
 		return Optional.empty();
+	}
+
+	default Set<PathMatcher> blacklistedPaths() {
+		return Set.of();
 	}
 }

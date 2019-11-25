@@ -15,16 +15,16 @@ import org.apiguardian.api.API.Status;
 import de.tum.in.test.api.locked.ArtemisSecurityManager;
 
 /**
- * Allows to whitelist a {@link Path}, including all subpaths. The
+ * Allows to blacklist a {@link Path}, including all subpaths. The
  * {@link ArtemisSecurityManager} will disallow any fileaccess for
  * <b>non-whitelisted callers</b> outside the set of whitelisted paths. This
  * annotation is {@linkplain Repeatable}, and can be placed additively on the
- * test class and test method. Different types can be set to gain more control
+ * test class and test method.Different types can be set to gain more control
  * over the mtaching paths.<br>
- * Use e.g. <code>@WhitelistPath("")</code> to allow access to all files in the
- * execution directory.
+ * Use e.g. <code>@BlacklistPath("foo/")</code> to disallow access to all files
+ * in the sub-directory <code>foo</code> of the execution directory.
  * <p>
- * <b>If this annotation is not present, no access to any paths is granted.</b>
+ * <b>This annotation overpowers any {@link WhitelistPath} annotations.</b>
  *
  * @see Path
  * @author Christian Femers
@@ -35,8 +35,8 @@ import de.tum.in.test.api.locked.ArtemisSecurityManager;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, TYPE, ANNOTATION_TYPE })
-@Repeatable(WhitelistPaths.class)
-public @interface WhitelistPath {
+@Repeatable(BlacklistPaths.class)
+public @interface BlacklistPath {
 	/**
 	 * The String value passed to {@link Path#of(String, String...)}
 	 */

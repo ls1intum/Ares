@@ -3,13 +3,14 @@ package de.tum.in.test.api.util;
 import static org.junit.platform.commons.util.AnnotationUtils.*;
 
 import java.lang.StackWalker.StackFrame;
-import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.WhitelistPath;
@@ -62,14 +63,22 @@ public final class GeneralTestExtension {
 		config.withCurrentPath();
 		config.addWhitelistedClassNames(generateClassWhiteList(context));
 		config.withPathWhitelist(generatePathWhiteList(context));
+		config.withPathBlacklist(generatePathBlackList(context));
 		return config.build();
 	}
 
-	private static Optional<Set<Path>> generatePathWhiteList(TestContext context) {
+	private static Optional<Set<PathMatcher>> generatePathWhiteList(TestContext context) {
 		var methodLevel = findRepeatableAnnotations(context.testMethod(), WhitelistPath.class);
 		var classLevel = findRepeatableAnnotations(context.testClass(), WhitelistPath.class);
-		return Optional.of(Stream.concat(methodLevel.stream(), classLevel.stream()).map(WhitelistPath::value)
-				.map(Path::of).collect(Collectors.toSet()));
+		return Optional.of(Stream.concat(methodLevel.stream(), classLevel.stream())
+				.map(wp -> wp.type().convertToPathMatcher(wp.value())).collect(Collectors.toSet()));
+	}
+
+	private static Set<PathMatcher> generatePathBlackList(TestContext context) {
+		var methodLevel = findRepeatableAnnotations(context.testMethod(), BlacklistPath.class);
+		var classLevel = findRepeatableAnnotations(context.testClass(), BlacklistPath.class);
+		return Stream.concat(methodLevel.stream(), classLevel.stream())
+				.map(wp -> wp.type().convertToPathMatcher(wp.value())).collect(Collectors.toSet());
 	}
 
 	private static Set<String> generateClassWhiteList(TestContext context) {

@@ -2,6 +2,7 @@ package de.tum.in.test.api.locked;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Method testMethod;
 	private Path executionPath;
 	private Set<String> whitelistedClassNames = new HashSet<>();
-	private Set<Path> whitelistedPaths;
+	private Set<PathMatcher> whitelistedPaths;
+	private Set<PathMatcher> blacklistedPaths = Set.of();
 	private boolean whitelistFirstThread;
 
 	private ArtemisSecurityConfigurationBuilder() {
@@ -45,7 +47,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return whitelistFirstThread;
 	}
 
-	public Set<Path> getWhitelistedPaths() {
+	public Set<PathMatcher> getWhitelistedPaths() {
 		return whitelistedPaths;
 	}
 
@@ -59,16 +61,21 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<Path> whitelistedPaths) {
-		this.whitelistedPaths = whitelistedPaths.stream().map(Path::toAbsolutePath).collect(Collectors.toSet());
+	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<PathMatcher> whitelistedPaths) {
+		this.whitelistedPaths = whitelistedPaths.stream().collect(Collectors.toSet());
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPathWhitelist(
-			Optional<? extends Collection<Path>> whitelistedPaths) {
+			Optional<? extends Collection<PathMatcher>> whitelistedPaths) {
 		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> {
 			this.whitelistedPaths = null;
 		});
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withPathBlacklist(Collection<PathMatcher> blacklistedPaths) {
+		this.blacklistedPaths = Set.copyOf(blacklistedPaths);
 		return this;
 	}
 
@@ -110,7 +117,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public ArtemisSecurityConfiguration build() {
 		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames,
-				whitelistFirstThread, Optional.ofNullable(whitelistedPaths));
+				whitelistFirstThread, Optional.ofNullable(whitelistedPaths), blacklistedPaths);
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {

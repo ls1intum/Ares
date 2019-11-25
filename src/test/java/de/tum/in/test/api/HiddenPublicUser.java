@@ -1,12 +1,11 @@
 package de.tum.in.test.api;
 
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.jupiter.Hidden;
 import de.tum.in.test.api.jupiter.Public;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 @Deadline("2200-01-01 16:00")
 @TestMethodOrder(Alphanumeric.class)

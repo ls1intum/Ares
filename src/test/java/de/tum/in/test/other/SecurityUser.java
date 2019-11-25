@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
+import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
@@ -29,6 +31,8 @@ import de.tum.in.test.api.jupiter.PublicTest;
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(Alphanumeric.class)
 //@UseLocale("en")
+@WhitelistPath(value = "target/**", type = PathType.GLOB)
+@BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 public class SecurityUser {
 
 	@PublicTest

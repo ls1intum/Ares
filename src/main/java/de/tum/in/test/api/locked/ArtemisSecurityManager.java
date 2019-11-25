@@ -233,22 +233,34 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private void checkPathAccess(Path p) {
+		boolean whitelisted = false;
+		boolean blacklisted = false;
 		try {
 			Path pa = p.toAbsolutePath();
-			if (isPathWhitelisted(pa))
+			whitelisted = isPathWhitelisted(pa);
+			blacklisted = isPathBlacklisted(pa);
+			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
 			e.printStackTrace(LOG_OUTPUT);
 		}
-		LOG_OUTPUT.println("PATH ACCESS: " + p);
-		checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_path_access", p)); //$NON-NLS-1$
+		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted);
+		checkForNonWhitelistedStackFrames(() -> {
+			LOG_OUTPUT.println(message);
+			return formatLocalized("security.error_path_access", p); //$NON-NLS-1$
+		});
 	}
 
 	private boolean isPathWhitelisted(Path pa) {
 		var pathWhitelist = configuration.whitelistedPaths();
 		if (pathWhitelist.isEmpty())
 			return pa.startsWith(configuration.executionPath());
-		return pathWhitelist.get().stream().anyMatch(pa::startsWith);
+		return pathWhitelist.get().stream().anyMatch(pm -> pm.matches(pa));
+	}
+
+	private boolean isPathBlacklisted(Path pa) {
+		var pathBlacklist = configuration.blacklistedPaths();
+		return pathBlacklist.stream().anyMatch(pm -> pm.matches(pa));
 	}
 
 	@Override
