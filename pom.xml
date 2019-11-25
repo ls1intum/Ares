@@ -121,7 +121,7 @@
 			<scope>test</scope>
 			<version>1.5.2</version>
 		</dependency>
-		<!-- For testing we use a test framework testing framework -->
+		<!-- For testing the property based testing framework jqwick is supported -->
 		<dependency>
 			<groupId>net.jqwik</groupId>
 			<artifactId>jqwik</artifactId>
