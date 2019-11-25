@@ -32,8 +32,8 @@ public abstract class TestContext {
 
 	@Override
 	public String toString() {
-		return String.format("TestContext [testMethod()=%s, displayName()=%s, findTestType()=%s]",
-				testMethod(), displayName(), findTestType());
+		return String.format("TestContext [testMethod()=%s, displayName()=%s, findTestType()=%s]", testMethod(),
+				displayName(), findTestType());
 	}
 
 }

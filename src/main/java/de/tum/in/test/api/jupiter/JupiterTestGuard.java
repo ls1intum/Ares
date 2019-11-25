@@ -54,7 +54,7 @@ public final class JupiterTestGuard implements InvocationInterceptor, DisplayNam
 		checkForHidden(JupiterContext.of(extensionContext));
 		doProceedAndPostProcess(invocation);
 	}
-	
+
 	@Override
 	public String generateDisplayNameForClass(Class<?> testClass) {
 		return defaultNameGen.generateDisplayNameForClass(testClass);

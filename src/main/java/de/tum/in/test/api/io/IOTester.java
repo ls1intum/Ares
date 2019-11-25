@@ -82,7 +82,7 @@ public final class IOTester {
 
 		isInstalled = false;
 	}
-	
+
 	public synchronized void reset() {
 		inTester.reset();
 		outTester.resetOutput();

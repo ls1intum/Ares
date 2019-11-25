@@ -21,8 +21,8 @@ import net.jqwik.api.Property;
  * PdgpSecurityManager, can declare {@link IOTester} as parameter using the
  * annotation {@link ForAll}.
  * <p>
- * <b>This annotation must be accompanied by some jqwik test annotation, it
- * will not cause test execution by itself!</b>
+ * <b>This annotation must be accompanied by some jqwik test annotation, it will
+ * not cause test execution by itself!</b>
  * 
  * @author Christian Femers
  * @since 0.2.0

@@ -21,7 +21,7 @@ public class HiddenPublicUser {
 	void testPublicIncomplete() {
 		// nothing
 	}
-	
+
 	@Hidden
 	@Test
 	void testHiddenNormal() {

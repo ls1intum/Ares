@@ -57,7 +57,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
 	private List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"org.eclipse.", "com.intellij", "org.assertj", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			"org.eclipse.", "com.intellij", "org.assertj", "org.opentest4j.", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.api.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
@@ -241,7 +241,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			e.printStackTrace(LOG_OUTPUT);
 		}
 		LOG_OUTPUT.println("PATH ACCESS: " + p);
-		checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_path_access", p));
+		checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_path_access", p)); //$NON-NLS-1$
 	}
 
 	private boolean isPathWhitelisted(Path pa) {
@@ -256,7 +256,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			var blackList = List.of("java.lang.reflect", "de.tum.in.test.api.util", PACKAGE_NAME); //$NON-NLS-1$
+			var blackList = List.of("java.lang.reflect", "de.tum.in.test.api.util", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$
 			if (blackList.stream().anyMatch(pkg::startsWith)) {
 				/*
 				 * this is a very expensive operation, can we do better? (no)
@@ -372,7 +372,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
 		if (isInstalled())
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
-		LOG_OUTPUT.println("REQUEST INSTALL " + Thread.currentThread() + " " + configuration);
+		LOG_OUTPUT.println("REQUEST INSTALL " + Thread.currentThread() + " " + configuration.shortDesc());
 		String token = INSTANCE.generateAccessToken();
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = Objects.requireNonNull(configuration);

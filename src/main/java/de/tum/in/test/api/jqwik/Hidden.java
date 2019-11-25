@@ -19,8 +19,8 @@ import de.tum.in.test.api.io.IOTester;
  * annotation requires a {@link Deadline} annotation to be set either on the
  * test class or the test method. See {@link Deadline} for more information.
  * <p>
- * <b>This annotation must be accompanied by some jqwik test annotation, it
- * will not cause test execution by itself!</b>
+ * <b>This annotation must be accompanied by some jqwik test annotation, it will
+ * not cause test execution by itself!</b>
  * 
  * @see Deadline
  * @author Christian Femers
