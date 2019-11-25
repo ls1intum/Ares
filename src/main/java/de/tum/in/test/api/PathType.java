@@ -35,7 +35,7 @@ public enum PathType {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + s);
-			return p -> pm.matches(relativizeSafe(p, CURRENT_PATH));
+			return p -> pm.matches(relativizeSafe(p));
 		}
 	},
 	/**
@@ -47,7 +47,7 @@ public enum PathType {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
-			return p -> pm.matches(relativizeSafe(p, CURRENT_PATH));
+			return p -> pm.matches(relativizeSafe(p));
 		}
 	},
 	/**
@@ -75,9 +75,6 @@ public enum PathType {
 		}
 	};
 
-	static final Path CURRENT_PATH = Path.of("");
-	static final FileSystem DEFAULT_FS = FileSystems.getDefault();
-
 	/**
 	 * @param s the format/pattern
 	 * @return a {@link PathMatcher} that is configured to match absolute paths.
@@ -85,9 +82,13 @@ public enum PathType {
 	 */
 	public abstract PathMatcher convertToPathMatcher(String s);
 
-	private static Path relativizeSafe(Path p, Path target) {
-		if (p.isAbsolute() && !Objects.equals(p.getRoot(), target.getRoot()))
-			return p.normalize();
-		return target.relativize(p).normalize();
+	static final Path CURRENT_PATH = Path.of("").toAbsolutePath();
+	static final FileSystem DEFAULT_FS = FileSystems.getDefault();
+
+	private static Path relativizeSafe(Path any) {
+		Path p = any.normalize().toAbsolutePath();
+		if (!Objects.equals(p.getRoot(), CURRENT_PATH.getRoot()))
+			return p;
+		return CURRENT_PATH.relativize(p).normalize();
 	}
 }
