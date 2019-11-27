@@ -62,11 +62,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.0.0-M4</version>
 				<!-- configuration> <forkCount>1C</forkCount> </configuration -->
 			</plugin>
-			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version> <executions> <execution> <id>sign-artifacts</id> <phase>verify</phase>
+			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId> 
+				<version>1.6</version> <executions> <execution> <id>sign-artifacts</id> <phase>verify</phase> 
 				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin -->
 		</plugins>
 	</build>
