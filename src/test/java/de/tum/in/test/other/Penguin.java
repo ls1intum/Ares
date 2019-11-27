@@ -1,6 +1,7 @@
 package de.tum.in.test.other;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -46,5 +47,18 @@ public class Penguin extends MiniJava {
 
 	public static void accessPath(Path p) throws IOException {
 		Files.readString(p);
+	}
+
+	public static void maliciousException() {
+		throw new MaliciousException();
+	}
+
+	public static String tryExecuteLs() {
+		try {
+			return new String(Runtime.getRuntime().exec("git --help").getInputStream().readAllBytes())
+					.replaceAll("\\W| ", "_");
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

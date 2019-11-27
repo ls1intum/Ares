@@ -179,6 +179,16 @@ public class SecurityUser {
 	public void accessPathAllowed() throws IOException {
 		Penguin.accessPath(Path.of("pom.xml"));
 	}
+	
+	@PublicTest
+	public void testMaliciousException() {
+		Penguin.maliciousException();
+	}
+	
+	@PublicTest
+	public void testExecuteLs() {
+		Penguin.tryExecuteLs();
+	}
 
 	/**
 	 * This can be used to check for Threads that are not stoppable. This should
