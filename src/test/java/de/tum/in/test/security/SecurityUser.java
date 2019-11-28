@@ -1,4 +1,4 @@
-package de.tum.in.test.other;
+package de.tum.in.test.security;
 
 //import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.*;
@@ -33,6 +33,7 @@ import de.tum.in.test.api.jupiter.PublicTest;
 //@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
+@SuppressWarnings("static-method")
 public class SecurityUser {
 
 	@PublicTest
@@ -99,6 +100,7 @@ public class SecurityUser {
 		assertEquals("Nieder mit den Eisbären!", secondLine);
 	}
 
+
 	@PublicTest
 	public void testSquareCorrect(IOTester tester) {
 		tester.provideInputLines("5");
@@ -121,11 +123,11 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	public void exceedTimeLimit(IOTester tester) {
+	public void exceedTimeLimit() {
 		while (true) {
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException e) {
+			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				// ignore
 			}
 		}
@@ -179,15 +181,23 @@ public class SecurityUser {
 	public void accessPathAllowed() throws IOException {
 		Penguin.accessPath(Path.of("pom.xml"));
 	}
-	
+
+	@PublicTest
+	@WhitelistPath("")
+	public void accessPathTest() throws IOException {
+		if (!Files.exists(Path.of("target/test-classes/de/tum/in/test/security/SecurityTest.class")))
+			fail("File not present");
+		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/test/security/SecurityTest.class"));
+	}
+
 	@PublicTest
 	public void testMaliciousException() {
 		Penguin.maliciousException();
 	}
-	
+
 	@PublicTest
-	public void testExecuteLs() {
-		Penguin.tryExecuteLs();
+	public void testExecuteGit() {
+		Penguin.tryExecuteGit();
 	}
 
 	/**

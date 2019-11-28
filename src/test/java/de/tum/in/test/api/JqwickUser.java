@@ -122,7 +122,7 @@ public class JqwickUser {
 	@Public
 	@Property(tries = 1)
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
-	void provokeTimeoutSleepTries(@ForAll @Positive int x) {
+	void provokeTimeoutSleepTries(@SuppressWarnings("unused") @ForAll @Positive int x) {
 		try {
 			Thread.sleep(300);
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
@@ -133,7 +133,7 @@ public class JqwickUser {
 	@Public
 	@Example
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
-	void provokeTimeoutSleepExample(@ForAll @Positive int x) {
+	void provokeTimeoutSleepExample(@SuppressWarnings("unused") @ForAll @Positive int x) {
 		try {
 			Thread.sleep(300);
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
@@ -144,7 +144,7 @@ public class JqwickUser {
 	@Public
 	@Property
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
-	void provokeTimeoutSleepProperty(@ForAll @Positive int x) {
+	void provokeTimeoutSleepProperty(@SuppressWarnings("unused") @ForAll @Positive int x) {
 		try {
 			Thread.sleep(300);
 		} catch (@SuppressWarnings("unused") InterruptedException e) {

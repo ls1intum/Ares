@@ -1,4 +1,4 @@
-package de.tum.in.test.other;
+package de.tum.in.test.security;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package de.tum.in.test.other;
+package de.tum.in.test.security;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -14,6 +14,7 @@ public class Penguin extends MiniJava {
 		write("Nieder mit den Eisbären!");
 	}
 
+	@SuppressWarnings("unused")
 	public static void mäin(String[] args) {
 		int a = readInt("Zahl eingeben:");
 		int b = a * a;
@@ -21,6 +22,7 @@ public class Penguin extends MiniJava {
 		write(b);
 	}
 
+	@SuppressWarnings("unused")
 	public static void readTwoTimes() {
 		int a = readInt("Zahl eingeben:");
 		int b = readInt("Nächste");
@@ -53,7 +55,7 @@ public class Penguin extends MiniJava {
 		throw new MaliciousException();
 	}
 
-	public static String tryExecuteLs() {
+	public static String tryExecuteGit() {
 		try {
 			return new String(Runtime.getRuntime().exec("git --help").getInputStream().readAllBytes())
 					.replaceAll("\\W| ", "_");
