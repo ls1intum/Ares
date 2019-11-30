@@ -2,13 +2,14 @@ package de.tum.in.test.api.locked;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+
+import de.tum.in.test.api.util.PathRule;
 
 @API(status = Status.INTERNAL)
 public interface ArtemisSecurityConfiguration {
@@ -27,11 +28,11 @@ public interface ArtemisSecurityConfiguration {
 
 	boolean whitelistFirstThread();
 
-	default Optional<Set<PathMatcher>> whitelistedPaths() {
+	default Optional<Set<PathRule>> whitelistedPaths() {
 		return Optional.empty();
 	}
 
-	default Set<PathMatcher> blacklistedPaths() {
+	default Set<PathRule> blacklistedPaths() {
 		return Set.of();
 	}
 }

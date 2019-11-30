@@ -2,7 +2,6 @@ package de.tum.in.test.api.locked;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.tum.in.test.api.util.PathRule;
 import de.tum.in.test.api.util.TestContext;
 import de.tum.in.test.api.util.TimeoutUtils;
 
@@ -19,8 +19,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Method testMethod;
 	private Path executionPath;
 	private Set<String> whitelistedClassNames = new HashSet<>();
-	private Set<PathMatcher> whitelistedPaths;
-	private Set<PathMatcher> blacklistedPaths = Set.of();
+	private Set<PathRule> whitelistedPaths;
+	private Set<PathRule> blacklistedPaths = Set.of();
 	private boolean whitelistFirstThread;
 
 	private ArtemisSecurityConfigurationBuilder() {
@@ -47,7 +47,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return whitelistFirstThread;
 	}
 
-	public Set<PathMatcher> getWhitelistedPaths() {
+	public Set<PathRule> getWhitelistedPaths() {
 		return whitelistedPaths;
 	}
 
@@ -61,20 +61,20 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<PathMatcher> whitelistedPaths) {
+	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<PathRule> whitelistedPaths) {
 		this.whitelistedPaths = whitelistedPaths.stream().collect(Collectors.toSet());
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPathWhitelist(
-			Optional<? extends Collection<PathMatcher>> whitelistedPaths) {
+			Optional<? extends Collection<PathRule>> whitelistedPaths) {
 		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> {
 			this.whitelistedPaths = null;
 		});
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathBlacklist(Collection<PathMatcher> blacklistedPaths) {
+	public ArtemisSecurityConfigurationBuilder withPathBlacklist(Collection<PathRule> blacklistedPaths) {
 		this.blacklistedPaths = Set.copyOf(blacklistedPaths);
 		return this;
 	}

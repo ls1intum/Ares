@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 import javax.net.ssl.SSLPermission;
 import javax.security.auth.AuthPermission;
 
+import de.tum.in.test.api.PathActionLevel;
+
 /**
  * Prevents System.exit, reflection to a certain degree, networking use,
  * execution commands and long running threads.
@@ -224,7 +226,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (perm instanceof AuthPermission)
 				throw new SecurityException(localized("security.error_modify_auth") + perm); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
-				checkPathAccess(Path.of(perm.getName()));
+				checkPathAccess(Path.of(perm.getName()), PathActionLevel.getLevelOf(perm.getActions()));
 		} finally
 
 		{
@@ -232,13 +234,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 	}
 
-	private void checkPathAccess(Path p) {
+	private void checkPathAccess(Path p, PathActionLevel pathActionLevel) {
 		boolean whitelisted = false;
 		boolean blacklisted = false;
 		try {
 			Path pa = p.toAbsolutePath();
-			whitelisted = isPathWhitelisted(pa);
-			blacklisted = isPathBlacklisted(pa);
+			whitelisted = isPathWhitelisted(pa, pathActionLevel);
+			blacklisted = isPathBlacklisted(pa, pathActionLevel);
 			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
@@ -251,16 +253,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		});
 	}
 
-	private boolean isPathWhitelisted(Path pa) {
+	private boolean isPathWhitelisted(Path pa, PathActionLevel pathActionLevel) {
 		var pathWhitelist = configuration.whitelistedPaths();
 		if (pathWhitelist.isEmpty())
 			return pa.startsWith(configuration.executionPath());
-		return pathWhitelist.get().stream().anyMatch(pm -> pm.matches(pa));
+		return pathWhitelist.get().stream().anyMatch(pm -> pm.matchesWithLevel(pa, pathActionLevel));
 	}
 
-	private boolean isPathBlacklisted(Path pa) {
+	private boolean isPathBlacklisted(Path pa, PathActionLevel pathActionLevel) {
 		var pathBlacklist = configuration.blacklistedPaths();
-		return pathBlacklist.stream().anyMatch(pm -> pm.matches(pa));
+		return pathBlacklist.stream().anyMatch(pm -> pm.matchesWithLevel(pa, pathActionLevel));
 	}
 
 	@Override

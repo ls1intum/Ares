@@ -3,7 +3,6 @@ package de.tum.in.test.api.util;
 import static org.junit.platform.commons.util.AnnotationUtils.*;
 
 import java.lang.StackWalker.StackFrame;
-import java.nio.file.PathMatcher;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -67,18 +66,17 @@ public final class GeneralTestExtension {
 		return config.build();
 	}
 
-	private static Optional<Set<PathMatcher>> generatePathWhiteList(TestContext context) {
+	private static Optional<Set<PathRule>> generatePathWhiteList(TestContext context) {
 		var methodLevel = findRepeatableAnnotations(context.testMethod(), WhitelistPath.class);
 		var classLevel = findRepeatableAnnotations(context.testClass(), WhitelistPath.class);
-		return Optional.of(Stream.concat(methodLevel.stream(), classLevel.stream())
-				.map(wp -> wp.type().convertToPathMatcher(wp.value())).collect(Collectors.toSet()));
+		return Optional.of(
+				Stream.concat(methodLevel.stream(), classLevel.stream()).map(PathRule::of).collect(Collectors.toSet()));
 	}
 
-	private static Set<PathMatcher> generatePathBlackList(TestContext context) {
+	private static Set<PathRule> generatePathBlackList(TestContext context) {
 		var methodLevel = findRepeatableAnnotations(context.testMethod(), BlacklistPath.class);
 		var classLevel = findRepeatableAnnotations(context.testClass(), BlacklistPath.class);
-		return Stream.concat(methodLevel.stream(), classLevel.stream())
-				.map(wp -> wp.type().convertToPathMatcher(wp.value())).collect(Collectors.toSet());
+		return Stream.concat(methodLevel.stream(), classLevel.stream()).map(PathRule::of).collect(Collectors.toSet());
 	}
 
 	private static Set<String> generateClassWhiteList(TestContext context) {

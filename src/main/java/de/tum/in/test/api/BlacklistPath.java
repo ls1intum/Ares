@@ -43,4 +43,6 @@ public @interface BlacklistPath {
 	String value();
 
 	PathType type() default PathType.STARTS_WITH;
+
+	PathActionLevel level() default PathActionLevel.READ;
 }

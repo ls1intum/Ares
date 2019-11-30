@@ -2,25 +2,26 @@ package de.tum.in.test.api.locked;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import de.tum.in.test.api.util.PathRule;
+
 final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfiguration {
 	private final Class<?> testClass;
 	private final Method testMethod;
 	private final Path executionPath;
 	private final List<String> whitelistedClassNames;
-	private final Optional<Set<PathMatcher>> whitelistedPaths;
-	private final Set<PathMatcher> blacklistedPaths;
+	private final Optional<Set<PathRule>> whitelistedPaths;
+	private final Set<PathRule> blacklistedPaths;
 	private final boolean whitelistFirstThread;
 
 	ArtemisSecurityConfigurationImpl(Class<?> testClass, Method testMethod, Path executionPath,
 			Collection<String> whitelistedClassNames, boolean whitelistFirstThread,
-			Optional<Collection<PathMatcher>> whitelistedPaths, Collection<PathMatcher> blacklistedPaths) {
+			Optional<Collection<PathRule>> whitelistedPaths, Collection<PathRule> blacklistedPaths) {
 		this.testClass = Objects.requireNonNull(testClass);
 		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
@@ -56,12 +57,12 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	}
 
 	@Override
-	public Optional<Set<PathMatcher>> whitelistedPaths() {
+	public Optional<Set<PathRule>> whitelistedPaths() {
 		return whitelistedPaths;
 	}
 
 	@Override
-	public Set<PathMatcher> blacklistedPaths() {
+	public Set<PathRule> blacklistedPaths() {
 		return blacklistedPaths;
 	}
 
