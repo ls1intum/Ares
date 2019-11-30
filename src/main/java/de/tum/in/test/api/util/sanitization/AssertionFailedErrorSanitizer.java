@@ -19,7 +19,7 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t) throws SanitizationError {
 		AssertionFailedError afe = (AssertionFailedError) t;
 		AssertionFailedError newAfe = new AssertionFailedError(afe.getMessage(), sanitizeValue(afe.getExpected()),
-				sanitizeValue(afe.getExpected()));
+				sanitizeValue(afe.getActual()));
 		ThrowableSanitizer.copyThrowableInfo(afe, newAfe);
 		return newAfe;
 	}
