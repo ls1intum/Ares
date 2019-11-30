@@ -194,6 +194,46 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	@Override
+	public void checkAccess(Thread t) {
+		try {
+			if (enterPublicInterface())
+				return;
+			super.checkAccess(t);
+			if (!testThreadGroup.parentOf(t.getThreadGroup()))
+				throw new SecurityException(localized("security.error_thread_access"));
+		} finally {
+			exitPublicInterface();
+		}
+	}
+
+	@Override
+	public void checkAccess(ThreadGroup g) {
+		try {
+			if (enterPublicInterface())
+				return;
+			super.checkAccess(g);
+			if (!testThreadGroup.parentOf(g))
+				throw new SecurityException(localized("security.error_threadgroup_access"));
+		} finally {
+			exitPublicInterface();
+		}
+	}
+
+	@Override
+	public void checkPackageDefinition(String pkg) {
+		try {
+			if (enterPublicInterface())
+				return;
+			LOG_OUTPUT.println("PKG-DEF: " + pkg);
+			super.checkPackageDefinition(pkg);
+			if (staticWhiteList.stream().anyMatch(pkg::startsWith))
+				throw new SecurityException(formatLocalized("security.error_package_definition", pkg));
+		} finally {
+			exitPublicInterface();
+		}
+	}
+
+	@Override
 	public void checkPermission(Permission perm) {
 		try {
 			if (enterPublicInterface())

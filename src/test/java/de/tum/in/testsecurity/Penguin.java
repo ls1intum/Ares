@@ -63,4 +63,16 @@ public class Penguin extends MiniJava {
 			throw new UncheckedIOException(e);
 		}
 	}
+
+	public static void tryBreakThreadGroup() {
+		ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+		for (;;) {
+			ThreadGroup parent = threadGroup.getParent();
+			if (parent == null)
+				break;
+			threadGroup = parent;
+		}
+		new Thread(threadGroup, () -> {
+		}).start();
+	}
 }
