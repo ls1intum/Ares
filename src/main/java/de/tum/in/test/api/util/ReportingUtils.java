@@ -33,7 +33,7 @@ public class ReportingUtils {
 				newT = ThrowableSanitizer.sanitize(t);
 			} catch (@SuppressWarnings("unused") Throwable error) {
 				throw new SecurityException(
-						"Throwable " + name + " threw an error when retrieving information about it",error);
+						"Throwable " + name + " threw an error when retrieving information about it.");
 			}
 			throw newT;
 		}
