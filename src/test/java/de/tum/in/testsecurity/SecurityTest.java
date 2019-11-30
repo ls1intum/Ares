@@ -1,4 +1,4 @@
-package de.tum.in.test.security;
+package de.tum.in.testsecurity;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;

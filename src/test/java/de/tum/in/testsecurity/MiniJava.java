@@ -1,4 +1,4 @@
-package de.tum.in.test.security;
+package de.tum.in.testsecurity;
 
 import java.io.BufferedReader;
 import java.io.IOException;

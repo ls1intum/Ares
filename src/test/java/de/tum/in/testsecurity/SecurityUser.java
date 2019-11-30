@@ -1,4 +1,4 @@
-package de.tum.in.test.security;
+package de.tum.in.testsecurity;
 
 //import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.*;
@@ -185,9 +185,9 @@ public class SecurityUser {
 	@PublicTest
 	@WhitelistPath("")
 	public void accessPathTest() throws IOException {
-		if (!Files.exists(Path.of("target/test-classes/de/tum/in/test/security/SecurityTest.class")))
+		if (!Files.exists(Path.of("target/test-classes/de/tum/in/testsecurity/SecurityTest.class")))
 			fail("File not present");
-		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/test/security/SecurityTest.class"));
+		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/testsecurity/SecurityTest.class"));
 	}
 
 	@PublicTest

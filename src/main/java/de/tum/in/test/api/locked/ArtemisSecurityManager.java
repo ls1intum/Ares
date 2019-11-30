@@ -58,7 +58,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"org.eclipse.", "com.intellij", "org.assertj", "org.opentest4j.", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.api.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
 	private Optional<Thread> whitelistedThread = Optional.empty();
