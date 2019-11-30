@@ -4,13 +4,16 @@ import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
+import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
+
 /**
  * For handling and post processing Exceptions and Errors, currently not in use.
- * 
+ *
  * @author Christian Femers
  *
  */
 public class ReportingUtils {
+
 	private ReportingUtils() {
 
 	}
@@ -20,12 +23,20 @@ public class ReportingUtils {
 		 * Currently not needed anymore, because Artemis #993 is fixed, but might be
 		 * useful in future (e.g. convert newlines/tabs to \n, \t or similar)
 		 */
-//		try {
-		return invocation.proceed();
-//		} catch (Throwable t) {
-//			tryPostProcessFieldOrAddSuppressed(t, "detailMessage");
-//			throw t;
-//		}
+		try {
+			return invocation.proceed();
+		} catch (Throwable t) {
+			String name = "unknown";
+			Throwable newT;
+			try {
+				name = t.getClass().getName();
+				newT = ThrowableSanitizer.sanitize(t);
+			} catch (@SuppressWarnings("unused") Throwable error) {
+				throw new SecurityException(
+						"Throwable " + name + " threw an error when retrieving information about it",error);
+			}
+			throw newT;
+		}
 	}
 
 	@SuppressWarnings("unused")
