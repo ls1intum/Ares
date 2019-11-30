@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tum.in</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>0.2.7</version>
+	<version>0.2.8-SNAPSHOT</version>
 	<name>Artemis Java Test Sandbox</name>
 	<description>JUnit 5 Extension API for Artemis Java Testing</description>
 	<inceptionYear>2019</inceptionYear>
