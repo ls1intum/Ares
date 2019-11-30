@@ -25,6 +25,8 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	private static Object sanitizeValue(ValueWrapper vw) {
+		if(vw == null)
+			return null;
 		return vw.getStringRepresentation();
 	}
 }
