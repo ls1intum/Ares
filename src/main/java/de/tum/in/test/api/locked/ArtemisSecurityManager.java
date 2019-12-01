@@ -83,11 +83,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean enterPublicInterface() {
-		return recursionBreak.get().getAndIncrement() > 0;
+		return recursionBreak.get().getAndIncrement() > 10;
 	}
 
 	private boolean exitPublicInterface() {
-		return recursionBreak.get().getAndDecrement() > 0;
+		return recursionBreak.get().getAndDecrement() > 10;
 	}
 
 	@Override
@@ -196,10 +196,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	@Override
 	public void checkAccess(Thread t) {
 		try {
+			ThreadGroup tg = t.getThreadGroup();
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(t);
-			if (!testThreadGroup.parentOf(t.getThreadGroup()))
+			if (!testThreadGroup.parentOf(tg))
 				throw new SecurityException(localized("security.error_thread_access"));
 		} finally {
 			exitPublicInterface();
@@ -236,6 +237,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	@Override
 	public void checkPermission(Permission perm) {
 		try {
+			String permName = perm.getName();
+			String permActions = perm.getActions();
+			String permString = String.valueOf(perm);
+
 			if (enterPublicInterface())
 				return;
 			// for files: read, readlink, write, delete
@@ -244,29 +249,29 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			// for redefinition of IO: setIO
 			var whitelist = List.of("getClassLoader", "accessSystemModules"); //$NON-NLS-1$ //$NON-NLS-2$
 			var blacklist = List.of("setIO", "manageProcess"); //$NON-NLS-1$ //$NON-NLS-2$
-			if (whitelist.contains(perm.getName()))
+			if (whitelist.contains(permName))
 				return;
-			if (blacklist.contains(perm.getName()))
-				throw new SecurityException(localized("security.error_blacklist") + perm); //$NON-NLS-1$
+			if (blacklist.contains(permName))
+				throw new SecurityException(localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed
-			if ("setSecurityManager".equals(perm.getName()) && !isPartlyDisabled) //$NON-NLS-1$
+			if ("setSecurityManager".equals(permName) && !isPartlyDisabled) //$NON-NLS-1$
 				throw new SecurityException(localized("security.error_security_manager")); //$NON-NLS-1$
 			if (perm instanceof SerializablePermission)
-				throw new SecurityException(localized("security.error_modify_serialization") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_modify_serialization") + permString); //$NON-NLS-1$
 			if (perm instanceof AWTPermission)
-				throw new SecurityException(localized("security.error_awt") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_awt") + permString); //$NON-NLS-1$
 			if (perm instanceof ManagementPermission)
-				throw new SecurityException(localized("security.error_management") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_management") + permString); //$NON-NLS-1$
 			if (perm instanceof NetPermission || perm instanceof SocketPermission)
-				throw new SecurityException(localized("security.error_networking") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_networking") + permString); //$NON-NLS-1$
 			if (perm instanceof SecurityPermission)
-				throw new SecurityException(localized("security.error_modify_security") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_modify_security") + permString); //$NON-NLS-1$
 			if (perm instanceof SSLPermission)
-				throw new SecurityException(localized("security.error_modify_ssl") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_modify_ssl") + permString); //$NON-NLS-1$
 			if (perm instanceof AuthPermission)
-				throw new SecurityException(localized("security.error_modify_auth") + perm); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_modify_auth") + permString); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
-				checkPathAccess(Path.of(perm.getName()), PathActionLevel.getLevelOf(perm.getActions()));
+				checkPathAccess(Path.of(permName), PathActionLevel.getLevelOf(permActions));
 		} finally {
 			exitPublicInterface();
 		}
