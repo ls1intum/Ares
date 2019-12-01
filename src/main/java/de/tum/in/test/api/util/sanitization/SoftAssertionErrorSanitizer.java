@@ -1,5 +1,6 @@
 package de.tum.in.test.api.util.sanitization;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ public enum SoftAssertionErrorSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
-		SoftAssertionError sae = new SoftAssertionError(
-				((SoftAssertionError) t).getErrors().stream().collect(Collectors.toUnmodifiableList()));
+		SoftAssertionError sae = new SoftAssertionError(List.copyOf(
+				((SoftAssertionError) t).getErrors().stream().collect(Collectors.toList())));
 		ThrowableSanitizer.copyThrowableInfo(t, sae);
 		return sae;
 	}
