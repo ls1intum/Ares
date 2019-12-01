@@ -12,7 +12,7 @@ final class StaticLine extends AbstractLine {
 	}
 
 	@Override
-	public final String text() {
+	public String text() {
 		return text;
 	}
 

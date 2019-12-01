@@ -32,13 +32,13 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * The format has to be {@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}. In this
  * case, we allow replacing the <code>T</code> with a space, to improve
  * readability. So this can be e.g.
- * 
+ *
  * <ul>
  * <li><code>2019-09-09 06:00</code></li>
  * <li><code>2019-09-09T06:00</code></li>
  * <li><code>2019-09-09T06:00:01</code></li>
  * </ul>
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.0

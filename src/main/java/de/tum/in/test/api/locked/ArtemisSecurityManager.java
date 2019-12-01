@@ -58,7 +58,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
-	private List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private final List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"org.eclipse.", "com.intellij", "org.assertj", "org.opentest4j.", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	private ArtemisSecurityConfiguration configuration;
@@ -71,13 +71,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			throw new IllegalStateException(localized("security.already_created")); //$NON-NLS-1$
 	}
 
-	private final synchronized String generateAccessToken() {
+	private synchronized String generateAccessToken() {
 		String tokenString = UUID.randomUUID().toString();
 		accessToken = hash(tokenString);
 		return tokenString;
 	}
 
-	private final synchronized void checkAccess(String accessToken) {
+	private synchronized void checkAccess(String accessToken) {
 		if (!this.accessToken.equals(hash(accessToken)))
 			throw new SecurityException(localized("security.access_token_invalid")); //$NON-NLS-1$
 	}
@@ -464,7 +464,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.requestThreadWhitelisting(Thread.currentThread());
 	}
 
-	private static final String hash(String s) {
+	private static String hash(String s) {
 		if (s == null)
 			return ""; //$NON-NLS-1$
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));

@@ -22,7 +22,7 @@ final class TestOutStream extends OutputStream {
 	}
 
 	private final LineAcceptor outputAcceptor;
-	private Optional<OutputStream> mirror;
+	private final Optional<OutputStream> mirror;
 
 	private final ByteArrayOutputStream currentInput;
 

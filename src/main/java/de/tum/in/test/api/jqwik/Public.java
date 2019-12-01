@@ -23,7 +23,7 @@ import net.jqwik.api.Property;
  * <p>
  * <b>This annotation must be accompanied by some jqwik test annotation, it will
  * not cause test execution by itself!</b>
- * 
+ *
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0

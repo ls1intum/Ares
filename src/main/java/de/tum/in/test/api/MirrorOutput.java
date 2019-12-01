@@ -20,7 +20,7 @@ import de.tum.in.test.api.io.IOTester;
  * <p>
  * A {@link MirrorOutput} annotation on a method always overrides the one on the
  * class level.
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.0

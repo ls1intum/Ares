@@ -9,11 +9,10 @@ public final class UnexpectedExceptionError extends Error {
 
 	private UnexpectedExceptionError(Throwable cause) throws SanitizationError {
 		super(cause.toString(), sanitize(cause.getCause()), true, true);
-		this.originalType = cause.getClass();
+		originalType = cause.getClass();
 		setStackTrace(cause.getStackTrace());
-		for (Throwable sup : cause.getSuppressed()) {
+		for (Throwable sup : cause.getSuppressed())
 			addSuppressed(sanitize(sup));
-		}
 	}
 
 	public Class<? extends Throwable> getOriginalType() {

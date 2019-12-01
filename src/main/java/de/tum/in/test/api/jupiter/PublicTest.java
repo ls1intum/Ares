@@ -17,7 +17,7 @@ import de.tum.in.test.api.io.IOTester;
 /**
  * Marks a <b>PUBLIC</b> test case, uses the PdgpSecurityManager, can declare
  * {@link IOTester} as parameter.
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.1

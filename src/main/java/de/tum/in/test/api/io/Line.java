@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * <ul>
  * <li><i>Optional:</i> a line number, starting at 1.</li>
  * </ul>
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.0
@@ -30,7 +30,7 @@ public interface Line {
 
 	/**
 	 * Number of the Line, starting at 1.
-	 * 
+	 *
 	 * @return the line number or -1, if none is set
 	 */
 	int lineNumber();
@@ -46,11 +46,11 @@ public interface Line {
 		return text().contentEquals(cs);
 	}
 
-	public static AbstractLine of(String text) {
+	static AbstractLine of(String text) {
 		return new StaticLine(text);
 	}
 
-	public static List<AbstractLine> linesOf(String multiLineText) {
+	static List<AbstractLine> linesOf(String multiLineText) {
 		return Arrays.stream(multiLineText.split("\r?\n|\r", -1)).map(Line::of) //$NON-NLS-1$
 				.collect(Collectors.toUnmodifiableList());
 	}

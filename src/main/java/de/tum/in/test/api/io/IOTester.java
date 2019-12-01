@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Class for testing console input and output of programs.
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.1
@@ -110,15 +110,15 @@ public final class IOTester {
 		return Line.joinLinesToString(getErrorOutput(), LINE_SEPERATOR);
 	}
 
-	public final InputTester getInTester() {
+	public InputTester getInTester() {
 		return inTester;
 	}
 
-	public final OutputTester getOutTester() {
+	public OutputTester getOutTester() {
 		return outTester;
 	}
 
-	public final OutputTester getErrTester() {
+	public OutputTester getErrTester() {
 		return errTester;
 	}
 

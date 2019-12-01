@@ -18,7 +18,7 @@ import de.tum.in.test.api.Deadline;
  * some basic hash code.
  * <p>
  * <b>This has not been tested in conjunction with Artemis!</b>
- * 
+ *
  * @author Christian Femers
  * @since 0.1.0
  * @version 1.0.0

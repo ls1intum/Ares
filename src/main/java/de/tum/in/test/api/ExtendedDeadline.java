@@ -25,7 +25,7 @@ import de.tum.in.test.api.jupiter.HiddenTest;
  * <li><code>1d 5h</code></li>
  * <li><code>1d 5h 8m</code></li>
  * </ul>
- * 
+ *
  * @see Deadline
  * @author Christian Femers
  * @since 0.1.0

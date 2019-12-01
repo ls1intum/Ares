@@ -39,9 +39,8 @@ public final class ThrowableSanitizer {
 			if (UnexpectedExceptionError.class.equals(t.getClass()))
 				return t;
 			var firstPossibleSan = SANITIZERS.stream().filter(s -> s.canSanitize(t)).findFirst();
-			if (firstPossibleSan.isPresent()) {
+			if (firstPossibleSan.isPresent())
 				return firstPossibleSan.get().sanitize(t);
-			}
 			return UnexpectedExceptionError.wrap(t);
 		}
 	}

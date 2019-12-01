@@ -8,7 +8,7 @@ import java.util.Objects;
 
 final class TestInStream extends InputStream {
 
-	private LineProvider lineProvider;
+	private final LineProvider lineProvider;
 
 	private Line currentLine;
 	private ByteArrayInputStream input;

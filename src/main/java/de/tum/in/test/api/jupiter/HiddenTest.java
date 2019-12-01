@@ -19,7 +19,7 @@ import de.tum.in.test.api.io.IOTester;
  * Marks a HIDDEN test case, can declare {@link IOTester} as parameter. This
  * annotation requires a {@link Deadline} annotation to be set either on the
  * test class or the test method. See {@link Deadline} for more information.
- * 
+ *
  * @see Deadline
  * @author Christian Femers
  * @since 0.1.0

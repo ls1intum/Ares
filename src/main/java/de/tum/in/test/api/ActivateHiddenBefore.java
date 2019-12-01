@@ -19,7 +19,7 @@ import de.tum.in.test.api.jupiter.HiddenTest;
  * <p>
  * <b>This annotation overrides the {@link Deadline} annotation and deactivates
  * it up to the given date.</b>
- * 
+ *
  * @author Christian Femers
  * @see Deadline
  * @since 0.1.2

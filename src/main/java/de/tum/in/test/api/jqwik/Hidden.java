@@ -21,7 +21,7 @@ import de.tum.in.test.api.io.IOTester;
  * <p>
  * <b>This annotation must be accompanied by some jqwik test annotation, it will
  * not cause test execution by itself!</b>
- * 
+ *
  * @see Deadline
  * @author Christian Femers
  * @since 0.2.0

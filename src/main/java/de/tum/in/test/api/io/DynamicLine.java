@@ -10,23 +10,23 @@ final class DynamicLine extends AbstractLine {
 	private String text;
 
 	DynamicLine(CharSequence text) {
-		this.textUnderConstruction = new StringBuilder(text);
+		textUnderConstruction = new StringBuilder(text);
 		if (Line.containsLineBreaks(text))
 			throw new IllegalArgumentException("Line must not contain any new lines"); //$NON-NLS-1$
 	}
 
 	DynamicLine() {
-		this.textUnderConstruction = new StringBuilder();
+		textUnderConstruction = new StringBuilder();
 	}
 
-	public final void complete() {
+	public void complete() {
 		if (isComplete())
 			throw new IllegalStateException("Line already complete"); //$NON-NLS-1$
 		text = textUnderConstruction.toString();
 		textUnderConstruction = null;
 	}
 
-	public final void append(CharSequence s) {
+	public void append(CharSequence s) {
 		if (isComplete())
 			throw new IllegalStateException("Line already completed"); //$NON-NLS-1$
 		if (Line.containsLineBreaks(s))
@@ -35,7 +35,7 @@ final class DynamicLine extends AbstractLine {
 	}
 
 	@Override
-	public final String text() {
+	public String text() {
 		return text != null ? text : textUnderConstruction.toString();
 	}
 

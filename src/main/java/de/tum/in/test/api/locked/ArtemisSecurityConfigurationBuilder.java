@@ -52,7 +52,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
-		this.executionPath = Path.of("");
+		executionPath = Path.of("");
 		return this;
 	}
 
@@ -95,14 +95,14 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withFirstThreadWhitelisted() {
-		this.whitelistFirstThread = true;
+		whitelistFirstThread = true;
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
-		this.testClass = context.testClass().get();
-		this.testMethod = context.testMethod().get();
-		this.whitelistFirstThread = TimeoutUtils.findTimeout(context).isPresent();
+		testClass = context.testClass().get();
+		testMethod = context.testMethod().get();
+		whitelistFirstThread = TimeoutUtils.findTimeout(context).isPresent();
 		return this;
 	}
 

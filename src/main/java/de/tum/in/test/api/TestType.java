@@ -10,12 +10,12 @@ import de.tum.in.test.api.jupiter.PublicTest;
 
 /**
  * Type of an Artemis test case
- * 
+ *
  * @see Hidden
  * @see Public
  * @see HiddenTest
  * @see PublicTest
- * 
+ *
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0

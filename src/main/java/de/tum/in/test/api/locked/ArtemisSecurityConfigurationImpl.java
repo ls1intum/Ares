@@ -32,7 +32,7 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	}
 
 	@Override
-	public final Class<?> testClass() {
+	public Class<?> testClass() {
 		return testClass;
 	}
 
@@ -42,12 +42,12 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	}
 
 	@Override
-	public final Path executionPath() {
+	public Path executionPath() {
 		return executionPath;
 	}
 
 	@Override
-	public final List<String> whitelistedClassNames() {
+	public List<String> whitelistedClassNames() {
 		return whitelistedClassNames;
 	}
 

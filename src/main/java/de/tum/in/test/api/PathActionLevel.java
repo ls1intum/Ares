@@ -15,15 +15,14 @@ public enum PathActionLevel {
 		return ordinal() <= other.ordinal();
 	}
 
-
 	public static PathActionLevel getLevelOf(String actions) {
-		if(actions.contains("execute"))
+		if (actions.contains("execute"))
 			return EXECUTE;
-		if(actions.contains("delete"))
+		if (actions.contains("delete"))
 			return DELETE;
-		if(actions.contains("write"))
+		if (actions.contains("write"))
 			return WRITE;
-		if(actions.contains("readlink"))
+		if (actions.contains("readlink"))
 			return READLINK;
 		return READ;
 	}

@@ -85,9 +85,8 @@ public class TestGuardUtils {
 		var methodDelta = getExtensionDurationOf(testMethod);
 		// Then only the method counts ("override"), because it has its own deadline
 
-		if (methodLevel.isPresent()) {
+		if (methodLevel.isPresent())
 			return methodLevel.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
-		}
 		// look in the class otherwise
 		var classLevel = findAnnotation(testClass, Deadline.class).map(Deadline::value)
 				.map(TestGuardUtils::parseDeadline);

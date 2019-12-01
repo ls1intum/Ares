@@ -20,7 +20,7 @@ import de.tum.in.test.api.io.IOTester;
  * <b>This annotation must be accompanied by some JUnit 5 test annotation, it
  * will not cause test execution by itself!</b> This makes it usable with
  * different JUnit 5 runners.
- * 
+ *
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0
