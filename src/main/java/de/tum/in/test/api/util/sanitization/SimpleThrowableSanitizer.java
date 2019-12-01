@@ -58,7 +58,7 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 			try {
 				cause = Throwable.class.getDeclaredField("cause");
 				cause.setAccessible(true);
-				cause.set(t, sanitize(t.getCause()));
+				cause.set(t, ThrowableSanitizer.sanitize(t.getCause()));
 			} catch (ReflectiveOperationException e) {
 				throw new SanitizationError(e);
 			}
