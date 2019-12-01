@@ -29,9 +29,9 @@ import de.tum.in.test.api.locked.ArtemisSecurityManager;
  * @see Path
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, TYPE, ANNOTATION_TYPE })
