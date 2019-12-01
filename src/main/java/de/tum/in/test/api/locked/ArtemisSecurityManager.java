@@ -267,9 +267,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				throw new SecurityException(localized("security.error_modify_auth") + perm); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
 				checkPathAccess(Path.of(perm.getName()), PathActionLevel.getLevelOf(perm.getActions()));
-		} finally
-
-		{
+		} finally {
 			exitPublicInterface();
 		}
 	}
