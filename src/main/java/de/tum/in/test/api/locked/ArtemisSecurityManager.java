@@ -83,11 +83,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean enterPublicInterface() {
-		return recursionBreak.get().getAndIncrement() > 10;
+		return recursionBreak.get().getAndIncrement() > 2;
 	}
 
 	private boolean exitPublicInterface() {
-		return recursionBreak.get().getAndDecrement() > 10;
+		return recursionBreak.get().getAndDecrement() > 2;
 	}
 
 	@Override
@@ -195,8 +195,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkAccess(Thread t) {
+		ThreadGroup tg = t.getThreadGroup();
 		try {
-			ThreadGroup tg = t.getThreadGroup();
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(t);
@@ -236,11 +236,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkPermission(Permission perm) {
+		String permName = perm.getName();
+		String permActions = perm.getActions();
+		String permString = String.valueOf(perm);
 		try {
-			String permName = perm.getName();
-			String permActions = perm.getActions();
-			String permString = String.valueOf(perm);
-
 			if (enterPublicInterface())
 				return;
 			// for files: read, readlink, write, delete

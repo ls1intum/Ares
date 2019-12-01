@@ -205,6 +205,12 @@ public class SecurityUser {
 		Penguin.tryBreakThreadGroup();
 	}
 
+	@PublicTest
+	public void testEvilPermission() {
+		assertFalse(Penguin.tryEvilPermission());
+	}
+
+
 	/**
 	 * This can be used to check for Threads that are not stoppable. This should
 	 * never happen, but it could. Note that this test beaks all further ones,

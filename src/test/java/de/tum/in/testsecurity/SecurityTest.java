@@ -34,6 +34,7 @@ public class SecurityTest {
 	private final String testMaliciousException = "testMaliciousException";
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testThreadGroup = "testThreadGroup";
+	private final String testEvilPermission = "testEvilPermission";
 
 	@Test
 	void verifySecurity() {
@@ -41,7 +42,7 @@ public class SecurityTest {
 		var tests = results.tests();
 
 		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(21));
+		tests.assertStatistics(stats -> stats.started(22));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfully()));
@@ -49,6 +50,7 @@ public class SecurityTest {
 		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfully()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));

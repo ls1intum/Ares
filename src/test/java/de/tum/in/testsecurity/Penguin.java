@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.Permission;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.xyz.Circumvention;
 
@@ -73,6 +75,51 @@ public class Penguin extends MiniJava {
 			threadGroup = parent;
 		}
 		new Thread(threadGroup, () -> {
+			// nothing
 		}).start();
+	}
+
+	public static boolean tryEvilPermission() {
+		AtomicBoolean ab = new AtomicBoolean();
+		try {
+			System.getSecurityManager().checkPermission(new Permission("setIO") {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean implies(Permission permission) {
+					return false;
+				}
+
+				@Override
+				public int hashCode() {
+					return 0;
+				}
+
+				@Override
+				public String getActions() {
+					return null;
+				}
+
+				@Override
+				public boolean equals(Object obj) {
+					return false;
+				}
+
+				@Override
+				public String toString() {
+					try {
+						accessPath(Path.of("pom.xml"));
+						ab.set(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return super.toString();
+				}
+			});
+		} catch (@SuppressWarnings("unused") SecurityException e) {
+			// do nothing
+		}
+		return ab.get();
 	}
 }
