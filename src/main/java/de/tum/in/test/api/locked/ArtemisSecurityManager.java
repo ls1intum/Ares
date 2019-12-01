@@ -55,7 +55,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
-	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(() -> new AtomicInteger());
+	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
 	private List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
