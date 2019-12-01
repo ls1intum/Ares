@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 public final class ThrowableSanitizer {
 
+	private ThrowableSanitizer() {
+		// static methods only
+	}
+
 	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SimpleThrowableSanitizer.INSTANCE,
 			AssertionFailedErrorSanitizer.INSTANCE, MultipleFailuresErrorSanitizer.INSTANCE,
 			MultipleAssertionsErrorSanitizer.INSTANCE, SoftAssertionErrorSanitizer.INSTANCE);
