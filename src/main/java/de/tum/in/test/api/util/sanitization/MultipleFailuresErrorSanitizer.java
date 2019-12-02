@@ -1,5 +1,7 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
@@ -25,8 +27,8 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 			Field f = MultipleFailuresError.class.getDeclaredField("heading");
 			f.setAccessible(true);
 			String heading = (String) f.get(t);
-			List<Throwable> failures = List.copyOf(((MultipleFailuresError) t).getFailures().stream()
-					.map(ThrowableSanitizer::sanitize).collect(Collectors.toList()));
+			List<Throwable> failures = List.copyOf(invoke(() -> ((MultipleFailuresError) t).getFailures().stream()
+					.map(ThrowableSanitizer::sanitize).collect(Collectors.toList())));
 			MultipleFailuresError mfe = t.getClass().equals(MultipleFailuresError.class)
 					? new MultipleFailuresError(heading, failures)
 					: new AssertJMultipleFailuresError(heading, failures);

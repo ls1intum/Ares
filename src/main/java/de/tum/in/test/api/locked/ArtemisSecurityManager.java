@@ -22,6 +22,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -31,6 +32,7 @@ import javax.net.ssl.SSLPermission;
 import javax.security.auth.AuthPermission;
 
 import de.tum.in.test.api.PathActionLevel;
+import de.tum.in.test.api.util.BlacklistedInvoker;
 
 /**
  * Prevents System.exit, reflection to a certain degree, networking use,
@@ -58,9 +60,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
-	private final List<String> staticWhiteList = List.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private final Set<String> staticWhitelist = Set.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"org.eclipse.", "com.intellij", "org.assertj", "org.opentest4j.", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private final Set<String> staticBlacklist = Set.of(BlacklistedInvoker.class.getName());
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
 	private Optional<Thread> whitelistedThread = Optional.empty();
@@ -227,7 +230,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			LOG_OUTPUT.println("PKG-DEF: " + pkg);
 			super.checkPackageDefinition(pkg);
-			if (staticWhiteList.stream().anyMatch(pkg::startsWith))
+			if (staticWhitelist.stream().anyMatch(pkg::startsWith))
 				throw new SecurityException(formatLocalized("security.error_package_definition", pkg));
 		} finally {
 			exitPublicInterface();
@@ -288,7 +291,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		} catch (Exception e) {
 			e.printStackTrace(LOG_OUTPUT);
 		}
-		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted);
+		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted); //$NON-NLS-1$
 		checkForNonWhitelistedStackFrames(() -> {
 			LOG_OUTPUT.println(message);
 			return formatLocalized("security.error_path_access", p); //$NON-NLS-1$
@@ -339,8 +342,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (isCurrentThreadWhitelisted()) {
 			return stackWalker.walk(sfs -> sfs.filter(ste -> {
 				String name = ste.getClassName(); // we don't map here to retain more information
-				return staticWhiteList.stream().noneMatch(name::startsWith)
-						&& !configuration.whitelistedClassNames().contains(name);
+				return staticBlacklist.stream().anyMatch(name::startsWith)
+						|| (staticWhitelist.stream().noneMatch(name::startsWith)
+								&& !configuration.whitelistedClassNames().contains(name));
 			}).distinct().collect(Collectors.toList()));
 		}
 		return stackWalker.walk(sfs -> sfs.collect(Collectors.toList()));
@@ -418,7 +422,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	static boolean isStaticWhitelisted(String name) {
-		return INSTANCE.staticWhiteList.stream().anyMatch(name::startsWith);
+		return INSTANCE.staticWhitelist.stream().anyMatch(name::startsWith);
 	}
 
 	public static synchronized boolean isInstalled() {

@@ -8,6 +8,7 @@ import java.security.Permission;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.xyz.Circumvention;
+import org.apache.xyz.MaliciousExceptionB;
 
 public class Penguin extends MiniJava {
 
@@ -53,8 +54,18 @@ public class Penguin extends MiniJava {
 		Files.readString(p);
 	}
 
-	public static void maliciousException() {
-		throw new MaliciousException();
+	public static void maliciousExceptionA() {
+		throw new MaliciousExceptionA();
+	}
+
+	public static boolean maliciousExceptionB() {
+		AtomicBoolean ab = new AtomicBoolean();
+		try {
+			throw new MaliciousExceptionB(ab);
+		} catch (SecurityException e) {
+			// nothing
+		}
+		return ab.get();
 	}
 
 	public static String tryExecuteGit() {

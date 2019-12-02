@@ -31,7 +31,8 @@ public class SecurityTest {
 	private final String accessPathAllowed = "accessPathAllowed";
 	private final String accessPathTest = "accessPathTest";
 	private final String weAccessPath = "weAccessPath";
-	private final String testMaliciousException = "testMaliciousException";
+	private final String testMaliciousExceptionA = "testMaliciousExceptionA";
+	private final String testMaliciousExceptionB = "testMaliciousExceptionB";
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testThreadGroup = "testThreadGroup";
 	private final String testEvilPermission = "testEvilPermission";
@@ -42,7 +43,7 @@ public class SecurityTest {
 		var tests = results.tests();
 
 		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(22));
+		tests.assertStatistics(stats -> stats.started(23));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfully()));
@@ -57,9 +58,10 @@ public class SecurityTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionTrick, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathNormal, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathTest, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousException, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionA, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testExecuteGit, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadGroup, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(exceedTimeLimit, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));

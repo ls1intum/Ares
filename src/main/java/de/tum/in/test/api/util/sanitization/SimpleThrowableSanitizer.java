@@ -1,5 +1,7 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -51,14 +53,14 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
-		Throwable causeVal = t.getCause();
-		Throwable[] supprVal = t.getSuppressed();
+		Throwable causeVal = invoke(t::getCause);
+		Throwable[] supprVal = invoke(t::getSuppressed);
 		if (causeVal != null) {
 			Field cause;
 			try {
 				cause = Throwable.class.getDeclaredField("cause");
 				cause.setAccessible(true);
-				cause.set(t, ThrowableSanitizer.sanitize(t.getCause()));
+				cause.set(t, ThrowableSanitizer.sanitize(causeVal));
 			} catch (ReflectiveOperationException e) {
 				throw new SanitizationError(e);
 			}

@@ -1,5 +1,7 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +55,7 @@ public final class ThrowableSanitizer {
 				CAUSE.set(to, to);
 			else
 				CAUSE.set(to, sanitize(cause));
-			SUPPRESSED.set(to, Arrays.stream(from.getSuppressed()).map(ThrowableSanitizer::sanitize)
+			SUPPRESSED.set(to, Arrays.stream(invoke(from::getSuppressed)).map(ThrowableSanitizer::sanitize)
 					.collect(Collectors.toUnmodifiableList()));
 		} catch (IllegalArgumentException | ReflectiveOperationException e) {
 			throw new IllegalStateException(e);

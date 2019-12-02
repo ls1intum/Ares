@@ -1,5 +1,7 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
+
 import java.util.Set;
 
 import org.opentest4j.AssertionFailedError;
@@ -18,8 +20,8 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
 		AssertionFailedError afe = (AssertionFailedError) t;
-		AssertionFailedError newAfe = new AssertionFailedError(afe.getMessage(), sanitizeValue(afe.getExpected()),
-				sanitizeValue(afe.getActual()));
+		AssertionFailedError newAfe = new AssertionFailedError(invoke(afe::getMessage),
+				sanitizeValue(invoke(afe::getExpected)), sanitizeValue(invoke(afe::getActual)));
 		ThrowableSanitizer.copyThrowableInfo(afe, newAfe);
 		return newAfe;
 	}
@@ -27,6 +29,6 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	private static Object sanitizeValue(ValueWrapper vw) {
 		if (vw == null)
 			return null;
-		return vw.getStringRepresentation();
+		return invoke(vw::getStringRepresentation);
 	}
 }

@@ -1,5 +1,7 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,9 +20,9 @@ public enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitiz
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
-		MultipleAssertionsError mae = new MultipleAssertionsError(
-				List.copyOf(((MultipleAssertionsError) t).getErrors().stream().map(ThrowableSanitizer::sanitize)
-						.map(ae -> (AssertionError) ae).collect(Collectors.toList())));
+		MultipleAssertionsError mae = new MultipleAssertionsError(List.copyOf(
+				invoke(() -> ((MultipleAssertionsError) t).getErrors().stream().map(ThrowableSanitizer::sanitize)
+						.map(ae -> (AssertionError) ae).collect(Collectors.toList()))));
 		ThrowableSanitizer.copyThrowableInfo(t, mae);
 		return mae;
 	}

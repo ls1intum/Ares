@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 import org.opentest4j.AssertionFailedError;
 
-public class MaliciousException extends AssertionFailedError {
+public class MaliciousExceptionA extends AssertionFailedError {
 	/**
 	 *
 	 *

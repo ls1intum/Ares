@@ -1,5 +1,6 @@
 package de.tum.in.test.api.util.sanitization;
 
+import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
 import static de.tum.in.test.api.util.sanitization.ThrowableSanitizer.sanitize;
 
 public final class UnexpectedExceptionError extends Error {
@@ -8,10 +9,10 @@ public final class UnexpectedExceptionError extends Error {
 	private final Class<? extends Throwable> originalType;
 
 	private UnexpectedExceptionError(Throwable cause) throws SanitizationError {
-		super(cause.toString(), sanitize(cause.getCause()), true, true);
+		super(invoke(cause::toString), sanitize(invoke(cause::getCause)), true, true);
 		originalType = cause.getClass();
-		setStackTrace(cause.getStackTrace());
-		for (Throwable sup : cause.getSuppressed())
+		setStackTrace(invoke(cause::getStackTrace));
+		for (Throwable sup : invoke(cause::getSuppressed))
 			addSuppressed(sanitize(sup));
 	}
 
