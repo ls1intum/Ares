@@ -16,5 +16,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build and deploy with Maven
-      run: mvn -B clean deploy -Dregistry=https://maven.pkg.github.com/MaisiKoleni -Dtoken=GITHUB_TOKEN
+    - name: Create Maven Settings
+      env:
+        GITHUB_USERNAME: x-access-token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: s4u/maven-settings-action@v1
+      with:
+        servers: '[{"id": "github", "username": "${GITHUB_USERNAME}", "password": "${GITHUB_TOKEN}"}]'
+    - name: Build and Deploy with Maven
+      run: mvn -B -Dmaven.wagon.http.pool=false clean deploy

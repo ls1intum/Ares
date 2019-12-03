@@ -71,13 +71,22 @@
 		</plugins>
 	</build>
 
-	<!-- This is only for GitLab as a deploy workaround -->
-	<!-- <distributionManagement>
+	<scm>
+		<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+		<connection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</connection>
+		<developerConnection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</developerConnection>
+	</scm>
+
+	<distributionManagement>
 		<repository>
-			<id>internal</id>
-			<url>file://${project.build.directory}/mvn-repo</url>
+			<id>github</id>
+			<name>GitHub MaisiKoleni Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
 		</repository>
-	</distributionManagement> -->
+	</distributionManagement>
+	<!-- This is only for GitLab as a deploy workaround -->
+	<!-- <distributionManagement> <repository> <id>internal</id> <url>file://${project.build.directory}/mvn-repo</url>
+		</repository> </distributionManagement> -->
 
 	<dependencies>
 		<dependency>
