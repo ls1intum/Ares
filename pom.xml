@@ -70,12 +70,14 @@
 				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin -->
 		</plugins>
 	</build>
-	<distributionManagement>
+
+	<!-- This is only for GitLab as a deploy workaround -->
+	<!-- <distributionManagement>
 		<repository>
 			<id>internal</id>
 			<url>file://${project.build.directory}/mvn-repo</url>
 		</repository>
-	</distributionManagement>
+	</distributionManagement> -->
 
 	<dependencies>
 		<dependency>
