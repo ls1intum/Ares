@@ -7,9 +7,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 11
@@ -17,11 +15,10 @@ jobs:
       with:
         java-version: 11
     - name: Create Maven Settings
-      env:
-        GITHUB_USERNAME: x-access-token
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: s4u/maven-settings-action@v1
       with:
-        servers: '[{"id": "github", "username": "${GITHUB_USERNAME}", "password": "${GITHUB_TOKEN}"}]'
+        servers: '[{"id": "github", "username": "x-access-token", "password": "${GITHUB_TOKEN}"}]'
     - name: Build and Deploy with Maven
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn -B -Dmaven.wagon.http.pool=false clean deploy
