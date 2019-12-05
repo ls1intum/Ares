@@ -250,7 +250,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			// for preferences: preferences
 			// for redefinition of IO: setIO
 			var whitelist = List.of("getClassLoader", "accessSystemModules"); //$NON-NLS-1$ //$NON-NLS-2$
-			var blacklist = List.of("setIO", "manageProcess"); //$NON-NLS-1$ //$NON-NLS-2$
+			var blacklist = List.of("setIO", "manageProcess", "shutdownHooks"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (whitelist.contains(permName))
 				return;
 			if (blacklist.contains(permName))
