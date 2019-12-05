@@ -15,7 +15,8 @@ public final class ThrowableSanitizer {
 
 	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SimpleThrowableSanitizer.INSTANCE,
 			AssertionFailedErrorSanitizer.INSTANCE, MultipleFailuresErrorSanitizer.INSTANCE,
-			MultipleAssertionsErrorSanitizer.INSTANCE, SoftAssertionErrorSanitizer.INSTANCE);
+			MultipleAssertionsErrorSanitizer.INSTANCE, ExceptionInInitializerErrorSanitizer.INSTANCE,
+			SoftAssertionErrorSanitizer.INSTANCE);
 
 	private static final Field STACKTRACE;
 	private static final Field CAUSE;

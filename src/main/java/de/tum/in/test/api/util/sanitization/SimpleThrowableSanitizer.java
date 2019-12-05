@@ -36,7 +36,7 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 			UnsupportedOperationException.class, SecurityException.class, StackOverflowError.class,
 			ClassCastException.class, ArrayStoreException.class, IndexOutOfBoundsException.class,
 			ArrayIndexOutOfBoundsException.class, AssertionError.class, ConcurrentModificationException.class,
-			NumberFormatException.class, DateTimeException.class, DateTimeParseException.class,
+			LinkageError.class, NumberFormatException.class, DateTimeException.class, DateTimeParseException.class,
 			ZoneRulesException.class, UnsupportedTemporalTypeException.class, EmptyStackException.class,
 			BufferOverflowException.class, BufferUnderflowException.class, IllegalMonitorStateException.class,
 			InvalidPathException.class, UncheckedIOException.class, StringIndexOutOfBoundsException.class,
