@@ -205,7 +205,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(t);
 			if (!testThreadGroup.parentOf(tg))
-				throw new SecurityException(localized("security.error_thread_access")); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -218,7 +218,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(g);
 			if (!testThreadGroup.parentOf(g))
-				throw new SecurityException(localized("security.error_threadgroup_access")); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_threadgroup_access")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -368,6 +368,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (thread == null)
 				continue;
 			try {
+				thread.interrupt();
 				thread.join(500 / originalCount);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
@@ -454,6 +455,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 			LOG_OUTPUT.println("REQUEST UNINSTALL " + Thread.currentThread());
 			// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
+			System.runFinalization();
 			active = INSTANCE.checkThreadGroup();
 			INSTANCE.unwhitelistThreads();
 			INSTANCE.isPartlyDisabled = true;
