@@ -190,7 +190,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			checkForNonWhitelistedStackFrames(() -> localized("security.error_classloader"));
+			checkForNonWhitelistedStackFrames(() -> localized("security.error_classloader")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -204,7 +204,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(t);
 			if (!testThreadGroup.parentOf(tg))
-				throw new SecurityException(localized("security.error_thread_access"));
+				throw new SecurityException(localized("security.error_thread_access")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -217,7 +217,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(g);
 			if (!testThreadGroup.parentOf(g))
-				throw new SecurityException(localized("security.error_threadgroup_access"));
+				throw new SecurityException(localized("security.error_threadgroup_access")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -231,7 +231,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			LOG_OUTPUT.println("PKG-DEF: " + pkg);
 			super.checkPackageDefinition(pkg);
 			if (staticWhitelist.stream().anyMatch(pkg::startsWith))
-				throw new SecurityException(formatLocalized("security.error_package_definition", pkg));
+				throw new SecurityException(formatLocalized("security.error_package_definition", pkg)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -331,7 +331,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message) {
 		var nonWhitelisted = getNonWhitelistedStackFrames();
 		if (!nonWhitelisted.isEmpty()) {
-			LOG_OUTPUT.println("NWSFs ==> " + nonWhitelisted);
+			LOG_OUTPUT.println("NWSFs ==> " + nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
 			throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
 					first.getLineNumber(), first.getFileName()));
@@ -376,7 +376,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return new Thread[0];
 		// try forceful shutdown
 		SecurityException exception = new SecurityException(
-				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(theads)));
+				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(theads))); //$NON-NLS-1$
 		for (Thread thread : theads) {
 			if (thread == null)
 				continue;
@@ -459,7 +459,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 		if (active.length > 0)
 			throw new IllegalStateException(
-					formatLocalized("security.error_threads_still_active", Arrays.toString(active)));
+					formatLocalized("security.error_threads_still_active", Arrays.toString(active))); //$NON-NLS-1$
 	}
 
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {
@@ -468,7 +468,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	public static synchronized void requestThreadWhitelisting() {
-		LOG_OUTPUT.println("REQUEST WHITELISTING " + Thread.currentThread() + " " + INSTANCE.whitelistedThread);
+		LOG_OUTPUT.println("REQUEST WHITELISTING " + Thread.currentThread() + " " + INSTANCE.whitelistedThread); //$NON-NLS-1$ //$NON-NLS-2$
 		INSTANCE.requestThreadWhitelisting(Thread.currentThread());
 	}
 
