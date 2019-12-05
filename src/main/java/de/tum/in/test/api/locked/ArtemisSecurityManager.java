@@ -7,6 +7,7 @@ import java.io.FilePermission;
 import java.io.PrintStream;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
+import java.lang.Thread.State;
 import java.lang.management.ManagementPermission;
 import java.net.InetAddress;
 import java.net.NetPermission;
@@ -392,6 +393,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				exception.addSuppressed(e);
 				Thread.currentThread().interrupt();
 			}
+			if (thread.getState() != State.TERMINATED)
+				LOG_OUTPUT.println("THREAD STOP ERROR: Thread " + thread + " is still in state " + thread.getState()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (testThreadGroup.activeCount() > 0)
 			throw exception;
@@ -443,20 +446,25 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized void uninstall(String accessToken) {
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
+		Thread[] active = new Thread[0];
+		try {
+			INSTANCE.checkAccess(accessToken);
+			if (INSTANCE.isPartlyDisabled)
+				throw new IllegalStateException(localized("security.already_disabled")); //$NON-NLS-1$
 
-		INSTANCE.checkAccess(accessToken);
-		if (INSTANCE.isPartlyDisabled)
-			throw new IllegalStateException(localized("security.already_disabled")); //$NON-NLS-1$
-
-		LOG_OUTPUT.println("REQUEST UNINSTALL " + Thread.currentThread());
-		// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
-		Thread[] active = INSTANCE.checkThreadGroup();
-		INSTANCE.unwhitelistThreads();
-		INSTANCE.isPartlyDisabled = true;
-		System.setSecurityManager(ORIGINAL);
-		INSTANCE.isPartlyDisabled = false;
-		INSTANCE.configuration = null;
-
+			LOG_OUTPUT.println("REQUEST UNINSTALL " + Thread.currentThread());
+			// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
+			active = INSTANCE.checkThreadGroup();
+			INSTANCE.unwhitelistThreads();
+			INSTANCE.isPartlyDisabled = true;
+			System.setSecurityManager(ORIGINAL);
+			INSTANCE.isPartlyDisabled = false;
+			INSTANCE.configuration = null;
+		} catch (Throwable t) {
+			t.printStackTrace(LOG_OUTPUT);
+			LOG_OUTPUT.println("UNINSTALL FAILED: " + t); //$NON-NLS-1$
+			throw t;
+		}
 		if (active.length > 0)
 			throw new IllegalStateException(
 					formatLocalized("security.error_threads_still_active", Arrays.toString(active))); //$NON-NLS-1$
