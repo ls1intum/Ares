@@ -78,16 +78,17 @@
 		<developerConnection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</developerConnection>
 	</scm>
 
+	<!-- This is only for GitHub -->
+	<!-- <distributionManagement> <repository> <id>github</id> <name>GitHub
+		MaisiKoleni Apache Maven Packages</name> <url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+		</repository> </distributionManagement> -->
+	<!-- This is only for GitLab as a deploy workaround -->
 	<distributionManagement>
 		<repository>
-			<id>github</id>
-			<name>GitHub MaisiKoleni Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+			<id>internal</id>
+			<url>file://${project.build.directory}/mvn-repo</url>
 		</repository>
 	</distributionManagement>
-	<!-- This is only for GitLab as a deploy workaround -->
-	<!-- <distributionManagement> <repository> <id>internal</id> <url>file://${project.build.directory}/mvn-repo</url>
-		</repository> </distributionManagement> -->
 
 	<dependencies>
 		<dependency>
