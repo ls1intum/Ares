@@ -369,7 +369,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				continue;
 			try {
 				thread.interrupt();
-				thread.join(500 / originalCount);
+				thread.join(1000 / originalCount);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -388,7 +388,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			 */
 			thread.stop();
 			try {
-				thread.join(500 / originalCount);
+				thread.join(2000 / originalCount);
 			} catch (InterruptedException e) {
 				e.printStackTrace(LOG_OUTPUT);
 				exception.addSuppressed(e);
