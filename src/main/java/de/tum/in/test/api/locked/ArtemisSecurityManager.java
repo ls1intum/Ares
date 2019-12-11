@@ -404,11 +404,21 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private boolean isCurrentThreadWhitelisted() {
 		Thread current = Thread.currentThread();
+		String name;
+		try {
+			exitPublicInterface();
+			name = current.getName();
+		} finally {
+			enterPublicInterface();
+		}
+		var blacklist = Set.of("Finalizer", "InnocuousThread");
+		if (blacklist.stream().anyMatch(name::startsWith))
+			return false;
 		if (!testThreadGroup.parentOf(current.getThreadGroup()))
 			return true;
 		if (!configuration.whitelistFirstThread())
 			return false;
-		return whitelistedThread.filter(current::equals).isPresent();
+		return whitelistedThread.filter(t -> t.equals(current)).isPresent();
 	}
 
 	private void requestThreadWhitelisting(Thread t) {
