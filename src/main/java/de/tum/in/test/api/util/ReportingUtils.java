@@ -1,6 +1,7 @@
 package de.tum.in.test.api.util;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
@@ -50,7 +51,7 @@ public class ReportingUtils {
 			if (first.isPresent()) {
 				String call = first.get().toString();
 				tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
-					return (old == null ? "" : old + "   ") + "/// AJTS: Mögliche Problemstelle: " + call + " ///";
+					return Objects.toString(old, "") + "  /// AJTS: Mögliche Problemstelle: " + call + " ///";
 				});
 			}
 		}
