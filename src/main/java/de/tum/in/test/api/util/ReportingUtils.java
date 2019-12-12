@@ -28,28 +28,33 @@ public class ReportingUtils {
 		try {
 			return invocation.proceed();
 		} catch (Throwable t) {
-			String name = "unknown";
-			Throwable newT;
-			try {
-				name = t.getClass().getName();
-				newT = ThrowableSanitizer.sanitize(t);
-			} catch (@SuppressWarnings("unused") Throwable error) {
-				throw new SecurityException(
-						"Throwable " + name + " threw an error when retrieving information about it.");
-			}
-			tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
-			if (!(newT instanceof AssertionError)) {
-				StackTraceElement[] stackTrace = newT.getStackTrace();
-				var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
-				if (first.isPresent()) {
-					String call = first.get().toString();
-					tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
-						return (old == null ? "" : old + "   ") + "/// AJTS: Mögliche Problemstelle: " + call + " ///";
-					});
-				}
-			}
-			throw newT;
+			throw processThrowable(t);
 		}
+	}
+
+	public static Throwable processThrowable(Throwable t) {
+		if (t == null)
+			return null;
+		String name = "unknown";
+		Throwable newT;
+		try {
+			name = t.getClass().getName();
+			newT = ThrowableSanitizer.sanitize(t);
+		} catch (@SuppressWarnings("unused") Throwable error) {
+			return new SecurityException("Throwable " + name + " threw an error when retrieving information about it.");
+		}
+		tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
+		if (!(newT instanceof AssertionError)) {
+			StackTraceElement[] stackTrace = newT.getStackTrace();
+			var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
+			if (first.isPresent()) {
+				String call = first.get().toString();
+				tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
+					return (old == null ? "" : old + "   ") + "/// AJTS: Mögliche Problemstelle: " + call + " ///";
+				});
+			}
+		}
+		return newT;
 	}
 
 	private static String tryPostProcessFieldOrAddSuppressed(Throwable t, String fieldName,

@@ -1,13 +1,14 @@
 package de.tum.in.test.api.jqwik;
 
-import static de.tum.in.test.api.util.ReportingUtils.doProceedAndPostProcess;
 import static de.tum.in.test.api.util.TestGuardUtils.checkForHidden;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.util.JqwikContext;
+import de.tum.in.test.api.util.ReportingUtils;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
+import net.jqwik.api.lifecycle.PropertyExecutionResult.Status;
 import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
@@ -30,7 +31,19 @@ public final class JqwikTestGuard implements AroundPropertyHook {
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
 		checkForHidden(JqwikContext.of(context));
-		return doProceedAndPostProcess(property::execute);
+		return postProcess(property.execute());
 	}
 
+	private static PropertyExecutionResult postProcess(PropertyExecutionResult per) {
+		var t = per.getThrowable();
+		if (t.isEmpty())
+			return per;
+		Throwable newT = ReportingUtils.processThrowable(t.get());
+		if (per.getStatus() == Status.ABORTED)
+			return PropertyExecutionResult.aborted(newT, per.getSeed().orElse(null));
+		if (per.getStatus() == Status.FAILED)
+			return PropertyExecutionResult.failed(newT, per.getSeed().orElse(null),
+					per.getFalsifiedSample().orElse(null));
+		return per;
+	}
 }
