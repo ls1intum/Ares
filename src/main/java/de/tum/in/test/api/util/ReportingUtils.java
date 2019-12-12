@@ -46,7 +46,6 @@ public class ReportingUtils {
 					tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
 						return (old == null ? "" : old + "   ") + "/// AJTS: Mögliche Problemstelle: " + call + " ///";
 					});
-					System.out.println(newT);
 				}
 			}
 			throw newT;
