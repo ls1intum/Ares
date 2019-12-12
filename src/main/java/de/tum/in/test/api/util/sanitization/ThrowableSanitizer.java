@@ -52,12 +52,13 @@ public final class ThrowableSanitizer {
 		to.setStackTrace(to.getStackTrace());
 		try {
 			Throwable cause = (Throwable) CAUSE.get(from);
+			List<Throwable> suppr = Arrays.stream(invoke(from::getSuppressed)).map(ThrowableSanitizer::sanitize)
+					.collect(Collectors.toUnmodifiableList());
 			if (cause == from)
 				CAUSE.set(to, to);
 			else
 				CAUSE.set(to, sanitize(cause));
-			SUPPRESSED.set(to, Arrays.stream(invoke(from::getSuppressed)).map(ThrowableSanitizer::sanitize)
-					.collect(Collectors.toUnmodifiableList()));
+			SUPPRESSED.set(to, suppr);
 		} catch (IllegalArgumentException | ReflectiveOperationException e) {
 			throw new IllegalStateException(e);
 		}

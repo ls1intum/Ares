@@ -55,25 +55,22 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t) throws SanitizationError {
 		Throwable causeVal = invoke(t::getCause);
 		Throwable[] supprVal = invoke(t::getSuppressed);
-		if (causeVal != null) {
+		try {
 			Field cause;
-			try {
-				cause = Throwable.class.getDeclaredField("cause");
-				cause.setAccessible(true);
-				cause.set(t, ThrowableSanitizer.sanitize(causeVal));
-			} catch (ReflectiveOperationException e) {
-				throw new SanitizationError(e);
-			}
+			cause = Throwable.class.getDeclaredField("cause");
+			cause.setAccessible(true);
+			cause.set(t, ThrowableSanitizer.sanitize(causeVal));
+		} catch (ReflectiveOperationException e) {
+			throw new SanitizationError(e);
 		}
-		if (supprVal.length != 0) {
-			try {
-				Field suppr = Throwable.class.getDeclaredField("suppressedExceptions");
-				suppr.setAccessible(true);
-				suppr.set(t, Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize)
-						.collect(Collectors.toUnmodifiableList())); // this breaks addSuppressed by purpose
-			} catch (ReflectiveOperationException e) {
-				throw new SanitizationError(e);
-			}
+		try {
+			Field suppr = Throwable.class.getDeclaredField("suppressedExceptions");
+			suppr.setAccessible(true);
+			// this breaks addSuppressed by purpose
+			suppr.set(t,
+					Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toUnmodifiableList()));
+		} catch (ReflectiveOperationException e) {
+			throw new SanitizationError(e);
 		}
 		return t;
 	}
