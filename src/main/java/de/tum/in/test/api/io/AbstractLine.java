@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import de.tum.in.test.api.localization.Messages;
 
-abstract class AbstractLine implements Line {
+public abstract class AbstractLine implements Line {
 
 	int lineNumber = -1;
 
