@@ -33,7 +33,7 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 	private final Set<Class<? extends Throwable>> types = Set.of(Throwable.class, Error.class, Exception.class,
 			RuntimeException.class, ArithmeticException.class, NullPointerException.class,
 			IllegalArgumentException.class, NoClassDefFoundError.class, IllegalStateException.class,
-			UnsupportedOperationException.class, SecurityException.class, StackOverflowError.class,
+			UnsupportedOperationException.class, SecurityException.class, StackOverflowError.class, ThreadDeath.class,
 			ClassCastException.class, ArrayStoreException.class, IndexOutOfBoundsException.class,
 			ArrayIndexOutOfBoundsException.class, AssertionError.class, ConcurrentModificationException.class,
 			LinkageError.class, NumberFormatException.class, DateTimeException.class, DateTimeParseException.class,
