@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.platform.commons.util.AnnotationUtils;
+import org.junit.platform.commons.support.AnnotationSupport;
 
 public class LocaleExtension implements BeforeAllCallback, AfterAllCallback {
 
@@ -13,7 +13,7 @@ public class LocaleExtension implements BeforeAllCallback, AfterAllCallback {
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception {
-		var annot = AnnotationUtils.findAnnotation(context.getElement(), UseLocale.class);
+		var annot = AnnotationSupport.findAnnotation(context.getElement(), UseLocale.class);
 		if (annot.isEmpty())
 			return;
 		oldLocale = Locale.getDefault();

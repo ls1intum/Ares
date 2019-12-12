@@ -4,7 +4,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.junit.platform.commons.util.AnnotationUtils;
+import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.TestType;
 import de.tum.in.test.api.jqwik.JqwikArtemisTest;
@@ -52,6 +52,6 @@ public class JqwikContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return AnnotationUtils.findAnnotation(annotatedElement(), JqwikArtemisTest.class).map(JqwikArtemisTest::value);
+		return AnnotationSupport.findAnnotation(annotatedElement(), JqwikArtemisTest.class).map(JqwikArtemisTest::value);
 	}
 }

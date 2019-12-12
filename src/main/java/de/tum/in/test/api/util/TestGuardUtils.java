@@ -2,7 +2,7 @@ package de.tum.in.test.api.util;
 
 import static de.tum.in.test.api.localization.Messages.*;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationFormatError;

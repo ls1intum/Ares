@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.platform.commons.util.AnnotationUtils;
+import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.TestType;
 import de.tum.in.test.api.jupiter.JupiterArtemisTest;
@@ -52,7 +52,7 @@ public class JupiterContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return AnnotationUtils.findAnnotation(annotatedElement(), JupiterArtemisTest.class)
+		return AnnotationSupport.findAnnotation(annotatedElement(), JupiterArtemisTest.class)
 				.map(JupiterArtemisTest::value);
 	}
 }

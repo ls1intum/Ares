@@ -3,7 +3,7 @@ package de.tum.in.test.api.jupiter;
 import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static de.tum.in.test.api.util.ReportingUtils.doProceedAndPostProcess;
 import static de.tum.in.test.api.util.TestGuardUtils.*;
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;

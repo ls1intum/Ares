@@ -1,6 +1,6 @@
 package de.tum.in.test.api.util;
 
-import static org.junit.platform.commons.util.AnnotationUtils.*;
+import static org.junit.platform.commons.support.AnnotationSupport.*;
 
 import java.lang.StackWalker.StackFrame;
 import java.util.HashSet;
