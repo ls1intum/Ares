@@ -39,6 +39,8 @@ public final class JqwikTestGuard implements AroundPropertyHook {
 		if (t.isEmpty())
 			return per;
 		Throwable newT = ReportingUtils.processThrowable(t.get());
+		if (newT instanceof Error && !(newT instanceof AssertionError))
+			throw (Error) newT;
 		if (per.getStatus() == Status.ABORTED)
 			return PropertyExecutionResult.aborted(newT, per.getSeed().orElse(null));
 		if (per.getStatus() == Status.FAILED)
