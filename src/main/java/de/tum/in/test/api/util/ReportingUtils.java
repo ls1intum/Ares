@@ -1,9 +1,11 @@
 package de.tum.in.test.api.util;
 
 import java.lang.reflect.Field;
+import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
+import de.tum.in.test.api.locked.ArtemisSecurityManager;
 import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
 
 /**
@@ -35,16 +37,28 @@ public class ReportingUtils {
 				throw new SecurityException(
 						"Throwable " + name + " threw an error when retrieving information about it.");
 			}
+			tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
+			if (!(newT instanceof AssertionError)) {
+				StackTraceElement[] stackTrace = newT.getStackTrace();
+				var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
+				if (first.isPresent()) {
+					String call = first.get().toString();
+					tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
+						return (old == null ? "" : old + "   ") + "/// AJTS: Mögliche Problemstelle: " + call + " ///";
+					});
+					System.out.println(newT);
+				}
+			}
 			throw newT;
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private static String tryPostProcessFieldOrAddSuppressed(Throwable t, String fieldName) {
+	private static String tryPostProcessFieldOrAddSuppressed(Throwable t, String fieldName,
+			UnaryOperator<String> transform) {
 		try {
 			Field f = Throwable.class.getDeclaredField(fieldName);
 			f.setAccessible(true);
-			String value = postProcessMessage((String) f.get(t));
+			String value = transform.apply((String) f.get(t));
 			f.set(t, value);
 			return value;
 		} catch (Exception e) {
@@ -53,13 +67,7 @@ public class ReportingUtils {
 		}
 	}
 
-	/**
-	 * @deprecated This was needed to escape HTML-like messages. It is now fixed in
-	 *             Artemis and not needed for now.
-	 * @author Christian Femers
-	 */
-	@Deprecated(since = "0.2.0")
 	private static String postProcessMessage(String message) {
-		return message.replace('<', '"').replace('>', '"');
+		return message != null ? message.replaceAll("\r?\n", "  ") : null;
 	}
 }

@@ -341,14 +341,32 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private List<StackFrame> getNonWhitelistedStackFrames() {
 		if (isCurrentThreadWhitelisted()) {
-			return stackWalker.walk(sfs -> sfs.filter(ste -> {
-				String name = ste.getClassName(); // we don't map here to retain more information
-				return staticBlacklist.stream().anyMatch(name::startsWith)
-						|| (staticWhitelist.stream().noneMatch(name::startsWith)
-								&& !configuration.whitelistedClassNames().contains(name));
-			}).distinct().collect(Collectors.toList()));
+			return stackWalker
+					.walk(sfs -> sfs.filter(this::isStackFrameNotWhitelisted).distinct().collect(Collectors.toList()));
 		}
 		return stackWalker.walk(sfs -> sfs.collect(Collectors.toList()));
+	}
+
+	private boolean isCallNotWhitelisted(String call) {
+		return staticBlacklist.stream().anyMatch(call::startsWith)
+				|| (staticWhitelist.stream().noneMatch(call::startsWith)
+						&& (configuration == null || !configuration.whitelistedClassNames().contains(call)));
+	}
+
+	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
+		return isCallNotWhitelisted(sf.getClassName());
+	}
+
+	private boolean isStackFrameNotWhitelisted(StackTraceElement ste) {
+		return isCallNotWhitelisted(ste.getClassName());
+	}
+
+	public static Optional<StackTraceElement> firstNonWhitelisted(StackTraceElement... elements) {
+		for (StackTraceElement ste : elements) {
+			if (INSTANCE.isStackFrameNotWhitelisted(ste))
+				return Optional.ofNullable(ste);
+		}
+		return Optional.empty();
 	}
 
 	@Override
