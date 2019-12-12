@@ -6,6 +6,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.in
 
 import org.assertj.core.api.Condition;
 import org.junit.ComparisonFailure;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Event;
@@ -38,6 +39,7 @@ public class SecurityTest {
 	private final String testEvilPermission = "testEvilPermission";
 
 	@Test
+	@Tag("test-test")
 	void verifySecurity() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(SecurityUser.class)).execute();
 		var tests = results.tests();
