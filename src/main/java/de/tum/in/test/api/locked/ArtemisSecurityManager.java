@@ -387,7 +387,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				continue;
 			try {
 				thread.interrupt();
-				thread.join(1000 / originalCount);
+				thread.join(500 / originalCount);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -404,13 +404,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			 * we definitely want to forcefully terminate all threads (otherwise, next tests
 			 * will fail)
 			 */
-			thread.stop();
-			try {
-				thread.join(2000 / originalCount);
-			} catch (InterruptedException e) {
-				e.printStackTrace(LOG_OUTPUT);
-				exception.addSuppressed(e);
-				Thread.currentThread().interrupt();
+			for (int i = 0; i < 20 && thread.isAlive(); i++) {
+				thread.stop();
+				try {
+					thread.join(100 / originalCount);
+				} catch (InterruptedException e) {
+					e.printStackTrace(LOG_OUTPUT);
+					exception.addSuppressed(e);
+					Thread.currentThread().interrupt();
+					break;
+				}
 			}
 			if (thread.getState() != State.TERMINATED)
 				LOG_OUTPUT.println("THREAD STOP ERROR: Thread " + thread + " is still in state " + thread.getState()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -483,6 +486,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 			LOG_OUTPUT.println("REQUEST UNINSTALL " + Thread.currentThread());
 			// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
+			System.gc();
 			System.runFinalization();
 			active = INSTANCE.checkThreadGroup();
 			INSTANCE.unwhitelistThreads();
