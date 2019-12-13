@@ -31,7 +31,7 @@ public final class JqwikTestGuard implements AroundPropertyHook {
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
 		checkForHidden(JqwikContext.of(context));
-		return postProcess(property.execute());
+		return ReportingUtils.doProceedAndPostProcess(() -> postProcess(property.execute()));
 	}
 
 	private static PropertyExecutionResult postProcess(PropertyExecutionResult per) {
