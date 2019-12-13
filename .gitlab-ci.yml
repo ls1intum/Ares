@@ -44,7 +44,6 @@ JUnit:
 
 Deploy:
   stage: deploy
-  when: manual
   script:
     - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
     - mvn $MAVEN_CLI_OPTS clean test
@@ -56,3 +55,6 @@ Deploy:
     - git add --all
     - git commit -m "Upload new build artifact"
     - git push
+  rules:
+    - if: '$CI_COMMIT_TAG =~ "/^\d+\.\d+\.\d+.*$/"'
+    - when: manual
