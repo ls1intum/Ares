@@ -83,6 +83,7 @@ public final class GeneralTestExtension {
 		Set<String> entries = StackWalker.getInstance()
 				.walk(s -> s.map(StackFrame::getClassName).distinct().collect(Collectors.toCollection(HashSet::new)));
 		context.testClass().map(Class::getName).ifPresent(entries::add);
+		context.testClass().map(Class::getEnclosingClass).map(Class::getName).ifPresent(entries::add);
 		return entries;
 	}
 
