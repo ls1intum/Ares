@@ -96,6 +96,7 @@ public class DeadlineAdditionsTest {
 
 	@Test
 	@Tag("test-test")
+	@SuppressWarnings("static-method")
 	void verifyStatistics() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();

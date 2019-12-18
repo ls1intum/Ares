@@ -62,7 +62,7 @@ public class Penguin extends MiniJava {
 		AtomicBoolean ab = new AtomicBoolean();
 		try {
 			throw new MaliciousExceptionB(ab);
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			// nothing
 		}
 		return ab.get();
