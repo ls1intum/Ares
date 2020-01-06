@@ -387,7 +387,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				continue;
 			try {
 				thread.interrupt();
-				thread.join(500 / originalCount);
+				thread.join(500 / originalCount + 1);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -404,10 +404,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			 * we definitely want to forcefully terminate all threads (otherwise, next tests
 			 * will fail)
 			 */
-			for (int i = 0; i < 20 && thread.isAlive(); i++) {
+			for (int i = 0; i < 100 && thread.isAlive(); i++) {
 				thread.stop();
 				try {
-					thread.join(100 / originalCount);
+					thread.join(20 / originalCount + 1);
 				} catch (InterruptedException e) {
 					e.printStackTrace(LOG_OUTPUT);
 					exception.addSuppressed(e);
