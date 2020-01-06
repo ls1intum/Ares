@@ -24,6 +24,7 @@ import java.time.zone.ZoneRulesException;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,11 +40,12 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 			LinkageError.class, NumberFormatException.class, DateTimeException.class, DateTimeParseException.class,
 			ZoneRulesException.class, UnsupportedTemporalTypeException.class, EmptyStackException.class,
 			BufferOverflowException.class, BufferUnderflowException.class, IllegalMonitorStateException.class,
-			InvalidPathException.class, UncheckedIOException.class, StringIndexOutOfBoundsException.class,
-			IOException.class, OutOfMemoryError.class, FileNotFoundException.class, NoSuchFileException.class,
-			AccessDeniedException.class, DirectoryNotEmptyException.class, NotDirectoryException.class,
-			NotLinkException.class, FileAlreadyExistsException.class, MalformedInputException.class,
-			MalformedURLException.class, org.junit.ComparisonFailure.class, junit.framework.ComparisonFailure.class,
+			NoSuchElementException.class, InvalidPathException.class, UncheckedIOException.class,
+			StringIndexOutOfBoundsException.class, IOException.class, OutOfMemoryError.class,
+			FileNotFoundException.class, NoSuchFileException.class, AccessDeniedException.class,
+			DirectoryNotEmptyException.class, NotDirectoryException.class, NotLinkException.class,
+			FileAlreadyExistsException.class, MalformedInputException.class, MalformedURLException.class,
+			org.junit.ComparisonFailure.class, junit.framework.ComparisonFailure.class,
 			org.junit.internal.ArrayComparisonFailure.class, junit.framework.AssertionFailedError.class);
 
 	@Override
