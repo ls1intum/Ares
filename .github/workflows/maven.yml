@@ -14,11 +14,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Create Maven Settings
-      uses: s4u/maven-settings-action@v1
-      with:
-        servers: '[{"id": "github", "username": "x-access-token", "password": "${GITHUB_TOKEN}"}]'
     - name: Build and Deploy with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn -B -Dmaven.wagon.http.pool=false clean deploy
+      run: |
+        mkdir -p ~/.m2
+        echo "<settings><servers><server><id>github</id><username>MaisiKoleni</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+        mvn -B -Dmaven.wagon.http.pool=false clean deploy -P github

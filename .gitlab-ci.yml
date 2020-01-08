@@ -50,7 +50,7 @@ Deploy:
     - cd target
     - git clone -b master --depth 1 https://${CI_REPO_USER}:${CI_ACCESS_TOKEN}@gitlab.com/ajts-mvn/repo.git mvn-repo
     - cd ..
-    - mvn $MAVEN_CLI_OPTS deploy -DskipTests
+    - mvn $MAVEN_CLI_OPTS deploy -DskipTests -P gitlab
     - cd target/mvn-repo
     - git add --all
     - git commit -m "Upload new build artifact"
