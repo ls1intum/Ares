@@ -49,8 +49,7 @@ public final class GeneralTestExtension {
 		try {
 			ArtemisSecurityManager.uninstall(token);
 		} finally {
-			if (!ArtemisSecurityManager.isInstalled())
-				IOTester.uninstallCurrent();
+			IOTester.uninstallCurrent();
 			ioTester = null;
 		}
 	}
