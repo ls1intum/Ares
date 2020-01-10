@@ -469,8 +469,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return false;
 		if (!testThreadGroup.parentOf(current.getThreadGroup()))
 			return true;
-		if (configuration != null && !configuration.whitelistFirstThread())
-			return false;
 		return whitelistedThreads.stream().anyMatch(t -> t.equals(current));
 	}
 
