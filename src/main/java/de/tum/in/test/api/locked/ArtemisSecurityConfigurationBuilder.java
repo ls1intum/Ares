@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,13 +19,16 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Class<?> testClass;
 	private Method testMethod;
 	private Path executionPath;
-	private Set<String> whitelistedClassNames = new HashSet<>();
+	private Set<String> whitelistedClassNames;
 	private Set<PathRule> whitelistedPaths;
-	private Set<PathRule> blacklistedPaths = Set.of();
+	private Set<PathRule> blacklistedPaths;
 	private boolean whitelistFirstThread;
+	private OptionalInt allowedLocalPort;
 
 	private ArtemisSecurityConfigurationBuilder() {
-
+		whitelistedClassNames = new HashSet<>();
+		blacklistedPaths = Set.of();
+		allowedLocalPort = OptionalInt.empty();
 	}
 
 	public Class<?> getTestClass() {
@@ -49,6 +53,10 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public Set<PathRule> getWhitelistedPaths() {
 		return whitelistedPaths;
+	}
+
+	public OptionalInt getAllowedLocalPort() {
+		return allowedLocalPort;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
@@ -99,6 +107,16 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public ArtemisSecurityConfigurationBuilder withAllowedLocalPort(OptionalInt allowedLocalPort) {
+		this.allowedLocalPort = Objects.requireNonNull(allowedLocalPort);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder allowLocalPort(int port) {
+		allowedLocalPort = OptionalInt.of(port);
+		return this;
+	}
+
 	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
 		testClass = context.testClass().get();
 		testMethod = context.testMethod().get();
@@ -117,7 +135,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public ArtemisSecurityConfiguration build() {
 		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames,
-				whitelistFirstThread, Optional.ofNullable(whitelistedPaths), blacklistedPaths);
+				whitelistFirstThread, Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort);
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {

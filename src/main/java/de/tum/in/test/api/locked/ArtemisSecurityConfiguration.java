@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 
 import org.apiguardian.api.API;
@@ -35,4 +36,6 @@ public interface ArtemisSecurityConfiguration {
 	default Set<PathRule> blacklistedPaths() {
 		return Set.of();
 	}
+
+	OptionalInt allowedLocalPort();
 }

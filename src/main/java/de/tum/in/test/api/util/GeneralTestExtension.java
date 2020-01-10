@@ -5,10 +5,12 @@ import static org.junit.platform.commons.support.AnnotationSupport.*;
 import java.lang.StackWalker.StackFrame;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
@@ -47,7 +49,8 @@ public final class GeneralTestExtension {
 		try {
 			ArtemisSecurityManager.uninstall(token);
 		} finally {
-			IOTester.uninstallCurrent();
+			if (!ArtemisSecurityManager.isInstalled())
+				IOTester.uninstallCurrent();
 			ioTester = null;
 		}
 	}
@@ -63,6 +66,7 @@ public final class GeneralTestExtension {
 		config.addWhitelistedClassNames(generateClassWhiteList(context));
 		config.withPathWhitelist(generatePathWhiteList(context));
 		config.withPathBlacklist(generatePathBlackList(context));
+		config.withAllowedLocalPort(getAllowedLocalPort(context));
 		return config.build();
 	}
 
@@ -91,5 +95,11 @@ public final class GeneralTestExtension {
 		return findAnnotation(context.testMethod(), MirrorOutput.class)
 				.or(() -> findAnnotation(context.testClass(), MirrorOutput.class)).map(MirrorOutput::value)
 				.map(MirrorOutputPolicy::isEnabled).orElse(false);
+	}
+
+	private static OptionalInt getAllowedLocalPort(TestContext context) {
+		return findAnnotation(context.testMethod(), AllowLocalPort.class)
+				.or(() -> findAnnotation(context.testClass(), AllowLocalPort.class)).map(AllowLocalPort::value)
+				.map(OptionalInt::of).orElseGet(OptionalInt::empty);
 	}
 }
