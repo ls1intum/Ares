@@ -118,7 +118,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(localized("security.error_network_accept")); //$NON-NLS-1$
+			throw new SecurityException(formatLocalized("security.error_network_accept", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -131,7 +131,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(localized("security.error_network_connect")); //$NON-NLS-1$
+			throw new SecurityException(formatLocalized("security.error_network_connect", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -144,7 +144,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(localized("security.error_network_connect_with_context")); //$NON-NLS-1$
+			throw new SecurityException(formatLocalized("security.error_network_connect_with_context", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -157,7 +157,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed("localhost", port))
 				return;
-			throw new SecurityException(localized("security.error_network_listen")); //$NON-NLS-1$
+			throw new SecurityException(formatLocalized("security.error_network_listen", port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
