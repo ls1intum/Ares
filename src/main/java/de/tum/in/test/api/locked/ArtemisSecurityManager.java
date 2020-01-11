@@ -35,6 +35,7 @@ import javax.net.ssl.SSLPermission;
 import javax.security.auth.AuthPermission;
 
 import de.tum.in.test.api.PathActionLevel;
+import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.util.BlacklistedInvoker;
 
 /**
@@ -57,6 +58,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		} catch (NoSuchAlgorithmException e) {
 			throw new ExceptionInInitializerError(e);
 		}
+		// Allow to load resources
+		Messages.init();
 	}
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$

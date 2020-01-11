@@ -26,4 +26,8 @@ public class Messages {
 			return '!' + key + '!';
 		}
 	}
+
+	public static void init() {
+		// nothing
+	}
 }
