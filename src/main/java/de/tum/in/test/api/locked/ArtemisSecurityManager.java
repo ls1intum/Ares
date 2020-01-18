@@ -217,6 +217,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(t);
+			 // Thread terminated
+			if(tg == null)
+				return;
 			if (!testThreadGroup.parentOf(tg))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
 		} finally {
