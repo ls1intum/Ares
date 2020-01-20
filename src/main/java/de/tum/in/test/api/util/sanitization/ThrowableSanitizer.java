@@ -49,7 +49,7 @@ public final class ThrowableSanitizer {
 	}
 
 	static void copyThrowableInfo(Throwable from, Throwable to) {
-		to.setStackTrace(to.getStackTrace());
+		to.setStackTrace(from.getStackTrace());
 		try {
 			Throwable cause = (Throwable) CAUSE.get(from);
 			List<Throwable> suppr = Arrays.stream(invoke(from::getSuppressed)).map(ThrowableSanitizer::sanitize)
