@@ -47,6 +47,7 @@ import de.tum.in.test.api.util.BlacklistedInvoker;
  */
 public final class ArtemisSecurityManager extends SecurityManager {
 
+	private static final int NWSF_THRESHOLD = 100;
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
 	private static final String PACKAGE_NAME = ArtemisSecurityManager.class.getPackageName();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
@@ -356,6 +357,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message) {
 		var nonWhitelisted = getNonWhitelistedStackFrames();
 		if (!nonWhitelisted.isEmpty()) {
+			if (nwsfCount++ < NWSF_THRESHOLD)
 			LOG_OUTPUT.println("[WARNING] NWSFs ==> " + nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
 			throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
@@ -514,6 +516,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		LOG_OUTPUT
 				.println("[INFO] Request install by " + Thread.currentThread() + " with " + configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
 		String token = INSTANCE.generateAccessToken();
+		INSTANCE.nwsfCount = 0;
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = Objects.requireNonNull(configuration);
 		INSTANCE.unwhitelistThreads();
