@@ -38,4 +38,6 @@ public interface ArtemisSecurityConfiguration {
 	}
 
 	OptionalInt allowedLocalPort();
+
+	OptionalInt allowedThreadCount();
 }

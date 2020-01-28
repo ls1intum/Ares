@@ -78,7 +78,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
 	private Set<Thread> whitelistedThreads = new HashSet<>();
-	private boolean isPartlyDisabled;
+	private volatile boolean isPartlyDisabled;
+	private volatile boolean blockThreadCreation;
+	private int nwsfCount = 0;
 
 	private ArtemisSecurityManager() {
 		if (INSTANCE != null)
@@ -222,8 +224,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(t);
-			 // Thread terminated
-			if(tg == null)
+			// Thread terminated
+			if (tg == null)
 				return;
 			if (!testThreadGroup.parentOf(tg))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
@@ -240,6 +242,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			super.checkAccess(g);
 			if (!testThreadGroup.parentOf(g))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_threadgroup_access")); //$NON-NLS-1$
+			checkThreadCreation();
 		} finally {
 			exitPublicInterface();
 		}
@@ -358,7 +361,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		var nonWhitelisted = getNonWhitelistedStackFrames();
 		if (!nonWhitelisted.isEmpty()) {
 			if (nwsfCount++ < NWSF_THRESHOLD)
-			LOG_OUTPUT.println("[WARNING] NWSFs ==> " + nonWhitelisted); //$NON-NLS-1$
+				LOG_OUTPUT.println("[WARNING] NWSFs ==> " + nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
 			throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
 					first.getLineNumber(), first.getFileName()));
@@ -416,6 +419,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	@SuppressWarnings("deprecation")
 	private Thread[] checkThreadGroup() {
+		blockThreadCreation = true;
 		int originalCount = testThreadGroup.activeCount();
 		if (originalCount == 0)
 			return new Thread[0]; // everything ok
@@ -462,6 +466,17 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (testThreadGroup.activeCount() > 0)
 			throw exception;
 		return theads;
+	}
+
+	private void checkThreadCreation() {
+		if (blockThreadCreation || configuration == null || configuration.allowedThreadCount().isEmpty()) {
+			checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
+			return;
+		}
+		int current = testThreadGroup.activeCount();
+		int max = configuration.allowedThreadCount().getAsInt();
+		if (max < current)
+			checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_thread_maxExceeded", current, max)); //$NON-NLS-1$
 	}
 
 	private boolean isCurrentThreadWhitelisted() {
@@ -516,6 +531,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		LOG_OUTPUT
 				.println("[INFO] Request install by " + Thread.currentThread() + " with " + configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
 		String token = INSTANCE.generateAccessToken();
+		INSTANCE.blockThreadCreation = false;
 		INSTANCE.nwsfCount = 0;
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = Objects.requireNonNull(configuration);

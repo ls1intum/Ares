@@ -133,4 +133,16 @@ public class Penguin extends MiniJava {
 		}
 		return ab.get();
 	}
+	
+	public static void spawnEndlessThreads() {
+		try {
+			Thread.sleep(2);
+		} catch (InterruptedException e) {
+			// nothing
+		}
+		for (int i = 0; i < 2000; i++) {
+			Thread t = new Thread(Penguin::spawnEndlessThreads);
+			t.start();
+		}
+	}
 }

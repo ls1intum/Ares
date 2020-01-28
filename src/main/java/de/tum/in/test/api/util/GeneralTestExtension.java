@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import de.tum.in.test.api.AllowLocalPort;
+import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
@@ -69,6 +70,7 @@ public final class GeneralTestExtension {
 		config.withPathWhitelist(generatePathWhiteList(context));
 		config.withPathBlacklist(generatePathBlackList(context));
 		config.withAllowedLocalPort(getAllowedLocalPort(context));
+		config.withAllowedThreadCount(getAllowedThreadCount(context));
 		return config.build();
 	}
 
@@ -105,6 +107,11 @@ public final class GeneralTestExtension {
 
 	private static OptionalInt getAllowedLocalPort(TestContext context) {
 		return findAnnotationIn(context, AllowLocalPort.class).map(AllowLocalPort::value).map(OptionalInt::of)
+				.orElseGet(OptionalInt::empty);
+	}
+
+	private static OptionalInt getAllowedThreadCount(TestContext context) {
+		return findAnnotationIn(context, AllowThreads.class).map(AllowThreads::maxActiveCount).map(OptionalInt::of)
 				.orElseGet(OptionalInt::empty);
 	}
 

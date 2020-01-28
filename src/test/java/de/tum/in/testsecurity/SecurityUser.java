@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
@@ -26,6 +27,7 @@ import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
 
 //@MirrorOutput
+@AllowThreads
 @Deadline("2019-10-31 05:00")
 @ExtendedDeadline("1h 30m")
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
@@ -84,7 +86,6 @@ public class SecurityUser {
 		String b = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aluyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 		Assertions.assertEquals(a, b);
 	}
-
 
 	@HiddenTest
 	public void makeUTF8Error() throws IOException {
@@ -215,6 +216,10 @@ public class SecurityUser {
 		}
 	}
 
+	@PublicTest
+	public void testThreadBomb() {
+		Penguin.spawnEndlessThreads();
+	}
 
 	/**
 	 * This can be used to check for Threads that are not stoppable. This should

@@ -24,11 +24,13 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Set<PathRule> blacklistedPaths;
 	private boolean whitelistFirstThread;
 	private OptionalInt allowedLocalPort;
+	private OptionalInt allowedThreadCount;
 
 	private ArtemisSecurityConfigurationBuilder() {
 		whitelistedClassNames = new HashSet<>();
 		blacklistedPaths = Set.of();
 		allowedLocalPort = OptionalInt.empty();
+		allowedThreadCount = OptionalInt.empty();
 	}
 
 	public Class<?> getTestClass() {
@@ -57,6 +59,10 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public OptionalInt getAllowedLocalPort() {
 		return allowedLocalPort;
+	}
+
+	public OptionalInt getAllowedThreadCount() {
+		return allowedThreadCount;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
@@ -112,6 +118,11 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public ArtemisSecurityConfigurationBuilder withAllowedThreadCount(OptionalInt allowedThreadCount) {
+		this.allowedThreadCount = Objects.requireNonNull(allowedThreadCount);
+		return this;
+	}
+
 	public ArtemisSecurityConfigurationBuilder allowLocalPort(int port) {
 		allowedLocalPort = OptionalInt.of(port);
 		return this;
@@ -135,7 +146,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public ArtemisSecurityConfiguration build() {
 		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames,
-				whitelistFirstThread, Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort);
+				whitelistFirstThread, Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort,
+				allowedThreadCount);
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {
