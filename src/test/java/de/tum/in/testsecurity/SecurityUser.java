@@ -217,6 +217,7 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	@StrictTimeout(2)
 	public void testThreadBomb() {
 		Penguin.spawnEndlessThreads();
 	}
