@@ -65,7 +65,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG_OUTPUT.format(
-			"[WARNING] addSuppressed, %s called with %s%n", method, object == null ? "null" : object.getClass());
+			"[WARNING] addSuppressed, %s called with %s%n", method, object == null ? "null" : object.getClass()); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
@@ -80,6 +80,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private Set<Thread> whitelistedThreads = new HashSet<>();
 	private volatile boolean isPartlyDisabled;
 	private volatile boolean blockThreadCreation;
+	private volatile boolean lastUninstallFailed;
 	private int nwsfCount = 0;
 
 	private ArtemisSecurityManager() {
@@ -275,11 +276,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			// for preferences: preferences
 			// for redefinition of IO: setIO
 			var whitelist = List.of("getClassLoader", "accessSystemModules"); //$NON-NLS-1$ //$NON-NLS-2$
-			var blacklist = List.of("setIO", "manageProcess", "shutdownHooks", "createSecurityManager"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			var blacklist = List.of("manageProcess", "shutdownHooks", "createSecurityManager"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (whitelist.contains(permName))
 				return;
 			if (blacklist.contains(permName))
 				throw new SecurityException(localized("security.error_blacklist") + permString); //$NON-NLS-1$
+			if ("setIO".equals(permName)) // $NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed
 			if ("setSecurityManager".equals(permName) && !isPartlyDisabled) //$NON-NLS-1$
 				throw new SecurityException(localized("security.error_security_manager")); //$NON-NLS-1$
@@ -423,15 +426,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		int originalCount = testThreadGroup.activeCount();
 		if (originalCount == 0)
 			return new Thread[0]; // everything ok
-		Thread[] theads = new Thread[originalCount];
-		testThreadGroup.enumerate(theads);
+		Thread[] threads = new Thread[originalCount];
+		testThreadGroup.enumerate(threads);
 		// try gentle shutdown; without that, runs on CI might fail because of previous.
-		for (Thread thread : theads) {
+		for (Thread thread : threads) {
 			if (thread == null)
 				continue;
 			try {
 				thread.interrupt();
 				thread.join(500 / originalCount + 1L);
+				LOG_OUTPUT.format("[DEBUG] State %s after interrupt and join of %s%n", thread.getState(), thread); //$NON-NLS-1$
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -440,15 +444,19 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return new Thread[0];
 		// try forceful shutdown
 		SecurityException exception = new SecurityException(
-				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(theads))); //$NON-NLS-1$
-		for (Thread thread : theads) {
-			if (thread == null)
-				continue;
-			/*
-			 * we definitely want to forcefully terminate all threads (otherwise, next tests
-			 * will fail)
-			 */
-			for (int i = 0; i < 100 && thread.isAlive(); i++) {
+				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(threads))); //$NON-NLS-1$
+		int alive = threads.length;
+		TRIES: for (int i = 0; i < 50 && alive > 0; i++) {
+			alive = 0;
+			for (Thread thread : threads) {
+				if (thread == null || !thread.isAlive())
+					continue;
+				alive++;
+				LOG_OUTPUT.format("[DEBUG] Try %s to stop %s, state: %s%n", i + 1, thread, thread.getState()); //$NON-NLS-1$
+				/*
+				 * we definitely want to forcefully terminate all threads (otherwise, next tests
+				 * will fail)
+				 */
 				thread.stop();
 				try {
 					thread.join(20 / originalCount + 1L);
@@ -456,8 +464,20 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					e.printStackTrace(LOG_OUTPUT);
 					exception.addSuppressed(e);
 					Thread.currentThread().interrupt();
-					break;
+					break TRIES;
 				}
+			}
+		}
+		for (Thread thread : threads) {
+			if (thread == null || !thread.isAlive())
+				continue;
+			try {
+				thread.join(100 / originalCount + 1L);
+			} catch (InterruptedException e) {
+				e.printStackTrace(LOG_OUTPUT);
+				exception.addSuppressed(e);
+				Thread.currentThread().interrupt();
+				break;
 			}
 			if (thread.getState() != State.TERMINATED)
 				LOG_OUTPUT.println(
@@ -465,7 +485,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 		if (testThreadGroup.activeCount() > 0)
 			throw exception;
-		return theads;
+		return threads;
 	}
 
 	private void checkThreadCreation() {
@@ -526,8 +546,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
-		if (isInstalled())
+		if (INSTANCE.lastUninstallFailed) {
+			LOG_OUTPUT.println("[INFO] Try recovery from lastUninstallFailed"); //$NON-NLS-1$
+			INSTANCE.checkThreadGroup();
+			INSTANCE.isPartlyDisabled = true;
+			System.setSecurityManager(ORIGINAL);
+			INSTANCE.isPartlyDisabled = false;
+			INSTANCE.lastUninstallFailed = false;
+		} else if (isInstalled()) {
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
+		}
 		LOG_OUTPUT
 				.println("[INFO] Request install by " + Thread.currentThread() + " with " + configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
 		String token = INSTANCE.generateAccessToken();
@@ -559,7 +587,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			System.setSecurityManager(ORIGINAL);
 			INSTANCE.isPartlyDisabled = false;
 			INSTANCE.configuration = null;
+			INSTANCE.lastUninstallFailed = false;
 		} catch (Throwable t) {
+			INSTANCE.lastUninstallFailed = true;
 			t.printStackTrace(LOG_OUTPUT);
 			LOG_OUTPUT.println("[ERROR] UNINSTALL FAILED: " + t); //$NON-NLS-1$
 			throw t;
