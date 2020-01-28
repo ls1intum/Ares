@@ -28,6 +28,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.tum.in.test.api.locked.ArtemisSecurityManager;
+
 public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
@@ -70,7 +72,9 @@ public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 			suppr.setAccessible(true);
 			// this breaks addSuppressed by purpose
 			suppr.set(t,
-					Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toUnmodifiableList()));
+					IgnorantUnmodifiableList.wrapWith(
+							Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
+							ArtemisSecurityManager.getOnModification()));
 		} catch (ReflectiveOperationException e) {
 			throw new SanitizationError(e);
 		}

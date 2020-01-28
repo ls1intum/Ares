@@ -28,6 +28,7 @@ import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		// Allow to load resources
 		Messages.init();
 	}
+
+	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG_OUTPUT.format(
+			"[WARNING] addSuppressed, %s called with %s%n", method, object == null ? "null" : object.getClass());
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
@@ -563,5 +567,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (s == null)
 			return ""; //$NON-NLS-1$
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));
+	}
+
+	public static BiConsumer<String, Object> getOnModification() {
+		return ON_MODIFICATION;
 	}
 }

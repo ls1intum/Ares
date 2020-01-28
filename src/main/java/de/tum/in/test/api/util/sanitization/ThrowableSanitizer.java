@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.tum.in.test.api.locked.ArtemisSecurityManager;
+
 public final class ThrowableSanitizer {
 
 	private ThrowableSanitizer() {
@@ -52,8 +54,9 @@ public final class ThrowableSanitizer {
 		to.setStackTrace(from.getStackTrace());
 		try {
 			Throwable cause = (Throwable) CAUSE.get(from);
-			List<Throwable> suppr = Arrays.stream(invoke(from::getSuppressed)).map(ThrowableSanitizer::sanitize)
-					.collect(Collectors.toUnmodifiableList());
+			List<Throwable> suppr = IgnorantUnmodifiableList.wrapWith(Arrays.stream(invoke(from::getSuppressed))
+					.map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
+					ArtemisSecurityManager.getOnModification());
 			if (cause == from)
 				CAUSE.set(to, to);
 			else
