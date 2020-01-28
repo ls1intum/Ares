@@ -27,7 +27,7 @@ import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
 
 //@MirrorOutput
-@AllowThreads
+@AllowThreads(maxActiveCount = 100)
 @Deadline("2019-10-31 05:00")
 @ExtendedDeadline("1h 30m")
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
