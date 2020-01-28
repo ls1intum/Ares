@@ -571,11 +571,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
 		Thread[] active = new Thread[0];
+		int oldPrio = Thread.currentThread().getPriority();
 		try {
 			INSTANCE.checkAccess(accessToken);
 			if (INSTANCE.isPartlyDisabled)
 				throw new IllegalStateException(localized("security.already_disabled")); //$NON-NLS-1$
 
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			LOG_OUTPUT.println("[INFO] Request uninstall by " + Thread.currentThread()); //$NON-NLS-1$
 			// try to clean up and try to run finalize() of test objects
 			System.gc();
@@ -593,6 +595,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			t.printStackTrace(LOG_OUTPUT);
 			LOG_OUTPUT.println("[ERROR] UNINSTALL FAILED: " + t); //$NON-NLS-1$
 			throw t;
+		} finally {
+			Thread.currentThread().setPriority(oldPrio);
 		}
 		if (active.length > 0)
 			throw new IllegalStateException(
