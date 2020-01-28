@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Allows starting and modifying own Threads.
  *
  * @author Christian Femers
- * @since 0.3.11
+ * @since 0.4.0
  * @version 1.0.0
  */
 @Documented
