@@ -23,17 +23,21 @@ final class TestOutStream extends OutputStream {
 
 	private final LineAcceptor outputAcceptor;
 	private final Optional<OutputStream> mirror;
+	private final long maxChars;
+	private long charCount;
 
 	private final ByteArrayOutputStream currentInput;
 
-	TestOutStream(LineAcceptor outputAcceptor, OutputStream mirror) {
+	TestOutStream(LineAcceptor outputAcceptor, OutputStream mirror, long maxChars) {
 		this.mirror = Optional.ofNullable(mirror);
 		this.outputAcceptor = outputAcceptor;
 		this.currentInput = new ByteArrayOutputStream();
+		this.maxChars = maxChars;
 	}
 
 	@Override
 	public void write(int b) throws IOException {
+		checkCharCount(1);
 		currentInput.write(b);
 		if (mirror.isPresent())
 			mirror.get().write(b);
@@ -41,6 +45,7 @@ final class TestOutStream extends OutputStream {
 
 	@Override
 	public void write(byte[] b) throws IOException {
+		checkCharCount(b.length);
 		currentInput.write(b);
 		if (mirror.isPresent())
 			mirror.get().write(b);
@@ -48,6 +53,7 @@ final class TestOutStream extends OutputStream {
 
 	@Override
 	public void write(byte[] b, int offset, int length) throws IOException {
+		checkCharCount(length);
 		currentInput.write(b, offset, length);
 		if (mirror.isPresent())
 			mirror.get().write(b, offset, length);
@@ -69,4 +75,10 @@ final class TestOutStream extends OutputStream {
 		currentInput.reset();
 	}
 
+	private void checkCharCount(int newChars) {
+		charCount += newChars;
+		if (charCount > maxChars) {
+			throw new SecurityException(formatLocalized("output_tester.output_maxExceeded", charCount));
+		}
+	}
 }

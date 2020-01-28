@@ -41,7 +41,7 @@ public final class IOTester {
 
 	private boolean isInstalled;
 
-	private IOTester(boolean mirrorOutput) {
+	private IOTester(boolean mirrorOutput, long maxChars) {
 		// backup
 		oldIn = System.in;
 		oldOut = System.out;
@@ -54,8 +54,8 @@ public final class IOTester {
 
 		// initialize test streams
 		in = new TestInStream(inTester);
-		out = new TestOutStream(outTester, mirrorOutput ? oldOut : null);
-		err = new TestOutStream(errTester, mirrorOutput ? oldErr : null);
+		out = new TestOutStream(outTester, mirrorOutput ? oldOut : null, maxChars);
+		err = new TestOutStream(errTester, mirrorOutput ? oldErr : null, maxChars);
 	}
 
 	public synchronized void install() {
@@ -126,10 +126,10 @@ public final class IOTester {
 		return instance != null && instance.isInstalled;
 	}
 
-	public static synchronized IOTester installNew(boolean mirrorOutput) {
+	public static synchronized IOTester installNew(boolean mirrorOutput, long maxChars) {
 		if (isInstalled())
 			throw new IllegalStateException(localized("io_tester.already_installed")); //$NON-NLS-1$
-		instance = new IOTester(mirrorOutput);
+		instance = new IOTester(mirrorOutput, maxChars);
 		instance.install();
 		return instance;
 	}

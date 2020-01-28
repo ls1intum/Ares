@@ -20,10 +20,13 @@ import de.tum.in.test.api.io.IOTester;
  * <p>
  * A {@link MirrorOutput} annotation on a method always overrides the one on the
  * class level.
+ * <p>
+ * <code>maxCharCount</code> is used to restrict the number of characters that
+ * are stored and printed to the original standard output.
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
@@ -32,6 +35,14 @@ import de.tum.in.test.api.io.IOTester;
 public @interface MirrorOutput {
 
 	MirrorOutputPolicy value() default MirrorOutputPolicy.ENABLED;
+
+	/**
+	 * This is used to restrict the number of characters that are stored and printed
+	 * to the original standard output.
+	 * <p>
+	 * Default value is <code>10_000_000</code>
+	 */
+	long maxCharCount() default 10_000_000;
 
 	enum MirrorOutputPolicy {
 		DISABLED,

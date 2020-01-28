@@ -3,6 +3,7 @@ package de.tum.in.test.api.util;
 import static org.junit.platform.commons.support.AnnotationSupport.*;
 
 import java.lang.StackWalker.StackFrame;
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -22,6 +23,7 @@ import de.tum.in.test.api.locked.ArtemisSecurityManager;
 
 public final class GeneralTestExtension {
 
+	private static final long DEFAULT_MAX_STD_OUT = 10_000_000L;
 	private final TestContext context;
 	private String token;
 	private IOTester ioTester;
@@ -32,7 +34,8 @@ public final class GeneralTestExtension {
 
 	public void beforeTestExecution() throws Exception {
 		boolean mirrorOutput = shouldMirrorOutput(context);
-		ioTester = IOTester.installNew(mirrorOutput);
+		long maxStdOut = getMaxStandardOutput(context);
+		ioTester = IOTester.installNew(mirrorOutput, maxStdOut);
 		try {
 			token = ArtemisSecurityManager.install(generateConfiguration(context));
 		} catch (Throwable t) {
@@ -91,14 +94,23 @@ public final class GeneralTestExtension {
 	}
 
 	private static boolean shouldMirrorOutput(TestContext context) {
-		return findAnnotation(context.testMethod(), MirrorOutput.class)
-				.or(() -> findAnnotation(context.testClass(), MirrorOutput.class)).map(MirrorOutput::value)
-				.map(MirrorOutputPolicy::isEnabled).orElse(false);
+		return findAnnotationIn(context, MirrorOutput.class).map(MirrorOutput::value).map(MirrorOutputPolicy::isEnabled)
+				.orElse(false);
+	}
+
+	private static long getMaxStandardOutput(TestContext context) {
+		return findAnnotationIn(context, MirrorOutput.class).map(MirrorOutput::maxCharCount)
+				.orElse(DEFAULT_MAX_STD_OUT);
 	}
 
 	private static OptionalInt getAllowedLocalPort(TestContext context) {
-		return findAnnotation(context.testMethod(), AllowLocalPort.class)
-				.or(() -> findAnnotation(context.testClass(), AllowLocalPort.class)).map(AllowLocalPort::value)
-				.map(OptionalInt::of).orElseGet(OptionalInt::empty);
+		return findAnnotationIn(context, AllowLocalPort.class).map(AllowLocalPort::value).map(OptionalInt::of)
+				.orElseGet(OptionalInt::empty);
+	}
+
+	private static <A extends Annotation> Optional<A> findAnnotationIn(TestContext context, Class<A> annotation) {
+		return findAnnotation(context.testMethod(), annotation)
+				.or(() -> findAnnotation(context.annotatedElement(), annotation))
+				.or(() -> findAnnotation(context.testClass(), annotation));
 	}
 }
