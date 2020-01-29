@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.TestMethodOrder;
 
@@ -216,6 +217,7 @@ public class SecurityUser {
 		}
 	}
 
+	@Disabled
 	@PublicTest
 	@StrictTimeout(2)
 	public void testThreadBomb() {
