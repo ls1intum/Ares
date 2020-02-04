@@ -16,6 +16,7 @@ import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
+import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.locked.ArtemisSecurityConfiguration;
@@ -92,7 +93,15 @@ public final class GeneralTestExtension {
 				.walk(s -> s.map(StackFrame::getClassName).distinct().collect(Collectors.toCollection(HashSet::new)));
 		context.testClass().map(Class::getName).ifPresent(entries::add);
 		context.testClass().map(Class::getEnclosingClass).map(Class::getName).ifPresent(entries::add);
+		entries.addAll(getWhitelistedClasses(context));
 		return entries;
+	}
+
+	private static Set<String> getWhitelistedClasses(TestContext context) {
+		var methodLevel = findRepeatableAnnotations(context.testMethod(), WhitelistClass.class);
+		var classLevel = findRepeatableAnnotations(context.testClass(), WhitelistClass.class);
+		return Stream.concat(methodLevel.stream(), classLevel.stream()).map(WhitelistClass::value).map(Class::getName)
+				.collect(Collectors.toSet());
 	}
 
 	private static boolean shouldMirrorOutput(TestContext context) {
