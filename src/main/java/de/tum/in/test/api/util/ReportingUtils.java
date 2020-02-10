@@ -10,7 +10,7 @@ import de.tum.in.test.api.locked.ArtemisSecurityManager;
 import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
 
 /**
- * For handling and post processing Exceptions and Errors, currently not in use.
+ * For handling and post processing Exceptions and Errors.
  *
  * @author Christian Femers
  *
@@ -22,10 +22,6 @@ public class ReportingUtils {
 	}
 
 	public static <T> T doProceedAndPostProcess(Invocation<T> invocation) throws Throwable {
-		/*
-		 * Currently not needed anymore, because Artemis #993 is fixed, but might be
-		 * useful in future (e.g. convert newlines/tabs to \n, \t or similar)
-		 */
 		try {
 			return invocation.proceed();
 		} catch (Throwable t) {
@@ -72,6 +68,10 @@ public class ReportingUtils {
 		}
 	}
 
+	/**
+	 * This will replace any newlines by spaces, so that multiline messages are
+	 * displayed fully in the Artemis user interface.
+	 */
 	private static String postProcessMessage(String message) {
 		return message != null ? message.replaceAll("\r?\n", "  ") : null;
 	}
