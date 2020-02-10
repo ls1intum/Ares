@@ -2,6 +2,7 @@ package de.tum.in.test.api.util.sanitization;
 
 import java.util.AbstractList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -9,6 +10,31 @@ import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.function.BiConsumer;
 
+/**
+ * This is a proxy for {@linkplain List}s to prevent modification silently.
+ * While the lists obtained from {@linkplain List#copyOf(Collection)} or
+ * {@linkplain Collections#unmodifiableList(List)} throw
+ * {@linkplain UnsupportedOperationException}s on method calls that would change
+ * the lists state, this class will intentionally <b>not</b> do this.
+ * <p>
+ * It is however possible to supply an <code>IgnorantUnmodifiableList</code>
+ * with a {@linkplain BiConsumer} that gets supplied with the signature of the
+ * called method and, if present, the (most important) argument passed to the
+ * method.
+ * <p>
+ * Please note that this class was created for security reasons to prevent
+ * modifications without causing exceptions. For creating regular unmodifiable
+ * lists, {@link List#copyOf(Collection)} or
+ * {@link Collections#unmodifiableList(List)} should always be preferred.
+ *
+ * @author Christian Femers
+ *
+ * @see List#of(Object...)
+ * @see List#copyOf(Collection)
+ * @see Collections#unmodifiableList(List)
+ *
+ * @param <E> Type of the elements in the List.
+ */
 public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implements RandomAccess {
 	private final List<E> list;
 	private final BiConsumer<String, Object> onModification;
@@ -152,6 +178,7 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 	public ListIterator<E> listIterator(int index) {
 		final ListIterator<E> it = list.listIterator(index);
 		return new ListIterator<>() {
+			private boolean changeAllowed;
 
 			@Override
 			public boolean hasNext() {
@@ -160,6 +187,7 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 			@Override
 			public E next() {
+				changeAllowed = true;
 				return it.next();
 			}
 
@@ -170,6 +198,7 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 			@Override
 			public E previous() {
+				changeAllowed = true;
 				return it.previous();
 			}
 
@@ -185,19 +214,38 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 			@Override
 			public void remove() {
-				IgnorantUnmodifiableList.this.remove(0);
+				checkChangeAction();
+				changeAllowed = false;
+				IgnorantUnmodifiableList.this.remove(it.nextIndex() - 1);
 			}
 
 			@Override
 			public void set(E e) {
+				checkChangeAction();
 				IgnorantUnmodifiableList.this.set(0, e);
 			}
 
 			@Override
 			public void add(E e) {
+				changeAllowed = false;
 				IgnorantUnmodifiableList.this.add(e);
 			}
+
+			private void checkChangeAction() {
+				if (!changeAllowed)
+					throw new IllegalStateException();
+			}
 		};
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return list.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return list.hashCode();
 	}
 
 	@Override
