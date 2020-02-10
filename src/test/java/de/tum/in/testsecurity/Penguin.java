@@ -133,11 +133,11 @@ public class Penguin extends MiniJava {
 		}
 		return ab.get();
 	}
-	
+
 	public static void spawnEndlessThreads() {
 		try {
 			Thread.sleep(2);
-		} catch (InterruptedException e) {
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			// nothing
 		}
 		for (int i = 0; i < 2000; i++) {

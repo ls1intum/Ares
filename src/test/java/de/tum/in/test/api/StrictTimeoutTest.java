@@ -30,9 +30,9 @@ public class StrictTimeoutTest {
 	@Tag("test-test")
 	void verifyStrictTimeout() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(StrictTimeoutUser.class)).execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(8));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testOneSecondSuccess), finishedSuccessfully()));

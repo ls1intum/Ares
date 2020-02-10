@@ -26,9 +26,9 @@ public class HiddenPublicTest {
 	@Tag("test-test")
 	void verifyDeadline() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(HiddenPublicUser.class)).execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(5));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfully()));

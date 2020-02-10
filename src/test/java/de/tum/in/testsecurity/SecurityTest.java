@@ -37,15 +37,20 @@ public class SecurityTest {
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testThreadGroup = "testThreadGroup";
 	private final String testEvilPermission = "testEvilPermission";
+	/**
+	 * Currently unused because this is very inconsistent depending on the CI
+	 * environment
+	 */
+	@SuppressWarnings("unused")
 	private final String testThreadBomb = "testThreadBomb";
 
 	@Test
 	@Tag("test-test")
 	void verifySecurity() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(SecurityUser.class)).execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(23));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));

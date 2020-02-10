@@ -41,9 +41,9 @@ public class JqwickTest {
 	@Tag("test-test")
 	void verifyJqwik() {
 		var results = EngineTestKit.engine("jqwik").selectors(selectClass(JqwickUser.class)).execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(16));
 
 		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));

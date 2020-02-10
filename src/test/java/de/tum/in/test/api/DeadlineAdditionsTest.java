@@ -36,9 +36,9 @@ public class DeadlineAdditionsTest {
 	void verifyExtendedDeadline() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfully()));
 
@@ -56,9 +56,9 @@ public class DeadlineAdditionsTest {
 	void verifyActivateHiddenBefore() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfully()));
@@ -76,9 +76,9 @@ public class DeadlineAdditionsTest {
 	void verifyDeadlineAdditionsMixed() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
-		var tests = results.tests();
+		var tests = results.testEvents();
 
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1,
@@ -100,8 +100,8 @@ public class DeadlineAdditionsTest {
 	void verifyStatistics() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
-		var tests = results.tests();
-		results.containers().assertStatistics(stats -> stats.started(2).succeeded(2));
+		var tests = results.testEvents();
+		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(16).succeeded(8).failed(8));
 	}
 
