@@ -7,6 +7,7 @@ import java.util.function.UnaryOperator;
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
 import de.tum.in.test.api.locked.ArtemisSecurityManager;
+import de.tum.in.test.api.util.sanitization.SanitizationError;
 import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
 
 /**
@@ -37,8 +38,10 @@ public class ReportingUtils {
 		try {
 			name = t.getClass().getName();
 			newT = ThrowableSanitizer.sanitize(t);
-		} catch (@SuppressWarnings("unused") Throwable error) {
-			return new SecurityException("Throwable " + name + " threw an error when retrieving information about it.");
+		} catch (Throwable error) {
+			String info = error.getClass() == SanitizationError.class ? error.toString() : error.getClass().toString();
+			return new SecurityException(
+					"Throwable " + name + " threw an error when retrieving information about it. (" + info + ")");
 		}
 		tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
 		if (!(newT instanceof AssertionError)) {
