@@ -6,8 +6,9 @@
 	<artifactId>artemis-java-test-sandbox</artifactId>
 	<version>0.4.5-SNAPSHOT</version>
 	<name>Artemis Java Test Sandbox</name>
-	<description>JUnit 5 Extension API for Artemis Java Testing</description>
+	<description>JUnit 5 Extension API for secure Artemis Java Testing</description>
 	<inceptionYear>2019</inceptionYear>
+	<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
 	<licenses>
 		<license>
 			<name>MIT</name>
@@ -130,7 +131,8 @@
 			<scope>test</scope>
 			<version>1.5.2</version>
 		</dependency>
-		<!-- For testing the property based testing framework jqwick is supported -->
+		<!-- For testing the property based testing framework jqwik is supported
+			(but it is not a required dependency) -->
 		<dependency>
 			<groupId>net.jqwik</groupId>
 			<artifactId>jqwik</artifactId>
