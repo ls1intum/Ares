@@ -50,7 +50,7 @@ public final class ThrowableSanitizer {
 		}
 	}
 
-	static void copyThrowableInfo(Throwable from, Throwable to) {
+	static void copyThrowableInfo(Throwable from, Throwable to) throws SanitizationError {
 		to.setStackTrace(from.getStackTrace());
 		try {
 			Throwable cause = (Throwable) CAUSE.get(from);
@@ -63,7 +63,7 @@ public final class ThrowableSanitizer {
 				CAUSE.set(to, sanitize(cause));
 			SUPPRESSED.set(to, suppr);
 		} catch (IllegalArgumentException | ReflectiveOperationException e) {
-			throw new IllegalStateException(e);
+			throw new SanitizationError(e);
 		}
 	}
 }

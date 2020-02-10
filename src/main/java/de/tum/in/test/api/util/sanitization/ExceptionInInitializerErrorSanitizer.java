@@ -41,7 +41,7 @@ enum ExceptionInInitializerErrorSanitizer implements SpecificThrowableSanitizer 
 			}
 			SimpleThrowableSanitizer.INSTANCE.sanitize(t);
 		} catch (IllegalArgumentException | ReflectiveOperationException e) {
-			throw new IllegalStateException(e);
+			throw new SanitizationError(e);
 		}
 		return t;
 	}
