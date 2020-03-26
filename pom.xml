@@ -7,8 +7,8 @@
 	<version>0.4.5-SNAPSHOT</version>
 	<name>Artemis Java Test Sandbox</name>
 	<description>JUnit 5 Extension API for secure Artemis Java Testing</description>
-	<inceptionYear>2019</inceptionYear>
 	<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+	<inceptionYear>2019</inceptionYear>
 	<licenses>
 		<license>
 			<name>MIT</name>
@@ -25,12 +25,76 @@
 		</developer>
 	</developers>
 
+	<scm>
+		<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+		<connection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</connection>
+		<developerConnection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</developerConnection>
+	</scm>
+
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
+		<junit-jupiter-version>5.6.1</junit-jupiter-version>
+		<junit-platform-version>1.6.1</junit-platform-version>
+		<jqwik-version>1.2.1</jqwik-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>${junit-platform-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>${junit-jupiter-version}</version>
+		</dependency>
+		<!-- This is included for better String comparison error messages -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.15.0</version>
+		</dependency>
+		<!-- For testing we use a test framework testing framework -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-testkit</artifactId>
+			<scope>test</scope>
+			<version>${junit-platform-version}</version>
+		</dependency>
+		<!-- For testing the property based testing framework jqwik is supported
+			(but it is not a required dependency) -->
+		<dependency>
+			<groupId>net.jqwik</groupId>
+			<artifactId>jqwik</artifactId>
+			<version>${jqwik-version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -49,17 +113,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
-						<configuration>
-						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -80,67 +147,6 @@
 				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin -->
 		</plugins>
 	</build>
-
-	<scm>
-		<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
-		<connection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</connection>
-		<developerConnection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</developerConnection>
-	</scm>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<version>5.6.0</version>
-		</dependency>
-		<!-- This is included for better String comparison error messages -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.14.0</version>
-		</dependency>
-		<!-- For testing we use a test framework testing framework -->
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-testkit</artifactId>
-			<scope>test</scope>
-			<version>1.6.0</version>
-		</dependency>
-		<!-- For testing the property based testing framework jqwik is supported
-			(but it is not a required dependency) -->
-		<dependency>
-			<groupId>net.jqwik</groupId>
-			<artifactId>jqwik</artifactId>
-			<version>1.2.1</version>
-			<optional>true</optional>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<!-- This is only for GitHub -->
