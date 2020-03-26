@@ -68,6 +68,7 @@ public class Penguin extends MiniJava {
 		return ab.get();
 	}
 
+	@SuppressWarnings("resource")
 	public static String tryExecuteGit() {
 		try {
 			return new String(Runtime.getRuntime().exec("git --help").getInputStream().readAllBytes())
