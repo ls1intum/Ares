@@ -11,7 +11,6 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 final class TestOutStream extends OutputStream {
 
@@ -22,14 +21,15 @@ final class TestOutStream extends OutputStream {
 	}
 
 	private final LineAcceptor outputAcceptor;
-	private final Optional<OutputStream> mirror;
+	private final OutputStream mirror;
 	private final long maxChars;
 	private long charCount;
+	private volatile boolean closed;
 
 	private final ByteArrayOutputStream currentInput;
 
 	TestOutStream(LineAcceptor outputAcceptor, OutputStream mirror, long maxChars) {
-		this.mirror = Optional.ofNullable(mirror);
+		this.mirror = mirror;
 		this.outputAcceptor = outputAcceptor;
 		this.currentInput = new ByteArrayOutputStream();
 		this.maxChars = maxChars;
@@ -39,24 +39,24 @@ final class TestOutStream extends OutputStream {
 	public void write(int b) throws IOException {
 		checkCharCount(1);
 		currentInput.write(b);
-		if (mirror.isPresent())
-			mirror.get().write(b);
+		if (mirror != null)
+			mirror.write(b);
 	}
 
 	@Override
 	public void write(byte[] b) throws IOException {
 		checkCharCount(b.length);
 		currentInput.write(b);
-		if (mirror.isPresent())
-			mirror.get().write(b);
+		if (mirror != null)
+			mirror.write(b);
 	}
 
 	@Override
 	public void write(byte[] b, int offset, int length) throws IOException {
 		checkCharCount(length);
 		currentInput.write(b, offset, length);
-		if (mirror.isPresent())
-			mirror.get().write(b, offset, length);
+		if (mirror != null)
+			mirror.write(b, offset, length);
 	}
 
 	@Override
@@ -75,7 +75,17 @@ final class TestOutStream extends OutputStream {
 		currentInput.reset();
 	}
 
-	private void checkCharCount(int newChars) {
+	@Override
+	public void close() throws IOException {
+		closed = true;
+		if (mirror != null)
+			mirror.close();
+	}
+
+	private void checkCharCount(int newChars) throws IOException {
+		if (closed) {
+			throw new IOException("Stream closed");
+		}
 		charCount += newChars;
 		if (charCount > maxChars) {
 			throw new SecurityException(formatLocalized("output_tester.output_maxExceeded", charCount));
