@@ -16,7 +16,7 @@ import net.jqwik.api.lifecycle.PropertyLifecycleContext;
  * This class' main purpose is to guard the {@link HiddenTest}s execution and
  * evaluate the {@link Deadline}.
  * <p>
- * <i>Adaption for jqwick.</i>
+ * <i>Adaption for jqwik.</i>
  *
  * @author Christian Femers
  */

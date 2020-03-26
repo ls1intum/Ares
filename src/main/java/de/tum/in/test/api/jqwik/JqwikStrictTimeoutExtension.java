@@ -19,7 +19,7 @@ import net.jqwik.engine.facades.DomainContextFacadeImpl;
  * processed, using
  * {@link Assertions#assertTimeoutPreemptively(Duration, org.junit.jupiter.api.function.ThrowingSupplier)}
  * <p>
- * <i>Adaption for jqwick.</i>
+ * <i>Adaption for jqwik.</i>
  *
  * @author Christian Femers
  *

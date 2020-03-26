@@ -17,7 +17,7 @@ import net.jqwik.engine.providers.RegisteredArbitraryProviders;
 
 /**
  * <p>
- * <i>Adaption for jqwick.</i>
+ * <i>Adaption for jqwik.</i>
  *
  * @author Christian Femers
  */
