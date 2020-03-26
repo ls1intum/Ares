@@ -2,8 +2,9 @@ name: Java CI
 
 on: 
   push:
-  release:
-    types: [created]
+    branches:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   test:
@@ -21,8 +22,8 @@ jobs:
     - name: Test with Maven and JDK ${{ matrix.java }}
       run: mvn -B clean test
   deploy:
+    if: startsWith(github.event.ref, 'refs/tags/')
     needs: test
-    if: github.event_name == 'release' && github.event.action == 'created'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
