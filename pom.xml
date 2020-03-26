@@ -166,6 +166,11 @@
 					<name>GitHub MaisiKoleni Apache Maven Packages</name>
 					<url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
 				</repository>
+				<!-- GitHub cannot handle snapshots correctly now, so we do nothing -->
+				<snapshotRepository>
+					<id>internal</id>
+					<url>file://${project.build.directory}/mvn-repo</url>
+				</snapshotRepository>
 			</distributionManagement>
 		</profile>
 		<!-- This is only for GitLab as a deploy workaround -->
