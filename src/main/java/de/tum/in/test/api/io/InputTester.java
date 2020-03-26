@@ -18,7 +18,7 @@ import java.util.List;
 public final class InputTester implements LineProvider {
 
 	private final List<Line> expectedInput = new ArrayList<>();
-	private int position = 0;
+	private int position;
 
 	@Override
 	public Line getNextLine() {
