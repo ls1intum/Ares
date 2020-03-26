@@ -17,14 +17,11 @@ import java.util.List;
 public final class IOTester {
 
 	static final String LINE_SEPERATOR = "\n"; //$NON-NLS-1$
+
 	static {
-		Charset cs = Charset.defaultCharset();
-		if (!cs.name().equals("UTF-8")) { //$NON-NLS-1$
-			String message = formatLocalized("io_tester.default_not_utf8", cs); //$NON-NLS-1$
-			System.err.println(message); // this is more noticeable in maven build log
-			throw new IllegalStateException(message);
-		}
+		checkEncoding();
 	}
+
 	private static IOTester instance;
 
 	private final InputStream oldIn;
@@ -139,5 +136,14 @@ public final class IOTester {
 			throw new IllegalStateException(localized("io_tester.not_installed")); //$NON-NLS-1$
 		instance.uninstall();
 		instance = null;
+	}
+
+	private static void checkEncoding() {
+		Charset cs = Charset.defaultCharset();
+		if (!cs.name().equals("UTF-8")) { //$NON-NLS-1$
+			String message = formatLocalized("io_tester.default_not_utf8", cs); //$NON-NLS-1$
+			System.err.println(message); // this is more noticeable in maven build log
+			throw new IllegalStateException(message);
+		}
 	}
 }
