@@ -82,9 +82,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	public ArtemisSecurityConfigurationBuilder withPathWhitelist(
 			Optional<? extends Collection<PathRule>> whitelistedPaths) {
-		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> {
-			this.whitelistedPaths = null;
-		});
+		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> this.whitelistedPaths = null);
 		return this;
 	}
 
