@@ -1,6 +1,7 @@
 package de.tum.in.test.api.io;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,16 +56,7 @@ public interface Line {
 				.collect(Collectors.toUnmodifiableList());
 	}
 
-	static boolean containsLineBreaks(CharSequence text) {
-		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
-			if (c == '\r' || c == '\n')
-				return true;
-		}
-		return false;
-	}
-
-	static String joinLinesToString(List<Line> lines, CharSequence delimiter) {
+	static String joinLinesToString(Collection<? extends Line> lines, CharSequence delimiter) {
 		return lines.stream().map(Line::text).collect(Collectors.joining(delimiter));
 	}
 }
