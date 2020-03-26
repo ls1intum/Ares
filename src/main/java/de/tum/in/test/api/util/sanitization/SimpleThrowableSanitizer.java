@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import de.tum.in.test.api.locked.ArtemisSecurityManager;
 
-public enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
+enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
 	@Override

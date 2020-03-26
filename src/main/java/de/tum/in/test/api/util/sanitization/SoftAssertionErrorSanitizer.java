@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.assertj.core.api.SoftAssertionError;
 
-public enum SoftAssertionErrorSanitizer implements SpecificThrowableSanitizer {
+enum SoftAssertionErrorSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
 	private final Set<Class<? extends Throwable>> types = Set.of(SoftAssertionError.class);

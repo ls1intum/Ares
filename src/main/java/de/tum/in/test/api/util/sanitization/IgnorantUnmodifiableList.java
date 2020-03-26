@@ -10,6 +10,9 @@ import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.function.BiConsumer;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * This is a proxy for {@linkplain List}s to prevent modification silently.
  * While the lists obtained from {@linkplain List#copyOf(Collection)} or
@@ -35,6 +38,7 @@ import java.util.function.BiConsumer;
  *
  * @param <E> Type of the elements in the List.
  */
+@API(status = Status.INTERNAL)
 public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implements RandomAccess {
 	private final List<E> list;
 	private final BiConsumer<String, Object> onModification;

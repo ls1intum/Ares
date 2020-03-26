@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.assertj.core.error.MultipleAssertionsError;
 
-public enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
+enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
 	private final Set<Class<? extends Throwable>> types = Set.of(MultipleAssertionsError.class);

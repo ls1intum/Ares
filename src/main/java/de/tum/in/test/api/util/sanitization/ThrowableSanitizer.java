@@ -7,8 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.locked.ArtemisSecurityManager;
 
+@API(status = Status.INTERNAL)
 public final class ThrowableSanitizer {
 
 	private ThrowableSanitizer() {

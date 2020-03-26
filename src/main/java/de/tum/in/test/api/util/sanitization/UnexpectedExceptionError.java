@@ -3,6 +3,10 @@ package de.tum.in.test.api.util.sanitization;
 import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
 import static de.tum.in.test.api.util.sanitization.ThrowableSanitizer.sanitize;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.MAINTAINED)
 public final class UnexpectedExceptionError extends Error {
 
 	private static final long serialVersionUID = 1L;

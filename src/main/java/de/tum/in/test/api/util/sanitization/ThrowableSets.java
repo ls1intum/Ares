@@ -92,7 +92,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.ZipError;
 import java.util.zip.ZipException;
 
-public final class ThrowableSets {
+final class ThrowableSets {
 
 	private ThrowableSets() {
 	}
