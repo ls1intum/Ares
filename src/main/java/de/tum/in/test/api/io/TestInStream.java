@@ -10,7 +10,6 @@ final class TestInStream extends InputStream {
 
 	private final LineProvider lineProvider;
 
-	private Line currentLine;
 	private ByteArrayInputStream input;
 
 	TestInStream(LineProvider lineProvider) {
@@ -46,7 +45,7 @@ final class TestInStream extends InputStream {
 
 	private void tryLoadNextLine(boolean force) {
 		if (force || lineProvider.hasNextLine()) {
-			currentLine = lineProvider.getNextLine();
+			Line currentLine = lineProvider.getNextLine();
 			byte[] bytes = currentLine.text().concat(IOTester.LINE_SEPERATOR).getBytes(StandardCharsets.UTF_8);
 			input = new ByteArrayInputStream(bytes);
 		}
