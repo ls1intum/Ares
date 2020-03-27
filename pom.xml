@@ -62,12 +62,6 @@
 			<artifactId>junit-vintage-engine</artifactId>
 			<version>${junit-jupiter-version}</version>
 		</dependency>
-		<!-- This is included for better String comparison error messages -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13</version>
-		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest</artifactId>
