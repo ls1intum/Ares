@@ -52,6 +52,7 @@ Deploy:
     - cd ..
     - mvn $MAVEN_CLI_OPTS deploy -DskipTests -P gitlab
     - cd target/mvn-repo
+    - git pull
     - git add --all
     - git commit -m "Upload new build artifact"
     - git push
