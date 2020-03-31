@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util;
+package de.tum.in.test.api.internal;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.locked.ArtemisSecurityManager;
+import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 public class TimeoutUtils {
 

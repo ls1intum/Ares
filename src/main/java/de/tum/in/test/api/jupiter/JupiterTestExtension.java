@@ -1,15 +1,18 @@
 package de.tum.in.test.api.jupiter;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import de.tum.in.test.api.internal.GeneralTestExtension;
+import de.tum.in.test.api.internal.JupiterContext;
 import de.tum.in.test.api.io.IOTester;
-import de.tum.in.test.api.util.GeneralTestExtension;
-import de.tum.in.test.api.util.JupiterContext;
 
+@API(status = Status.INTERNAL)
 public final class JupiterTestExtension
 		implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
 

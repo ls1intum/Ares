@@ -2,11 +2,14 @@ package de.tum.in.test.api.localization;
 
 import java.util.Locale;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+@API(status = Status.INTERNAL)
 public class LocaleExtension implements BeforeAllCallback, AfterAllCallback {
 
 	private Locale oldLocale;

@@ -1,11 +1,13 @@
 package de.tum.in.test.api.jqwik;
 
-import static de.tum.in.test.api.util.TestGuardUtils.checkForHidden;
+import static de.tum.in.test.api.internal.TestGuardUtils.checkForHidden;
+
+import org.apiguardian.api.API;
 
 import de.tum.in.test.api.Deadline;
+import de.tum.in.test.api.internal.JqwikContext;
+import de.tum.in.test.api.internal.ReportingUtils;
 import de.tum.in.test.api.jupiter.HiddenTest;
-import de.tum.in.test.api.util.JqwikContext;
-import de.tum.in.test.api.util.ReportingUtils;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
 import net.jqwik.api.lifecycle.PropertyExecutionResult.Status;
@@ -20,6 +22,7 @@ import net.jqwik.api.lifecycle.PropertyLifecycleContext;
  *
  * @author Christian Femers
  */
+@API(status = API.Status.INTERNAL)
 public final class JqwikTestGuard implements AroundPropertyHook {
 
 	@Override

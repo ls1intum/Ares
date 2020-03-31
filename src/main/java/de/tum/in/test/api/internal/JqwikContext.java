@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util;
+package de.tum.in.test.api.internal;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;

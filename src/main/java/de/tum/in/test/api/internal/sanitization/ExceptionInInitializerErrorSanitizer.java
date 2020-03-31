@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util.sanitization;
+package de.tum.in.test.api.internal.sanitization;
 
 import java.lang.reflect.Field;
 import java.util.Optional;

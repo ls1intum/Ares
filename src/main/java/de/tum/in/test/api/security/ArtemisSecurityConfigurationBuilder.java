@@ -1,4 +1,4 @@
-package de.tum.in.test.api.locked;
+package de.tum.in.test.api.security;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
@@ -11,9 +11,9 @@ import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.internal.TimeoutUtils;
 import de.tum.in.test.api.util.PathRule;
-import de.tum.in.test.api.util.TestContext;
-import de.tum.in.test.api.util.TimeoutUtils;
 
 public final class ArtemisSecurityConfigurationBuilder {
 	private Class<?> testClass;

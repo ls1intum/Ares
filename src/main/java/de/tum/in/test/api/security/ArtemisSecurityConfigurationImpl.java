@@ -1,4 +1,4 @@
-package de.tum.in.test.api.locked;
+package de.tum.in.test.api.security;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;

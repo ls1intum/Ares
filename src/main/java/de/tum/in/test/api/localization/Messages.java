@@ -3,6 +3,10 @@ package de.tum.in.test.api.localization;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.INTERNAL)
 public final class Messages {
 	private static final String BUNDLE_NAME = "de.tum.in.test.api.localization.messages"; //$NON-NLS-1$
 

@@ -4,11 +4,15 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Objects;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.PathActionLevel;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.WhitelistPath;
 
+@API(status = Status.INTERNAL)
 public final class PathRule {
 	private final RuleType ruleType;
 	private final PathType pathType;
@@ -71,7 +75,7 @@ public final class PathRule {
 				&& Objects.equals(pathPattern, other.pathPattern);
 	}
 
-	enum RuleType {
+	public enum RuleType {
 		WHITELIST,
 		BLACKLIST;
 	}

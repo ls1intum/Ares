@@ -5,8 +5,8 @@ import java.time.Duration;
 import org.junit.jupiter.api.Assertions;
 
 import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.util.JqwikContext;
-import de.tum.in.test.api.util.TimeoutUtils;
+import de.tum.in.test.api.internal.JqwikContext;
+import de.tum.in.test.api.internal.TimeoutUtils;
 import net.jqwik.api.domains.DomainContext;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;

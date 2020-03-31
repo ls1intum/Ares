@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util.sanitization;
+package de.tum.in.test.api.util;
 
 import java.util.AbstractList;
 import java.util.Collection;

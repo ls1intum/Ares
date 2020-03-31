@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util;
+package de.tum.in.test.api.internal;
 
 import static de.tum.in.test.api.localization.Messages.*;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -30,7 +30,7 @@ import de.tum.in.test.api.TestType;
  *
  */
 @API(status = Status.INTERNAL)
-public class TestGuardUtils {
+public final class TestGuardUtils {
 
 	private static final Pattern DURATION_PATTERN = Pattern
 			.compile("(?:(?<d>\\d+)d)?\\s*(?:\\b(?<h>\\d+)h)?\\s*(?:\\b(?<m>\\d+)m)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
@@ -72,7 +72,7 @@ public class TestGuardUtils {
 		return context.findTestType().orElse(null) == type;
 	}
 
-	static LocalDateTime extractDeadline(TestContext context) {
+	public static LocalDateTime extractDeadline(TestContext context) {
 		var deadline = extractDeadline(context.testClass(), context.testMethod());
 		if (deadline.isPresent())
 			return deadline.get();
@@ -88,29 +88,28 @@ public class TestGuardUtils {
 		if (methodLevel.isPresent())
 			return methodLevel.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
 		// look in the class otherwise
-		var classLevel = findAnnotation(testClass, Deadline.class).map(Deadline::value)
-				.map(TestGuardUtils::parseDeadline);
+		var classLevel = findAnnotation(testClass, Deadline.class).map(Deadline::value).map(TestGuardUtils::parseDeadline);
 		var classDelta = findAnnotation(testClass, ExtendedDeadline.class).map(ExtendedDeadline::value)
 				.map(TestGuardUtils::parseDuration);
 		return classLevel.map(dl -> dl.plus(classDelta.orElse(Duration.ZERO)))
 				.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
 	}
 
-	static Optional<LocalDateTime> extractActivationBefore(TestContext context) {
+	public static Optional<LocalDateTime> extractActivationBefore(TestContext context) {
 		var methodLevel = getActivationBeforeOf(context.testMethod());
 		return methodLevel.or(() -> getActivationBeforeOf(context.testClass()));
 	}
 
-	static Optional<LocalDateTime> getDeadlineOf(Optional<? extends AnnotatedElement> element) {
+	public static Optional<LocalDateTime> getDeadlineOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, Deadline.class).map(Deadline::value).map(TestGuardUtils::parseDeadline);
 	}
 
-	static Optional<Duration> getExtensionDurationOf(Optional<? extends AnnotatedElement> element) {
+	public static Optional<Duration> getExtensionDurationOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, ExtendedDeadline.class).map(ExtendedDeadline::value)
 				.map(TestGuardUtils::parseDuration);
 	}
 
-	static Optional<LocalDateTime> getActivationBeforeOf(Optional<? extends AnnotatedElement> element) {
+	public static Optional<LocalDateTime> getActivationBeforeOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, ActivateHiddenBefore.class).map(ActivateHiddenBefore::value)
 				.map(TestGuardUtils::parseDeadline);
 	}

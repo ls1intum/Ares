@@ -1,4 +1,4 @@
-package de.tum.in.test.api.locked;
+package de.tum.in.test.api.security;
 
 import static de.tum.in.test.api.localization.Messages.*;
 
@@ -347,7 +347,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			var blackList = List.of("java.lang.reflect", "de.tum.in.test.api.util", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$
+			var blackList = List.of("java.lang.reflect", "de.tum.in.test.api.internal", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$
 			if (blackList.stream().anyMatch(pkg::startsWith)) {
 				/*
 				 * this is a very expensive operation, can we do better? (no)

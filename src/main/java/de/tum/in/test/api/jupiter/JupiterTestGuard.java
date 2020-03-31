@@ -1,14 +1,16 @@
 package de.tum.in.test.api.jupiter;
 
+import static de.tum.in.test.api.internal.ReportingUtils.doProceedAndPostProcess;
+import static de.tum.in.test.api.internal.TestGuardUtils.*;
 import static de.tum.in.test.api.localization.Messages.formatLocalized;
-import static de.tum.in.test.api.util.ReportingUtils.doProceedAndPostProcess;
-import static de.tum.in.test.api.util.TestGuardUtils.*;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
@@ -16,7 +18,7 @@ import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.TestType;
-import de.tum.in.test.api.util.JupiterContext;
+import de.tum.in.test.api.internal.JupiterContext;
 
 /**
  * This class' main purpose is to guard the {@link HiddenTest}s execution and
@@ -24,6 +26,7 @@ import de.tum.in.test.api.util.JupiterContext;
  *
  * @author Christian Femers
  */
+@API(status = Status.INTERNAL)
 public final class JupiterTestGuard implements InvocationInterceptor, DisplayNameGenerator {
 
 	private final DisplayNameGenerator defaultNameGen = new DisplayNameGenerator.ReplaceUnderscores();

@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util.sanitization;
+package de.tum.in.test.api.internal.sanitization;
 
 import java.io.EOFException;
 import java.io.FileNotFoundException;

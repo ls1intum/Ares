@@ -4,6 +4,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.INTERNAL)
 public final class BlacklistedInvoker {
 	private BlacklistedInvoker() {
 		// prevent instantiation

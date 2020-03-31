@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util;
+package de.tum.in.test.api.internal;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -6,9 +6,9 @@ import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
-import de.tum.in.test.api.locked.ArtemisSecurityManager;
-import de.tum.in.test.api.util.sanitization.SanitizationError;
-import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
+import de.tum.in.test.api.internal.sanitization.SanitizationError;
+import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
+import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 /**
  * For handling and post processing Exceptions and Errors.
@@ -16,7 +16,9 @@ import de.tum.in.test.api.util.sanitization.ThrowableSanitizer;
  * @author Christian Femers
  *
  */
-public class ReportingUtils {
+public final class ReportingUtils {
+
+	private static final String LINEBREAK_REPLACEMENT = "  ";
 
 	private ReportingUtils() {
 
@@ -31,30 +33,36 @@ public class ReportingUtils {
 	}
 
 	public static Throwable processThrowable(Throwable t) {
-		if (t == null)
-			return null;
 		String name = "unknown";
 		Throwable newT;
 		try {
 			name = t.getClass().getName();
 			newT = ThrowableSanitizer.sanitize(t);
-		} catch (Throwable error) {
-			String info = error.getClass() == SanitizationError.class ? error.toString() : error.getClass().toString();
-			return new SecurityException(
-					"Throwable " + name + " threw an error when retrieving information about it. (" + info + ")");
+		} catch (Throwable sanitizationError) {
+			return handleSanitizationFailure(name, sanitizationError);
 		}
 		tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
 		if (!(newT instanceof AssertionError)) {
-			StackTraceElement[] stackTrace = newT.getStackTrace();
-			var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
-			if (first.isPresent()) {
-				String call = first.get().toString();
-				tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
-					return Objects.toString(old, "") + "  /// AJTS: Mögliche Problemstelle: " + call + " ///";
-				});
-			}
+			addStackframeInfoToMessage(newT);
 		}
 		return newT;
+	}
+
+	private static Throwable handleSanitizationFailure(String name, Throwable error) {
+		String info = error.getClass() == SanitizationError.class ? error.toString() : error.getClass().toString();
+		return new SecurityException(
+				"Throwable " + name + " threw an error when retrieving information about it. (" + info + ")");
+	}
+
+	private static void addStackframeInfoToMessage(Throwable newT) {
+		StackTraceElement[] stackTrace = newT.getStackTrace();
+		var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
+		if (first.isPresent()) {
+			String call = first.get().toString();
+			tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
+				return Objects.toString(old, "") + "  /// AJTS: Mögliche Problemstelle: " + call + " ///";
+			});
+		}
 	}
 
 	private static String tryPostProcessFieldOrAddSuppressed(Throwable t, String fieldName,
@@ -76,6 +84,6 @@ public class ReportingUtils {
 	 * displayed fully in the Artemis user interface.
 	 */
 	private static String postProcessMessage(String message) {
-		return message != null ? message.replaceAll("\r?\n", "  ") : null;
+		return message != null ? message.replaceAll("\r?\n", LINEBREAK_REPLACEMENT) : null;
 	}
 }

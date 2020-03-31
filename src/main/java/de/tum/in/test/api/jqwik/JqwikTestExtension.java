@@ -2,9 +2,12 @@ package de.tum.in.test.api.jqwik;
 
 import java.util.Set;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+import de.tum.in.test.api.internal.GeneralTestExtension;
+import de.tum.in.test.api.internal.JqwikContext;
 import de.tum.in.test.api.io.IOTester;
-import de.tum.in.test.api.util.GeneralTestExtension;
-import de.tum.in.test.api.util.JqwikContext;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
@@ -21,6 +24,7 @@ import net.jqwik.engine.providers.RegisteredArbitraryProviders;
  *
  * @author Christian Femers
  */
+@API(status = Status.INTERNAL)
 public final class JqwikTestExtension implements AroundPropertyHook {
 
 	private GeneralTestExtension testExtension;

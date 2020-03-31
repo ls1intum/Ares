@@ -1,6 +1,6 @@
 package de.tum.in.test.api.jupiter;
 
-import static de.tum.in.test.api.util.TimeoutUtils.performTimeoutExecution;
+import static de.tum.in.test.api.internal.TimeoutUtils.performTimeoutExecution;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
 import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.util.JupiterContext;
+import de.tum.in.test.api.internal.JupiterContext;
 
 /**
  * This class manages the {@link StrictTimeout} annotation and how it is

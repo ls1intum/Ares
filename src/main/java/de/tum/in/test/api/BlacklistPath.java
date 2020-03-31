@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.locked.ArtemisSecurityManager;
+import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 /**
  * Allows to blacklist a {@link Path}, including all subpaths. The
