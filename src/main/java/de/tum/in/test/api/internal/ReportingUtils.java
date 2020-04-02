@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
 import de.tum.in.test.api.internal.sanitization.SanitizationError;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
+import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 /**
@@ -60,7 +61,8 @@ public final class ReportingUtils {
 		if (first.isPresent()) {
 			String call = first.get().toString();
 			tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
-				return Objects.toString(old, "") + "  /// AJTS: Mögliche Problemstelle: " + call + " ///";
+				return Objects.toString(old, "") + "  "
+						+ Messages.formatLocalized("reporting.problem_location_hint", call);
 			});
 		}
 	}
