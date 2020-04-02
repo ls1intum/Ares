@@ -200,11 +200,51 @@ By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method 
 
 ### Further Important Options
 
-Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing. Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
+Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing. 
+Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
+
+#### Path access and class loading
+You can use `@WhitelistPath` and `@BlacklistPath` to control access to paths. By default, no access is granted, and so you need to use `@WhitelistPath` to give student code the permission to read and write files explicitly. 
+You can specify exceptions using `@BlacklistPath` which will overpower the whitelisted paths.
+
+Most importantly, this does not only apply to explicit file IO, but also to the `.class` files that the class loader reads, as needed. This already happens if one student class requires another one, that has not been loaded after that. 
+You can recognize that in the standard error output:
+```
+[WARNING] BAD PATH ACCESS: K:\repo\course1920xyz-solution\bin\some\Thing.class (BL:false, WL:false)
+```
+This usually means the class loader could not load the class. The parentheses show, that the problem is the missing whitelisting. Therefore, all test setups should have some whitelisting.
+
+A number of examples how you can whitelist paths in AJTS:
+- `@WhitelistPath("")` will grant read access to the paths in the directory of execution, which is usually where the `pom.xml` is.
+- `@WhitelistPath("pom.xml")` will allow students to read the `pom.xml`.
+- `@WhitelistPath("..")` will allow read access to the level above the maven project. In Eclipse, that is the level of your workspace.
+- `@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)` grants read access to projects beginning with the exercise "id" used by Artemis. 
+  Should you use the Eclipse feature "Referenced Projects" (or the analog to that in your IDE) to link the student/solution project to the tests, you will need a setting like this.
+- `@WhitelistPath(value = "data", level = PathActionLevel.DELETE)` will allow students to read, write and delete files in the `data` directory and subdirectories.
+- `@WhitelistPath("target")` allows reading files in target (Maven output folder)
+- `@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)` prevents access to classes in source code or compiled form that contain `Test`. If you leave away the `*` after `Test`, nested classes are not blacklisted. 
+  Student classes should not be called something with "Test" then.
+
+That was not everything but already quite a lot. Take a look at the Javadoc of the annotations and enums used, if you want to know more. Before you give up, here is my recommendation how to start:
+```Java
+// This is for manual assessment, and not needed for Artemis.
+// Can be commented in before manual assessment begins or by tutors themselves.
+//@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)
+@WhitelistPath("target")
+@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
+```
+Add a `@BlacklistPath` for other important classes, like your reference implementations of the solution to test against should you use that approach.
+
+You can also use just the following *if you are absolutely sure, that `..` on a build agent will never contain any other students solutions from previous or simultaneous builds.*
+```Java
+@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)
+@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
+```
+
+As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
 // TODO
 - `@StrictTimeout`
-- `@BlacklistPath`, `@WhitelistPath`
 - `@MirrorOutput`
 - `@ActivateHiddenBefore`
 - `@AllowThreads`
