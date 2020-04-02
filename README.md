@@ -44,8 +44,8 @@ If you want to use jqwik or JUnit 4 (JUnit 5 vintage), simply include them in th
 
 ## Basic Usage
 
-*AJTS provides a high level of security which comes at the cost of usability. 
-Severaly steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does. 
+*AJTS provides a high level of security which comes at the cost of usability.
+Severaly steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does.
 Please study at least this complete basic usage guide before using AJTS in production.*
 
 ### Setup
@@ -117,8 +117,8 @@ In this example,
 While Artemis has a feature to mark test cases as hidden, this will not prevent the contents of the test case leaking through static variables, files and similar, be it accidentally or on purpose.
 To prevent that, **the hidden test case must not be executed before the deadline at all.**
 
-The public test case does not need to be hidden, as it's purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop. 
-Both can have a negative impact on the interactive learning experience because the students get confronted with an incomprehensible log of a failed build. 
+The public test case does not need to be hidden, as it's purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop.
+Both can have a negative impact on the interactive learning experience because the students get confronted with an incomprehensible log of a failed build.
 Such errors can be explained, but that takes a lot of time, especially if it happens a lot (and it will, if the number of students is sufficiently large).
 
 It is also a security problem again, students could try to read the `.java` files containing the test classes.
@@ -165,7 +165,7 @@ public class PenguinTest {
 ```
 That annotation (like most of the AJTS annotations) can also be placed on the test method (and nested classes), if multiple are present, the one that is closest to the test case is used.
 
-Now, it already works! Try to play around with the deadline in the annotation. If the given `LocalDateTime` lies in the past, the test case is executed and - together with the student code presented earlier - passes. 
+Now, it already works! Try to play around with the deadline in the annotation. If the given `LocalDateTime` lies in the past, the test case is executed and - together with the student code presented earlier - passes.
 If the deadline hasn't passed, the test case won't pass either. It fails with
 `org.opentest4j.AssertionFailedError: hidden tests will be executed after the deadline.` and the test was not executed, as the deadline is always checked before any hidden test case is executed.
 
@@ -182,8 +182,8 @@ public String getName() {
 You will now with AJTS get the following error message:<br>
 `java.lang.SecurityException: do not use System.exit(int)  /// potential problem location: Penguin.getName(Penguin.java:12) ///`
 
-As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`. 
-This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code. 
+As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`.
+This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code.
 Student code is basically everything that is not whitelisted.
 
 But what is whitelisted?
@@ -201,23 +201,25 @@ Files.readString(Path.of("pom.xml"));
 // or
 Files.readString(Path.of("src/test/java/PenguinTest.java")); // assuming default maven structure
 ```
-If you instead add one of the lines to the `getName()` method again, you will get something like: `java.lang.SecurityException: access to path src\test\java\PenguinTest.java denied in line 16 in Penguin.java`. 
-Which is exactly what you want, students should not be able to read the code of the test classes. 
+If you instead add one of the lines to the `getName()` method again, you will get something like: `java.lang.SecurityException: access to path src\test\java\PenguinTest.java denied in line 16 in Penguin.java`.
+Which is exactly what you want, students should not be able to read the code of the test classes.
 By default, student code has no access to any path, not even read access.
 
-By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method will make the test run fine again because `Penguin` is now whitelisted and can therefore access all files without problems. 
+By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method will make the test run fine again because `Penguin` is now whitelisted and can therefore access all files without problems.
 **So never whitelist classes that students can edit.**
 
 ### Further Important Options
 
-Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing. 
+Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing.
 Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
 
 #### Path access and class loading
-You can use `@WhitelistPath` and `@BlacklistPath` to control access to paths. By default, no access is granted, and so you need to use `@WhitelistPath` to give student code the permission to read and write files explicitly. 
+You can use `@WhitelistPath` and `@BlacklistPath` to control access to paths. By default, no access is granted, and so you need to use `@WhitelistPath` to give student code the permission to read and write files explicitly.
 You can specify exceptions using `@BlacklistPath` which will overpower the whitelisted paths.
 
-Most importantly, this does not only apply to explicit file IO, but also to the `.class` files that the class loader reads, as needed. This already happens if one student class requires another one, that has not been loaded after that. 
+*The following examples will make use of `course1920xyz` as placeholder value for the real Artemis exercise name/id. Replace it with the real one when borrowing code snippets or nothing will work as expected.*
+
+Most importantly, this does not only apply to explicit file IO, but also to the `.class` files that the class loader reads, as needed. This already happens if one student class requires another one, that has not been loaded after that.
 You can recognize that in the standard error output:
 ```
 [WARNING] BAD PATH ACCESS: K:\repo\course1920xyz-solution\bin\some\Thing.class (BL:false, WL:false)
@@ -228,18 +230,16 @@ A number of examples how you can whitelist paths in AJTS:
 - `@WhitelistPath("")` will grant read access to the paths in the directory of execution, which is usually where the `pom.xml` is.
 - `@WhitelistPath("pom.xml")` will allow students to read the `pom.xml`.
 - `@WhitelistPath("..")` will allow read access to the level above the maven project. In Eclipse, that is the level of your workspace.
-- `@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)` grants read access to projects beginning with the exercise "id" used by Artemis. 
+- `@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)` grants read access to projects beginning with the exercise "id" used by Artemis.
   Should you use the Eclipse feature "Referenced Projects" (or the analog to that in your IDE) to link the student/solution project to the tests, you will need a setting like this.
 - `@WhitelistPath(value = "data", level = PathActionLevel.DELETE)` will allow students to read, write and delete files in the `data` directory and subdirectories.
 - `@WhitelistPath("target")` allows reading files in target (Maven output folder)
-- `@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)` prevents access to classes in source code or compiled form that contain `Test`. If you leave away the `*` after `Test`, nested classes are not blacklisted. 
+- `@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)` prevents access to classes in source code or compiled form that contain `Test`. If you leave away the `*` after `Test`, nested classes are not blacklisted.
   Student classes should not be called something with "Test" then.
 
 That was not everything but already quite a lot. Take a look at the Javadoc of the annotations and enums used, if you want to know more. Before you give up, here is my recommendation how to start:
 ```Java
-// This is for manual assessment, and not needed for Artemis.
-// Can be commented in before manual assessment begins or by tutors themselves.
-//@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)
+//@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // For manual assessment
 @WhitelistPath("target")
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 ```
