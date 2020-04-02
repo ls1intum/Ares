@@ -253,8 +253,35 @@ You can also use just the following *if you are absolutely sure, that `..` on a 
 
 As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
+#### Timeout
+
+JUnit already provides means of applying timeouts to tests. However, those are *not strict* in the sense of "enforced in the strongest possible way". What is meant by that?
+
+There are three different ways how the timeouts can work:
+- like `org.junit.jupiter.api.Timeout`<br>
+  This timeout is not preemptive and the test itself runs in the same thread executing the tests. It will only try to stop the test via an interrupt. 
+  If that fails like it does for an endless loop, the test will definitively fail. After it is finished. Which might never happen and the main reason not to use this when it comes to testing unknown code.
+- like `org.junit.jupiter.api.Assertions.assertTimeoutPreemptively`<br>
+  This will fail the test preemptively by executing the `Executable` argument itself in a different thread than the thread executing all tests. 
+  It will only try to stop the test via an interrupt, but if that fails it will simply carry on. The test thread might still run though.
+- like `de.tum.in.test.api.StrictTimeout`<br>
+  This uses `assertTimeoutPreemptively`, but will resort to harder means if necessary.
+  It will in the following order:
+   1. wait the given duration
+   2. interrupt the thread executing the test and wait no longer (using assertTimeoutPreemptively)
+   3. block the creation of new threads
+   4. interrupt all threads created during the test and try to join the threads
+   5. if that fails, use `Thread.stop()` on all remaining threads and try to join again
+   6. repeat step 5 multiple times, if required
+   7. Should that fail, report a special SecurityException that not all threads could be stopped.
+      (see the standard error output for a detailed report then) *If that happens, no more tests can be properly executed because the security cannot be guaranteed and the test cases cannot be executed "in isolation". All following test will fail.*
+
+**Rule 1: When testing with AJTS, always use `@StrictTimeout`, the others will not work reliably especially in conjunction with the AJTS security.**
+
+**Rule 2: When writing tests for Artemis, always use `@StrictTimeout`.** There is no reason to omit the timeout, since you do not know the code students will write. 
+(And they will write code spawning millions of threads in endless loops which in turn will do the same recursively.)
+
 // TODO
-- `@StrictTimeout`
 - `@MirrorOutput`
 - `@ActivateHiddenBefore`
 - `@AllowThreads`
