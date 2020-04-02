@@ -99,9 +99,7 @@ public class PenguinTest {
     @Test
     void testPenguinPublic() {
         Penguin pingu = new Penguin("Julian");
-        String returnedName = pingu.getName();
-
-        assertEquals("Julian", returnedName, "getName() does not return the name supplied to the contructor");
+        assertEquals("Julian", pingu.getName(), "getName() does not return the name supplied to the contructor");
     }
 
     @Test
@@ -117,7 +115,7 @@ In this example,
 While Artemis has a feature to mark test cases as hidden, this will not prevent the contents of the test case leaking through static variables, files and similar, be it accidentally or on purpose.
 To prevent that, **the hidden test case must not be executed before the deadline at all.**
 
-The public test case does not need to be hidden, as it's purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop. Both can cause to have a negative impact on the interactive learning experience because the students get confronted with an incomprehensible log of a failed build. While such errors can be explained, that takes a lot of time, especially if it happens a lot (and it will, if the number of students is sufficiently large).
+The public test case does not need to be hidden, as it's purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop. Both can have a negative impact on the interactive learning experience because the students get confronted with an incomprehensible log of a failed build. Such errors can be explained, but that takes a lot of time, especially if it happens a lot (and it will, if the number of students is sufficiently large).
 
 It is also a security problem again, students could try to read the `.java` files containing the test classes.
 
@@ -133,16 +131,14 @@ import org.junit.jupiter.api.Test;
 import de.tum.in.test.api.jupiter.Hidden;
 import de.tum.in.test.api.jupiter.Public;
 
-// This example won't work just like that, see why below
+// This example won't work just like that, see below why
 public class PenguinTest {
 
     @Public
     @Test
     void testPenguinPublic() {
         Penguin pingu = new Penguin("Julian");
-        String returnedName = pingu.getName();
-
-        assertEquals("Julian", returnedName, "getName() does not return the name supplied to the contructor");
+        assertEquals("Julian", pingu.getName(), "getName() does not return the name supplied to the contructor");
     }
 
     @Hidden
@@ -155,10 +151,10 @@ public class PenguinTest {
 The code above won't work just like that, if you try to run it as is, you will get the following reported by JUnit:<br>
 `java.lang.annotation.AnnotationFormatError: cannot find a deadline for hidden test testPenguinHidden()`
 
-AJTS needs to know what the deadline is. We tell AJTS with another annotation.
+AJTS needs to know what the deadline is. We tell AJTS with another annotation:
 ```Java
 // Format must be DateTimeFormatter.ISO_LOCAL_DATE_TIME (using a space between date and time is permitted, too)
-@Deadline("2020-06-09 16:18")
+@Deadline("2020-06-09 03:14")
 public class PenguinTest {
     // ...
 }
@@ -181,9 +177,7 @@ public String getName() {
 You will now with AJTS get the following error message:<br>
 `java.lang.SecurityException: do not use System.exit(int)  /// potential problem location: Penguin.getName(Penguin.java:12) ///`
 
-As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`. This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the stack frame that is located in the students code. Student code is basically everything that is not whitelisted.
-
-AJTS also grants permissions that are requested by certain actions (`System.exit`, File IO, Networking, Threads, ...) based on whitelisted stack frames. **AJTS granting a permission requires all stack frames to be whitelisted.**
+As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`. This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code. Student code is basically everything that is not whitelisted.
 
 But what is whitelisted?
 - The test class itself (in case of nested classes, the outermost class is whitelisted) and therefore, *all* its nested classes and methods, too.
@@ -191,22 +185,32 @@ But what is whitelisted?
   Therefore, **never use such package names for student assignments!**
 - Classes whitelisted using `@WhitelistClass`
 
+AJTS also grants permissions that are requested by certain actions (`System.exit`, File IO, Networking, Threads, ...) based on whitelisted stack frames. **AJTS granting a permission requires all stack frames to be whitelisted.**
+
 Another test:<br>
-Adding one of the following lines to `testPenguinPublic()` itself and it will still pass using the original version of the student code:
+Adding one of the following lines to `testPenguinPublic()` itself and it will still pass using the correct student code:
 ```Java
 Files.readString(Path.of("pom.xml"));
 // or
-Files.readString(Path.of("src/test/java/PenguinTest.java"));
+Files.readString(Path.of("src/test/java/PenguinTest.java")); // assuming default maven structure
 ```
 If you instead add one of the lines to the `getName()` method again, you will get something like: `java.lang.SecurityException: access to path src\test\java\PenguinTest.java denied in line 16 in Penguin.java`. Which is exactly what you want, students should not be able to read the code of the test classes. By default, student code has no access to any path, not even read access.
 
-By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method will make the test run fine again because `Penguin` is now whitelisted and can therefore access all files without problems. **Never whitelist classes that students can edit.**
+By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method will make the test run fine again because `Penguin` is now whitelisted and can therefore access all files without problems. **So never whitelist classes that students can edit.**
 
 ### Further Important Options
 
 Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing. Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
 
 // TODO
+- `@StrictTimeout`
+- `@BlacklistPath`, `@WhitelistPath`
+- `@MirrorOutput`
+- `@ActivateHiddenBefore`
+- `@AllowThreads`
+- `@ExtendedDeadline`
+- `@AllowLocalPort`
+- `IOTester`
 
 ## License
 
