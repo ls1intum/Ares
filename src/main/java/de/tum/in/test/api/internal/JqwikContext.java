@@ -34,7 +34,7 @@ public class JqwikContext extends TestContext {
 
 	@Override
 	public Optional<AnnotatedElement> annotatedElement() {
-		return lifecycleContext.annotatedElement();
+		return lifecycleContext.optionalElement();
 	}
 
 	@Override
