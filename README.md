@@ -48,6 +48,21 @@ If you want to use jqwik or JUnit 4 (JUnit 5 vintage), simply include them in th
 Severaly steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does.
 Please study at least this complete basic usage guide before using AJTS in production.*
 
+#### Table of Contents
+- [Setup](#setup)
+- [Integrating AJTS](#integrating-ajts)
+- [What about Security?](#what-about-security)
+- [Further Important Options](#further-important-options)
+   - [Path Access and Class Loading](#path-access-and-class-loading)
+   - [Timeouts](#timeouts)
+   - [Showing Standard Output](#showing-standard-output)
+   - [Testing the Exercise before Release](#testing-the-exercise-before-release)
+   - [Extending a Deadline and Disability Compensation](#extending-a-deadline-and-disability-compensation)
+   - [Threads and Concurrency](#threads-and-concurrency)
+   - [Testing Console Interaction](#testing-console-interaction)
+   - [Networking](#networking)
+
+
 ### Setup
 
 Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like this:
@@ -169,7 +184,7 @@ Now, it already works! Try to play around with the deadline in the annotation. I
 If the deadline hasn't passed, the test case won't pass either. It fails with
 `org.opentest4j.AssertionFailedError: hidden tests will be executed after the deadline.` and the test was not executed, as the deadline is always checked before any hidden test case is executed.
 
-### What about security?
+### What about Security?
 
 The hidden test case was not executed and static variables cannot leak its contents.
 If you change `getName()` to
@@ -213,7 +228,7 @@ By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method 
 Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing.
 Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
 
-#### Path access and class loading
+#### Path Access and Class Loading
 You can use `@WhitelistPath` and `@BlacklistPath` to control access to paths. By default, no access is granted, and so you need to use `@WhitelistPath` to give student code the permission to read and write files explicitly.
 You can specify exceptions using `@BlacklistPath` which will overpower the whitelisted paths.
 
@@ -224,7 +239,7 @@ You can recognize that in the standard error output:
 ```
 [WARNING] BAD PATH ACCESS: K:\repo\course1920xyz-solution\bin\some\Thing.class (BL:false, WL:false)
 ```
-This usually means the class loader could not load the class. The parentheses show, that the problem is the missing whitelisting. Therefore, all test setups should have some whitelisting.
+This usually means the class loader could not load the class. The parentheses show, that the problem is the missing whitelisting. **Therefore, all test setups should have some whitelisting.**
 
 A number of examples how you can whitelist paths in AJTS:
 - `@WhitelistPath("")` will grant read access to the paths in the directory of execution, which is usually where the `pom.xml` is.
@@ -253,7 +268,7 @@ You can also use just the following *if you are absolutely sure, that `..` on a 
 
 As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
-#### Timeout
+#### Timeouts
 
 JUnit already provides means of applying timeouts to tests. However, those are *not strict* in the sense of "enforced in the strongest possible way". What is meant by that?
 
@@ -262,8 +277,7 @@ There are three different ways how the timeouts can work:
   This timeout is not preemptive and the test itself runs in the same thread executing the tests. It will only try to stop the test via an interrupt. 
   If that fails like it does for an endless loop, the test will definitively fail. After it is finished. Which might never happen and the main reason not to use this when it comes to testing unknown code.
 - like `org.junit.jupiter.api.Assertions.assertTimeoutPreemptively`<br>
-  This will fail the test preemptively by executing the `Executable` argument itself in a different thread than the thread executing all tests. 
-  It will only try to stop the test via an interrupt, but if that fails it will simply carry on. The test thread might still run though.
+  This will fail the test preemptively by executing the `Executable` argument itself in a different thread than the thread executing all tests. It will only try to stop the test via an interrupt, but if that fails it will simply carry on. The test thread might still run though.
 - like `de.tum.in.test.api.StrictTimeout`<br>
   This uses `assertTimeoutPreemptively`, but will resort to harder means if necessary.
   It will in the following order:
@@ -276,18 +290,46 @@ There are three different ways how the timeouts can work:
    7. Should that fail, report a special SecurityException that not all threads could be stopped.
       (see the standard error output for a detailed report then) *If that happens, no more tests can be properly executed because the security cannot be guaranteed and the test cases cannot be executed "in isolation". All following test will fail.*
 
-**Rule 1: When testing with AJTS, always use `@StrictTimeout`, the others will not work reliably especially in conjunction with the AJTS security.**
+**Rule 1: When testing with AJTS, always use `@StrictTimeout` for timeouts, the others will not work reliably especially in conjunction with the AJTS security.**
 
-**Rule 2: When writing tests for Artemis, always use `@StrictTimeout`.** There is no reason to omit the timeout, since you do not know the code students will write. 
-(And they will write code spawning millions of threads in endless loops which in turn will do the same recursively.)
+**Rule 2: When writing tests for Artemis, always use `@StrictTimeout`.** There is no reason to omit the timeout, since you do not know the code students will write. (And they will write code spawning millions of threads in endless loops which in turn will do the same recursively.)
 
-// TODO
-- `@MirrorOutput`
-- `@ActivateHiddenBefore`
-- `@AllowThreads`
-- `@ExtendedDeadline`
-- `@AllowLocalPort`
-- `IOTester`
+#### Showing Standard Output
+
+By default, AJTS will record standard and error output of each test internally and not print it to the console. The recorded output can then be obtained and tested, see [`IOTester`](#testing-console-interaction)
+The reason for this is on the one hand to keep the console and logs short and clean and on the other hand prevent students from accidentally messing up the logs with millions of lines.
+AJTS also has a hard limit on the total number of printed chars around 10 million.
+
+To mirror the output recorded by AJTS to the console, use the `@MirrorOutput` annotation on the test class or method.
+
+#### Testing the Exercise before Release
+
+Hidden tests will be executed by AJTS only after the deadline. This poses the problem, how the exercise creators should work on the tasks, tests and the sample solution. One possible solution would be to use an alternative deadline annotation or change the deadline temporarily.
+The problem is that it is quite likely one might forget to change it back again, and protecting the hidden tests would fail.
+
+Use `@ActivateHiddenBefore` just like `@Deadline` to state the LocalDateTime before which hidden tests should be executed. This Date should of course be before the release of the exercise on Artemis.
+
+#### Extending a Deadline and Disability Compensation
+
+You can use `@ExtendedDeadline` together with a duration like `1d` or `2d 12h 30m` to extend the deadline by the given amount. `@ExtendedDeadline("1d")` for example extends the deadline by one day.
+If you use the annotation on different levels (e.g. class and method) without stating a new deadline (e.g. deadline only on class level), the extensions will be added together.
+
+#### Threads and Concurrency
+
+By default, AJTS will not allow non-whitelisted code to use Threads at all. That includes thread pools, but excludes the common pool and its users, like parallel streams. To allow the use of Threads, use the annotation `@AllowThreads`.
+The number of active threads is also limited, the default value of that is 1000, but can be changed in the annotation. Please keep in mind that this limit should not be larger than 1000 to prevent performance and timeout chaos.
+
+New threads are for security reasons not directly whitelisted by AJTS and will not be allowed to do anything security critical.
+If you trust a thread (at least its entry point), you can explicitly request the thread to be whitelisted using `ArtemisSecurityManager.requestThreadWhitelisting(Thread)`.
+The thread calling the method and its stack must be whitelisted, of course.
+
+#### Testing Console Interaction
+
+// TODO `IOTester`
+
+#### Networking
+
+// TODO `@AllowLocalPort`
 
 ## License
 
