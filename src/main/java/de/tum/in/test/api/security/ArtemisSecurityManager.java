@@ -62,6 +62,15 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 		// Allow to load resources
 		Messages.init();
+		/*
+		 * Check for main Thread
+		 */
+		if (!Objects.equals("main", MAIN_THREAD.getName())) {
+			LOG_OUTPUT.printf(
+					"[ERROR] Expected ArtemisSecurityManager to be initialized in the main thread but was %s. Exiting...%n", //$NON-NLS-1$
+					MAIN_THREAD);
+			System.exit(1);
+		}
 	}
 
 	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG_OUTPUT.format(

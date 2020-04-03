@@ -12,6 +12,13 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 public class TimeoutUtils {
 
+	static {
+		/*
+		 * Initialize SecurityManager when we are still in the main thread
+		 */
+		ArtemisSecurityManager.isInstalled();
+	}
+
 	private TimeoutUtils() {
 
 	}

@@ -5,6 +5,13 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 public final class GeneralTestExtension {
 
+	static {
+		/*
+		 * Initialize SecurityManager when we are still in the main thread
+		 */
+		ArtemisSecurityManager.isInstalled();
+	}
+
 	private final TestContext context;
 	private String token;
 	private IOTester ioTester;
