@@ -12,6 +12,7 @@ import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.test.api.util.IgnorantUnmodifiableList;
+import de.tum.in.test.api.util.UnexpectedExceptionError;
 
 @API(status = Status.INTERNAL)
 public final class ThrowableSanitizer {

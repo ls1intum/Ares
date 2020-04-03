@@ -1,10 +1,12 @@
-package de.tum.in.test.api.internal.sanitization;
+package de.tum.in.test.api.util;
 
 import static de.tum.in.test.api.internal.sanitization.ThrowableSanitizer.sanitize;
 import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+
+import de.tum.in.test.api.internal.sanitization.SanitizationError;
 
 @API(status = Status.MAINTAINED)
 public final class UnexpectedExceptionError extends Error {
