@@ -34,9 +34,9 @@ public class JqwikStrictTimeoutExtension implements AroundPropertyHook {
 	@Override
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
-		DomainContext domainContext = DomainContextFacadeImpl.currentContext.get();
+		DomainContext domainContext = DomainContextFacadeImpl.getCurrentContext();
 		return TimeoutUtils.performTimeoutExecution(() -> {
-			DomainContextFacadeImpl.currentContext.set(domainContext);
+			DomainContextFacadeImpl.setCurrentContext(domainContext);
 			return property.execute();
 		}, JqwikContext.of(context));
 	}

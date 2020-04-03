@@ -10,7 +10,6 @@ import de.tum.in.test.api.internal.ReportingUtils;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
-import net.jqwik.api.lifecycle.PropertyExecutionResult.Status;
 import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
@@ -38,17 +37,12 @@ public final class JqwikTestGuard implements AroundPropertyHook {
 	}
 
 	private static PropertyExecutionResult postProcess(PropertyExecutionResult per) {
-		var t = per.getThrowable();
+		var t = per.throwable();
 		if (t.isEmpty())
 			return per;
 		Throwable newT = ReportingUtils.processThrowable(t.get());
 		if (newT instanceof Error && !(newT instanceof AssertionError))
 			throw (Error) newT;
-		if (per.getStatus() == Status.ABORTED)
-			return PropertyExecutionResult.aborted(newT, per.getSeed().orElse(null));
-		if (per.getStatus() == Status.FAILED)
-			return PropertyExecutionResult.failed(newT, per.getSeed().orElse(null),
-					per.getFalsifiedSample().orElse(null));
-		return per;
+		return per.mapTo(per.status(), newT);
 	}
 }
