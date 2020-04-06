@@ -659,6 +659,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			active = INSTANCE.checkThreadGroup();
 			INSTANCE.checkCommonThreadPool();
 			INSTANCE.unwhitelistThreads();
+			INSTANCE.blockThreadCreation = false;
 			/*
 			 * Currently deactivated to see if we can leave the security manager on all the
 			 * time
