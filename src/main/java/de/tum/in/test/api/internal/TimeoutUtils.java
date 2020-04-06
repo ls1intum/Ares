@@ -75,6 +75,7 @@ public final class TimeoutUtils {
 			throw new AssertionFailedError("execution timed out after " + formatDuration(timeout));
 		} finally {
 			executorService.shutdownNow();
+			ArtemisSecurityManager.revokeThreadWhitelisting();
 		}
 	}
 

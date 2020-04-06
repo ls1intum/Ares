@@ -602,6 +602,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.whitelistThread(t);
 	}
 
+	public static synchronized void revokeThreadWhitelisting() {
+		if (INSTANCE.isCurrentThreadWhitelisted())
+			INSTANCE.unwhitelistThreads();
+	}
+
 	private static String hash(String s) {
 		if (s == null)
 			return ""; //$NON-NLS-1$
