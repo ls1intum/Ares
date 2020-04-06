@@ -1,5 +1,6 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
@@ -30,8 +31,8 @@ public class DeadlineTest {
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(5));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenNormal, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicCustomDeadline, AnnotationFormatError.class));

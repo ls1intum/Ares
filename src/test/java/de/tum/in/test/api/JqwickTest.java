@@ -1,5 +1,6 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
@@ -49,8 +50,9 @@ public class JqwickTest {
 		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));
 		tests.assertThatEvents().doNotHave(event(test(testPublicIncomplete)));
 
-		tests.assertThatEvents().haveExactly(1, event(test(examplePublicNormal), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(exampleHiddenCustomDeadlinePast), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(examplePublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1,
+				event(test(exampleHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(exampleHiddenNormal, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1,
@@ -58,8 +60,9 @@ public class JqwickTest {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(exampleHiddenCustomDeadlineFuture, AssertionFailedError.class));
 
-		tests.assertThatEvents().haveExactly(1, event(test(propertyPublicNormal), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(propertyHiddenCustomDeadlinePast), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(propertyPublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1,
+				event(test(propertyHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(propertyHiddenNormal, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1,
@@ -67,7 +70,7 @@ public class JqwickTest {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(propertyHiddenCustomDeadlineFuture, AssertionFailedError.class));
 
-		tests.assertThatEvents().haveExactly(1, event(test(propertyUseIOTesterCorrect), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(propertyUseIOTesterCorrect), finishedSuccessfullyRep()));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(propertyUseIOTesterWrong, AssertionError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutEndlessLoop, IllegalStateException.class)); // TODO:
 																															// improve

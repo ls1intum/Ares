@@ -1,5 +1,6 @@
 package de.tum.in.testsecurity;
 
+import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
@@ -56,14 +57,14 @@ public class SecurityTest {
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(26));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(threadWhitelistingWithPathCorrect), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(threadWhitelistingWithPathCorrect), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));

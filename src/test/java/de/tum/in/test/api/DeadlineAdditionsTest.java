@@ -1,5 +1,6 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
@@ -40,7 +41,7 @@ public class DeadlineAdditionsTest {
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedNormal, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicExtended, AnnotationFormatError.class));
@@ -60,11 +61,11 @@ public class DeadlineAdditionsTest {
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenInactive), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenInactive), finishedSuccessfullyRep()));
 		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureActive), finishedSuccessfully()));
+				event(test(testHidden_CustomDeadlineFutureActive), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(testHidden_CustomDeadlineFutureInactive, AssertionFailedError.class));
@@ -80,11 +81,11 @@ public class DeadlineAdditionsTest {
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfullyRep()));
 		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureExtendedActive), finishedSuccessfully()));
+				event(test(testHidden_CustomDeadlineFutureExtendedActive), finishedSuccessfullyRep()));
 		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlinePastExtendedActive), finishedSuccessfully()));
+				event(test(testHidden_CustomDeadlinePastExtendedActive), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedInactive, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1,

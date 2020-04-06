@@ -1,5 +1,6 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
@@ -35,9 +36,9 @@ public class StrictTimeoutTest {
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(8));
 
-		tests.assertThatEvents().haveExactly(1, event(test(testOneSecondSuccess), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testMethodSuccess), finishedSuccessfully()));
-		tests.assertThatEvents().haveExactly(1, event(test(testClassSuccess), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(testOneSecondSuccess), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testMethodSuccess), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(test(testClassSuccess), finishedSuccessfullyRep()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testOneSecondFail, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testMethodFailNormal, AssertionFailedError.class));
