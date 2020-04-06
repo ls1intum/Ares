@@ -237,7 +237,7 @@ You can specify exceptions using `@BlacklistPath` which will overpower the white
 Most importantly, this does not only apply to explicit file IO, but also to the `.class` files that the class loader reads, as needed. This already happens if one student class requires another one, that has not been loaded after that.
 You can recognize that in the standard error output:
 ```
-[WARNING] BAD PATH ACCESS: K:\repo\course1920xyz-solution\bin\some\Thing.class (BL:false, WL:false)
+[WARN] [main] BAD PATH ACCESS: K:\repo\course1920xyz-solution\bin\some\Thing.class (BL:false, WL:false)
 ```
 This usually means the class loader could not load the class. The parentheses show, that the problem is the missing whitelisting. **Therefore, all test setups should have some whitelisting.**
 
@@ -279,7 +279,7 @@ There are three different ways how the timeouts can work:
 - like `org.junit.jupiter.api.Assertions.assertTimeoutPreemptively`<br>
   This will fail the test preemptively by executing the `Executable` argument itself in a different thread than the thread executing all tests. It will only try to stop the test via an interrupt, but if that fails it will simply carry on. The test thread might still run though.
 - like `de.tum.in.test.api.StrictTimeout`<br>
-  This uses `assertTimeoutPreemptively`, but will resort to harder means if necessary.
+  This uses a mechanism similar to `assertTimeoutPreemptively`, but will resort to harder means if necessary.
   It will in the following order:
    1. wait the given duration
    2. interrupt the thread executing the test and wait no longer (like assertTimeoutPreemptively)
