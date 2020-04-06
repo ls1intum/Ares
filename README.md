@@ -325,11 +325,11 @@ The thread calling the method and its stack must be whitelisted, of course.
 
 #### Testing Console Interaction
 
-// TODO `IOTester`
+In progress, see also `IOTester`.
 
 #### Networking
 
-// TODO `@AllowLocalPort`
+In progress, see also `@AllowLocalPort`.
 
 ## License
 
