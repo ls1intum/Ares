@@ -62,6 +62,7 @@ public final class TimeoutUtils {
 	}
 
 	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action) throws Throwable {
+		ArtemisSecurityManager.revokeThreadWhitelisting();
 		ExecutorService executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
 		try {
 			Future<T> future = executorService.submit(action);
@@ -75,7 +76,6 @@ public final class TimeoutUtils {
 			throw new AssertionFailedError("execution timed out after " + formatDuration(timeout));
 		} finally {
 			executorService.shutdownNow();
-			ArtemisSecurityManager.revokeThreadWhitelisting();
 		}
 	}
 
