@@ -103,8 +103,7 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 
 	@Override
 	public String shortDesc() {
-		return String.format(
-				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, allowedLocalPort=%s]",
+		return String.format("ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, allowedLocalPort=%s]",
 				testMethod, executionPath, whitelistedPaths, allowedLocalPort);
 	}
 }

@@ -88,7 +88,8 @@ public final class TestGuardUtils {
 		if (methodLevel.isPresent())
 			return methodLevel.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
 		// look in the class otherwise
-		var classLevel = findAnnotation(testClass, Deadline.class).map(Deadline::value).map(TestGuardUtils::parseDeadline);
+		var classLevel = findAnnotation(testClass, Deadline.class).map(Deadline::value)
+				.map(TestGuardUtils::parseDeadline);
 		var classDelta = findAnnotation(testClass, ExtendedDeadline.class).map(ExtendedDeadline::value)
 				.map(TestGuardUtils::parseDuration);
 		return classLevel.map(dl -> dl.plus(classDelta.orElse(Duration.ZERO)))

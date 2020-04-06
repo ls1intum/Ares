@@ -40,7 +40,6 @@ public abstract class AbstractLine implements Line {
 		this.lineNumber = lineNumber;
 	}
 
-
 	static boolean containsLineBreaks(CharSequence text) {
 		for (int i = 0; i < text.length(); i++) {
 			char c = text.charAt(i);

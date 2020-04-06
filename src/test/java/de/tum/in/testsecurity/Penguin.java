@@ -153,7 +153,7 @@ public class Penguin extends MiniJava {
 
 	public static void tryThreadWhitelisting() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
-		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		ArtemisSecurityManager.requestThreadWhitelisting(t);
 		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
@@ -163,7 +163,7 @@ public class Penguin extends MiniJava {
 		});
 		t.start();
 		t.join();
-		if(failure.get() != null)
+		if (failure.get() != null)
 			throw failure.get();
 	}
 }

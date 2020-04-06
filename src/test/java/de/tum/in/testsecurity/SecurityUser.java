@@ -223,7 +223,7 @@ public class SecurityUser {
 	@PublicTest
 	public void threadWhitelistingWithPathFail() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
-		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
@@ -232,14 +232,14 @@ public class SecurityUser {
 		});
 		t.start();
 		t.join();
-		if(failure.get() != null)
+		if (failure.get() != null)
 			throw failure.get();
 	}
 
 	@PublicTest
 	public void threadWhitelistingWithPathCorrect() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
-		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		ArtemisSecurityManager.requestThreadWhitelisting(t);
 		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
@@ -249,7 +249,7 @@ public class SecurityUser {
 		});
 		t.start();
 		t.join();
-		if(failure.get() != null)
+		if (failure.get() != null)
 			throw failure.get();
 	}
 
