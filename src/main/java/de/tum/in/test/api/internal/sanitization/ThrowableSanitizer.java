@@ -62,7 +62,7 @@ public final class ThrowableSanitizer {
 			Throwable cause = (Throwable) CAUSE.get(from);
 			List<Throwable> suppr = IgnorantUnmodifiableList.wrapWith(Arrays.stream(invoke(from::getSuppressed))
 					.map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
-					ArtemisSecurityManager.getOnModification());
+					ArtemisSecurityManager.getOnSuppressedModification());
 			if (cause == from)
 				CAUSE.set(to, to);
 			else

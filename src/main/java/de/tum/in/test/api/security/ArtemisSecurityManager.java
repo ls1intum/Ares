@@ -70,7 +70,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 	}
 
-	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG
+	private static final BiConsumer<String, Object> ON_SUPPRESSED_MOD = (method, object) -> LOG
 			.warn("addSuppressed, {} called with {}", method, object == null ? "null" : object.getClass()); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
@@ -613,7 +613,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));
 	}
 
-	public static BiConsumer<String, Object> getOnModification() {
-		return ON_MODIFICATION;
+	public static BiConsumer<String, Object> getOnSuppressedModification() {
+		return ON_SUPPRESSED_MOD;
 	}
 }

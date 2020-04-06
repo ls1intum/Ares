@@ -36,7 +36,7 @@ enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 			suppr.set(t,
 					IgnorantUnmodifiableList.wrapWith(
 							Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
-							ArtemisSecurityManager.getOnModification()));
+							ArtemisSecurityManager.getOnSuppressedModification()));
 		} catch (ReflectiveOperationException e) {
 			throw new SanitizationError(e);
 		}
