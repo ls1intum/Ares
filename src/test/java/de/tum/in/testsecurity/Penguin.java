@@ -2,13 +2,17 @@ package de.tum.in.testsecurity;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Permission;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.xyz.Circumvention;
 import org.apache.xyz.MaliciousExceptionB;
+
+import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 public class Penguin extends MiniJava {
 
@@ -145,5 +149,21 @@ public class Penguin extends MiniJava {
 			Thread t = new Thread(Penguin::spawnEndlessThreads);
 			t.start();
 		}
+	}
+
+	public static void tryThreadWhitelisting() throws Throwable {
+		AtomicReference<Throwable> failure = new AtomicReference<>();
+		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		ArtemisSecurityManager.requestThreadWhitelisting(t);
+		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				failure.set(e);
+			}
+		});
+		t.start();
+		t.join();
+		if(failure.get() != null)
+			throw failure.get();
 	}
 }

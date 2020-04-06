@@ -43,6 +43,9 @@ public class SecurityTest {
 	 */
 	@SuppressWarnings("unused")
 	private final String testThreadBomb = "testThreadBomb";
+	private final String threadWhitelistingWithPathFail = "threadWhitelistingWithPathFail";
+	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
+	private final String threadWhitelistingWithPathPenguin = "threadWhitelistingWithPathPenguin";
 
 	@Test
 	@Tag("test-test")
@@ -51,7 +54,7 @@ public class SecurityTest {
 		var tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(23));
+		tests.assertStatistics(stats -> stats.started(26));
 
 		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfully()));
@@ -60,6 +63,7 @@ public class SecurityTest {
 		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfully()));
 		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfully()));
+		tests.assertThatEvents().haveExactly(1, event(test(threadWhitelistingWithPathCorrect), finishedSuccessfully()));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));
@@ -71,6 +75,8 @@ public class SecurityTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadGroup, SecurityException.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
 //		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadBomb, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(threadWhitelistingWithPathFail, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(threadWhitelistingWithPathPenguin, SecurityException.class));
 
 		tests.assertThatEvents().haveExactly(1, testFailedWith(exceedTimeLimit, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));

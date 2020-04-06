@@ -4,10 +4,12 @@ package de.tum.in.testsecurity;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
@@ -26,6 +28,7 @@ import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 //@MirrorOutput
 @AllowThreads(maxActiveCount = 100)
@@ -215,6 +218,44 @@ public class SecurityUser {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@PublicTest
+	public void threadWhitelistingWithPathFail() throws Throwable {
+		AtomicReference<Throwable> failure = new AtomicReference<>();
+		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				failure.set(e);
+			}
+		});
+		t.start();
+		t.join();
+		if(failure.get() != null)
+			throw failure.get();
+	}
+
+	@PublicTest
+	public void threadWhitelistingWithPathCorrect() throws Throwable {
+		AtomicReference<Throwable> failure = new AtomicReference<>();
+		Thread t = new Thread(()->Path.of("pom.xml").toFile().canWrite());
+		ArtemisSecurityManager.requestThreadWhitelisting(t);
+		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				failure.set(e);
+			}
+		});
+		t.start();
+		t.join();
+		if(failure.get() != null)
+			throw failure.get();
+	}
+
+	@PublicTest
+	public void threadWhitelistingWithPathPenguin() throws Throwable {
+		Penguin.tryThreadWhitelisting();
 	}
 
 	@Disabled
