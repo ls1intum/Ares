@@ -4,7 +4,6 @@ import static de.tum.in.test.api.localization.Messages.*;
 
 import java.awt.AWTPermission;
 import java.io.FilePermission;
-import java.io.PrintStream;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
 import java.lang.Thread.State;
@@ -35,9 +34,11 @@ import java.util.stream.Collectors;
 import javax.net.ssl.SSLPermission;
 import javax.security.auth.AuthPermission;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.tum.in.test.api.PathActionLevel;
 import de.tum.in.test.api.localization.Messages;
-import de.tum.in.test.api.util.BlacklistedInvoker;
 
 /**
  * Prevents System.exit, reflection to a certain degree, networking use,
@@ -47,12 +48,9 @@ import de.tum.in.test.api.util.BlacklistedInvoker;
  */
 public final class ArtemisSecurityManager extends SecurityManager {
 
-	private static final int NWSF_THRESHOLD = 100;
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
-	private static final String PACKAGE_NAME = ArtemisSecurityManager.class.getPackageName();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
-	private static final PrintStream LOG_OUTPUT = System.err;
-	private static final Thread MAIN_THREAD = Thread.currentThread();
+	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -65,32 +63,26 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		/*
 		 * Check for main Thread
 		 */
-		if (!Objects.equals("main", MAIN_THREAD.getName())) {
-			LOG_OUTPUT.printf(
-					"[ERROR] Expected ArtemisSecurityManager to be initialized in the main thread but was %s. Exiting...%n", //$NON-NLS-1$
-					MAIN_THREAD);
+		if (!Objects.equals("main", SecurityConstants.MAIN_THREAD.getName())) { //$NON-NLS-1$
+			LOG.error("Expected ArtemisSecurityManager to be initialized in the main thread but was {}. Exiting...", //$NON-NLS-1$
+					SecurityConstants.MAIN_THREAD);
 			System.exit(1);
 		}
 	}
 
-	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG_OUTPUT.format(
-			"[WARNING] addSuppressed, %s called with %s%n", method, object == null ? "null" : object.getClass()); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final BiConsumer<String, Object> ON_MODIFICATION = (method, object) -> LOG
+			.warn("addSuppressed, {} called with {}", method, object == null ? "null" : object.getClass()); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
-	private final Set<String> staticWhitelist = Set.of("java.", "org.junit.", "jdk.", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"org.eclipse.", "com.intellij", "org.assertj", "org.opentest4j.", // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			"com.sun.", "sun.", "org.apache.", "de.tum.in.test.", "net.jqwik", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private final Set<String> staticBlacklist = Set.of(BlacklistedInvoker.class.getName());
 	private ArtemisSecurityConfiguration configuration;
 	private String accessToken;
 	private Set<Thread> whitelistedThreads = new HashSet<>();
 	private volatile boolean isPartlyDisabled;
 	private volatile boolean blockThreadCreation;
 	private volatile boolean lastUninstallFailed;
-	private int nwsfCount = 0;
 
 	private ArtemisSecurityManager() {
 		if (INSTANCE != null)
@@ -121,7 +113,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			if (Thread.currentThread() == MAIN_THREAD && getNonWhitelistedStackFrames().isEmpty()) {
+			if (Thread.currentThread() == SecurityConstants.MAIN_THREAD && getNonWhitelistedStackFrames().isEmpty()) {
 				// always allow maven to exit
 				return;
 			}
@@ -263,9 +255,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			LOG_OUTPUT.println("[INFO] PKG-DEF: " + pkg); //$NON-NLS-1$
+			LOG.info("PKG-DEF: {}", pkg); //$NON-NLS-1$
 			super.checkPackageDefinition(pkg);
-			if (staticWhitelist.stream().anyMatch(pkg::startsWith))
+			if (SecurityConstants.STACK_WHITELIST.stream().anyMatch(pkg::startsWith))
 				throw new SecurityException(formatLocalized("security.error_package_definition", pkg)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
@@ -330,11 +322,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
-			e.printStackTrace(LOG_OUTPUT);
+			LOG.warn("Error in checkPathAccess", e);
 		}
-		String message = String.format("[WARNING] BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted); //$NON-NLS-1$
+		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted); //$NON-NLS-1$
 		checkForNonWhitelistedStackFrames(() -> {
-			LOG_OUTPUT.println(message);
+			LOG.warn(message);
 			return formatLocalized("security.error_path_access", p); //$NON-NLS-1$
 		});
 	}
@@ -356,8 +348,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			var blackList = List.of("java.lang.reflect", "de.tum.in.test.api.internal", PACKAGE_NAME); //$NON-NLS-1$ //$NON-NLS-2$
-			if (blackList.stream().anyMatch(pkg::startsWith)) {
+			if (SecurityConstants.PACKAGE_USE_BLACKLIST.stream().anyMatch(pkg::startsWith)) {
 				/*
 				 * this is a very expensive operation, can we do better? (no)
 				 */
@@ -372,8 +363,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message) {
 		var nonWhitelisted = getNonWhitelistedStackFrames();
 		if (!nonWhitelisted.isEmpty()) {
-			if (nwsfCount++ < NWSF_THRESHOLD)
-				LOG_OUTPUT.println("[WARNING] NWSFs ==> " + nonWhitelisted); //$NON-NLS-1$
+			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
 			throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
 					first.getLineNumber(), first.getFileName()));
@@ -389,8 +379,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean isCallNotWhitelisted(String call) {
-		return staticBlacklist.stream().anyMatch(call::startsWith)
-				|| (staticWhitelist.stream().noneMatch(call::startsWith)
+		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
+				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
 						&& (configuration == null || !configuration.whitelistedClassNames().contains(call)));
 	}
 
@@ -416,8 +406,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private boolean isConnectionAllowed(String host, int port) {
 		var nwsfs = getNonWhitelistedStackFrames();
-		LOG_OUTPUT.println("[INFO] Connection use request: " + host + ":" + port + " [" + Thread.currentThread() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ ", NWSFs: " + nwsfs.size() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+		LOG.info("Connection use request: {}:{} [NWSFs: {}]", host, port, nwsfs.size()); //$NON-NLS-1$
 		if (nwsfs.isEmpty())
 			return true;
 		return configuration != null && isLocalHost(host)
@@ -444,7 +433,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			try {
 				thread.interrupt();
 				thread.join(500 / originalCount + 1L);
-				LOG_OUTPUT.format("[DEBUG] State %s after interrupt and join of %s%n", thread.getState(), thread); //$NON-NLS-1$
+				LOG.debug("State {} after interrupt and join of {}", thread.getState(), thread); //$NON-NLS-1$
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -461,7 +450,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				if (thread == null || !thread.isAlive())
 					continue;
 				alive++;
-				LOG_OUTPUT.format("[DEBUG] Try %s to stop %s, state: %s%n", i + 1, thread, thread.getState()); //$NON-NLS-1$
+				LOG.debug("Try {} to stop {}, state: {}", i + 1, thread, thread.getState()); //$NON-NLS-1$
 				/*
 				 * we definitely want to forcefully terminate all threads (otherwise, next tests
 				 * will fail)
@@ -470,7 +459,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				try {
 					thread.join(20 / originalCount + 1L);
 				} catch (InterruptedException e) {
-					e.printStackTrace(LOG_OUTPUT);
+					LOG.warn("Error in checkThreadGroup 1", e);
 					exception.addSuppressed(e);
 					Thread.currentThread().interrupt();
 					break TRIES;
@@ -483,14 +472,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			try {
 				thread.join(100 / originalCount + 1L);
 			} catch (InterruptedException e) {
-				e.printStackTrace(LOG_OUTPUT);
+				LOG.warn("Error in checkThreadGroup 2", e);
 				exception.addSuppressed(e);
 				Thread.currentThread().interrupt();
 				break;
 			}
 			if (thread.getState() != State.TERMINATED)
-				LOG_OUTPUT.println(
-						"[ERROR] THREAD STOP ERROR: Thread " + thread + " is still in state " + thread.getState()); //$NON-NLS-1$ //$NON-NLS-2$
+				LOG.error("THREAD STOP ERROR: Thread {} is still in state {}", thread, thread.getState()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (testThreadGroup.activeCount() > 0)
 			throw exception;
@@ -529,13 +517,12 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private void whitelistThread(Thread t) {
-		LOG_OUTPUT.println("[INFO] Request whitelisting: " + t + " " + INSTANCE.whitelistedThreads + " by " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ Thread.currentThread());
+		LOG.info("Request whitelisting: {} {}", t, INSTANCE.whitelistedThreads); //$NON-NLS-1$
 		boolean whitelisted = isCurrentThreadWhitelisted();
 		if (!whitelisted)
 			throw new SecurityException(localized("security.error_thread_whitelisting_failed")); //$NON-NLS-1$
 		whitelistedThreads.add(t);
-		LOG_OUTPUT.println("[INFO] Thread whitelisted: " + t); //$NON-NLS-1$
+		LOG.info("Thread whitelisted: {}", t); //$NON-NLS-1$
 	}
 
 	private void unwhitelistThreads() {
@@ -543,7 +530,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	static boolean isStaticWhitelisted(String name) {
-		return INSTANCE.staticWhitelist.stream().anyMatch(name::startsWith);
+		return SecurityConstants.STACK_WHITELIST.stream().anyMatch(name::startsWith);
 	}
 
 	public static synchronized boolean isInstalled() {
@@ -552,7 +539,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
 		if (INSTANCE.lastUninstallFailed) {
-			LOG_OUTPUT.println("[INFO] Try recovery from lastUninstallFailed"); //$NON-NLS-1$
+			LOG.info("Try recovery from lastUninstallFailed"); //$NON-NLS-1$
 			INSTANCE.checkThreadGroup();
 			INSTANCE.isPartlyDisabled = true;
 			System.setSecurityManager(ORIGINAL);
@@ -561,11 +548,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		} else if (isInstalled()) {
 			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
 		}
-		LOG_OUTPUT
-				.println("[INFO] Request install by " + Thread.currentThread() + " with " + configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
+		if (LOG.isInfoEnabled())
+			LOG.info("Request install with {}", configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
 		String token = INSTANCE.generateAccessToken();
 		INSTANCE.blockThreadCreation = false;
-		INSTANCE.nwsfCount = 0;
 		System.setSecurityManager(INSTANCE);
 		INSTANCE.configuration = Objects.requireNonNull(configuration);
 		INSTANCE.unwhitelistThreads();
@@ -583,7 +569,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				throw new IllegalStateException(localized("security.already_disabled")); //$NON-NLS-1$
 
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-			LOG_OUTPUT.println("[INFO] Request uninstall by " + Thread.currentThread()); //$NON-NLS-1$
+			LOG.info("Request uninstall"); //$NON-NLS-1$
 			// try to clean up and try to run finalize() of test objects
 			System.gc();
 			System.runFinalization();
@@ -597,8 +583,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			INSTANCE.lastUninstallFailed = false;
 		} catch (Throwable t) {
 			INSTANCE.lastUninstallFailed = true;
-			t.printStackTrace(LOG_OUTPUT);
-			LOG_OUTPUT.println("[ERROR] UNINSTALL FAILED: " + t); //$NON-NLS-1$
+			LOG.error("UNINSTALL FAILED", t); //$NON-NLS-1$
 			throw t;
 		} finally {
 			Thread.currentThread().setPriority(oldPrio);
