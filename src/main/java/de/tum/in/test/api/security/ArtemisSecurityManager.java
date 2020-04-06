@@ -317,8 +317,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		boolean blacklisted = false;
 		try {
 			Path pa = p.toAbsolutePath();
-			whitelisted = isPathWhitelisted(pa, pathActionLevel);
 			blacklisted = isPathBlacklisted(pa, pathActionLevel);
+			whitelisted = isPathWhitelisted(pa, pathActionLevel);
 			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
