@@ -1,5 +1,6 @@
 package de.tum.in.test.api.jqwik;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.apiguardian.api.API;
@@ -42,12 +43,31 @@ public final class JqwikTestExtension implements AroundPropertyHook {
 		testExtension.beforeTestExecution();
 		ioTesterProvider = new IOTesterProvider(testExtension.getIOTester());
 		RegisteredArbitraryProviders.register(ioTesterProvider);
+
+		PropertyExecutionResult result;
+		Throwable error = null;
 		try {
-			return property.execute();
+			/*
+			 * Note that the only Throwable not caught and collected is OutOfMemoryError
+			 */
+			result = property.execute();
 		} finally {
 			RegisteredArbitraryProviders.unregister(ioTesterProvider);
-			testExtension.afterTestExecution();
+			try {
+				testExtension.afterTestExecution();
+			} catch (Throwable t) {
+				error = t;
+			}
 		}
+		// Fix for issue #1, add as suppressed exception
+		if (error != null) {
+			Optional<Throwable> propExecError = result.throwable();
+			if (propExecError.isPresent())
+				propExecError.get().addSuppressed(error);
+			else
+				result = result.mapToFailed(error);
+		}
+		return result;
 	}
 
 	private static class IOTesterProvider implements ArbitraryProvider {

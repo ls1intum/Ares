@@ -72,13 +72,11 @@ public class JqwickTest {
 
 		tests.assertThatEvents().haveExactly(1, event(test(propertyUseIOTesterCorrect), finishedSuccessfullyRep()));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(propertyUseIOTesterWrong, AssertionError.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutEndlessLoop, IllegalStateException.class)); // TODO:
-																															// improve
-																															// message
+		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutEndlessLoop, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutSleepExample, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutSleepTries, AssertionFailedError.class));
 		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(provokeTimeoutSleepProperty, IllegalStateException.class));
+				testFailedWith(provokeTimeoutSleepProperty, AssertionFailedError.class));
 
 	}
 
