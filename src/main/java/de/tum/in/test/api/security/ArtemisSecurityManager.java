@@ -235,7 +235,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			if (isMainThreadAndInactive()) {
-				LOG.debug("Allowing main thread to create a ClassLoader inbetweeen tests");
+				LOG.trace("Allowing main thread to create a ClassLoader inbetween tests");
 				return;
 			}
 			checkForNonWhitelistedStackFrames(() -> localized("security.error_classloader")); //$NON-NLS-1$
@@ -255,7 +255,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (tg == null)
 				return;
 			if (isMainThreadAndInactive()) {
-				LOG.debug("Allowing Thread access to {} for main thread inbetweeen tests", externGet(t::toString));
+				LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString));
 				return;
 			}
 			if (!testThreadGroup.parentOf(tg))
@@ -272,7 +272,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(g);
 			if (isMainThreadAndInactive()) {
-				LOG.debug("Allowing ThreadGroup access to {} for main thread inbetweeen tests", externGet(g::toString));
+				LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests", externGet(g::toString));
 				return;
 			}
 			if (!testThreadGroup.parentOf(g))
@@ -358,7 +358,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			LOG.warn("Error in checkPathAccess", e);
 		}
 		if (isMainThreadAndInactive() && pathActionLevel.isBelowOrEqual(PathActionLevel.READLINK)) {
-			LOG.debug("Allowing read access for main thread inbetweeen tests");
+			LOG.trace("Allowing read access for main thread inbetween tests"); // appears very often
 			return;
 		}
 		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted); //$NON-NLS-1$
