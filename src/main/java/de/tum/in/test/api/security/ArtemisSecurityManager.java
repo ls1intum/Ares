@@ -532,17 +532,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		LOG_OUTPUT.println("[INFO] Request whitelisting: " + t + " " + INSTANCE.whitelistedThreads + " by " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ Thread.currentThread());
 		boolean whitelisted = isCurrentThreadWhitelisted();
-		if (!whitelisted && (configuration == null || !configuration.whitelistFirstThread()))
-			return;
-		if (!whitelistedThreads.isEmpty() && !whitelisted)
-			throw new SecurityException(localized("security.error_thread_already_whitelisted")); //$NON-NLS-1$
+		if (!whitelisted)
+			throw new SecurityException(localized("security.error_thread_whitelisting_failed")); //$NON-NLS-1$
 		whitelistedThreads.add(t);
 		LOG_OUTPUT.println("[INFO] Thread whitelisted: " + t); //$NON-NLS-1$
 	}
 
 	private void unwhitelistThreads() {
-		if (!configuration.whitelistFirstThread() && !whitelistedThreads.isEmpty())
-			throw new SecurityException(localized("security.error_no_thread_whitelisting")); //$NON-NLS-1$
 		whitelistedThreads.clear();
 	}
 
@@ -615,10 +611,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {
 		INSTANCE.checkAccess(accessToken);
 		INSTANCE.configuration = configuration;
-	}
-
-	public static synchronized void requestThreadWhitelisting() {
-		requestThreadWhitelisting(Thread.currentThread());
 	}
 
 	public static synchronized void requestThreadWhitelisting(Thread t) {

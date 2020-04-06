@@ -18,20 +18,17 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	private final List<String> whitelistedClassNames;
 	private final Optional<Set<PathRule>> whitelistedPaths;
 	private final Set<PathRule> blacklistedPaths;
-	private final boolean whitelistFirstThread;
 	private final OptionalInt allowedLocalPort;
 	private final OptionalInt allowedThreadCount;
 
 	ArtemisSecurityConfigurationImpl(Class<?> testClass, Method testMethod, Path executionPath,
-			Collection<String> whitelistedClassNames, boolean whitelistFirstThread,
-			Optional<Collection<PathRule>> whitelistedPaths, Collection<PathRule> blacklistedPaths,
-			OptionalInt allowedLocalPort, OptionalInt allowedThreadCount) {
+			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
+			Collection<PathRule> blacklistedPaths, OptionalInt allowedLocalPort, OptionalInt allowedThreadCount) {
 		this.testClass = Objects.requireNonNull(testClass);
 		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
 		this.whitelistedClassNames = List.copyOf(whitelistedClassNames);
 		this.whitelistedPaths = whitelistedPaths.map(Set::copyOf);
-		this.whitelistFirstThread = whitelistFirstThread;
 		this.blacklistedPaths = Set.copyOf(blacklistedPaths);
 		this.allowedLocalPort = Objects.requireNonNull(allowedLocalPort);
 		this.allowedThreadCount = Objects.requireNonNull(allowedThreadCount);
@@ -55,11 +52,6 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	@Override
 	public List<String> whitelistedClassNames() {
 		return whitelistedClassNames;
-	}
-
-	@Override
-	public boolean whitelistFirstThread() {
-		return whitelistFirstThread;
 	}
 
 	@Override
@@ -92,29 +84,27 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 		return Objects.equals(executionPath, other.executionPath) && Objects.equals(testClass, other.testClass)
 				&& Objects.equals(testMethod, other.testMethod)
 				&& Objects.equals(whitelistedClassNames, other.whitelistedClassNames)
-				&& whitelistFirstThread == other.whitelistFirstThread
 				&& Objects.equals(allowedLocalPort, other.allowedLocalPort)
 				&& Objects.equals(allowedThreadCount, other.allowedThreadCount);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(executionPath, testClass, testMethod, whitelistedClassNames, whitelistFirstThread,
-				allowedThreadCount);
+		return Objects.hash(executionPath, testClass, testMethod, whitelistedClassNames, allowedThreadCount);
 	}
 
 	@Override
 	public String toString() {
 		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s,"
-				+ " testClass=%s, testMethod=%s, whitelistFirstThread=%s, whitelistedPaths=%s, allowedLocalPort=%s, allowedThreadCount=%s]",
-				whitelistedClassNames, executionPath, testClass, testMethod, whitelistFirstThread, whitelistedPaths,
-				allowedLocalPort, allowedThreadCount);
+				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, allowedLocalPort=%s, allowedThreadCount=%s]",
+				whitelistedClassNames, executionPath, testClass, testMethod, whitelistedPaths, allowedLocalPort,
+				allowedThreadCount);
 	}
 
 	@Override
 	public String shortDesc() {
 		return String.format(
-				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistFirstThread=%s, whitelistedPaths=%s, allowedLocalPort=%s]",
-				testMethod, executionPath, whitelistFirstThread, whitelistedPaths, allowedLocalPort);
+				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, allowedLocalPort=%s]",
+				testMethod, executionPath, whitelistedPaths, allowedLocalPort);
 	}
 }

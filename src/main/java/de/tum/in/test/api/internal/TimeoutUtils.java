@@ -1,16 +1,27 @@
 package de.tum.in.test.api.internal;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.platform.commons.support.AnnotationSupport;
+import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
-public class TimeoutUtils {
+public final class TimeoutUtils {
 
 	static {
 		/*
@@ -33,9 +44,67 @@ public class TimeoutUtils {
 		var timeout = findTimeout(context);
 		if (timeout.isEmpty())
 			return execution.get();
-		return Assertions.assertTimeoutPreemptively(timeout.get(), () -> {
-			ArtemisSecurityManager.requestThreadWhitelisting();
+		return executeWithTimeout(timeout.get(), () -> rethrowThrowableSafe(execution));
+	}
+
+	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception {
+		try {
 			return execution.get();
-		});
+		} catch (Exception | Error e) {
+			throw e;
+		} catch (Throwable t) {
+			/*
+			 * Should never happen, as there are no other direct subclasses of Throwable in
+			 * use. But students might still do that, so better be prepared.
+			 */
+			throw new ExecutionException(t);
+		}
+	}
+
+	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action) throws Throwable {
+		ExecutorService executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
+		try {
+			Future<T> future = executorService.submit(action);
+			return future.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+		} catch (ExecutionException ex) {
+			// should never happen, but you never know
+			if (ex.getCause() instanceof ExecutionException)
+				throw ex.getCause().getCause();
+			throw ex.getCause();
+		} catch (@SuppressWarnings("unused") TimeoutException ex) {
+			throw new AssertionFailedError("execution timed out after " + formatDuration(timeout));
+		} finally {
+			executorService.shutdownNow();
+		}
+	}
+
+	private static String formatDuration(Duration duration) {
+		List<String> parts = new ArrayList<>();
+		long h = duration.toHours();
+		long m = duration.toMinutesPart();
+		long s = duration.toSecondsPart();
+		long ms = duration.toMillisPart();
+		if (h != 0)
+			parts.add(h + " h");
+		if (m != 0)
+			parts.add(m + " min");
+		if (s != 0)
+			parts.add(s + " s");
+		if (ms != 0)
+			parts.add(ms + " ms");
+		return String.join(" ", parts);
+	}
+
+	private static class WhitelistedThreadFactory implements ThreadFactory {
+		private static final AtomicInteger TIMEOUT_THREAD_ID = new AtomicInteger(1);
+
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = new Thread(r, "ajts-to-" + TIMEOUT_THREAD_ID.getAndIncrement());
+			if (t.getPriority() != Thread.NORM_PRIORITY)
+				t.setPriority(Thread.NORM_PRIORITY);
+			ArtemisSecurityManager.requestThreadWhitelisting(t);
+			return t;
+		}
 	}
 }

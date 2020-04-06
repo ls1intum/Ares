@@ -27,8 +27,6 @@ public interface ArtemisSecurityConfiguration {
 
 	String shortDesc();
 
-	boolean whitelistFirstThread();
-
 	default Optional<Set<PathRule>> whitelistedPaths() {
 		return Optional.empty();
 	}
