@@ -35,13 +35,13 @@ public final class TestContextUtils {
 	 * {@link Inherited})</li>
 	 * <li>recursively: the classes enclosing the test class, if applicable (and
 	 * superclasses, if {@link Inherited})</li>
-	 * <ul>
+	 * </ul>
 	 *
 	 * @param <A>        The type of the annotation
 	 * @param context    the {@link TestContext} to search in
 	 * @param annotation the annotation to look for
-	 * @return the first occurrence of <A> in the described order as Optional, never
-	 *         null
+	 * @return the first occurrence of <code>A</code> in the described order as
+	 *         Optional, never null
 	 *
 	 * @see AnnotationSupport#findAnnotation(AnnotatedElement, Class)
 	 *
@@ -61,18 +61,20 @@ public final class TestContextUtils {
 	 * {@link Inherited})</li>
 	 * <li>recursively: the classes enclosing the test class, if applicable (and
 	 * superclasses, if {@link Inherited})</li>
-	 * <ul>
+	 * </ul>
 	 *
 	 * @param <A>        The type of the annotation
 	 * @param context    the {@link TestContext} to search in
 	 * @param annotation the annotation to look for
-	 * @return all occurrences of <A> in the described order as Stream, never null
+	 * @return all occurrences of <code>A</code> in the described order as Stream,
+	 *         never null
 	 *
 	 * @see AnnotationSupport#findRepeatableAnnotations(AnnotatedElement, Class)
 	 *
 	 * @author Christian Femers
 	 */
-	public static <A extends Annotation> Stream<A> findRepeatableAnnotationsIn(TestContext context, Class<A> annotation) {
+	public static <A extends Annotation> Stream<A> findRepeatableAnnotationsIn(TestContext context,
+			Class<A> annotation) {
 		return getAnnotatedElementsInnermostFirst(context)
 				.flatMap(e -> findRepeatableAnnotations(e, annotation).stream());
 	}
