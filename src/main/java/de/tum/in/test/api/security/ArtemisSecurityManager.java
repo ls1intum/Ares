@@ -385,16 +385,35 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			if (SecurityConstants.PACKAGE_USE_BLACKLIST.stream().anyMatch(pkg::startsWith)) {
+			super.checkPackageAccess(pkg);
+			if (!isMainThreadAndInactive() && isPackageAccessForbidden(pkg)) {
 				/*
 				 * this is a very expensive operation, can we do better? (no)
 				 */
-				checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_disallowed_package", pkg)); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> {
+					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg),
+							isPackageWhitelisted(pkg));
+					return formatLocalized("security.error_disallowed_package", pkg);
+				}); // $NON-NLS-1$
 			}
-			super.checkPackageAccess(pkg);
 		} finally {
 			exitPublicInterface();
 		}
+	}
+
+	private boolean isPackageAccessForbidden(String pkg) {
+		return SecurityConstants.PACKAGE_USE_BLACKLIST.stream().anyMatch(pkg::startsWith)
+				|| (isPackageBlacklisted(pkg) && !isPackageWhitelisted(pkg));
+	}
+
+	private boolean isPackageBlacklisted(String packageName) {
+		var packageBlacklist = configuration.blacklistedPackages();
+		return packageBlacklist.stream().anyMatch(pm -> pm.matches(packageName));
+	}
+
+	private boolean isPackageWhitelisted(String packageName) {
+		var packageWhitelist = configuration.whitelistedPackages();
+		return packageWhitelist.stream().anyMatch(pm -> pm.matches(packageName));
 	}
 
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message) {
