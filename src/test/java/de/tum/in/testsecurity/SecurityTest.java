@@ -43,10 +43,11 @@ public class SecurityTest {
 	private final String threadWhitelistingWithPathFail = "threadWhitelistingWithPathFail";
 	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
 	private final String threadWhitelistingWithPathPenguin = "threadWhitelistingWithPathPenguin";
-	private final String packageBlacklistingPenguinUtil = "packageBlacklistingPenguinUtil";
-	private final String packageBlacklistingPenguinJava = "packageBlacklistingPenguinJava";
-	private final String packageBlacklistingPenguinAll = "packageBlacklistingPenguinAll";
-	private final String packageBlackAndWhitelistingPenguin = "packageBlackAndWhitelistingPenguin";
+	private final String package_aBlacklistingPenguinUtil = "package_aBlacklistingPenguinUtil";
+	private final String package_bBlacklistingPenguinJava = "package_bBlacklistingPenguinJava";
+	private final String package_cBlacklistingPenguinAll = "package_cBlacklistingPenguinAll";
+	private final String package_dBlackAndWhitelistingPenguin = "package_dBlackAndWhitelistingPenguin";
+	private final String package_eBlackPenguinAgain = "package_eBlackPenguinAgain";
 
 	private static Events tests;
 
@@ -57,7 +58,7 @@ public class SecurityTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(30));
+		tests.assertStatistics(stats -> stats.started(31));
 	}
 
 	@TestTest
@@ -102,9 +103,9 @@ public class SecurityTest {
 	}
 
 	@TestTest
-	void test_packageBlackAndWhitelistingPenguin() {
+	void test_package_dBlackAndWhitelistingPenguin() {
 		tests.assertThatEvents().haveExactly(1,
-				event(test(packageBlackAndWhitelistingPenguin), finishedSuccessfullyRep()));
+				event(test(package_dBlackAndWhitelistingPenguin), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
@@ -171,20 +172,27 @@ public class SecurityTest {
 	}
 
 	@TestTest
-	void test_packageBlacklistingPenguinUtil() {
+	void test_package_aBlacklistingPenguinUtil() {
 		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(packageBlacklistingPenguinUtil, SecurityException.class));
+				testFailedWith(package_aBlacklistingPenguinUtil, SecurityException.class));
 	}
 
 	@TestTest
-	void test_packageBlacklistingPenguinJava() {
+	void test_package_bBlacklistingPenguinJava() {
 		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(packageBlacklistingPenguinJava, SecurityException.class));
+				testFailedWith(package_bBlacklistingPenguinJava, SecurityException.class));
 	}
 
 	@TestTest
-	void test_packageBlacklistingPenguinAll() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(packageBlacklistingPenguinAll, SecurityException.class));
+	void test_package_cBlacklistingPenguinAll() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(package_cBlacklistingPenguinAll, SecurityException.class));
+	}
+
+	@Disabled("Classes are only checked when they are loaded, so changing this again is impossible")
+	@TestTest
+	void test_package_eBlackPenguinAgain() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(package_eBlackPenguinAgain, SecurityException.class));
 	}
 
 	@TestTest

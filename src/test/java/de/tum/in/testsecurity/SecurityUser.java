@@ -269,27 +269,33 @@ public class SecurityUser {
 
 	@BlacklistPackage("java.util")
 	@PublicTest
-	public void packageBlacklistingPenguinUtil() throws Throwable {
-		Penguin.useArrayList();
+	public void package_aBlacklistingPenguinUtil() throws Throwable {
+		ArrayListUserProxy.useArrayList();
 	}
 
 	@BlacklistPackage("java.**")
 	@PublicTest
-	public void packageBlacklistingPenguinJava() throws Throwable {
-		Penguin.useArrayList();
+	public void package_bBlacklistingPenguinJava() throws Throwable {
+		ArrayListUserProxy.useArrayList();
 	}
 
 	@BlacklistPackage("**")
 	@PublicTest
-	public void packageBlacklistingPenguinAll() throws Throwable {
-		Penguin.useArrayList();
+	public void package_cBlacklistingPenguinAll() throws Throwable {
+		ArrayListUserProxy.useArrayList();
 	}
 
 	@BlacklistPackage("**")
 	@WhitelistPackage("java.util")
 	@PublicTest
-	public void packageBlackAndWhitelistingPenguin() throws Throwable {
-		Penguin.useArrayList();
+	public void package_dBlackAndWhitelistingPenguin() throws Throwable {
+		ArrayListUserProxy.useArrayList();
+	}
+
+	@BlacklistPackage("java.util")
+	@PublicTest
+	public void package_eBlackPenguinAgain() throws Throwable {
+		ArrayListUserProxy.useArrayList();
 	}
 
 	/**
