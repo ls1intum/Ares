@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 @API(status = Status.INTERNAL)
@@ -38,4 +39,12 @@ public interface ArtemisSecurityConfiguration {
 	OptionalInt allowedLocalPort();
 
 	OptionalInt allowedThreadCount();
+
+	default Set<PackageRule> blacklistedPackages() {
+		return Set.of();
+	}
+
+	default Set<PackageRule> whitelistedPackages() {
+		return Set.of();
+	}
 }

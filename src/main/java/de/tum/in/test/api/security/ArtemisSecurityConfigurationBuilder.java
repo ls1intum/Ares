@@ -9,9 +9,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 public final class ArtemisSecurityConfigurationBuilder {
@@ -21,12 +21,16 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Set<String> whitelistedClassNames;
 	private Set<PathRule> whitelistedPaths;
 	private Set<PathRule> blacklistedPaths;
+	private Set<PackageRule> blacklistedPackages;
+	private Set<PackageRule> whitelistedPackages;
 	private OptionalInt allowedLocalPort;
 	private OptionalInt allowedThreadCount;
 
 	private ArtemisSecurityConfigurationBuilder() {
 		whitelistedClassNames = new HashSet<>();
 		blacklistedPaths = Set.of();
+		blacklistedPackages = Set.of();
+		whitelistedPackages = Set.of();
 		allowedLocalPort = OptionalInt.empty();
 		allowedThreadCount = OptionalInt.empty();
 	}
@@ -51,12 +55,24 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return whitelistedPaths;
 	}
 
+	public Set<PathRule> getBlacklistedPaths() {
+		return blacklistedPaths;
+	}
+
 	public OptionalInt getAllowedLocalPort() {
 		return allowedLocalPort;
 	}
 
 	public OptionalInt getAllowedThreadCount() {
 		return allowedThreadCount;
+	}
+
+	public Set<PackageRule> getBlacklistedPackages() {
+		return blacklistedPackages;
+	}
+
+	public Set<PackageRule> getWhitelistedPackages() {
+		return whitelistedPackages;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
@@ -70,7 +86,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<PathRule> whitelistedPaths) {
-		this.whitelistedPaths = whitelistedPaths.stream().collect(Collectors.toSet());
+		this.whitelistedPaths = Set.copyOf(whitelistedPaths);
 		return this;
 	}
 
@@ -125,9 +141,20 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public ArtemisSecurityConfigurationBuilder withPackageBlacklist(Collection<PackageRule> packageBlacklist) {
+		this.blacklistedPackages = Set.copyOf(packageBlacklist);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withPackageWhitelist(Collection<PackageRule> packageWhitelist) {
+		this.whitelistedPackages = Set.copyOf(packageWhitelist);
+		return this;
+	}
+
 	public ArtemisSecurityConfiguration build() {
 		return new ArtemisSecurityConfigurationImpl(testClass, testMethod, executionPath, whitelistedClassNames,
-				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort, allowedThreadCount);
+				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort, allowedThreadCount,
+				blacklistedPackages, whitelistedPackages);
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {
