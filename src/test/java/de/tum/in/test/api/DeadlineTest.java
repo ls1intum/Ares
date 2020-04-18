@@ -1,18 +1,18 @@
 package de.tum.in.test.api;
 
-import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
+import static de.tum.in.testutil.CustomConditions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 
 import java.lang.annotation.AnnotationFormatError;
 
-import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import org.junit.platform.testkit.engine.Event;
+import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
+
+import de.tum.in.testutil.TestTest;
 
 public class DeadlineTest {
 
@@ -22,25 +22,41 @@ public class DeadlineTest {
 	private final String testPublicCustomDeadline = "testPublicCustomDeadline";
 	private final String testPublicNormal = "testPublicNormal";
 
-	@Test
+	private static Events tests;
+
+	@BeforeAll
 	@Tag("test-test")
-	void verifyDeadline() {
+	static void verifyDeadline() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineUser.class)).execute();
-		var tests = results.testEvents();
+		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(5));
-
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
-
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenNormal, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicCustomDeadline, AnnotationFormatError.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHiddenCustomDeadlineFuture, AssertionFailedError.class));
 	}
 
-	private static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
-		return event(test(testName), finishedWithFailure(instanceOf(errorType)));
+	@TestTest
+	void test_testPublicNormal() {
+		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenCustomDeadlinePast() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenNormal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenNormal, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testPublicCustomDeadline() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicCustomDeadline, AnnotationFormatError.class));
+	}
+
+	@TestTest
+	void test_testHiddenCustomDeadlineFuture() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHiddenCustomDeadlineFuture, AssertionFailedError.class));
 	}
 }

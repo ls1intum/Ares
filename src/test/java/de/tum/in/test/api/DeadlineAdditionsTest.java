@@ -1,18 +1,18 @@
 package de.tum.in.test.api;
 
-import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
+import static de.tum.in.testutil.CustomConditions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 
 import java.lang.annotation.AnnotationFormatError;
 
-import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import org.junit.platform.testkit.engine.Event;
+import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
+
+import de.tum.in.testutil.TestTest;
 
 public class DeadlineAdditionsTest {
 	private final String testHidden_CustomDeadlineFutureActive = "testHidden_CustomDeadlineFutureActive";
@@ -32,81 +32,105 @@ public class DeadlineAdditionsTest {
 	private final String testPublicActive = "testPublicActive";
 	private final String testPublicExtended = "testPublicExtended";
 
-	@Test
+	private static Events tests;
+
+	@BeforeAll
 	@Tag("test-test")
-	void verifyExtendedDeadline() {
+	static void verifyExtendedDeadline() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
 				.execute();
-		var tests = results.testEvents();
+		tests = results.testEvents();
 
-		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfullyRep()));
-
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedNormal, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicExtended, AnnotationFormatError.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHidden_CustomDeadlineFutureExtendedNormal, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHidden_CustomDeadlinePastExtendedNormal, AssertionFailedError.class));
-
-	}
-
-	@Test
-	@Tag("test-test")
-	void verifyActivateHiddenBefore() {
-		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
-				.execute();
-		var tests = results.testEvents();
-
-		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenInactive), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureActive), finishedSuccessfullyRep()));
-
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHidden_CustomDeadlineFutureInactive, AssertionFailedError.class));
-
-	}
-
-	@Test
-	@Tag("test-test")
-	void verifyDeadlineAdditionsMixed() {
-		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
-				.execute();
-		var tests = results.testEvents();
-
-		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureExtendedActive), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlinePastExtendedActive), finishedSuccessfullyRep()));
-
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedInactive, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHidden_CustomDeadlineFutureExtendedInactive, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testHidden_CustomDeadlinePastExtendedInactive, AssertionFailedError.class));
-
-	}
-
-	@Test
-	@Tag("test-test")
-	@SuppressWarnings("static-method")
-	void verifyStatistics() {
-		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(DeadlineAdditionsUser.class))
-				.execute();
-		var tests = results.testEvents();
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
 		tests.assertStatistics(stats -> stats.started(16).succeeded(8).failed(8));
 	}
 
-	private static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
-		return event(test(testName), finishedWithFailure(instanceOf(errorType)));
+	@TestTest
+	void test_testHiddenNormal() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfullyRep()));
 	}
+
+	@TestTest
+	void test_testHiddenExtendedNormal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedNormal, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testPublicExtended() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testPublicExtended, AnnotationFormatError.class));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlineFutureExtendedNormal() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHidden_CustomDeadlineFutureExtendedNormal, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlinePastExtendedNormal() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHidden_CustomDeadlinePastExtendedNormal, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testPublicActive() {
+		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenActive() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenInactive() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenInactive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlineFutureActive() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(testHidden_CustomDeadlineFutureActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlineFutureInactive() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHidden_CustomDeadlineFutureInactive, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHiddenExtendedActive() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlineFutureExtendedActive() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(testHidden_CustomDeadlineFutureExtendedActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlinePastExtendedActive() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(testHidden_CustomDeadlinePastExtendedActive), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenExtendedInactive() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testHiddenExtendedInactive, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlineFutureExtendedInactive() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHidden_CustomDeadlineFutureExtendedInactive, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHidden_CustomDeadlinePastExtendedInactive() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testHidden_CustomDeadlinePastExtendedInactive, AssertionFailedError.class));
+	}
+
 }

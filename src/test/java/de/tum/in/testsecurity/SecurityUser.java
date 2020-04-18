@@ -18,11 +18,13 @@ import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.AllowThreads;
+import de.tum.in.test.api.BlacklistPackage;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
@@ -263,6 +265,31 @@ public class SecurityUser {
 	@StrictTimeout(2)
 	public void testThreadBomb() {
 		Penguin.spawnEndlessThreads();
+	}
+
+	@BlacklistPackage("java.util")
+	@PublicTest
+	public void packageBlacklistingPenguinUtil() throws Throwable {
+		Penguin.useArrayList();
+	}
+
+	@BlacklistPackage("java.**")
+	@PublicTest
+	public void packageBlacklistingPenguinJava() throws Throwable {
+		Penguin.useArrayList();
+	}
+
+	@BlacklistPackage("**")
+	@PublicTest
+	public void packageBlacklistingPenguinAll() throws Throwable {
+		Penguin.useArrayList();
+	}
+
+	@BlacklistPackage("**")
+	@WhitelistPackage("java.util")
+	@PublicTest
+	public void packageBlackAndWhitelistingPenguin() throws Throwable {
+		Penguin.useArrayList();
 	}
 
 	/**

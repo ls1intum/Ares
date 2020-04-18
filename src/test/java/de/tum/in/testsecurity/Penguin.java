@@ -6,6 +6,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Permission;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -165,5 +166,10 @@ public class Penguin extends MiniJava {
 		t.join();
 		if (failure.get() != null)
 			throw failure.get();
+	}
+
+	public static void useArrayList() {
+		ArrayList<String> x = new ArrayList<>();
+		x.add("abc");
 	}
 }

@@ -1,17 +1,17 @@
 package de.tum.in.testsecurity;
 
-import static de.tum.in.test.api.CustomConditions.finishedSuccessfullyRep;
+import static de.tum.in.testutil.CustomConditions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 
-import org.assertj.core.api.Condition;
 import org.junit.ComparisonFailure;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import org.junit.platform.testkit.engine.Event;
+import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
+
+import de.tum.in.testutil.TestTest;
 
 public class SecurityTest {
 
@@ -47,51 +47,181 @@ public class SecurityTest {
 	private final String threadWhitelistingWithPathFail = "threadWhitelistingWithPathFail";
 	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
 	private final String threadWhitelistingWithPathPenguin = "threadWhitelistingWithPathPenguin";
+	private final String packageBlacklistingPenguinUtil = "packageBlacklistingPenguinUtil";
+	private final String packageBlacklistingPenguinJava = "packageBlacklistingPenguinJava";
+	private final String packageBlacklistingPenguinAll = "packageBlacklistingPenguinAll";
+	private final String packageBlackAndWhitelistingPenguin = "packageBlackAndWhitelistingPenguin";
 
-	@Test
+	private static Events tests;
+
+	@BeforeAll
 	@Tag("test-test")
-	void verifySecurity() {
+	static void verifySecurity() {
 		var results = EngineTestKit.engine("junit-jupiter").selectors(selectClass(SecurityUser.class)).execute();
-		var tests = results.testEvents();
+		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(26));
-
-		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfullyRep()));
-		tests.assertThatEvents().haveExactly(1,
-				event(test(threadWhitelistingWithPathCorrect), finishedSuccessfullyRep()));
-
-		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionTrick, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathNormal, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathTest, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionA, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testExecuteGit, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadGroup, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
-//		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadBomb, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(threadWhitelistingWithPathFail, SecurityException.class));
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(threadWhitelistingWithPathPenguin, SecurityException.class));
-
-		tests.assertThatEvents().haveExactly(1, testFailedWith(exceedTimeLimit, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit5, AssertionFailedError.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(makeUTF8Error, IllegalArgumentException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testPenguin2, ComparisonFailure.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testSquareWrong, IllegalStateException.class));
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyreads, IllegalStateException.class));
+		tests.assertStatistics(stats -> stats.started(30));
 	}
 
-	private static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
-		return event(test(testName), finishedWithFailure(instanceOf(errorType)));
+	@TestTest
+	void test_testPenguin1() {
+		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testPolarBear() {
+		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testSquareCorrect() {
+		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_weUseReflection() {
+		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_weAccessPath() {
+		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_accessPathAllowed() {
+		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testEvilPermission() {
+		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_threadWhitelistingWithPathCorrect() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(threadWhitelistingWithPathCorrect), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_packageBlackAndWhitelistingPenguin() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(packageBlackAndWhitelistingPenguin), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_doSystemExit() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(doSystemExit, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useReflectionNormal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useReflectionTrick() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionTrick, SecurityException.class));
+	}
+
+	@TestTest
+	void test_accessPathNormal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathNormal, SecurityException.class));
+	}
+
+	@TestTest
+	void test_accessPathTest() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(accessPathTest, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testMaliciousExceptionA() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionA, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testExecuteGit() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testExecuteGit, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testThreadGroup() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadGroup, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testMaliciousExceptionB() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testThreadBomb() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadBomb, SecurityException.class));
+	}
+
+	@TestTest
+	void test_threadWhitelistingWithPathFail() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(threadWhitelistingWithPathFail, SecurityException.class));
+	}
+
+	@TestTest
+	void test_threadWhitelistingWithPathPenguin() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(threadWhitelistingWithPathPenguin, SecurityException.class));
+	}
+
+	@TestTest
+	void test_packageBlacklistingPenguinUtil() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(packageBlacklistingPenguinUtil, SecurityException.class));
+	}
+
+	@TestTest
+	void test_packageBlacklistingPenguinJava() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(packageBlacklistingPenguinJava, SecurityException.class));
+	}
+
+	@TestTest
+	void test_packageBlacklistingPenguinAll() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(packageBlacklistingPenguinAll, SecurityException.class));
+	}
+
+	@TestTest
+	void test_exceedTimeLimit() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(exceedTimeLimit, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_longOutputJUnit4() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));
+	}
+
+	@TestTest
+	void test_longOutputJUnit5() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit5, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_makeUTF8Error() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(makeUTF8Error, IllegalArgumentException.class));
+	}
+
+	@TestTest
+	void test_testPenguin2() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testPenguin2, ComparisonFailure.class));
+	}
+
+	@TestTest
+	void test_testSquareWrong() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testSquareWrong, IllegalStateException.class));
+	}
+
+	@TestTest
+	void test_testTooManyreads() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyreads, IllegalStateException.class));
 	}
 }
