@@ -75,11 +75,6 @@ public final class PathRule {
 				&& Objects.equals(pathPattern, other.pathPattern);
 	}
 
-	public enum RuleType {
-		WHITELIST,
-		BLACKLIST;
-	}
-
 	public static PathRule of(WhitelistPath whitelistedPath) {
 		return new PathRule(RuleType.WHITELIST, whitelistedPath.type(), whitelistedPath.level(),
 				whitelistedPath.value());
