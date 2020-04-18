@@ -6,6 +6,7 @@ import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.ComparisonFailure;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
@@ -38,11 +39,6 @@ public class SecurityTest {
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testThreadGroup = "testThreadGroup";
 	private final String testEvilPermission = "testEvilPermission";
-	/**
-	 * Currently unused because this is very inconsistent depending on the CI
-	 * environment
-	 */
-	@SuppressWarnings("unused")
 	private final String testThreadBomb = "testThreadBomb";
 	private final String threadWhitelistingWithPathFail = "threadWhitelistingWithPathFail";
 	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
@@ -156,6 +152,7 @@ public class SecurityTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
 	}
 
+	@Disabled("Currently unused because this is very inconsistent depending on the CI environment")
 	@TestTest
 	void test_testThreadBomb() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadBomb, SecurityException.class));
