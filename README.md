@@ -34,7 +34,7 @@ Maven where to find the AJTS resources:
     <repository>
         <id>ajts</id>
         <name>AJTS Maven Packages</name>
-        <url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
     </repository>
 </repositories>
 ```
@@ -76,7 +76,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <repository>
         <id>ajts</id>
         <name>AJTS Maven Packages</name>
-        <url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
     </repository>
 </repositories>
 
@@ -330,6 +330,22 @@ In progress, see also `IOTester`.
 #### Networking
 
 In progress, see also `@AllowLocalPort`.
+
+## Additional Notes
+
+#### GitHub Packages
+
+GitHub Packages does currently not allow unregistered, public access to the
+packages. Therefore, you will need to authenticate to GitHub if you use
+```xml
+<repositories>
+    <repository>
+        <id>ajts</id>
+        <name>AJTS Maven Packages</name>
+        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
+    </repository>
+</repositories>
+```
 
 ## License
 
