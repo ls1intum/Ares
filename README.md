@@ -1,4 +1,4 @@
-# Artemis Java Test Sandbox 
+# Artemis Java Test Sandbox
 ![Java CI](https://github.com/MaisiKoleni/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
 
 Artemis Java Test Sandbox *(abbr. AJTS)* is a JUnit 5 extension for easy and secure Java testing
@@ -255,17 +255,16 @@ A number of examples how you can whitelist paths in AJTS:
 
 That was not everything but already quite a lot. Take a look at the Javadoc of the annotations and enums used, if you want to know more. Before you give up, here is my recommendation how to start:
 ```Java
-//@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // For manual assessment
-@WhitelistPath("target")
+@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // for manual assessment and development
+@WhitelistPath("target") // mainly for Artemis
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 ```
 Add a `@BlacklistPath` for other important classes, like your reference implementations of the solution to test against should you use that approach.
 
-You can also use just the following *if you are absolutely sure, that `..` on a build agent will never contain any other students solutions from previous or simultaneous builds.*
-```Java
-@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB)
-@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
-```
+*Note: the Artemis project starts with `course1920xyz`, but the build in Bamboo (by Artemis) will
+happen in a directory named after the build plan, which is in upper case and therefore,
+begins with `COURSE1920XYZ`. Make sure that you do not build multiple student solutions 
+in the same directory on the same machine using the git clone (lower case) approach. Otherwise, adjust the whitelisting to your needs.*
 
 As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
