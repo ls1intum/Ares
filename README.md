@@ -21,7 +21,7 @@ AJTS is provided as Maven dependency. To use AJTS in the test environment of a M
 <dependency>
     <groupId>de.tum.in</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -84,7 +84,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <dependency>
         <groupId>de.tum.in</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.1</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
