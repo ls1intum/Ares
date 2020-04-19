@@ -63,6 +63,18 @@ public class SecurityUser {
 		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/testsecurity/SecurityTest.class"));
 	}
 
+	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@PublicTest
+	public void accessPathRelativeGlobA() throws IOException {
+		Penguin.accessPath(Path.of("pom.xml").toAbsolutePath());
+	}
+
+	@WhitelistPath(value = "./pom.xml", type = PathType.GLOB)
+	@PublicTest
+	public void accessPathRelativeGlobB() throws IOException {
+		Penguin.accessPath(Path.of("pom.xml").toAbsolutePath());
+	}
+
 	@PublicTest
 	public void doSystemExit() {
 		System.exit(0);

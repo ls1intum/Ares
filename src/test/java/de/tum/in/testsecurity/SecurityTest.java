@@ -48,6 +48,8 @@ public class SecurityTest {
 	private final String package_cBlacklistingPenguinAll = "package_cBlacklistingPenguinAll";
 	private final String package_dBlackAndWhitelistingPenguin = "package_dBlackAndWhitelistingPenguin";
 	private final String package_eBlackPenguinAgain = "package_eBlackPenguinAgain";
+	private final String accessPathRelativeGlobA = "accessPathRelativeGlobA";
+	private final String accessPathRelativeGlobB = "accessPathRelativeGlobB";
 
 	private static Events tests;
 
@@ -58,7 +60,7 @@ public class SecurityTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(31));
+		tests.assertStatistics(stats -> stats.started(33));
 	}
 
 	@TestTest
@@ -106,6 +108,16 @@ public class SecurityTest {
 	void test_package_dBlackAndWhitelistingPenguin() {
 		tests.assertThatEvents().haveExactly(1,
 				event(test(package_dBlackAndWhitelistingPenguin), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_accessPathRelativeGlobA() {
+		tests.assertThatEvents().haveExactly(1, event(test(accessPathRelativeGlobA), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_accessPathRelativeGlobB() {
+		tests.assertThatEvents().haveExactly(1, event(test(accessPathRelativeGlobB), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
