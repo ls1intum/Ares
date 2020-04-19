@@ -101,6 +101,11 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.2.0</version>
 				<configuration>
@@ -154,6 +159,30 @@
 			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId>
 				<version>1.6</version> <executions> <execution> <id>sign-artifacts</id> <phase>verify</phase>
 				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<rules>
+						<requireMavenVersion>
+							<version>[3.6,)</version>
+						</requireMavenVersion>
+						<requireJavaVersion>
+							<version>[11,)</version>
+						</requireJavaVersion>
+					</rules>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
