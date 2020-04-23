@@ -34,6 +34,8 @@ import de.tum.in.test.api.io.IOTester;
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
 public @interface MirrorOutput {
 
+	public static final long DEFAULT_MAX_STD_OUT = 10_000_000L;
+
 	MirrorOutputPolicy value() default MirrorOutputPolicy.ENABLED;
 
 	/**
@@ -42,7 +44,7 @@ public @interface MirrorOutput {
 	 * <p>
 	 * Default value is <code>10_000_000</code>
 	 */
-	long maxCharCount() default 10_000_000;
+	long maxCharCount() default DEFAULT_MAX_STD_OUT;
 
 	enum MirrorOutputPolicy {
 		DISABLED,

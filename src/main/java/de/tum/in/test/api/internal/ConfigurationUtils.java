@@ -22,8 +22,6 @@ import de.tum.in.test.api.util.PathRule;
 
 public final class ConfigurationUtils {
 
-	private static final long DEFAULT_MAX_STD_OUT = 10_000_000L;
-
 	private ConfigurationUtils() {
 
 	}
@@ -72,7 +70,7 @@ public final class ConfigurationUtils {
 
 	public static long getMaxStandardOutput(TestContext context) {
 		return TestContextUtils.findAnnotationIn(context, MirrorOutput.class).map(MirrorOutput::maxCharCount)
-				.orElse(DEFAULT_MAX_STD_OUT);
+				.orElse(MirrorOutput.DEFAULT_MAX_STD_OUT);
 	}
 
 	public static OptionalInt getAllowedLocalPort(TestContext context) {
