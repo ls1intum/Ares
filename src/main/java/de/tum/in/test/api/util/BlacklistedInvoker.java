@@ -24,4 +24,12 @@ public final class BlacklistedInvoker {
 	public static <R> R invoke(Supplier<R> action) {
 		return action.get();
 	}
+
+	public static <R> R invokeOrElse(Supplier<R> action, Supplier<R> alternative) {
+		try {
+			return action.get();
+		} catch (@SuppressWarnings("unused") SecurityException se) {
+			return alternative.get();
+		}
+	}
 }
