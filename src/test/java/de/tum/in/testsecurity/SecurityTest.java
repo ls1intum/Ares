@@ -50,6 +50,11 @@ public class SecurityTest {
 	private final String package_eBlackPenguinAgain = "package_eBlackPenguinAgain";
 	private final String accessPathRelativeGlobA = "accessPathRelativeGlobA";
 	private final String accessPathRelativeGlobB = "accessPathRelativeGlobB";
+	private final String nonprivilegedExceptionExtern = "nonprivilegedExceptionExtern";
+	private final String nonprivilegedExceptionIntern = "nonprivilegedExceptionIntern";
+	private final String privilegedExceptionNormal = "privilegedExceptionNormal";
+	private final String privilegedExceptionFail = "privilegedExceptionFail";
+	private final String nonprivilegedExceptionTry = "nonprivilegedExceptionTry";
 
 	private static Events tests;
 
@@ -60,7 +65,7 @@ public class SecurityTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(33));
+		tests.assertStatistics(stats -> stats.started(38));
 	}
 
 	@TestTest
@@ -240,5 +245,33 @@ public class SecurityTest {
 	@TestTest
 	void test_testTooManyreads() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyreads, IllegalStateException.class));
+	}
+
+	@TestTest
+	void test_nonprivilegedExceptionExtern() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(nonprivilegedExceptionExtern, AssertionError.class, "ABC"));
+	}
+
+	@TestTest
+	void test_nonprivilegedExceptionIntern() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(nonprivilegedExceptionIntern, AssertionError.class, "ABC"));
+	}
+
+	@TestTest
+	void test_privilegedExceptionNormal() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(privilegedExceptionNormal, NullPointerException.class, "xyz"));
+	}
+
+	@TestTest
+	void test_privilegedExceptionFail() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(privilegedExceptionFail, AssertionError.class, "xyz"));
+	}
+
+	@TestTest
+	void test_nonprivilegedExceptionTry() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(nonprivilegedExceptionTry, AssertionError.class, "ABC"));
 	}
 }

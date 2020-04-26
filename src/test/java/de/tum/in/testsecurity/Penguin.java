@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.xyz.Circumvention;
 import org.apache.xyz.MaliciousExceptionB;
 
+import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 public class Penguin extends MiniJava {
@@ -165,5 +166,15 @@ public class Penguin extends MiniJava {
 		t.join();
 		if (failure.get() != null)
 			throw failure.get();
+	}
+
+	public static void throwNullPointerException() {
+		throw new NullPointerException("xyz");
+	}
+
+	public static void throwPrivilegedNullPointerException() {
+		TestUtils.privilegedThrow((Runnable) () -> {
+			throw new NullPointerException("xyz");
+		});
 	}
 }

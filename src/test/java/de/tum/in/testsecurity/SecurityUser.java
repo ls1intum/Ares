@@ -23,7 +23,9 @@ import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.PathType;
+import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
@@ -308,6 +310,40 @@ public class SecurityUser {
 	@PublicTest
 	public void package_eBlackPenguinAgain() throws Throwable {
 		ArrayListUserProxy.useArrayList();
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void nonprivilegedExceptionExtern() {
+		Penguin.throwNullPointerException();
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void nonprivilegedExceptionIntern() {
+		throw new NullPointerException("xy");
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void privilegedExceptionNormal() throws Exception {
+		TestUtils.privilegedThrow(() -> {
+			throw new NullPointerException("xyz");
+		});
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void privilegedExceptionFail() {
+		TestUtils.privilegedThrow(() -> {
+			fail("xyz");
+		});
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void nonprivilegedExceptionTry() {
+		Penguin.throwPrivilegedNullPointerException();
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package de.tum.in.testutil;
 
 import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
 import java.time.Duration;
 import java.util.List;
@@ -28,6 +28,11 @@ public final class CustomConditions {
 
 	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
 		return event(test(testName), finishedWithFailure(instanceOf(errorType)));
+	}
+
+	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType,
+			String message) {
+		return event(test(testName), finishedWithFailure(instanceOf(errorType), message(message)));
 	}
 
 	public static Condition<Event> finishedSuccessfullyRep() {
