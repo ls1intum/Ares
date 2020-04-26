@@ -428,8 +428,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private List<StackFrame> getNonWhitelistedStackFrames() {
 		if (isCurrentThreadWhitelisted()) {
-			return stackWalker
-					.walk(sfs -> sfs.filter(this::isStackFrameNotWhitelisted).distinct().collect(Collectors.toList()));
+			return stackWalker.walk(sfs -> sfs.filter(this::isStackFrameNotWhitelisted).collect(Collectors.toList()));
 		}
 		return stackWalker.walk(sfs -> sfs.collect(Collectors.toList()));
 	}
