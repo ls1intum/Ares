@@ -6,11 +6,14 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.internal.sanitization.SanitizationError;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
+import de.tum.in.test.api.util.BlacklistedInvoker;
 
 /**
  * For handling and post processing Exceptions and Errors.
@@ -21,6 +24,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 public final class ReportingUtils {
 
 	private static final String LINEBREAK_REPLACEMENT = "  ";
+	private static final Logger LOG = LoggerFactory.getLogger(ReportingUtils.class);
 
 	private ReportingUtils() {
 
@@ -67,6 +71,10 @@ public final class ReportingUtils {
 			name = t.getClass().getName();
 			newT = ThrowableSanitizer.sanitize(t);
 		} catch (Throwable sanitizationError) {
+			BlacklistedInvoker.invoke(() -> {
+				LOG.error("Sanitization failed for " + t + " with error", sanitizationError);
+				return null;
+			});
 			return handleSanitizationFailure(name, sanitizationError);
 		}
 		return newT;
