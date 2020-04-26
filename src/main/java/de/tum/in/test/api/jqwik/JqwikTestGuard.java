@@ -7,6 +7,7 @@ import org.apiguardian.api.API;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.internal.JqwikContext;
 import de.tum.in.test.api.internal.ReportingUtils;
+import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
@@ -32,15 +33,17 @@ public final class JqwikTestGuard implements AroundPropertyHook {
 	@Override
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
-		checkForHidden(JqwikContext.of(context));
-		return ReportingUtils.doProceedAndPostProcess(() -> postProcess(property.execute()));
+		JqwikContext jqwikContext = JqwikContext.of(context);
+		checkForHidden(jqwikContext);
+		return ReportingUtils.doProceedAndPostProcess(() -> postProcess(property.execute(), jqwikContext),
+				jqwikContext);
 	}
 
-	private static PropertyExecutionResult postProcess(PropertyExecutionResult per) {
+	private static PropertyExecutionResult postProcess(PropertyExecutionResult per, TestContext context) {
 		var t = per.throwable();
 		if (t.isEmpty())
 			return per;
-		Throwable newT = ReportingUtils.processThrowable(t.get());
+		Throwable newT = ReportingUtils.processThrowable(t.get(), context);
 		if (newT instanceof Error && !(newT instanceof AssertionError))
 			throw (Error) newT;
 		return per.mapTo(per.status(), newT);

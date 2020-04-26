@@ -88,8 +88,9 @@ public final class JupiterTestGuard implements InvocationInterceptor, DisplayNam
 
 	private static <T> T proceedWithInvocation(Invocation<T> invocation, ExtensionContext extensionContext)
 			throws Throwable {
-		checkForHidden(JupiterContext.of(extensionContext));
-		return doProceedAndPostProcess(invocation);
+		JupiterContext jupiterContext = JupiterContext.of(extensionContext);
+		checkForHidden(jupiterContext);
+		return doProceedAndPostProcess(invocation, jupiterContext);
 	}
 
 	@Override

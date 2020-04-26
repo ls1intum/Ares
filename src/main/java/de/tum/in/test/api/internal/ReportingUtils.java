@@ -2,6 +2,7 @@ package de.tum.in.test.api.internal;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
@@ -25,15 +26,41 @@ public final class ReportingUtils {
 
 	}
 
-	public static <T> T doProceedAndPostProcess(Invocation<T> invocation) throws Throwable {
+	public static <T> T doProceedAndPostProcess(Invocation<T> invocation, TestContext context) throws Throwable {
 		try {
 			return invocation.proceed();
 		} catch (Throwable t) {
-			throw processThrowable(t);
+			throw processThrowable(t, context);
 		}
 	}
 
-	public static Throwable processThrowable(Throwable t) {
+	public static Throwable processThrowable(Throwable t, TestContext context) {
+		Optional<String> nonprivilegedFailureMessage = ConfigurationUtils.getNonprivilegedFailureMessage(context);
+		if (nonprivilegedFailureMessage.isPresent())
+			return processThrowablePrivilegedOnly(t, nonprivilegedFailureMessage.get());
+		return processThrowableRegularly(t);
+	}
+
+	private static Throwable processThrowableRegularly(Throwable t) {
+		Throwable newT = trySanitizeThrowable(t);
+		tryPostProcessMessageOrAddSuppressed(newT, ReportingUtils::postProcessMessage);
+		if (!(newT instanceof AssertionError)) {
+			addStackframeInfoToMessage(newT);
+		}
+		return newT;
+	}
+
+	private static Throwable processThrowablePrivilegedOnly(Throwable t, String nonprivilegedFailureMessage) {
+		Throwable newT;
+		if (t instanceof PrivilegedException)
+			newT = trySanitizeThrowable(t);
+		else
+			newT = new AssertionError(nonprivilegedFailureMessage);
+		tryPostProcessMessageOrAddSuppressed(t, ReportingUtils::postProcessMessage);
+		return newT;
+	}
+
+	private static Throwable trySanitizeThrowable(Throwable t) {
 		String name = "unknown";
 		Throwable newT;
 		try {
@@ -41,10 +68,6 @@ public final class ReportingUtils {
 			newT = ThrowableSanitizer.sanitize(t);
 		} catch (Throwable sanitizationError) {
 			return handleSanitizationFailure(name, sanitizationError);
-		}
-		tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", ReportingUtils::postProcessMessage);
-		if (!(newT instanceof AssertionError)) {
-			addStackframeInfoToMessage(newT);
 		}
 		return newT;
 	}
@@ -60,17 +83,16 @@ public final class ReportingUtils {
 		var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
 		if (first.isPresent()) {
 			String call = first.get().toString();
-			tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", old -> {
+			tryPostProcessMessageOrAddSuppressed(newT, old -> {
 				return Objects.toString(old, "") + "  "
 						+ Messages.formatLocalized("reporting.problem_location_hint", call);
 			});
 		}
 	}
 
-	private static String tryPostProcessFieldOrAddSuppressed(Throwable t, String fieldName,
-			UnaryOperator<String> transform) {
+	private static String tryPostProcessMessageOrAddSuppressed(Throwable t, UnaryOperator<String> transform) {
 		try {
-			Field f = Throwable.class.getDeclaredField(fieldName);
+			Field f = Throwable.class.getDeclaredField("detailMessage");
 			f.setAccessible(true);
 			String value = transform.apply((String) f.get(t));
 			f.set(t, value);

@@ -2,6 +2,7 @@ package de.tum.in.test.api.internal;
 
 import java.lang.StackWalker.StackFrame;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import de.tum.in.test.api.BlacklistPackage;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
+import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
@@ -91,5 +93,10 @@ public final class ConfigurationUtils {
 	public static Set<PackageRule> generatePackageWhiteList(TestContext context) {
 		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistPackage.class).map(PackageRule::of)
 				.collect(Collectors.toSet());
+	}
+
+	public static Optional<String> getNonprivilegedFailureMessage(TestContext context) {
+		return TestContextUtils.findAnnotationIn(context, PrivilegedExceptionsOnly.class)
+				.map(PrivilegedExceptionsOnly::value);
 	}
 }
