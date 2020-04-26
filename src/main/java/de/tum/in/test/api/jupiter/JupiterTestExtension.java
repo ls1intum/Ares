@@ -2,8 +2,8 @@ package de.tum.in.test.api.jupiter;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
@@ -13,8 +13,7 @@ import de.tum.in.test.api.internal.JupiterContext;
 import de.tum.in.test.api.io.IOTester;
 
 @API(status = Status.INTERNAL)
-public final class JupiterTestExtension
-		implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
+public final class JupiterTestExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
 	private GeneralTestExtension testExtension;
 
@@ -29,13 +28,13 @@ public final class JupiterTestExtension
 	}
 
 	@Override
-	public void beforeTestExecution(ExtensionContext context) throws Exception {
+	public void beforeEach(ExtensionContext context) throws Exception {
 		testExtension = new GeneralTestExtension(JupiterContext.of(context));
 		testExtension.beforeTestExecution();
 	}
 
 	@Override
-	public void afterTestExecution(ExtensionContext context) throws Exception {
+	public void afterEach(ExtensionContext context) throws Exception {
 		testExtension.afterTestExecution();
 	}
 }
