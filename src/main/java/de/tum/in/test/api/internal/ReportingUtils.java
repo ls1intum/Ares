@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.tum.in.test.api.internal.sanitization.SanitizationError;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
@@ -76,17 +75,14 @@ public final class ReportingUtils {
 			name = t.getClass().getName();
 			newT = ThrowableSanitizer.sanitize(t);
 		} catch (Throwable sanitizationError) {
-			BlacklistedInvoker.invoke(() -> {
-				LOG.error("Sanitization failed for " + t + " with error", sanitizationError);
-				return null;
-			});
 			return handleSanitizationFailure(name, sanitizationError);
 		}
 		return newT;
 	}
 
 	private static Throwable handleSanitizationFailure(String name, Throwable error) {
-		String info = error.getClass() == SanitizationError.class ? error.toString() : error.getClass().toString();
+		String info = BlacklistedInvoker.invokeOrElse(error::toString, () -> error.getClass().toString());
+		LOG.error("Sanitization failed for {} with error {}", name, info);
 		return new SecurityException(
 				"Throwable " + name + " threw an error when retrieving information about it. (" + info + ")");
 	}
