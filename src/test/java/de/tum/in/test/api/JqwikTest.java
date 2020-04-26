@@ -14,7 +14,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.testutil.TestTest;
 
-public class JqwickTest {
+public class JqwikTest {
 	private final String testHiddenIncomplete = "testHiddenIncomplete";
 	private final String testPublicIncomplete = "testPublicIncomplete";
 
@@ -42,7 +42,7 @@ public class JqwickTest {
 	@BeforeAll
 	@Tag("test-test")
 	static void verifyJqwik() {
-		var results = EngineTestKit.engine("jqwik").selectors(selectClass(JqwickUser.class)).execute();
+		var results = EngineTestKit.engine("jqwik").selectors(selectClass(JqwikUser.class)).execute();
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));

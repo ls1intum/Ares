@@ -6,8 +6,8 @@ import org.assertj.core.api.Assertions;
 
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
-import de.tum.in.test.api.jqwik.Hidden;
-import de.tum.in.test.api.jqwik.Public;
+import de.tum.in.test.api.jqwik.HiddenJqwik;
+import de.tum.in.test.api.jqwik.PublicJqwik;
 import net.jqwik.api.Example;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
@@ -16,85 +16,85 @@ import net.jqwik.api.constraints.Positive;
 
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
-public class JqwickUser {
+public class JqwikUser {
 
-	@Hidden
+	@HiddenJqwik
 	void testHiddenIncomplete() {
 		// nothing
 	}
 
-	@Public
+	@PublicJqwik
 	void testPublicIncomplete() {
 		// nothing
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Example
 	void exampleHiddenNormal() {
 		// nothing
 	}
 
-	@Public
+	@PublicJqwik
 	@Example
 	void examplePublicNormal() {
 		// nothing
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Example
 	@Deadline("2000-01-01 16:00")
 	void exampleHiddenCustomDeadlinePast() {
 		// nothing
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Example
 	@Deadline("2200-01-01 16:00")
 	void exampleHiddenCustomDeadlineFuture() {
 		// nothing
 	}
 
-	@Public
+	@PublicJqwik
 	@Example
 	@Deadline("2200-01-01 16:00")
 	void examplePublicCustomDeadline() {
 		// nothing
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Property
 	boolean propertyHiddenNormal(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
-	@Public
+	@PublicJqwik
 	@Property
 	boolean propertyPublicNormal(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Property
 	@Deadline("2000-01-01 16:00")
 	boolean propertyHiddenCustomDeadlinePast(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
-	@Hidden
+	@HiddenJqwik
 	@Property
 	@Deadline("2200-01-01 16:00")
 	boolean propertyHiddenCustomDeadlineFuture(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
-	@Public
+	@PublicJqwik
 	@Property
 	@Deadline("2200-01-01 16:00")
 	boolean propertyPublicCustomDeadline(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
-	@Public
+	@PublicJqwik
 	@Property
 	void propertyUseIOTesterCorrect(@ForAll IOTester test, @ForAll @CharRange(from = 'a', to = 'z') String s) {
 		test.reset();
@@ -102,7 +102,7 @@ public class JqwickUser {
 		Assertions.assertThat(test.getOutput()).containsExactly(Line.of(s), Line.of(""));
 	}
 
-	@Public
+	@PublicJqwik
 	@Property
 	void propertyUseIOTesterWrong(@ForAll IOTester test, @ForAll @CharRange(from = 'a', to = 'z') String s) {
 		test.reset();
@@ -110,7 +110,7 @@ public class JqwickUser {
 		Assertions.assertThat(test.getOutput()).containsExactly(Line.of(s), Line.of(""));
 	}
 
-	@Public
+	@PublicJqwik
 	@Example
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutEndlessLoop(@ForAll @Positive int x) {
@@ -119,7 +119,7 @@ public class JqwickUser {
 			y += x;
 	}
 
-	@Public
+	@PublicJqwik
 	@Property(tries = 1)
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutSleepTries(@SuppressWarnings("unused") @ForAll @Positive int x) {
@@ -130,7 +130,7 @@ public class JqwickUser {
 		}
 	}
 
-	@Public
+	@PublicJqwik
 	@Example
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutSleepExample(@SuppressWarnings("unused") @ForAll @Positive int x) {
@@ -141,7 +141,7 @@ public class JqwickUser {
 		}
 	}
 
-	@Public
+	@PublicJqwik
 	@Property
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutSleepProperty(@SuppressWarnings("unused") @ForAll @Positive int x) {
