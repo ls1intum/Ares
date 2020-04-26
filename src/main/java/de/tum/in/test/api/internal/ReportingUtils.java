@@ -42,7 +42,7 @@ public final class ReportingUtils {
 		} catch (Throwable sanitizationError) {
 			return handleSanitizationFailure(name, sanitizationError);
 		}
-		tryPostProcessFieldOrAddSuppressed(t, "detailMessage", ReportingUtils::postProcessMessage);
+		tryPostProcessFieldOrAddSuppressed(newT, "detailMessage", ReportingUtils::postProcessMessage);
 		if (!(newT instanceof AssertionError)) {
 			addStackframeInfoToMessage(newT);
 		}
