@@ -26,6 +26,11 @@ public final class ReportingUtils {
 	private static final String LINEBREAK_REPLACEMENT = "  ";
 	private static final Logger LOG = LoggerFactory.getLogger(ReportingUtils.class);
 
+	static {
+		// Initialize
+		ThrowableSanitizer.sanitize(null);
+	}
+
 	private ReportingUtils() {
 
 	}

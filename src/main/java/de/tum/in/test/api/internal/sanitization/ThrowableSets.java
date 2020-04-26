@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 final class ThrowableSets {
 
 	/**
@@ -21,6 +24,8 @@ final class ThrowableSets {
 	 * this set.
 	 */
 	static final Set<Class<? extends Throwable>> SAFE_TYPES;
+
+	private static final Logger LOG = LoggerFactory.getLogger(ThrowableSets.class);
 
 	private static final String JUNIT4_CHECK_CLASS = "junit.framework.AssertionFailedError";
 	private static final String JUNIT5_CHECK_CLASS = "org.junit.platform.commons.JUnitException";
@@ -52,6 +57,9 @@ final class ThrowableSets {
 			Class.forName(className, false, Thread.currentThread().getContextClassLoader());
 			return true;
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
+			return false;
+		} catch (Exception e) {
+			LOG.error("Loading class " + className + "failed", e);
 			return false;
 		}
 	}

@@ -21,6 +21,11 @@ public final class ThrowableSanitizer {
 		// static methods only
 	}
 
+	static {
+		// Initialize
+		ThrowableSets.SAFE_TYPES.size();
+	}
+
 	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SimpleThrowableSanitizer.INSTANCE,
 			AssertionFailedErrorSanitizer.INSTANCE, PrivilegedExceptionSanitizer.INSTANCE,
 			MultipleFailuresErrorSanitizer.INSTANCE, MultipleAssertionsErrorSanitizer.INSTANCE,
