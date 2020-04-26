@@ -64,7 +64,7 @@ public final class TestGuardUtils {
 	}
 
 	public static boolean hasAnnotation(TestContext context, Class<? extends Annotation> type) {
-		Optional<AnnotatedElement> element = context.annotatedElement();
+		Optional<Method> element = context.testMethod();
 		return findAnnotation(element, type).isPresent();
 	}
 
