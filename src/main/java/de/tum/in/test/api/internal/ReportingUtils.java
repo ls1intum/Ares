@@ -79,7 +79,7 @@ public final class ReportingUtils {
 	}
 
 	private static void addStackframeInfoToMessage(Throwable newT) {
-		StackTraceElement[] stackTrace = newT.getStackTrace();
+		StackTraceElement[] stackTrace = BlacklistedInvoker.invoke(newT::getStackTrace);
 		var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
 		if (first.isPresent()) {
 			String call = first.get().toString();
