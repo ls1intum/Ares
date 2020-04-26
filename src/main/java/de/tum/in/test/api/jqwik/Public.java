@@ -1,6 +1,6 @@
 package de.tum.in.test.api.jqwik;
 
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -31,7 +31,7 @@ import net.jqwik.api.Property;
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target(METHOD)
+@Target({METHOD, ANNOTATION_TYPE})
 @JqwikArtemisTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only

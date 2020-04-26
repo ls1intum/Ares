@@ -1,6 +1,6 @@
 package de.tum.in.test.api.jupiter;
 
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -31,7 +31,7 @@ import de.tum.in.test.api.io.IOTester;
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target(METHOD)
+@Target({METHOD, ANNOTATION_TYPE})
 @JupiterArtemisTest(TestType.HIDDEN)
 public @interface Hidden {
 	// marker only
