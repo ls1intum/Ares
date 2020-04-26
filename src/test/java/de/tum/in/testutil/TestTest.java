@@ -16,5 +16,5 @@ import org.junit.jupiter.api.Test;
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
 public @interface TestTest {
-
+	// just a @Test @Tag combination
 }
