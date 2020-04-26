@@ -27,11 +27,14 @@ import net.jqwik.api.Property;
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0
+ * @deprecated To avoid importing and using the wrong <code>@Public</code>
+ *             accidentally. Use {@link PublicJqwik} instead.
  */
-@API(status = Status.MAINTAINED)
+@Deprecated(since = "0.5.3")
+@API(status = Status.DEPRECATED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE })
 @JqwikArtemisTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only

@@ -26,11 +26,14 @@ import de.tum.in.test.api.io.IOTester;
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0
+ * @deprecated To avoid importing and using the wrong <code>@Hidden</code>
+ *             accidentally. Use {@link HiddenJqwik} instead.
  */
-@API(status = Status.MAINTAINED)
+@Deprecated(since = "0.5.3")
+@API(status = Status.DEPRECATED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE })
 @JqwikArtemisTest(TestType.HIDDEN)
 public @interface Hidden {
 	// marker only
