@@ -455,6 +455,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return Optional.empty();
 	}
 
+	public static void checkCurrentStack(Supplier<String> exceptionMessage) {
+		INSTANCE.checkForNonWhitelistedStackFrames(exceptionMessage);
+	}
+
 	private static boolean isLocalHost(String host) {
 		return Objects.equals(host, "localhost") || Objects.equals(host, "127.0.0.1"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
