@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import de.tum.in.test.api.TestType;
 import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.internal.TestType;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
 public class JqwikContext extends TestContext {

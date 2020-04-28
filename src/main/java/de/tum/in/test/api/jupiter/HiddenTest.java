@@ -12,7 +12,7 @@ import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.Test;
 
 import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.TestType;
+import de.tum.in.test.api.internal.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**

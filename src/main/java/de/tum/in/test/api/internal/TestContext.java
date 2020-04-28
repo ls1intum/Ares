@@ -7,8 +7,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.TestType;
-
 /**
  * Adapter for different JUnit 5 test runner contexts. This interface provides
  * the common properties of a test context.

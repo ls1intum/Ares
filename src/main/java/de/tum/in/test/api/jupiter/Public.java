@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.TestType;
+import de.tum.in.test.api.internal.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**

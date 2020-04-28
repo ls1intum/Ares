@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import de.tum.in.test.api.TestType;
 import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.internal.TestType;
 
 public class JupiterContext extends TestContext {
 	private final ExtensionContext extensionContext;

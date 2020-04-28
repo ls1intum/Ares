@@ -21,7 +21,6 @@ import org.apiguardian.api.API.Status;
 import de.tum.in.test.api.ActivateHiddenBefore;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
-import de.tum.in.test.api.TestType;
 
 /**
  * This class handles public/hidden tests and deadline evaluation.

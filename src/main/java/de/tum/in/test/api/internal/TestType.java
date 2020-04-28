@@ -1,4 +1,4 @@
-package de.tum.in.test.api;
+package de.tum.in.test.api.internal;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
