@@ -1,7 +1,7 @@
 package de.tum.in.test.api.util;
 
+import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
 import static de.tum.in.test.api.internal.sanitization.ThrowableSanitizer.sanitize;
-import static de.tum.in.test.api.util.BlacklistedInvoker.invoke;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

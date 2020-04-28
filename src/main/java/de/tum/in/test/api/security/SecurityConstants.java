@@ -3,7 +3,7 @@ package de.tum.in.test.api.security;
 import java.io.PrintStream;
 import java.util.Set;
 
-import de.tum.in.test.api.util.BlacklistedInvoker;
+import de.tum.in.test.api.internal.BlacklistedInvoker;
 
 public final class SecurityConstants {
 

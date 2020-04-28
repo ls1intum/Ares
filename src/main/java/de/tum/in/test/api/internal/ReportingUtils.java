@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
-import de.tum.in.test.api.util.BlacklistedInvoker;
 
 /**
  * For handling and post processing Exceptions and Errors.

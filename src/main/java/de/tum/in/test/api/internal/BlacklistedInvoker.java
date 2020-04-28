@@ -1,4 +1,4 @@
-package de.tum.in.test.api.util;
+package de.tum.in.test.api.internal;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
