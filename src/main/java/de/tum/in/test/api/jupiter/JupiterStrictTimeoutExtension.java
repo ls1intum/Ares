@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
 import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.internal.JupiterContext;
 
 /**
  * This class manages the {@link StrictTimeout} annotation and how it is

@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal;
+package de.tum.in.test.api.jqwik;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.TestType;
-import de.tum.in.test.api.jqwik.JqwikArtemisTest;
+import de.tum.in.test.api.internal.TestContext;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
 public class JqwikContext extends TestContext {

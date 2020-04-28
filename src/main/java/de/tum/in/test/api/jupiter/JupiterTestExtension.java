@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
 import de.tum.in.test.api.internal.GeneralTestExtension;
-import de.tum.in.test.api.internal.JupiterContext;
 import de.tum.in.test.api.io.IOTester;
 
 @API(status = Status.INTERNAL)

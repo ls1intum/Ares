@@ -19,7 +19,6 @@ import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.TestType;
-import de.tum.in.test.api.internal.JupiterContext;
 
 /**
  * This class' main purpose is to guard the {@link HiddenTest}s execution and

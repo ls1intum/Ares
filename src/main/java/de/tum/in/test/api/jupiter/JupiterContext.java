@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal;
+package de.tum.in.test.api.jupiter;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.TestType;
-import de.tum.in.test.api.jupiter.JupiterArtemisTest;
+import de.tum.in.test.api.internal.TestContext;
 
 public class JupiterContext extends TestContext {
 	private final ExtensionContext extensionContext;

@@ -7,7 +7,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.internal.GeneralTestExtension;
-import de.tum.in.test.api.internal.JqwikContext;
 import de.tum.in.test.api.io.IOTester;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
