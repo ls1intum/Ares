@@ -39,6 +39,8 @@
 		<jqwik-version>1.2.7</jqwik-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- full certificate fingerprint: B58E410970742EF7AD0FDD48D1A045E1DD48B876 -->
+		<gpg.key.id>D1A045E1DD48B876</gpg.key.id>
 	</properties>
 
 	<dependencies>
@@ -137,7 +139,7 @@
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -180,6 +182,16 @@
 					</rules>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -209,6 +221,49 @@
 					<url>file://${project.build.directory}/mvn-repo</url>
 				</repository>
 			</distributionManagement>
+		</profile>
+		<!-- Profile for manually deploying to Maven Central -->
+		<profile>
+			<id>ossrh</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<!-- Only sign the plugin if it's built manually for OSSRH -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<keyname>${gpg.key.id}</keyname>
+									<passphraseServerId>${gpg.key.id}</passphraseServerId>
+									<!-- This is to prevent Maven GPG not passing the passphrase correctly
+										requires GPG version 2.1 or greater -->
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>
