@@ -2,18 +2,18 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.tum.in</groupId>
+	<groupId>de.tum.in.ase</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>0.5.3-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Artemis Java Test Sandbox</name>
 	<description>JUnit 5 Extension API for secure Artemis Java Testing</description>
-	<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+	<url>https://github.com/ls1intum/artemis-java-test-sandbox</url>
 	<inceptionYear>2019</inceptionYear>
 	<licenses>
 		<license>
 			<name>MIT</name>
 			<url>https://opensource.org/licenses/MIT</url>
-			<comments>See https://github.com/MaisiKoleni/artemis-java-test-sandbox/blob/master/LICENSE</comments>
+			<comments>See https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE</comments>
 		</license>
 	</licenses>
 	<developers>
@@ -26,9 +26,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/MaisiKoleni/artemis-java-test-sandbox</url>
-		<connection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</connection>
-		<developerConnection>scm:git:https://github.com/MaisiKoleni/artemis-java-test-sandbox.git</developerConnection>
+		<url>https://github.com/ls1intum/artemis-java-test-sandbox</url>
+		<connection>scm:git:https://github.com/ls1intum/artemis-java-test-sandbox.git</connection>
+		<developerConnection>scm:git:https://github.com/ls1intum/artemis-java-test-sandbox.git</developerConnection>
 	</scm>
 
 	<properties>
@@ -39,6 +39,8 @@
 		<jqwik-version>1.2.7</jqwik-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- full certificate fingerprint: B58E410970742EF7AD0FDD48D1A045E1DD48B876 -->
+		<gpg.key.id>D1A045E1DD48B876</gpg.key.id>
 	</properties>
 
 	<dependencies>
@@ -137,7 +139,7 @@
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -180,6 +182,16 @@
 					</rules>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -191,7 +203,7 @@
 				<repository>
 					<id>github</id>
 					<name>GitHub MaisiKoleni Apache Maven Packages</name>
-					<url>https://maven.pkg.github.com/MaisiKoleni/artemis-java-test-sandbox</url>
+					<url>https://maven.pkg.github.com/ls1intum/artemis-java-test-sandbox</url>
 				</repository>
 				<!-- GitHub cannot handle snapshots correctly now, so we do nothing -->
 				<snapshotRepository>
@@ -209,6 +221,49 @@
 					<url>file://${project.build.directory}/mvn-repo</url>
 				</repository>
 			</distributionManagement>
+		</profile>
+		<!-- Profile for manually deploying to Maven Central -->
+		<profile>
+			<id>ossrh</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<!-- Only sign the plugin if it's built manually for OSSRH -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<keyname>${gpg.key.id}</keyname>
+									<passphraseServerId>${gpg.key.id}</passphraseServerId>
+									<!-- This is to prevent Maven GPG not passing the passphrase correctly
+										requires GPG version 2.1 or greater -->
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>

@@ -1,5 +1,5 @@
 # Artemis Java Test Sandbox
-![Java CI](https://github.com/MaisiKoleni/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
+![Java CI](https://github.com/ls1intum/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
 
 Artemis Java Test Sandbox *(abbr. AJTS)* is a JUnit 5 extension for easy and secure Java testing
 on the interactive learning platform [Artemis](https://github.com/ls1intum/Artemis).
@@ -16,29 +16,19 @@ Its main features are
 
 *Note: AJTS requires at least Java 11.*
 
-AJTS is provided as Maven dependency. To use AJTS in the test environment of a Maven project, use
+AJTS is provided as Maven dependency. To use AJTS in the test environment of a Maven project, include
 
 ```xml
 <dependency>
     <groupId>de.tum.in</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>0.5.1</version>
+    <version>1.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
 
-in the `dependencies` section and include the following block in your `pom.xml` to tell
-Maven where to find the AJTS resources:
+in the `dependencies` section.
 
-```xml
-<repositories>
-    <repository>
-        <id>ajts</id>
-        <name>AJTS Maven Packages</name>
-        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
-    </repository>
-</repositories>
-```
 You can now remove dependencies to JUnit 5, AssertJ and Hamcrest if present because AJTS already includes them.
 If you want to use jqwik or JUnit 4 (JUnit 5 vintage), simply include them in the dependencies section.
 
@@ -73,19 +63,11 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <maven.compiler.target>11</maven.compiler.target>
 </properties>
 
-<repositories>
-    <repository>
-        <id>ajts</id>
-        <name>AJTS Maven Packages</name>
-        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>de.tum.in</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>0.5.1</version>
+        <version>1.0.0</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -263,7 +245,7 @@ Add a `@BlacklistPath` for other important classes, like your reference implemen
 
 *Note: the Artemis project starts with `course1920xyz`, but the build in Bamboo (by Artemis) will
 happen in a directory named after the build plan, which is in upper case and therefore,
-begins with `COURSE1920XYZ`. Make sure that you do not build multiple student solutions 
+begins with `COURSE1920XYZ`. Make sure that you do not build multiple student solutions
 in the same directory on the same machine using the git clone (lower case) approach. Otherwise, adjust the whitelisting to your needs.*
 
 As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
@@ -333,6 +315,21 @@ In progress, see also `@AllowLocalPort`.
 
 ## Additional Notes
 
+#### Older Versions
+
+For versions prior to `1.0.0`, this repository block had to be added to the `pom.xml`:
+```xml
+<repositories>
+    <repository>
+        <id>ajts</id>
+        <name>AJTS Maven Packages</name>
+        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
+    </repository>
+</repositories>
+```
+**Using older AJTS versions is highly discouraged, remove these repository declarations and update to the newest AJTS version
+if they appear in your projects.**
+
 #### GitHub Packages
 
 GitHub Packages does currently not allow unregistered, public access to the
@@ -349,4 +346,4 @@ packages. Therefore, you will need to authenticate to GitHub if you use
 
 ## License
 
-AJTS was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/MaisiKoleni/artemis-java-test-sandbox/blob/master/LICENSE).
+AJTS was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE).
