@@ -20,7 +20,7 @@ AJTS is provided as Maven dependency. To use AJTS in the test environment of a M
 
 ```xml
 <dependency>
-    <groupId>de.tum.in</groupId>
+    <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
     <version>1.0.0</version>
     <scope>test</scope>
@@ -65,7 +65,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
 
 <dependencies>
     <dependency>
-        <groupId>de.tum.in</groupId>
+        <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
         <version>1.0.0</version>
         <scope>test</scope>
@@ -339,7 +339,7 @@ packages. Therefore, you will need to authenticate to GitHub if you use
     <repository>
         <id>ajts</id>
         <name>AJTS Maven Packages</name>
-        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
+        <url>https://maven.pkg.github.com/ls1intum/artemis-java-test-sandbox</url>
     </repository>
 </repositories>
 ```
