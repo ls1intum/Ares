@@ -1,6 +1,7 @@
 # Artemis Java Test Sandbox
 ![Java CI](https://github.com/ls1intum/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
+[![Maven Central](https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
 Artemis Java Test Sandbox *(abbr. AJTS)* is a JUnit 5 extension for easy and secure Java testing
 on the interactive learning platform [Artemis](https://github.com/ls1intum/Artemis).
