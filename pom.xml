@@ -36,7 +36,7 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<junit-jupiter-version>5.6.2</junit-jupiter-version>
 		<junit-platform-version>1.6.2</junit-platform-version>
-		<jqwik-version>1.2.7</jqwik-version>
+		<jqwik-version>1.3.1</jqwik-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- full certificate fingerprint: B58E410970742EF7AD0FDD48D1A045E1DD48B876 -->
@@ -88,7 +88,7 @@
 			<scope>test</scope>
 			<version>${junit-platform-version}</version>
 		</dependency>
-		<!-- For testing the property based testing framework jqwik is supported
+		<!-- For testing the property based testing framework jqwik is supported 
 			(but it is not a required dependency) -->
 		<dependency>
 			<groupId>net.jqwik</groupId>
@@ -232,7 +232,7 @@
 								<configuration>
 									<keyname>${gpg.key.id}</keyname>
 									<passphraseServerId>${gpg.key.id}</passphraseServerId>
-									<!-- This is to prevent Maven GPG not passing the passphrase correctly
+									<!-- This is to prevent Maven GPG not passing the passphrase correctly 
 										requires GPG version 2.1 or greater -->
 									<gpgArguments>
 										<arg>--pinentry-mode</arg>
