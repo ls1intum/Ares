@@ -253,6 +253,7 @@ final class ThrowableSets {
 	static final class AssertJ {
 
 		private AssertJ() {
+
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(
