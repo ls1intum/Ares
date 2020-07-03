@@ -1,6 +1,7 @@
 package de.tum.in.test.api;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -15,9 +16,17 @@ public final class TestUtils {
 
 	private TestUtils() {
 	}
+	
+	public static void invokeBlacklisted(Runnable action) {
+		BlacklistedInvoker.invoke(action);
+	}
 
 	public static <T, R> R invokeBlacklisted(T t, Function<T, R> action) {
 		return BlacklistedInvoker.invoke(t, action);
+	}
+	
+	public static <T> void invokeBlacklisted(T t, Consumer<T> action) {
+		BlacklistedInvoker.invoke(t, action);
 	}
 
 	public static <R> R invokeBlacklisted(Supplier<R> action) {

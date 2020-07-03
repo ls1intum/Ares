@@ -13,6 +13,10 @@ public final class BlacklistedInvoker {
 		// prevent instantiation
 	}
 
+	public static void invoke(Runnable action) {
+		action.run();
+	}
+
 	public static <T, R> R invoke(T t, Function<T, R> action) {
 		return action.apply(t);
 	}
