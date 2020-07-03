@@ -215,6 +215,12 @@
 		<!-- Profile for manually deploying to Maven Central -->
 		<profile>
 			<id>ossrh</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
 			<build>
 				<plugins>
 					<!-- Only sign the plugin if it's built manually for OSSRH -->
