@@ -24,7 +24,7 @@ AJTS is provided as Maven dependency. To use AJTS in the test environment of a M
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -32,7 +32,7 @@ AJTS is provided as Maven dependency. To use AJTS in the test environment of a M
 in the `dependencies` section.
 
 You can now remove dependencies to JUnit 5, AssertJ and Hamcrest if present because AJTS already includes them.
-If you want to use jqwik or JUnit 4 (JUnit 5 vintage), simply include them in the dependencies section.
+If you want to use jqwik (>= 1.2.4) or JUnit 4 (JUnit 5 vintage), simply include them in the dependencies section.
 
 
 ## Basic Usage
@@ -69,7 +69,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
