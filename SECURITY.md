@@ -2,13 +2,13 @@
 
 ## Supported Versions
 
-As AJTS is at the moment not fully released, the only supported version is whatever the current one is.
+Currently, the only supported AJTS version is whatever the current one is (as shown in the [README](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/README.md)).
 See the [Wiki](https://github.com/MaisiKoleni/artemis-java-test-sandbox/wiki) for the changes and how to adjust your tests to them.
 
 ## Reporting a Vulnerability
 
 If the security problem relates to a bug that is associated with unexpected behavior or inconvenience or something non-critical is broken,
-simply report it as a bug and [use the bug report template for that](https://github.com/MaisiKoleni/artemis-java-test-sandbox/issues/new?assignees=&labels=&template=bug_report.md&title=).
+simply report it as a bug and [use the bug report template for that](https://github.com/ls1intum/artemis-java-test-sandbox/issues/new?assignees=&labels=&template=bug_report.md&title=).
 
 If what you discovered could be used maliciously or is in another way an actual security vulnerability, please do not make the issue public, but follow these steps:
 - similar to a bug report, collect information how it can be reproduced
