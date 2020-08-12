@@ -21,6 +21,8 @@ public class DeadlineTest {
 	private final String testHiddenNormal = "testHiddenNormal";
 	private final String testPublicCustomDeadline = "testPublicCustomDeadline";
 	private final String testPublicNormal = "testPublicNormal";
+	private final String testHiddenTimeZoneUtc = "testHiddenTimeZoneUtc";
+	private final String testHiddenTimeZoneBerlin = "testHiddenTimeZoneBerlin";
 
 	private static Events tests;
 
@@ -31,7 +33,7 @@ public class DeadlineTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(5));
+		tests.assertStatistics(stats -> stats.started(7));
 	}
 
 	@TestTest
@@ -58,5 +60,15 @@ public class DeadlineTest {
 	void test_testHiddenCustomDeadlineFuture() {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(testHiddenCustomDeadlineFuture, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHiddenTimeZoneUtc() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenTimeZoneUtc), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testHiddenTimeZoneBerlin() {
+		tests.assertThatEvents().haveExactly(1, event(test(testHiddenTimeZoneBerlin), finishedSuccessfullyRep()));
 	}
 }

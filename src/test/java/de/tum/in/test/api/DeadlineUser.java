@@ -37,4 +37,16 @@ public class DeadlineUser {
 	void testPublicCustomDeadline() {
 		// nothing
 	}
+
+	@HiddenTest
+	@Deadline("2000-01-01 16:00 UTC")
+	void testHiddenTimeZoneUtc() {
+		// nothing
+	}
+
+	@HiddenTest
+	@Deadline("2000-01-01 16:00 Europe/Berlin")
+	void testHiddenTimeZoneBerlin() {
+		// nothing
+	}
 }
