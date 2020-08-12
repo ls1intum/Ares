@@ -6,7 +6,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.apiguardian.api.API;
@@ -26,22 +27,29 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * The deadline date (and time) is the date set by this annotation <b>plus</b>
  * the {@link ExtendedDeadline} annotation of the test class if present and
  * <b>plus</b> the {@link ExtendedDeadline} annotation of the test method, if
- * present. Hidden tests are executed, when {@link LocalDateTime#now()} is
+ * present. Hidden tests are executed, when {@link ZonedDateTime#now()} is
  * <b>past this date</b>.
  * <p>
- * The format has to be {@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}. In this
- * case, we allow replacing the <code>T</code> with a space, to improve
- * readability. So this can be e.g.
+ * The format has to be
+ * 
+ * <pre>
+ * {@linkplain DateTimeFormatter#ISO_LOCAL_DATE ISO_LOCAL_DATE}(T| ){@linkplain DateTimeFormatter#ISO_LOCAL_TIME ISO_LOCAL_TIME}( {@link ZoneId
+ * ZONE_ID})?
+ * </pre>
+ * 
+ * While the {@link ZoneId} can be left out, this is highly discouraged because
+ * build agents might not have the same/correct time zone set. <br>
+ * So this can be e.g.
  *
  * <ul>
- * <li><code>2019-09-09 06:00</code></li>
- * <li><code>2019-09-09T06:00</code></li>
- * <li><code>2019-09-09T06:00:01</code></li>
+ * <li><code>2019-09-09 06:00 Europe/Berlin</code></li>
+ * <li><code>2019-09-09T06:00 UTC</code></li>
+ * <li><code>2019-09-09T06:00:01 America/Los_Angeles</code></li>
  * </ul>
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented

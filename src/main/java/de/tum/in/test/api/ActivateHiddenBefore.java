@@ -23,7 +23,7 @@ import de.tum.in.test.api.jupiter.HiddenTest;
  * @author Christian Femers
  * @see Deadline
  * @since 0.1.2
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
