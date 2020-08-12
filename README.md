@@ -3,18 +3,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=alert_status)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=security_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-<br>
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=ncloc)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=coverage)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_index)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=bugs)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
-
 Artemis Java Test Sandbox *(abbr. AJTS)* is a JUnit 5 extension for easy and secure Java testing
 on the interactive learning platform [Artemis](https://github.com/ls1intum/Artemis).
 
@@ -25,6 +13,20 @@ Its main features are
 - utilities for improved feedback in Artemis like processing multiline error messages
   or pointing to a possible location that caused an Exception
 - utilities to test exercises using System.out and System.in comfortably
+
+#### Project Status
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=alert_status)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=security_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=ncloc)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=coverage)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_index)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=bugs)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox)
 
 ## Installation
 
