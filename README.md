@@ -157,8 +157,8 @@ The code above won't work just like that, if you try to run it as is, you will g
 
 AJTS needs to know what the deadline is. We tell AJTS with another annotation:
 ```Java
-// Format must be DateTimeFormatter.ISO_LOCAL_DATE_TIME (using a space between date and time is permitted, too)
-@Deadline("2020-06-09 03:14")
+// Format must be ISO_LOCAL_DATE(T| )ISO_LOCAL_TIME( ZONE_ID)?
+@Deadline("2020-06-09 03:14 Europe/Berlin")
 public class PenguinTest {
     // ...
 }
@@ -168,6 +168,8 @@ That annotation (like most of the AJTS annotations) can also be placed on the te
 Now, it already works! Try to play around with the deadline in the annotation. If the given `LocalDateTime` lies in the past, the test case is executed and - together with the student code presented earlier - passes.
 If the deadline hasn't passed, the test case won't pass either. It fails with
 `org.opentest4j.AssertionFailedError: hidden tests will be executed after the deadline.` and the test was not executed, as the deadline is always checked before any hidden test case is executed.
+
+You might have noticed that we specify the time zone as well. Although the annotation parser permits leaving it unspecified, this bears the risk of (not) executing the tests at the correct time if the build agents time zone is different from the one on your machine or what you would expect it to be. If you run tests where the time zone is/was not set, AJTS will warn your about that in the logs.
 
 ### What about Security?
 
