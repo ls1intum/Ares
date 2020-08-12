@@ -10,6 +10,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -17,6 +19,8 @@ import java.util.regex.Pattern;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.ActivateHiddenBefore;
 import de.tum.in.test.api.Deadline;
@@ -31,6 +35,13 @@ import de.tum.in.test.api.ExtendedDeadline;
 @API(status = Status.INTERNAL)
 public final class TestGuardUtils {
 
+	private static final Logger LOG = LoggerFactory.getLogger(TestGuardUtils.class);
+
+	/**
+	 * According to {@link ZoneId#of(String)}, all ZoneIds have to start like that,
+	 * the ones in {@link ZoneId#SHORT_IDS} do as well.
+	 */
+	private static final String ZONE_ID_START_PATTERN = "[-+A-Za-z].*";
 	private static final Pattern DURATION_PATTERN = Pattern
 			.compile("(?:(?<d>\\d+)d)?\\s*(?:\\b(?<h>\\d+)h)?\\s*(?:\\b(?<m>\\d+)m)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
@@ -45,13 +56,13 @@ public final class TestGuardUtils {
 				throw new AnnotationFormatError(
 						formatLocalized("test_guard.test_cannot_be_public_and_hidden", context.displayName())); //$NON-NLS-1$
 
-			LocalDateTime now = LocalDateTime.now();
-			LocalDateTime finalDeadline = extractDeadline(context);
+			ZonedDateTime now = ZonedDateTime.now();
+			ZonedDateTime finalDeadline = extractDeadline(context);
 			// check if now is after the deadline including extensions
 			if (now.isAfter(finalDeadline))
 				return;
 			// check if now is in the activate hidden tests period
-			Optional<LocalDateTime> activationBefore = extractActivationBefore(context);
+			Optional<ZonedDateTime> activationBefore = extractActivationBefore(context);
 			if (activationBefore.map(now::isBefore).orElse(false))
 				return;
 			fail(localized("test_guard.hidden_test_before_deadline_message")); //$NON-NLS-1$
@@ -71,7 +82,7 @@ public final class TestGuardUtils {
 		return context.findTestType().orElse(null) == type;
 	}
 
-	public static LocalDateTime extractDeadline(TestContext context) {
+	public static ZonedDateTime extractDeadline(TestContext context) {
 		var deadline = extractDeadline(context.testClass(), context.testMethod());
 		if (deadline.isPresent())
 			return deadline.get();
@@ -79,7 +90,7 @@ public final class TestGuardUtils {
 				formatLocalized("test_guard.hidden_test_missing_deadline", context.displayName())); //$NON-NLS-1$
 	}
 
-	public static Optional<LocalDateTime> extractDeadline(Optional<Class<?>> testClass, Optional<Method> testMethod) {
+	public static Optional<ZonedDateTime> extractDeadline(Optional<Class<?>> testClass, Optional<Method> testMethod) {
 		var methodLevel = getDeadlineOf(testMethod);
 		var methodDelta = getExtensionDurationOf(testMethod);
 		// Then only the method counts ("override"), because it has its own deadline
@@ -95,12 +106,12 @@ public final class TestGuardUtils {
 				.map(dl -> dl.plus(methodDelta.orElse(Duration.ZERO)));
 	}
 
-	public static Optional<LocalDateTime> extractActivationBefore(TestContext context) {
+	public static Optional<ZonedDateTime> extractActivationBefore(TestContext context) {
 		var methodLevel = getActivationBeforeOf(context.testMethod());
 		return methodLevel.or(() -> getActivationBeforeOf(context.testClass()));
 	}
 
-	public static Optional<LocalDateTime> getDeadlineOf(Optional<? extends AnnotatedElement> element) {
+	public static Optional<ZonedDateTime> getDeadlineOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, Deadline.class).map(Deadline::value).map(TestGuardUtils::parseDeadline);
 	}
 
@@ -109,26 +120,62 @@ public final class TestGuardUtils {
 				.map(TestGuardUtils::parseDuration);
 	}
 
-	public static Optional<LocalDateTime> getActivationBeforeOf(Optional<? extends AnnotatedElement> element) {
+	public static Optional<ZonedDateTime> getActivationBeforeOf(Optional<? extends AnnotatedElement> element) {
 		return findAnnotation(element, ActivateHiddenBefore.class).map(ActivateHiddenBefore::value)
 				.map(TestGuardUtils::parseDeadline);
 	}
 
 	/**
 	 * @param deadlineString a String of format like described in {@link Deadline}
-	 *                       (which is like {@link LocalDateTime} ISO)
 	 * @return the {@link LocalDateTime}, never <code>null</code>
 	 * @throws AnnotationFormatError if the given String's format is invalid
 	 * @author Christian Femers
 	 */
 	@API(status = Status.INTERNAL)
-	public static LocalDateTime parseDeadline(String deadlineString) {
+	public static ZonedDateTime parseDeadline(String deadlineString) {
 		try {
-			return LocalDateTime.parse(deadlineString.replace(' ', 'T'));
+			var parts = splitIntoDateTimeAndZone(deadlineString);
+			var dateTimeString = parts[0];
+			var zoneString = parts[1];
+			LocalDateTime dateTime = LocalDateTime.parse(dateTimeString.replace(' ', 'T'));
+			ZoneId zone;
+			if (zoneString == null) {
+				zone = ZoneId.systemDefault();
+				LOG.warn("No time zone found for deadline \"{}\", using system default \"{}\" now."
+						+ "Please consider setting a time zone in case the build agents have a different time zone set.",
+						deadlineString, zone);
+			} else {
+				zone = ZoneId.of(zoneString, ZoneId.SHORT_IDS);
+			}
+			return dateTime.atZone(zone);
 		} catch (DateTimeParseException e) {
 			throw new AnnotationFormatError(formatLocalized("test_guard.invalid_deadline_format", deadlineString), //$NON-NLS-1$
 					e);
 		}
+	}
+
+	/**
+	 * Splits the deadline string into the local time part and the time zone part if
+	 * present
+	 * 
+	 * @param deadlineString the deadline string of format ISO-LOCAL-DATE(T|
+	 *                       )ISO-LOCAL-TIME( ZONE-ID)?
+	 * @return always a string array of length two, the first part is always the
+	 *         local date time part and not null, the second is the zone part and
+	 *         can be null
+	 * @author Christian Femers
+	 */
+	private static String[] splitIntoDateTimeAndZone(String deadlineString) {
+		int firstSpace = deadlineString.indexOf(' ');
+		if (firstSpace == -1)
+			return new String[] { deadlineString, null };
+		int lastSpace = deadlineString.lastIndexOf(' ');
+		String potentialZoneIdString = deadlineString.substring(lastSpace + 1);
+		// either it has two spaces and thereby three parts (YYYY-MM-DD hh:mm ZONE) or
+		// the last part matches a ZoneId start
+		if (firstSpace != lastSpace || potentialZoneIdString.matches(ZONE_ID_START_PATTERN))
+			return new String[] { deadlineString.substring(0, lastSpace), potentialZoneIdString };
+		return new String[] { deadlineString, null };
 	}
 
 	/**

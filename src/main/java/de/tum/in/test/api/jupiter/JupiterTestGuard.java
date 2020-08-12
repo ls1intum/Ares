@@ -7,7 +7,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import org.apiguardian.api.API;
@@ -110,7 +110,7 @@ public final class JupiterTestGuard implements InvocationInterceptor, DisplayNam
 			String name = testMethod.toString();
 			if (deadline.isEmpty())
 				return formatLocalized("test_guard.obfuscate_hidden_test_missing_deadline", name); //$NON-NLS-1$
-			if (LocalDateTime.now().isBefore(deadline.get()))
+			if (ZonedDateTime.now().isBefore(deadline.get()))
 				return String.format("Hidden Test %08X", name.hashCode()); //$NON-NLS-1$
 		}
 		return defaultNameGen.generateDisplayNameForMethod(testClass, testMethod);
