@@ -134,8 +134,8 @@ class IgnorantUnmodifiableListTest {
 
 	@Test
 	void testGetInt() {
-		assertThat(list).element(0).isEqualTo(OBJ_A);
-		assertThat(list).element(1).isEqualTo(OBJ_B);
+		assertThat(list.get(0)).isEqualTo(OBJ_A);
+		assertThat(list.get(1)).isEqualTo(OBJ_B);
 		assertFalse(changeDetected);
 	}
 
@@ -183,7 +183,7 @@ class IgnorantUnmodifiableListTest {
 	void testListIterator() {
 		var lit = list.listIterator();
 		assertThat(lit.hasNext()).isTrue();
-		assertThat(lit.nextIndex()).isEqualTo(0);
+		assertThat(lit.nextIndex()).isZero();
 		assertThat(lit.next()).isEqualTo(OBJ_A);
 		lit.remove();
 		assertTrue(changeDetected);
@@ -201,7 +201,7 @@ class IgnorantUnmodifiableListTest {
 		assertThat(lit.hasPrevious()).isTrue();
 		assertThat(lit.previousIndex()).isEqualTo(1);
 		assertThat(lit.previous()).isEqualTo(OBJ_B);
-		assertThat(lit.previousIndex()).isEqualTo(0);
+		assertThat(lit.previousIndex()).isZero();
 		lit.set(OBJ_C);
 		assertTrue(changeDetected);
 
@@ -217,7 +217,7 @@ class IgnorantUnmodifiableListTest {
 
 	@Test
 	void testToString() {
-		assertThat(list.toString()).isEqualTo(source.toString());
+		assertThat(list).hasToString(source.toString());
 		assertFalse(changeDetected);
 	}
 }
