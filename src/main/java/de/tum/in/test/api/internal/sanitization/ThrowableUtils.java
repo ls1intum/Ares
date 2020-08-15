@@ -25,7 +25,6 @@ final class ThrowableUtils {
 			STACK_TRACE = lookup.findVarHandle(Throwable.class, STACK_TRACE_NAME, StackTraceElement[].class);
 			SUPPRESSED_EXCEPTIONS = lookup.findVarHandle(Throwable.class, SUPPRESSED_EXCEPTIONS_NAME, List.class);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
 			throw new ExceptionInInitializerError(e);
 		}
 	}

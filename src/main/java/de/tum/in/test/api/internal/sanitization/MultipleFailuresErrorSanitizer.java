@@ -26,7 +26,6 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 			var lookup = MethodHandles.privateLookupIn(MultipleFailuresError.class, MethodHandles.lookup());
 			HEADING = lookup.findVarHandle(MultipleFailuresError.class, HEADING_NAME, String.class);
 		} catch (IllegalAccessException | NoSuchFieldException e) {
-			e.printStackTrace();
 			throw new ExceptionInInitializerError(e);
 		}
 	}
