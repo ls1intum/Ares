@@ -1,6 +1,5 @@
 package de.tum.in.testuser;
 
-//import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -24,6 +23,8 @@ import de.tum.in.test.api.BlacklistPackage;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
+import de.tum.in.test.api.MirrorOutput;
+import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.StrictTimeout;
@@ -34,17 +35,18 @@ import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.testuser.subject.ArrayListUserProxy;
 import de.tum.in.testuser.subject.Penguin;
 
-//@MirrorOutput
+@MirrorOutput(MirrorOutputPolicy.DISABLED)
 @AllowThreads(maxActiveCount = 100)
 @Deadline("2019-10-31 05:00")
 @ExtendedDeadline("1h 30m")
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(Alphanumeric.class)
-//@UseLocale("en")
+@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
@@ -203,22 +205,24 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	public void testTooManyreads(IOTester tester) {
+	public void testTooManyReads(IOTester tester) {
 		tester.provideInputLines("12");
 
 		Penguin.readTwoTimes();
 	}
 
 	@PublicTest
+	@MirrorOutput(maxCharCount = 10, value = MirrorOutputPolicy.DISABLED)
+	public void testTooManyChars() {
+		Penguin.main(new String[0]);
+	}
+
+	@PublicTest
 	public void useReflectionNormal() {
-//		Thread[] theads = new Thread[Thread.currentThread().getThreadGroup().activeCount()];
-//		Thread.currentThread().getThreadGroup().enumerate(theads);
-//		System.err.println(" " + Arrays.toString(theads) + " - " + Thread.currentThread());
 		Penguin.useReflection();
 	}
 
 	@PublicTest
-//	@MirrorOutput
 	public void useReflectionTrick() {
 		Penguin.useReflection2();
 		Circumvention.thrown.ifPresent(e -> {

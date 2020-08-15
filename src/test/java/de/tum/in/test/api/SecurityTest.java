@@ -30,7 +30,8 @@ class SecurityTest {
 	private final String testPolarBear = "testPolarBear";
 	private final String testSquareCorrect = "testSquareCorrect";
 	private final String testSquareWrong = "testSquareWrong";
-	private final String testTooManyreads = "testTooManyreads";
+	private final String testTooManyReads = "testTooManyReads";
+	private final String testTooManyChars = "testTooManyChars";
 	private final String useReflectionNormal = "useReflectionNormal";
 	private final String useReflectionTrick = "useReflectionTrick";
 	private final String weUseReflection = "weUseReflection";
@@ -70,7 +71,7 @@ class SecurityTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(39));
+		tests.assertStatistics(stats -> stats.started(40));
 	}
 
 	@TestTest
@@ -248,8 +249,13 @@ class SecurityTest {
 	}
 
 	@TestTest
-	void test_testTooManyreads() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyreads, IllegalStateException.class));
+	void test_testTooManyReads() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyReads, IllegalStateException.class));
+	}
+
+	@TestTest
+	void test_testTooManyChars() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyChars, SecurityException.class));
 	}
 
 	@TestTest
