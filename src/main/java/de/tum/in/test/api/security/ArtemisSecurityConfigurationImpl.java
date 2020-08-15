@@ -13,8 +13,8 @@ import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfiguration {
-	private final Class<?> testClass;
-	private final Method testMethod;
+	private final Optional<Class<?>> testClass;
+	private final Optional<Method> testMethod;
 	private final Path executionPath;
 	private final List<String> whitelistedClassNames;
 	private final Optional<Set<PathRule>> whitelistedPaths;
@@ -24,7 +24,7 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	private final Set<PackageRule> blacklistedPackages;
 	private final Set<PackageRule> whitelistedPackages;
 
-	ArtemisSecurityConfigurationImpl(Class<?> testClass, Method testMethod, Path executionPath,
+	ArtemisSecurityConfigurationImpl(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath,
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, OptionalInt allowedLocalPort, OptionalInt allowedThreadCount,
 			Set<PackageRule> blacklistedPackages, Set<PackageRule> whitelistedPackages) {
@@ -41,12 +41,12 @@ final class ArtemisSecurityConfigurationImpl implements ArtemisSecurityConfigura
 	}
 
 	@Override
-	public Class<?> testClass() {
+	public Optional<Class<?>> testClass() {
 		return testClass;
 	}
 
 	@Override
-	public Method testMethod() {
+	public Optional<Method> testMethod() {
 		return testMethod;
 	}
 

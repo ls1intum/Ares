@@ -15,8 +15,8 @@ import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 public final class ArtemisSecurityConfigurationBuilder {
-	private Class<?> testClass;
-	private Method testMethod;
+	private Optional<Class<?>> testClass;
+	private Optional<Method> testMethod;
 	private Path executionPath;
 	private Set<String> whitelistedClassNames;
 	private Set<PathRule> whitelistedPaths;
@@ -27,6 +27,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private OptionalInt allowedThreadCount;
 
 	private ArtemisSecurityConfigurationBuilder() {
+		testClass = Optional.empty();
+		testMethod = Optional.empty();
 		whitelistedClassNames = new HashSet<>();
 		blacklistedPaths = Set.of();
 		blacklistedPackages = Set.of();
@@ -35,11 +37,11 @@ public final class ArtemisSecurityConfigurationBuilder {
 		allowedThreadCount = OptionalInt.empty();
 	}
 
-	public Class<?> getTestClass() {
+	public Optional<Class<?>> getTestClass() {
 		return testClass;
 	}
 
-	public Method getTestMethod() {
+	public Optional<Method> getTestMethod() {
 		return testMethod;
 	}
 
@@ -102,12 +104,12 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withTestClass(Class<?> testClass) {
-		this.testClass = Objects.requireNonNull(testClass);
+		this.testClass = Optional.of(testClass);
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withTestMethod(Method testMethod) {
-		this.testMethod = Objects.requireNonNull(testMethod);
+		this.testMethod = Optional.of(testMethod);
 		return this;
 	}
 
@@ -127,8 +129,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
-		testClass = context.testClass().get();
-		testMethod = context.testMethod().get();
+		testClass = context.testClass();
+		testMethod = context.testMethod();
 		return this;
 	}
 

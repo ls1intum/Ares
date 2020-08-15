@@ -16,35 +16,25 @@ import de.tum.in.test.api.util.PathRule;
 @API(status = Status.INTERNAL)
 public interface ArtemisSecurityConfiguration {
 
-	Class<?> testClass();
+	Optional<Class<?>> testClass();
 
-	Method testMethod();
+	Optional<Method> testMethod();
 
 	Path executionPath();
 
-	default List<String> whitelistedClassNames() {
-		return List.of();
-	}
+	List<String> whitelistedClassNames();
 
 	String shortDesc();
 
-	default Optional<Set<PathRule>> whitelistedPaths() {
-		return Optional.empty();
-	}
+	Optional<Set<PathRule>> whitelistedPaths();
 
-	default Set<PathRule> blacklistedPaths() {
-		return Set.of();
-	}
+	Set<PathRule> blacklistedPaths();
 
 	OptionalInt allowedLocalPort();
 
 	OptionalInt allowedThreadCount();
 
-	default Set<PackageRule> blacklistedPackages() {
-		return Set.of();
-	}
+	Set<PackageRule> blacklistedPackages();
 
-	default Set<PackageRule> whitelistedPackages() {
-		return Set.of();
-	}
+	Set<PackageRule> whitelistedPackages();
 }
