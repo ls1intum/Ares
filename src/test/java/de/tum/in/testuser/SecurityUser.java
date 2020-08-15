@@ -8,9 +8,10 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
@@ -350,15 +351,27 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	public void commonPoolInterruptable() {
-		Stream.of("").parallel().map(s -> {
+	public void commonPoolInterruptable() throws InterruptedException, ExecutionException {
+		// check functionality
+		var res = ForkJoinPool.commonPool().submit(() -> "A").get();
+		assertEquals("A", res);
+		// submit long-running task
+		ForkJoinPool.commonPool().submit(() -> {
 			try {
 				Thread.sleep(5_000);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
-			return s;
-		}).findAny();
+		});
+		// check that the task is still running after 100 ms
+		try {
+			Thread.sleep(100);
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		assertFalse(ForkJoinPool.commonPool().isQuiescent());
+		// wait for task end
+		ForkJoinPool.commonPool().awaitQuiescence(5, TimeUnit.SECONDS);
 	}
 
 	/**
