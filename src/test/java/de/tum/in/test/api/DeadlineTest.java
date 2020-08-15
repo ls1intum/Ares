@@ -12,6 +12,7 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
+import de.tum.in.testuser.DeadlineUser;
 import de.tum.in.testutil.TestTest;
 
 class DeadlineTest {

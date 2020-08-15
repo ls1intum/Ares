@@ -1,4 +1,4 @@
-package de.tum.in.testsecurity;
+package de.tum.in.testuser;
 
 //import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.*;
@@ -33,6 +33,8 @@ import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
+import de.tum.in.testuser.subject.ArrayListUserProxy;
+import de.tum.in.testuser.subject.Penguin;
 
 //@MirrorOutput
 @AllowThreads(maxActiveCount = 100)
@@ -44,7 +46,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
-class SecurityUser {
+public class SecurityUser {
 
 	@PublicTest
 	@WhitelistPath("")
@@ -60,9 +62,9 @@ class SecurityUser {
 	@PublicTest
 	@WhitelistPath("")
 	public void accessPathTest() throws IOException {
-		if (!Files.exists(Path.of("target/test-classes/de/tum/in/testsecurity/SecurityTest.class")))
+		if (!Files.exists(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class")))
 			fail("File not present");
-		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/testsecurity/SecurityTest.class"));
+		Penguin.accessPath(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class"));
 	}
 
 	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)

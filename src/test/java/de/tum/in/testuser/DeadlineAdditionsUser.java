@@ -1,10 +1,13 @@
-package de.tum.in.test.api;
+package de.tum.in.testuser;
 
+import de.tum.in.test.api.ActivateHiddenBefore;
+import de.tum.in.test.api.Deadline;
+import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
 
 @Deadline("2000-01-01 00:00")
-class DeadlineAdditionsUser {
+public class DeadlineAdditionsUser {
 
 	@PublicTest
 	@ActivateHiddenBefore("2200-01-01 00:00")

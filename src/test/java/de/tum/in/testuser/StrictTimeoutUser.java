@@ -1,4 +1,4 @@
-package de.tum.in.test.api;
+package de.tum.in.testuser;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,10 +6,12 @@ import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.tum.in.test.api.StrictTimeout;
+
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(Alphanumeric.class)
 @SuppressWarnings({ "static-method", "unused" })
-class StrictTimeoutUser {
+public class StrictTimeoutUser {
 
 	@Test
 	@StrictTimeout(1)

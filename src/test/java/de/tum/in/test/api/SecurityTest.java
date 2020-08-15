@@ -1,4 +1,4 @@
-package de.tum.in.testsecurity;
+package de.tum.in.test.api;
 
 import static de.tum.in.testutil.CustomConditions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -12,6 +12,7 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
+import de.tum.in.testuser.SecurityUser;
 import de.tum.in.testutil.TestTest;
 
 class SecurityTest {

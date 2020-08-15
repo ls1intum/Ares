@@ -1,4 +1,4 @@
-package de.tum.in.testsecurity;
+package de.tum.in.testuser.subject;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

@@ -1,9 +1,11 @@
-package de.tum.in.test.api;
+package de.tum.in.testuser;
 
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
 
+import de.tum.in.test.api.Deadline;
+import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jqwik.Hidden;
@@ -16,7 +18,7 @@ import net.jqwik.api.constraints.Positive;
 
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
-class JqwickUser {
+public class JqwickUser {
 
 	@Hidden
 	void testHiddenIncomplete() {
