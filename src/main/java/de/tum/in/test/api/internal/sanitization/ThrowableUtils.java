@@ -34,11 +34,11 @@ final class ThrowableUtils {
 	}
 
 	static StackTraceElement[] getStackTrace(Throwable target) {
-		return (StackTraceElement[]) CAUSE.getVolatile(target);
+		return (StackTraceElement[]) STACK_TRACE.getVolatile(target);
 	}
 
 	static List<Throwable> getSuppressedExceptions(Throwable target) {
-		return (List<Throwable>) CAUSE.getVolatile(target);
+		return (List<Throwable>) SUPPRESSED_EXCEPTIONS.getVolatile(target);
 	}
 
 	static void setCause(Throwable target, Throwable newValue) {
