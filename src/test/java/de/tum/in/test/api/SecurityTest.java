@@ -1,8 +1,11 @@
 package de.tum.in.test.api;
 
 import static de.tum.in.testutil.CustomConditions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
+
+import java.util.concurrent.ForkJoinPool;
 
 import org.junit.ComparisonFailure;
 import org.junit.jupiter.api.BeforeAll;
@@ -56,6 +59,7 @@ class SecurityTest {
 	private final String privilegedExceptionNormal = "privilegedExceptionNormal";
 	private final String privilegedExceptionFail = "privilegedExceptionFail";
 	private final String nonprivilegedExceptionTry = "nonprivilegedExceptionTry";
+	private final String commonPoolInterruptable = "commonPoolInterruptable";
 
 	private static Events tests;
 
@@ -66,7 +70,7 @@ class SecurityTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(38));
+		tests.assertStatistics(stats -> stats.started(39));
 	}
 
 	@TestTest
@@ -274,5 +278,12 @@ class SecurityTest {
 	@TestTest
 	void test_nonprivilegedExceptionTry() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(nonprivilegedExceptionTry, AssertionError.class, "ABC"));
+	}
+
+	@TestTest
+	void test_commonPoolInterruptable() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(commonPoolInterruptable, AssertionError.class, "execution timed out after 300 ms"));
+		assertTrue(ForkJoinPool.commonPool().isQuiescent());
 	}
 }

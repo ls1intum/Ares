@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
@@ -346,6 +347,18 @@ public class SecurityUser {
 	@PublicTest
 	public void nonprivilegedExceptionTry() {
 		Penguin.throwPrivilegedNullPointerException();
+	}
+
+	@PublicTest
+	public void commonPoolInterruptable() {
+		Stream.of("").parallel().map(s -> {
+			try {
+				Thread.sleep(5_000);
+			} catch (@SuppressWarnings("unused") InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			return s;
+		}).findAny();
 	}
 
 	/**
