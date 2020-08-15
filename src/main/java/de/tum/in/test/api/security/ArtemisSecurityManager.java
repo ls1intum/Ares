@@ -556,7 +556,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		ThreadGroup[] tgs = new ThreadGroup[root.activeGroupCount() + 5];
 		root.enumerate(tgs, true);
 		ThreadGroup commong = Stream.of(tgs).filter(tg -> "InnocuousForkJoinWorkerThreadGroup".equals(tg.getName())) //$NON-NLS-1$
-				.findFirst().get(); // was created indirectly in the static initializer
+				.findFirst().orElseThrow(IllegalStateException::new); // was created indirectly in the static initializer
 		Thread[] threads = new Thread[commong.activeCount() + 5];
 		commong.enumerate(threads);
 		LOG.info("Try interrupt common pool"); //$NON-NLS-1$
