@@ -27,9 +27,6 @@ import net.jqwik.engine.providers.RegisteredArbitraryProviders;
 @API(status = Status.INTERNAL)
 public final class JqwikTestExtension implements AroundPropertyHook {
 
-	private GeneralTestExtension testExtension;
-	private IOTesterProvider ioTesterProvider;
-
 	@Override
 	public int aroundPropertyProximity() {
 		return 20;
@@ -38,9 +35,10 @@ public final class JqwikTestExtension implements AroundPropertyHook {
 	@Override
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
-		testExtension = new GeneralTestExtension(JqwikContext.of(context));
+		GeneralTestExtension testExtension = new GeneralTestExtension(JqwikContext.of(context));
 		testExtension.beforeTestExecution();
-		ioTesterProvider = new IOTesterProvider(testExtension.getIOTester());
+
+		IOTesterProvider ioTesterProvider = new IOTesterProvider(testExtension.getIOTester());
 		RegisteredArbitraryProviders.register(ioTesterProvider);
 
 		PropertyExecutionResult result;
@@ -85,6 +83,5 @@ public final class JqwikTestExtension implements AroundPropertyHook {
 		public Set<Arbitrary<?>> provideFor(TypeUsage targetType, SubtypeProvider subtypeProvider) {
 			return Set.of(Arbitraries.just(ioTester));
 		}
-
 	}
 }
