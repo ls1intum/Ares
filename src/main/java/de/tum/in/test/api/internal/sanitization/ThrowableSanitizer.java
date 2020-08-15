@@ -2,7 +2,6 @@ package de.tum.in.test.api.internal.sanitization;
 
 import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,22 +30,6 @@ public final class ThrowableSanitizer {
 			MultipleFailuresErrorSanitizer.INSTANCE, MultipleAssertionsErrorSanitizer.INSTANCE,
 			ExceptionInInitializerErrorSanitizer.INSTANCE, SoftAssertionErrorSanitizer.INSTANCE);
 
-	private static final Field STACKTRACE;
-	private static final Field CAUSE;
-	private static final Field SUPPRESSED;
-	static {
-		try {
-			STACKTRACE = Throwable.class.getDeclaredField("stackTrace");
-			STACKTRACE.setAccessible(true);
-			CAUSE = Throwable.class.getDeclaredField("cause");
-			CAUSE.setAccessible(true);
-			SUPPRESSED = Throwable.class.getDeclaredField("suppressedExceptions");
-			SUPPRESSED.setAccessible(true);
-		} catch (NoSuchFieldException | SecurityException e) {
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-
 	public static Throwable sanitize(final Throwable t) throws SanitizationError {
 		if (t == null)
 			return null;
@@ -58,19 +41,26 @@ public final class ThrowableSanitizer {
 		return UnexpectedExceptionError.wrap(t);
 	}
 
-	static void copyThrowableInfo(Throwable from, Throwable to) throws SanitizationError {
-		to.setStackTrace(from.getStackTrace());
+	static void copyThrowableInfoSafe(Throwable from, Throwable to) throws SanitizationError {
 		try {
-			Throwable cause = (Throwable) CAUSE.get(from);
-			List<Throwable> suppr = IgnorantUnmodifiableList.wrapWith(Arrays.stream(invoke(from::getSuppressed))
-					.map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
+			// this is only needed for transfer, the stack trace is safe
+			if (from != to)
+				to.setStackTrace(from.getStackTrace());
+
+			// this returns either null or another Throwable instance
+			Throwable causeVal = invoke(from::getCause);
+			Throwable[] supprVal = invoke(from::getSuppressed);
+
+			// because causeVal is never t, this will lock the cause and calls to initCause
+			var newCause = ThrowableSanitizer.sanitize(causeVal);
+			ThrowableUtils.setCause(to, newCause);
+
+			// this breaks addSuppressed by purpose
+			var newSupressed = IgnorantUnmodifiableList.wrapWith(
+					Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
 					ArtemisSecurityManager.getOnSuppressedModification());
-			if (cause == from)
-				CAUSE.set(to, to);
-			else
-				CAUSE.set(to, sanitize(cause));
-			SUPPRESSED.set(to, suppr);
-		} catch (IllegalArgumentException | ReflectiveOperationException e) {
+			ThrowableUtils.setSuppressedException(to, newSupressed);
+		} catch (Exception e) {
 			throw new SanitizationError(e);
 		}
 	}

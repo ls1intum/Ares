@@ -26,7 +26,7 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 			return SimpleThrowableSanitizer.INSTANCE.sanitize(afe);
 		AssertionFailedError newAfe = new AssertionFailedError(invoke(afe::getMessage), sanitizeValue(expected),
 				sanitizeValue(actual));
-		ThrowableSanitizer.copyThrowableInfo(afe, newAfe);
+		ThrowableSanitizer.copyThrowableInfoSafe(afe, newAfe);
 		return newAfe;
 	}
 

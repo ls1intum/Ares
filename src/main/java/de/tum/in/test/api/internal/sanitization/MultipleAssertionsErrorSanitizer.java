@@ -23,7 +23,7 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 		MultipleAssertionsError mae = new MultipleAssertionsError(List.copyOf(
 				invoke(() -> ((MultipleAssertionsError) t).getErrors().stream().map(ThrowableSanitizer::sanitize)
 						.map(ae -> (AssertionError) ae).collect(Collectors.toList()))));
-		ThrowableSanitizer.copyThrowableInfo(t, mae);
+		ThrowableSanitizer.copyThrowableInfoSafe(t, mae);
 		return mae;
 	}
 }

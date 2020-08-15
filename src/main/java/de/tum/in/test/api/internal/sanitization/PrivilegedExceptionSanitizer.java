@@ -12,6 +12,7 @@ enum PrivilegedExceptionSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
+		// returning only the content of the privileged exception is the purpose here
 		return ThrowableSanitizer.sanitize(((PrivilegedException) t).getPriviledgedThrowable());
 	}
 }
