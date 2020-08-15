@@ -23,8 +23,8 @@ class ThrowableUtilsTest {
 
 		cause = ThrowableUtils.getCause(target);
 		// set to new cause
-		assertThat(cause).isSameAs(newCause);
-		assertThat(cause).isSameAs(target.getCause());
+		assertThat(cause).isSameAs(newCause) //
+				.isSameAs(target.getCause());
 	}
 
 	@Test
@@ -39,8 +39,8 @@ class ThrowableUtilsTest {
 
 		stackTrace = ThrowableUtils.getStackTrace(target);
 		// set to new suppressed
-		assertThat(stackTrace).isSameAs(newStackTrace);
-		assertThat(stackTrace).containsExactly(target.getStackTrace());
+		assertThat(stackTrace).isSameAs(newStackTrace) //
+				.containsExactly(target.getStackTrace());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ class ThrowableUtilsTest {
 
 		suppressed = ThrowableUtils.getSuppressedExceptions(target);
 		// set to new suppressed
-		assertThat(suppressed).isSameAs(newSuppressed);
-		assertThat(suppressed).containsExactly(target.getSuppressed());
+		assertThat(suppressed).isSameAs(newSuppressed) //
+				.containsExactly(target.getSuppressed());
 	}
 }
