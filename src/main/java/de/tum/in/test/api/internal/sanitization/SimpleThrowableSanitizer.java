@@ -19,12 +19,13 @@ enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
+		// this returns either null or another Throwable instance
 		Throwable causeVal = invoke(t::getCause);
 		Throwable[] supprVal = invoke(t::getSuppressed);
 		try {
-			Field cause;
-			cause = Throwable.class.getDeclaredField("cause");
+			Field cause = Throwable.class.getDeclaredField("cause");
 			cause.setAccessible(true);
+			// because causeVal is never t, this will lock the cause and calls to initCause
 			cause.set(t, ThrowableSanitizer.sanitize(causeVal));
 		} catch (ReflectiveOperationException e) {
 			throw new SanitizationError(e);

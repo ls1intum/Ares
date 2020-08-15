@@ -50,15 +50,12 @@ public final class ThrowableSanitizer {
 	public static Throwable sanitize(final Throwable t) throws SanitizationError {
 		if (t == null)
 			return null;
-		// use synchronized to prevent modification of t during sanitization
-		synchronized (t) {
-			if (UnexpectedExceptionError.class.equals(t.getClass()))
-				return t;
-			var firstPossibleSan = SANITIZERS.stream().filter(s -> s.canSanitize(t)).findFirst();
-			if (firstPossibleSan.isPresent())
-				return firstPossibleSan.get().sanitize(t);
-			return UnexpectedExceptionError.wrap(t);
-		}
+		if (UnexpectedExceptionError.class.equals(t.getClass()))
+			return t;
+		var firstPossibleSan = SANITIZERS.stream().filter(s -> s.canSanitize(t)).findFirst();
+		if (firstPossibleSan.isPresent())
+			return firstPossibleSan.get().sanitize(t);
+		return UnexpectedExceptionError.wrap(t);
 	}
 
 	static void copyThrowableInfo(Throwable from, Throwable to) throws SanitizationError {
