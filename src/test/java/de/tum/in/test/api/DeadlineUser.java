@@ -8,7 +8,7 @@ import de.tum.in.test.api.jupiter.PublicTest;
 
 @Deadline("2200-01-01 16:00")
 @TestMethodOrder(Alphanumeric.class)
-public class DeadlineUser {
+class DeadlineUser {
 
 	@HiddenTest
 	void testHiddenNormal() {

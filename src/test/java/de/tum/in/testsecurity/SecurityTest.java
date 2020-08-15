@@ -14,7 +14,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.testutil.TestTest;
 
-public class SecurityTest {
+class SecurityTest {
 
 	private final String doSystemExit = "doSystemExit";
 	private final String exceedTimeLimit = "exceedTimeLimit";

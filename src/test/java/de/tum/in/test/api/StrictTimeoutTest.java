@@ -12,7 +12,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.testutil.TestTest;
 
-public class StrictTimeoutTest {
+class StrictTimeoutTest {
 
 	private final String testOneSecondFail = "testOneSecondFail";
 	private final String testOneSecondSuccess = "testOneSecondSuccess";

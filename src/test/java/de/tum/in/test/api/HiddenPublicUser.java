@@ -9,7 +9,7 @@ import de.tum.in.test.api.jupiter.Public;
 
 @Deadline("2200-01-01 16:00")
 @TestMethodOrder(Alphanumeric.class)
-public class HiddenPublicUser {
+class HiddenPublicUser {
 
 	@Hidden
 	void testHiddenIncomplete() {

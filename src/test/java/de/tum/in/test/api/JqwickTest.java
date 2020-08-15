@@ -14,7 +14,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.testutil.TestTest;
 
-public class JqwickTest {
+class JqwickTest {
 	private final String testHiddenIncomplete = "testHiddenIncomplete";
 	private final String testPublicIncomplete = "testPublicIncomplete";
 

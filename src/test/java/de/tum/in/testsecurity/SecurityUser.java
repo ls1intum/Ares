@@ -44,7 +44,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
-public class SecurityUser {
+class SecurityUser {
 
 	@PublicTest
 	@WhitelistPath("")

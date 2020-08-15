@@ -16,7 +16,7 @@ import net.jqwik.api.constraints.Positive;
 
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
-public class JqwickUser {
+class JqwickUser {
 
 	@Hidden
 	void testHiddenIncomplete() {

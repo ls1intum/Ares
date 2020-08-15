@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(Alphanumeric.class)
 @SuppressWarnings({ "static-method", "unused" })
-public class StrictTimeoutUser {
+class StrictTimeoutUser {
 
 	@Test
 	@StrictTimeout(1)

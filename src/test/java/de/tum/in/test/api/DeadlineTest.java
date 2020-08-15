@@ -14,7 +14,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.testutil.TestTest;
 
-public class DeadlineTest {
+class DeadlineTest {
 
 	private final String testHiddenCustomDeadlineFuture = "testHiddenCustomDeadlineFuture";
 	private final String testHiddenCustomDeadlinePast = "testHiddenCustomDeadlinePast";
