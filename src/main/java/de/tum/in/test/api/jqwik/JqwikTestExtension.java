@@ -83,7 +83,7 @@ public final class JqwikTestExtension implements AroundPropertyHook {
 
 		@Override
 		public Set<Arbitrary<?>> provideFor(TypeUsage targetType, SubtypeProvider subtypeProvider) {
-			return Set.of(Arbitraries.constant(ioTester));
+			return Set.of(Arbitraries.just(ioTester));
 		}
 
 	}
