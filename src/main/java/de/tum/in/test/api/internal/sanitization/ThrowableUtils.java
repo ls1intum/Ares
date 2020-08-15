@@ -8,7 +8,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 @API(status = Status.INTERNAL)
-class ThrowableUtils {
+final class ThrowableUtils {
 
 	private static final String CAUSE_NAME = "cause";
 	private static final String STACK_TRACE_NAME = "stackTrace";
@@ -34,8 +34,8 @@ class ThrowableUtils {
 		return (Throwable) CAUSE.getVolatile(target);
 	}
 
-	static Throwable[] getStackTrace(Throwable target) {
-		return (Throwable[]) CAUSE.getVolatile(target);
+	static StackTraceElement[] getStackTrace(Throwable target) {
+		return (StackTraceElement[]) CAUSE.getVolatile(target);
 	}
 
 	static List<Throwable> getSuppressedExceptions(Throwable target) {
@@ -46,7 +46,7 @@ class ThrowableUtils {
 		CAUSE.setVolatile(target, newValue);
 	}
 
-	static void setStackTrace(Throwable target, Throwable[] newValue) {
+	static void setStackTrace(Throwable target, StackTraceElement... newValue) {
 		STACK_TRACE.setVolatile(target, newValue);
 	}
 
