@@ -19,7 +19,7 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) throws SanitizationError {
+	public Throwable sanitize(Throwable t) {
 		// the list is not safe here, it is simply set in the constructor
 		MultipleAssertionsError mae = new MultipleAssertionsError(
 				invoke(() -> List.copyOf(((MultipleAssertionsError) t).getErrors())).stream()

@@ -4,5 +4,5 @@ interface SpecificThrowableSanitizer {
 
 	boolean canSanitize(Throwable t);
 
-	Throwable sanitize(Throwable t) throws SanitizationError;
+	Throwable sanitize(Throwable t);
 }

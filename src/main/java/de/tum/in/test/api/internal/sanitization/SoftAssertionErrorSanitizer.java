@@ -18,7 +18,7 @@ enum SoftAssertionErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) throws SanitizationError {
+	public Throwable sanitize(Throwable t) {
 		SoftAssertionError sae = new SoftAssertionError(
 				invoke(() -> List.copyOf(((SoftAssertionError) t).getErrors())));
 		ThrowableSanitizer.copyThrowableInfoSafe(t, sae);

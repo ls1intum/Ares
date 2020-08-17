@@ -31,7 +31,7 @@ public final class ThrowableSanitizer {
 			MultipleFailuresErrorSanitizer.INSTANCE, MultipleAssertionsErrorSanitizer.INSTANCE,
 			ExceptionInInitializerErrorSanitizer.INSTANCE, SoftAssertionErrorSanitizer.INSTANCE);
 
-	public static Throwable sanitize(final Throwable t) throws SanitizationError {
+	public static Throwable sanitize(final Throwable t) {
 		if (t == null)
 			return null;
 		if (UnexpectedExceptionError.class.equals(t.getClass()))
@@ -42,30 +42,26 @@ public final class ThrowableSanitizer {
 		return UnexpectedExceptionError.wrap(t);
 	}
 
-	static void copyThrowableInfoSafe(Throwable from, Throwable to) throws SanitizationError {
-		try {
-			// this is only needed for transfer
-			if (from != to) {
-				// the message and stack trace are safe
-				ThrowableUtils.setDetailMessage(to, ThrowableUtils.getDetailMessage(from));
-				to.setStackTrace(from.getStackTrace());
-			}
-
-			// this returns either null or another Throwable instance
-			Throwable causeVal = invoke(from::getCause);
-			Throwable[] supprVal = invoke(from::getSuppressed);
-
-			// because causeVal is never t, this will lock the cause and calls to initCause
-			var newCause = ThrowableSanitizer.sanitize(causeVal);
-			ThrowableUtils.setCause(to, newCause);
-
-			// this breaks addSuppressed by purpose
-			var newSupressed = IgnorantUnmodifiableList.wrapWith(
-					Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
-					ArtemisSecurityManager.getOnSuppressedModification());
-			ThrowableUtils.setSuppressedException(to, newSupressed);
-		} catch (Exception e) {
-			throw new SanitizationError(e);
+	static void copyThrowableInfoSafe(Throwable from, Throwable to) {
+		// this is only needed for transfer
+		if (from != to) {
+			// the message and stack trace are safe
+			ThrowableUtils.setDetailMessage(to, ThrowableUtils.getDetailMessage(from));
+			to.setStackTrace(from.getStackTrace());
 		}
+
+		// this returns either null or another Throwable instance
+		Throwable causeVal = invoke(from::getCause);
+		Throwable[] supprVal = invoke(from::getSuppressed);
+
+		// because causeVal is never t, this will lock the cause and calls to initCause
+		var newCause = ThrowableSanitizer.sanitize(causeVal);
+		ThrowableUtils.setCause(to, newCause);
+
+		// this breaks addSuppressed by purpose
+		var newSupressed = IgnorantUnmodifiableList.wrapWith(
+				Arrays.stream(supprVal).map(ThrowableSanitizer::sanitize).collect(Collectors.toList()),
+				ArtemisSecurityManager.getOnSuppressedModification());
+		ThrowableUtils.setSuppressedException(to, newSupressed);
 	}
 }

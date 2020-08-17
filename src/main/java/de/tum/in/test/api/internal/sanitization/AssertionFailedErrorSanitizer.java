@@ -18,7 +18,7 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) throws SanitizationError {
+	public Throwable sanitize(Throwable t) {
 		AssertionFailedError afe = (AssertionFailedError) t;
 		ValueWrapper expected = invoke(afe::getExpected);
 		ValueWrapper actual = invoke(afe::getActual);

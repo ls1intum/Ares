@@ -38,16 +38,12 @@ enum ExceptionInInitializerErrorSanitizer implements SpecificThrowableSanitizer 
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) throws SanitizationError {
-		try {
-			if (EXCEPTION.isPresent()) {
-				Throwable ex = (Throwable) EXCEPTION.get().getVolatile(t);
-				EXCEPTION.get().setVolatile(t, ThrowableSanitizer.sanitize(ex));
-			}
-			SimpleThrowableSanitizer.INSTANCE.sanitize(t);
-		} catch (IllegalArgumentException e) {
-			throw new SanitizationError(e);
+	public Throwable sanitize(Throwable t) {
+		if (EXCEPTION.isPresent()) {
+			Throwable ex = (Throwable) EXCEPTION.get().getVolatile(t);
+			EXCEPTION.get().setVolatile(t, ThrowableSanitizer.sanitize(ex));
 		}
+		SimpleThrowableSanitizer.INSTANCE.sanitize(t);
 		return t;
 	}
 }

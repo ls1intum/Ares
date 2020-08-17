@@ -34,7 +34,7 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) throws SanitizationError {
+	public Throwable sanitize(Throwable t) {
 		String heading = (String) HEADING.get(t);
 		// list is safe here because of defensive copying in MultipleFailuresError
 		List<Throwable> failures = ((MultipleFailuresError) t).getFailures().stream().map(ThrowableSanitizer::sanitize)
