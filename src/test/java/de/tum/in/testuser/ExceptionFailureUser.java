@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.assertj.core.api.SoftAssertionError;
+import org.assertj.core.description.TextDescription;
+import org.assertj.core.error.MultipleAssertionsError;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.TestMethodOrder;
 
@@ -46,12 +48,18 @@ public class ExceptionFailureUser {
 	}
 
 	@PublicTest
-	public void multipleAssertions() {
+	public void assertJMultipleFailures() {
 		assertThat("ABC").satisfiesAnyOf(s -> {
 			fail("A");
 		}, s -> {
 			fail("B");
 		});
+	}
+
+	@PublicTest
+	public void multipleAssertions() {
+		throw new MultipleAssertionsError(new TextDescription("Failed with %d", 5),
+				List.of(new AssertionError("X", new CustomException())));
 	}
 
 	@PublicTest

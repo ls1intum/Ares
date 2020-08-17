@@ -7,6 +7,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 import org.assertj.core.api.Condition;
 import org.assertj.core.api.SoftAssertionError;
 import org.assertj.core.error.AssertJMultipleFailuresError;
+import org.assertj.core.error.MultipleAssertionsError;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.platform.testkit.engine.EngineTestKit;
@@ -21,6 +22,7 @@ class ExceptionFailureTest {
 
 	private final String assertionFailed = "assertionFailed";
 	private final String multipleFailures = "multipleFailures";
+	private final String assertJMultipleFailures = "assertJMultipleFailures";
 	private final String exceptionInInitializer = "exceptionInInitializer";
 	private final String multipleAssertions = "multipleAssertions";
 	private final String softAssertion = "softAssertion";
@@ -37,7 +39,7 @@ class ExceptionFailureTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(7));
+		tests.assertStatistics(stats -> stats.started(8));
 	}
 
 	@TestTest
@@ -67,8 +69,28 @@ class ExceptionFailureTest {
 
 	@TestTest
 	void test_multipleAssertions() {
+		Condition<Throwable> hasOneCorrectlySanitizedAssertionError = new Condition<>(t -> {
+			if (((MultipleAssertionsError) t).getErrors().size() != 1)
+				return false;
+			var error = ((MultipleAssertionsError) t).getErrors().get(0);
+			return "X".equals(error.getMessage()) //
+					&& error.getCause() instanceof UnexpectedExceptionError //
+					&& error.getCause().getMessage().contains("ABC");
+
+		}, "has one correctly sanitized AssertionError");
 		tests.assertThatEvents().haveExactly(1,
 				event(test(multipleAssertions),
+						finishedWithFailure(instanceOf(MultipleAssertionsError.class),
+								message(m -> m.contains("[Failed with 5]") //
+										&& m.contains("The following assertion failed:") //
+										&& m.contains("1) X")),
+								hasOneCorrectlySanitizedAssertionError)));
+	}
+
+	@TestTest
+	void test_assertJMultipleFailures() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(assertJMultipleFailures),
 						finishedWithFailure(instanceOf(AssertJMultipleFailuresError.class),
 								message(m -> m.contains("Multiple Failures (2 failures)") //
 										&& m.contains("-- failure 1 --A") //
