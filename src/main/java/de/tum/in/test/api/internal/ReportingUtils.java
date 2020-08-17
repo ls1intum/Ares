@@ -1,6 +1,5 @@
 package de.tum.in.test.api.internal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -99,16 +98,9 @@ public final class ReportingUtils {
 	}
 
 	private static String tryPostProcessMessageOrAddSuppressed(Throwable t, UnaryOperator<String> transform) {
-		try {
-			Field f = Throwable.class.getDeclaredField("detailMessage");
-			f.setAccessible(true);
-			String value = transform.apply((String) f.get(t));
-			f.set(t, value);
-			return value;
-		} catch (Exception e) {
-			t.addSuppressed(e);
-			return null;
-		}
+		String newMessage = transform.apply(ThrowableUtils.getDetailMessage(t));
+		ThrowableUtils.setDetailMessage(t, newMessage);
+		return newMessage;
 	}
 
 	/**
