@@ -44,9 +44,12 @@ public final class ThrowableSanitizer {
 
 	static void copyThrowableInfoSafe(Throwable from, Throwable to) throws SanitizationError {
 		try {
-			// this is only needed for transfer, the stack trace is safe
-			if (from != to)
+			// this is only needed for transfer
+			if (from != to) {
+				// the message and stack trace are safe
+				ThrowableUtils.setDetailMessage(to, ThrowableUtils.getDetailMessage(from));
 				to.setStackTrace(from.getStackTrace());
+			}
 
 			// this returns either null or another Throwable instance
 			Throwable causeVal = invoke(from::getCause);
