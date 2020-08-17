@@ -77,10 +77,48 @@ public class ExceptionFailureUser {
 		throw new CustomException();
 	}
 
+	@PublicTest
+	public void faultyGetCauseException() {
+		throw new AssertionError("XYZ", new FaultyGetCauseException());
+	}
+
+	@PublicTest
+	public void faultyToStringException() {
+		throw new FaultyToStringException();
+	}
+
 	static class InitFailure {
 		static final int x;
 		static {
 			x = 4 / 0;
+		}
+	}
+
+	static class FaultyGetCauseException extends RuntimeException {
+
+		private static final long serialVersionUID = 487618816288959774L;
+
+		public FaultyGetCauseException() {
+			super("DEF");
+		}
+
+		@Override
+		public synchronized Throwable getCause() {
+			throw new NullPointerException("Faulty");
+		}
+	}
+
+	static class FaultyToStringException extends RuntimeException {
+
+		private static final long serialVersionUID = -3215361616244777479L;
+
+		public FaultyToStringException() {
+			super("XYZ");
+		}
+
+		@Override
+		public String toString() {
+			throw new IllegalStateException("Faulty");
 		}
 	}
 }

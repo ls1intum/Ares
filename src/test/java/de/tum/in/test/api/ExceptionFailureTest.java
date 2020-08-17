@@ -28,6 +28,8 @@ class ExceptionFailureTest {
 	private final String softAssertion = "softAssertion";
 	private final String nullPointer = "nullPointer";
 	private final String customException = "customException";
+	private final String faultyGetCauseException = "faultyGetCauseException";
+	private final String faultyToStringException = "faultyToStringException";
 
 	private static Events tests;
 
@@ -39,7 +41,7 @@ class ExceptionFailureTest {
 		tests = results.testEvents();
 
 		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(8));
+		tests.assertStatistics(stats -> stats.started(10));
 	}
 
 	@TestTest
@@ -119,5 +121,19 @@ class ExceptionFailureTest {
 								message("de.tum.in.testuser.subject.CustomException: ABC"),
 								new Condition<>(t -> t.getCause() instanceof ArrayIndexOutOfBoundsException,
 										"cause is ArrayIndexOutOfBoundsException"))));
+	}
+
+	@TestTest
+	void test_faultyGetCauseException() {
+		tests.assertThatEvents().haveExactly(1, event(test(faultyGetCauseException),
+				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains(
+						"java.lang.AssertionError threw an error when retrieving information about it. (java.lang.NullPointerException: Faulty)")))));
+	}
+
+	@TestTest
+	void test_faultyToStringException() {
+		tests.assertThatEvents().haveExactly(1, event(test(faultyToStringException),
+				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains(
+						"FaultyToStringException threw an error when retrieving information about it. (java.lang.IllegalStateException: Faulty)")))));
 	}
 }
