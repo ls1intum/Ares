@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.internal.ThrowableUtils;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.test.api.util.IgnorantUnmodifiableList;
 import de.tum.in.test.api.util.UnexpectedExceptionError;

@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal.sanitization;
+package de.tum.in.test.api.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +10,22 @@ import org.junit.jupiter.api.Test;
 class ThrowableUtilsTest {
 
 	private Throwable target = new Exception("ABC");
+
+	@Test
+	void testDetailMessage() {
+		var message = ThrowableUtils.getDetailMessage(target);
+		// not initialized
+		assertThat(message).isEqualTo("ABC");
+
+		// set cause
+		var newMessage = "XYZ";
+		ThrowableUtils.setDetailMessage(target, newMessage);
+
+		message = ThrowableUtils.getDetailMessage(target);
+		// set to new cause
+		assertThat(message).isSameAs(newMessage) //
+				.isSameAs(target.getMessage());
+	}
 
 	@Test
 	void testCause() {
