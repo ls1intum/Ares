@@ -20,9 +20,11 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
-		MultipleAssertionsError mae = new MultipleAssertionsError(List.copyOf(
-				invoke(() -> ((MultipleAssertionsError) t).getErrors().stream().map(ThrowableSanitizer::sanitize)
-						.map(ae -> (AssertionError) ae).collect(Collectors.toList()))));
+		// the list is not safe here, it is simply set in the constructor
+		MultipleAssertionsError mae = new MultipleAssertionsError(
+				invoke(() -> List.copyOf(((MultipleAssertionsError) t).getErrors())).stream()
+						.map(ThrowableSanitizer::sanitize).map(ae -> (AssertionError) ae)
+						.collect(Collectors.toUnmodifiableList()));
 		ThrowableSanitizer.copyThrowableInfoSafe(t, mae);
 		return mae;
 	}

@@ -1,7 +1,5 @@
 package de.tum.in.test.api.internal.sanitization;
 
-import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.List;
@@ -38,8 +36,9 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 	@Override
 	public Throwable sanitize(Throwable t) throws SanitizationError {
 		String heading = (String) HEADING.get(t);
-		List<Throwable> failures = List.copyOf(invoke(() -> ((MultipleFailuresError) t).getFailures().stream()
-				.map(ThrowableSanitizer::sanitize).collect(Collectors.toList())));
+		// list is safe here because of defensive copying in MultipleFailuresError
+		List<Throwable> failures = ((MultipleFailuresError) t).getFailures().stream().map(ThrowableSanitizer::sanitize)
+				.collect(Collectors.toList());
 		MultipleFailuresError mfe = createNewInstance(t, heading, failures);
 		ThrowableSanitizer.copyThrowableInfoSafe(t, mfe);
 		return mfe;
