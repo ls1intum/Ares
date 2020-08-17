@@ -125,15 +125,17 @@ class ExceptionFailureTest {
 
 	@TestTest
 	void test_faultyGetCauseException() {
-		tests.assertThatEvents().haveExactly(1, event(test(faultyGetCauseException),
-				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains(
-						"java.lang.AssertionError threw an error when retrieving information about it. (java.lang.NullPointerException: Faulty)")))));
+		tests.assertThatEvents().haveExactly(1, event(test(faultyGetCauseException), finishedWithFailure(
+				instanceOf(SecurityException.class),
+				message(m -> m.contains("AssertionError thrown, but cannot be displayed:") && m.contains(
+						"FaultyGetCauseException threw an exception when retrieving information about it. (java.lang.NullPointerException: Faulty)")))));
 	}
 
 	@TestTest
 	void test_faultyToStringException() {
-		tests.assertThatEvents().haveExactly(1, event(test(faultyToStringException),
-				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains(
-						"FaultyToStringException threw an error when retrieving information about it. (java.lang.IllegalStateException: Faulty)")))));
+		tests.assertThatEvents().haveExactly(1, event(test(faultyToStringException), finishedWithFailure(
+				instanceOf(SecurityException.class),
+				message(m -> m.contains("FaultyToStringException thrown, but cannot be displayed:") && m.contains(
+						"FaultyToStringException threw an exception when retrieving information about it. (java.lang.IllegalStateException: Faulty)")))));
 	}
 }
