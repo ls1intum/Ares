@@ -28,72 +28,6 @@ import de.tum.in.testuser.subject.CustomException;
 @SuppressWarnings("static-method")
 public class ExceptionFailureUser {
 
-	@PublicTest
-	public void assertionFailed() throws Exception {
-		assertEquals(1, 2);
-	}
-
-	@PublicTest
-	public void multipleFailures() {
-		assertAll(() -> {
-			fail("A");
-		}, () -> {
-			fail("B");
-		});
-	}
-
-	@PublicTest
-	public void exceptionInInitializer() {
-		assertEquals(InitFailure.x, 0);
-	}
-
-	@PublicTest
-	public void assertJMultipleFailures() {
-		assertThat("ABC").satisfiesAnyOf(s -> {
-			fail("A");
-		}, s -> {
-			fail("B");
-		});
-	}
-
-	@PublicTest
-	public void multipleAssertions() {
-		throw new MultipleAssertionsError(new TextDescription("Failed with %d", 5),
-				List.of(new AssertionError("X", new CustomException())));
-	}
-
-	@PublicTest
-	public void softAssertion() {
-		throw new SoftAssertionError(List.of("A", "B"));
-	}
-
-	@PublicTest
-	public void nullPointer() {
-		Objects.requireNonNull(null, "XYZ");
-	}
-
-	@PublicTest
-	public void customException() {
-		throw new CustomException();
-	}
-
-	@PublicTest
-	public void faultyGetCauseException() {
-		throw new AssertionError("XYZ", new FaultyGetCauseException());
-	}
-
-	@PublicTest
-	public void faultyToStringException() {
-		throw new FaultyToStringException();
-	}
-
-	static class InitFailure {
-		static final int x;
-		static {
-			x = 4 / 0;
-		}
-	}
-
 	static class FaultyGetCauseException extends RuntimeException {
 
 		private static final long serialVersionUID = 487618816288959774L;
@@ -120,5 +54,71 @@ public class ExceptionFailureUser {
 		public String toString() {
 			throw new IllegalStateException("Faulty");
 		}
+	}
+
+	static class InitFailure {
+		static final int x;
+		static {
+			x = 4 / 0;
+		}
+	}
+
+	@PublicTest
+	public void assertionFailed() throws Exception {
+		assertEquals(1, 2);
+	}
+
+	@PublicTest
+	public void assertJMultipleFailures() {
+		assertThat("ABC").satisfiesAnyOf(s -> {
+			fail("A");
+		}, s -> {
+			fail("B");
+		});
+	}
+
+	@PublicTest
+	public void customException() {
+		throw new CustomException();
+	}
+
+	@PublicTest
+	public void exceptionInInitializer() {
+		assertEquals(InitFailure.x, 0);
+	}
+
+	@PublicTest
+	public void faultyGetCauseException() {
+		throw new AssertionError("XYZ", new FaultyGetCauseException());
+	}
+
+	@PublicTest
+	public void faultyToStringException() {
+		throw new FaultyToStringException();
+	}
+
+	@PublicTest
+	public void multipleAssertions() {
+		throw new MultipleAssertionsError(new TextDescription("Failed with %d", 5),
+				List.of(new AssertionError("X", new CustomException())));
+	}
+
+	@PublicTest
+	public void multipleFailures() {
+		assertAll(() -> {
+			fail("A");
+		}, () -> {
+			fail("B");
+		});
+	}
+
+	@PublicTest
+	public void nullPointer() {
+		Objects.requireNonNull(null, "XYZ");
+	}
+
+	@PublicTest
+	public void softAssertion() {
+		throw new SoftAssertionError(List.of("A", "B"));
 	}
 }

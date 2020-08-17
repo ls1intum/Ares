@@ -1,0 +1,62 @@
+package de.tum.in.testuser;
+
+import static org.junit.Assert.fail;
+
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import de.tum.in.test.api.BlacklistPath;
+import de.tum.in.test.api.MirrorOutput;
+import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
+import de.tum.in.test.api.PathType;
+import de.tum.in.test.api.PrivilegedExceptionsOnly;
+import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.TestUtils;
+import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.testuser.subject.PrivilegedExceptionPenguin;
+
+@PrivilegedExceptionsOnly("ABC")
+@MirrorOutput(MirrorOutputPolicy.DISABLED)
+@StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
+@TestMethodOrder(Alphanumeric.class)
+@WhitelistPath(value = "target/**", type = PathType.GLOB)
+@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
+@SuppressWarnings("static-method")
+public class PrivilegedExceptionUser {
+
+	@PublicTest
+	public void nonprivilegedExceptionExtern() {
+		PrivilegedExceptionPenguin.throwNullPointerException();
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void nonprivilegedExceptionIntern() {
+		throw new NullPointerException("xy");
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void nonprivilegedExceptionTry() {
+		PrivilegedExceptionPenguin.throwPrivilegedNullPointerException();
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void privilegedExceptionFail() {
+		TestUtils.privilegedThrow(() -> {
+			fail("xyz");
+		});
+	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	public void privilegedExceptionNormal() throws Exception {
+		TestUtils.privilegedThrow(() -> {
+			throw new NullPointerException("xyz");
+		});
+	}
+}
