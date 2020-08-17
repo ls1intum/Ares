@@ -77,4 +77,8 @@ public final class ThrowableUtils {
 		if (sm != null)
 			sm.checkPackageAccess(ThrowableUtils.class.getPackageName());
 	}
+
+	private ThrowableUtils() {
+
+	}
 }
