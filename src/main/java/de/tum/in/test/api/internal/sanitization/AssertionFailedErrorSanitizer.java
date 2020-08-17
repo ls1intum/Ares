@@ -26,13 +26,13 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 			return SimpleThrowableSanitizer.INSTANCE.sanitize(afe);
 		AssertionFailedError newAfe = new AssertionFailedError(invoke(afe::getMessage), sanitizeValue(expected),
 				sanitizeValue(actual));
-		ThrowableSanitizer.copyThrowableInfoSafe(afe, newAfe);
+		SanitizationUtils.copyThrowableInfoSafe(afe, newAfe);
 		return newAfe;
 	}
 
 	private static Object sanitizeValue(ValueWrapper vw) {
 		if (vw == null)
 			return null;
-		return invoke(vw::getStringRepresentation);
+		return SanitizationUtils.sanitizeWithinScopeOf(vw.getType(), () -> invoke(vw::getStringRepresentation));
 	}
 }

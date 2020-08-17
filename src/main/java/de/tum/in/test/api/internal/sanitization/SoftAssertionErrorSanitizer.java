@@ -21,7 +21,7 @@ enum SoftAssertionErrorSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t) {
 		SoftAssertionError sae = new SoftAssertionError(
 				invoke(() -> List.copyOf(((SoftAssertionError) t).getErrors())));
-		ThrowableSanitizer.copyThrowableInfoSafe(t, sae);
+		SanitizationUtils.copyThrowableInfoSafe(t, sae);
 		return sae;
 	}
 }

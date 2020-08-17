@@ -10,7 +10,7 @@ enum SimpleThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	@Override
 	public Throwable sanitize(Throwable t) {
-		ThrowableSanitizer.copyThrowableInfoSafe(t, t);
+		SanitizationUtils.copyThrowableInfoSafe(t, t);
 		return t;
 	}
 }

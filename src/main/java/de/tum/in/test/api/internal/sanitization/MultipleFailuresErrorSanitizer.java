@@ -40,7 +40,7 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 		List<Throwable> failures = ((MultipleFailuresError) t).getFailures().stream().map(ThrowableSanitizer::sanitize)
 				.collect(Collectors.toList());
 		MultipleFailuresError mfe = createNewInstance(t, heading, failures);
-		ThrowableSanitizer.copyThrowableInfoSafe(t, mfe);
+		SanitizationUtils.copyThrowableInfoSafe(t, mfe);
 		return mfe;
 	}
 

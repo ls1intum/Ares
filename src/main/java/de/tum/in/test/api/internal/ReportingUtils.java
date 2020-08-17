@@ -81,8 +81,7 @@ public final class ReportingUtils {
 	private static Throwable handleSanitizationFailure(String name, Throwable error) {
 		String info = BlacklistedInvoker.invokeOrElse(error::toString, () -> error.getClass().toString());
 		LOG.error("Sanitization failed for {} with error {}", name, info);
-		return new SecurityException(
-				"Throwable " + name + " threw an error when retrieving information about it. (" + info + ")");
+		return new SecurityException(name + " thrown, but cannot be displayed: " + info + "");
 	}
 
 	private static void addStackframeInfoToMessage(Throwable newT) {
