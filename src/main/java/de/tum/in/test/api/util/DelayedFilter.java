@@ -48,11 +48,11 @@ public class DelayedFilter<T> implements Predicate<T> {
 		return lastValue;
 	}
 
-	public boolean isHasBeenTrue() {
+	public boolean hasBeenTrue() {
 		return !hasNotBeenTrue;
 	}
 
-	public boolean isHasBeenFalse() {
+	public boolean hasBeenFalse() {
 		return !hasNotBeenFalse;
 	}
 

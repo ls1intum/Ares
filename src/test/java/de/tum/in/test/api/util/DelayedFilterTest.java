@@ -53,17 +53,17 @@ class DelayedFilterTest {
 	void testHasBeen() {
 		DelayedFilter<Character> filter = new DelayedFilter<>(2, Character::isDigit, true);
 
-		assertThat(filter.isHasBeenTrue()).isFalse();
-		assertThat(filter.isHasBeenFalse()).isFalse();
+		assertThat(filter.hasBeenTrue()).isFalse();
+		assertThat(filter.hasBeenFalse()).isFalse();
 
 		assertThat(filter.test('0')).isTrue();
 
-		assertThat(filter.isHasBeenTrue()).isTrue();
-		assertThat(filter.isHasBeenFalse()).isFalse();
+		assertThat(filter.hasBeenTrue()).isTrue();
+		assertThat(filter.hasBeenFalse()).isFalse();
 
 		assertThat(filter.test('X')).isTrue();
 
-		assertThat(filter.isHasBeenTrue()).isTrue();
-		assertThat(filter.isHasBeenFalse()).isTrue();
+		assertThat(filter.hasBeenTrue()).isTrue();
+		assertThat(filter.hasBeenFalse()).isTrue();
 	}
 }
