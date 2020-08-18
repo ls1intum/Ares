@@ -13,24 +13,9 @@ import de.tum.in.test.api.jupiter.Public;
 public class HiddenPublicUser {
 
 	@Hidden
-	void testHiddenIncomplete() {
-		// nothing
-	}
-
-	@Public
-	void testPublicIncomplete() {
-		// nothing
-	}
-
-	@Hidden
 	@Test
-	void testHiddenNormal() {
-		// nothing
-	}
-
-	@Public
-	@Test
-	void testPublicNormal() {
+	@Deadline("2200-01-01 16:00")
+	void testHiddenCustomDeadlineFuture() {
 		// nothing
 	}
 
@@ -42,9 +27,13 @@ public class HiddenPublicUser {
 	}
 
 	@Hidden
+	void testHiddenIncomplete() {
+		// nothing
+	}
+
+	@Hidden
 	@Test
-	@Deadline("2200-01-01 16:00")
-	void testHiddenCustomDeadlineFuture() {
+	void testHiddenNormal() {
 		// nothing
 	}
 
@@ -52,6 +41,17 @@ public class HiddenPublicUser {
 	@Test
 	@Deadline("2200-01-01 16:00")
 	void testPublicCustomDeadline() {
+		// nothing
+	}
+
+	@Public
+	void testPublicIncomplete() {
+		// nothing
+	}
+
+	@Public
+	@Test
+	void testPublicNormal() {
 		// nothing
 	}
 }

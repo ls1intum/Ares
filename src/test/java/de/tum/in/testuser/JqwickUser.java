@@ -21,24 +21,9 @@ import net.jqwik.api.constraints.Positive;
 public class JqwickUser {
 
 	@Hidden
-	void testHiddenIncomplete() {
-		// nothing
-	}
-
-	@Public
-	void testPublicIncomplete() {
-		// nothing
-	}
-
-	@Hidden
 	@Example
-	void exampleHiddenNormal() {
-		// nothing
-	}
-
-	@Public
-	@Example
-	void examplePublicNormal() {
+	@Deadline("2200-01-01 16:00")
+	void exampleHiddenCustomDeadlineFuture() {
 		// nothing
 	}
 
@@ -51,8 +36,7 @@ public class JqwickUser {
 
 	@Hidden
 	@Example
-	@Deadline("2200-01-01 16:00")
-	void exampleHiddenCustomDeadlineFuture() {
+	void exampleHiddenNormal() {
 		// nothing
 	}
 
@@ -63,15 +47,16 @@ public class JqwickUser {
 		// nothing
 	}
 
-	@Hidden
-	@Property
-	boolean propertyHiddenNormal(@ForAll @Positive int x) {
-		return x != 0;
+	@Public
+	@Example
+	void examplePublicNormal() {
+		// nothing
 	}
 
-	@Public
+	@Hidden
 	@Property
-	boolean propertyPublicNormal(@ForAll @Positive int x) {
+	@Deadline("2200-01-01 16:00")
+	boolean propertyHiddenCustomDeadlineFuture(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
@@ -84,8 +69,7 @@ public class JqwickUser {
 
 	@Hidden
 	@Property
-	@Deadline("2200-01-01 16:00")
-	boolean propertyHiddenCustomDeadlineFuture(@ForAll @Positive int x) {
+	boolean propertyHiddenNormal(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
@@ -93,6 +77,12 @@ public class JqwickUser {
 	@Property
 	@Deadline("2200-01-01 16:00")
 	boolean propertyPublicCustomDeadline(@ForAll @Positive int x) {
+		return x != 0;
+	}
+
+	@Public
+	@Property
+	boolean propertyPublicNormal(@ForAll @Positive int x) {
 		return x != 0;
 	}
 
@@ -122,17 +112,6 @@ public class JqwickUser {
 	}
 
 	@Public
-	@Property(tries = 1)
-	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
-	void provokeTimeoutSleepTries(@SuppressWarnings("unused") @ForAll @Positive int x) {
-		try {
-			Thread.sleep(300);
-		} catch (@SuppressWarnings("unused") InterruptedException e) {
-			// do nothing
-		}
-	}
-
-	@Public
 	@Example
 	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutSleepExample(@SuppressWarnings("unused") @ForAll @Positive int x) {
@@ -152,5 +131,26 @@ public class JqwickUser {
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			// do nothing
 		}
+	}
+
+	@Public
+	@Property(tries = 1)
+	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
+	void provokeTimeoutSleepTries(@SuppressWarnings("unused") @ForAll @Positive int x) {
+		try {
+			Thread.sleep(300);
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
+			// do nothing
+		}
+	}
+
+	@Hidden
+	void testHiddenIncomplete() {
+		// nothing
+	}
+
+	@Public
+	void testPublicIncomplete() {
+		// nothing
 	}
 }

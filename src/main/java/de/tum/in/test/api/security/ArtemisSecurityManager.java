@@ -7,7 +7,9 @@ import java.io.FilePermission;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
 import java.lang.Thread.State;
+import java.lang.invoke.LambdaMetafactory;
 import java.lang.management.ManagementPermission;
+import java.lang.reflect.ReflectPermission;
 import java.net.InetAddress;
 import java.net.NetPermission;
 import java.net.SocketPermission;
@@ -42,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.PathActionLevel;
 import de.tum.in.test.api.localization.Messages;
+import de.tum.in.test.api.util.DelayedFilter;
 
 /**
  * Prevents System.exit, reflection to a certain degree, networking use,
@@ -113,11 +116,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean enterPublicInterface() {
-		return recursionBreak.get().getAndIncrement() > 1;
+		return recursionBreak.get().getAndIncrement() > 0;
 	}
 
 	private boolean exitPublicInterface() {
-		return recursionBreak.get().getAndDecrement() > 1;
+		return recursionBreak.get().getAndDecrement() > 0;
 	}
 
 	private <T> T externGet(Supplier<T> supplier) {
@@ -340,6 +343,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				throw new SecurityException(localized("security.error_modify_auth") + permString); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
 				checkPathAccess(Path.of(permName), PathActionLevel.getLevelOf(permActions));
+			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName))
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString);
 		} finally {
 			exitPublicInterface();
 		}
@@ -427,10 +432,20 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private List<StackFrame> getNonWhitelistedStackFrames() {
+		// one for LambdaMetafactory itself and one for the caller
+		DelayedFilter<StackFrame> delayedIsNotPrivileged = new DelayedFilter<>(2, this::isNotPrivileged, true);
+		List<StackFrame> result;
 		if (isCurrentThreadWhitelisted()) {
-			return stackWalker.walk(sfs -> sfs.filter(this::isStackFrameNotWhitelisted).collect(Collectors.toList()));
+			result = stackWalker.walk(sfs -> sfs.takeWhile(delayedIsNotPrivileged)
+					.filter(this::isStackFrameNotWhitelisted).collect(Collectors.toList()));
+		} else {
+			result = stackWalker.walk(sfs -> sfs.takeWhile(delayedIsNotPrivileged).collect(Collectors.toList()));
 		}
-		return stackWalker.walk(sfs -> sfs.collect(Collectors.toList()));
+		return result;
+	}
+
+	private boolean isNotPrivileged(StackFrame stackFrame) {
+		return !LambdaMetafactory.class.getName().equals(stackFrame.getClassName());
 	}
 
 	private boolean isCallNotWhitelisted(String call) {
@@ -556,7 +571,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		ThreadGroup[] tgs = new ThreadGroup[root.activeGroupCount() + 5];
 		root.enumerate(tgs, true);
 		ThreadGroup commong = Stream.of(tgs).filter(tg -> "InnocuousForkJoinWorkerThreadGroup".equals(tg.getName())) //$NON-NLS-1$
-				.findFirst().orElseThrow(IllegalStateException::new); // was created indirectly in the static initializer
+				.findFirst().orElseThrow(IllegalStateException::new); // was created indirectly in the static
+																		// initializer
 		Thread[] threads = new Thread[commong.activeCount() + 5];
 		commong.enumerate(threads);
 		LOG.info("Try interrupt common pool"); //$NON-NLS-1$

@@ -14,6 +14,8 @@ public class DelayedFilter<T> implements Predicate<T> {
 	private final int delay;
 	private final boolean[] buffer;
 	private int pos;
+	private boolean hasNotBeenTrue = true;
+	private boolean hasNotBeenFalse = true;
 	private boolean lastValue;
 
 	public DelayedFilter(int delay, Predicate<T> original, boolean startValue) {
@@ -29,13 +31,29 @@ public class DelayedFilter<T> implements Predicate<T> {
 	@Override
 	public boolean test(T t) {
 		lastValue = buffer[pos];
-		buffer[pos] = original.test(t);
-		pos = nextPos();
+		updateWithNewValue(original.test(t));
 		return lastValue;
+	}
+
+	private void updateWithNewValue(boolean newValue) {
+		buffer[pos] = newValue;
+		pos = nextPos();
+		if (hasNotBeenTrue && newValue)
+			hasNotBeenTrue = false;
+		else if (hasNotBeenFalse && !newValue)
+			hasNotBeenFalse = false;
 	}
 
 	public boolean lastValue() {
 		return lastValue;
+	}
+
+	public boolean hasBeenTrue() {
+		return !hasNotBeenTrue;
+	}
+
+	public boolean hasBeenFalse() {
+		return !hasNotBeenFalse;
 	}
 
 	private int nextPos() {

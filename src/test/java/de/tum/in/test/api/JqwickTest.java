@@ -1,6 +1,6 @@
 package de.tum.in.test.api;
 
-import static de.tum.in.testutil.CustomConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
@@ -12,33 +12,31 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
+import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.testuser.JqwickUser;
-import de.tum.in.testutil.TestTest;
 
 class JqwickTest {
-	private final String testHiddenIncomplete = "testHiddenIncomplete";
-	private final String testPublicIncomplete = "testPublicIncomplete";
+
+	private static Events tests;
 
 	private final String exampleHiddenCustomDeadlineFuture = "exampleHiddenCustomDeadlineFuture";
 	private final String exampleHiddenCustomDeadlinePast = "exampleHiddenCustomDeadlinePast";
 	private final String exampleHiddenNormal = "exampleHiddenNormal";
 	private final String examplePublicCustomDeadline = "examplePublicCustomDeadline";
 	private final String examplePublicNormal = "examplePublicNormal";
-
 	private final String propertyHiddenCustomDeadlineFuture = "propertyHiddenCustomDeadlineFuture";
 	private final String propertyHiddenCustomDeadlinePast = "propertyHiddenCustomDeadlinePast";
 	private final String propertyHiddenNormal = "propertyHiddenNormal";
 	private final String propertyPublicCustomDeadline = "propertyPublicCustomDeadline";
 	private final String propertyPublicNormal = "propertyPublicNormal";
-
 	private final String propertyUseIOTesterCorrect = "propertyUseIOTesterCorrect";
 	private final String propertyUseIOTesterWrong = "propertyUseIOTesterWrong";
-
 	private final String provokeTimeoutEndlessLoop = "provokeTimeoutEndlessLoop";
 	private final String provokeTimeoutSleepExample = "provokeTimeoutSleepExample";
 	private final String provokeTimeoutSleepProperty = "provokeTimeoutSleepProperty";
 	private final String provokeTimeoutSleepTries = "provokeTimeoutSleepTries";
-	private static Events tests;
+	private final String testHiddenIncomplete = "testHiddenIncomplete";
+	private final String testPublicIncomplete = "testPublicIncomplete";
 
 	@BeforeAll
 	@Tag("test-test")
@@ -51,18 +49,9 @@ class JqwickTest {
 	}
 
 	@TestTest
-	void test_testHiddenIncomplete() {
-		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));
-	}
-
-	@TestTest
-	void test_testPublicIncomplete() {
-		tests.assertThatEvents().doNotHave(event(test(testPublicIncomplete)));
-	}
-
-	@TestTest
-	void test_examplePublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(examplePublicNormal), finishedSuccessfullyRep()));
+	void test_exampleHiddenCustomDeadlineFuture() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(exampleHiddenCustomDeadlineFuture, AssertionFailedError.class));
 	}
 
 	@TestTest
@@ -83,14 +72,14 @@ class JqwickTest {
 	}
 
 	@TestTest
-	void test_exampleHiddenCustomDeadlineFuture() {
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(exampleHiddenCustomDeadlineFuture, AssertionFailedError.class));
+	void test_examplePublicNormal() {
+		tests.assertThatEvents().haveExactly(1, event(test(examplePublicNormal), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
-	void test_propertyPublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(propertyPublicNormal), finishedSuccessfullyRep()));
+	void test_propertyHiddenCustomDeadlineFuture() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(propertyHiddenCustomDeadlineFuture, AssertionFailedError.class));
 	}
 
 	@TestTest
@@ -111,9 +100,8 @@ class JqwickTest {
 	}
 
 	@TestTest
-	void test_propertyHiddenCustomDeadlineFuture() {
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(propertyHiddenCustomDeadlineFuture, AssertionFailedError.class));
+	void test_propertyPublicNormal() {
+		tests.assertThatEvents().haveExactly(1, event(test(propertyPublicNormal), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
@@ -137,14 +125,23 @@ class JqwickTest {
 	}
 
 	@TestTest
-	void test_provokeTimeoutSleepTries() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutSleepTries, AssertionFailedError.class));
-	}
-
-	@TestTest
 	void test_provokeTimeoutSleepProperty() {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(provokeTimeoutSleepProperty, AssertionFailedError.class));
 	}
 
+	@TestTest
+	void test_provokeTimeoutSleepTries() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(provokeTimeoutSleepTries, AssertionFailedError.class));
+	}
+
+	@TestTest
+	void test_testHiddenIncomplete() {
+		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));
+	}
+
+	@TestTest
+	void test_testPublicIncomplete() {
+		tests.assertThatEvents().doNotHave(event(test(testPublicIncomplete)));
+	}
 }

@@ -12,12 +12,8 @@ import de.tum.in.test.api.jupiter.PublicTest;
 public class DeadlineUser {
 
 	@HiddenTest
-	void testHiddenNormal() {
-		// nothing
-	}
-
-	@PublicTest
-	void testPublicNormal() {
+	@Deadline("2200-01-01 16:00")
+	void testHiddenCustomDeadlineFuture() {
 		// nothing
 	}
 
@@ -28,14 +24,13 @@ public class DeadlineUser {
 	}
 
 	@HiddenTest
-	@Deadline("2200-01-01 16:00")
-	void testHiddenCustomDeadlineFuture() {
+	void testHiddenNormal() {
 		// nothing
 	}
 
-	@PublicTest
-	@Deadline("2000-01-01 16:00")
-	void testPublicCustomDeadline() {
+	@HiddenTest
+	@Deadline("2000-01-01 16:00 Europe/Berlin")
+	void testHiddenTimeZoneBerlin() {
 		// nothing
 	}
 
@@ -45,9 +40,14 @@ public class DeadlineUser {
 		// nothing
 	}
 
-	@HiddenTest
-	@Deadline("2000-01-01 16:00 Europe/Berlin")
-	void testHiddenTimeZoneBerlin() {
+	@PublicTest
+	@Deadline("2000-01-01 16:00")
+	void testPublicCustomDeadline() {
+		// nothing
+	}
+
+	@PublicTest
+	void testPublicNormal() {
 		// nothing
 	}
 }
