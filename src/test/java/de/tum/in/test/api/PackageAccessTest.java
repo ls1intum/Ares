@@ -17,15 +17,15 @@ class PackageAccessTest {
 	@UserTestResults
 	private static Events tests;
 
-	private final String package_aBlacklistingUtil = "package_aBlacklistingUtil";
+	private final String package_aBlacklistingRegex = "package_aBlacklistingRegex";
 	private final String package_bBlacklistingJava = "package_bBlacklistingJava";
 	private final String package_cBlacklistingAll = "package_cBlacklistingAll";
 	private final String package_dBlackAndWhitelisting = "package_dBlackAndWhitelisting";
 	private final String package_eBlackAgain = "package_eBlackAgain";
 
 	@TestTest
-	void test_package_aBlacklistingUtil() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(package_aBlacklistingUtil, SecurityException.class));
+	void test_package_aBlacklistingRegex() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(package_aBlacklistingRegex, SecurityException.class));
 	}
 
 	@TestTest

@@ -1,15 +1,15 @@
 package de.tum.in.testuser.subject;
 
-import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class PackageAccessPenguin {
-	
+
 	private PackageAccessPenguin() {
 
 	}
-	
+
 	public static void useArrayList() {
-		ArrayList<String> x = new ArrayList<>();
-		x.add("abc");
+		Pattern pattern = Pattern.compile("a+");
+		pattern.asMatchPredicate().test("aaa");
 	}
 }

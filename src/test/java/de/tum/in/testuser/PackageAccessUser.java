@@ -26,9 +26,9 @@ import de.tum.in.testuser.subject.PackageAccessPenguin;
 @SuppressWarnings("static-method")
 public class PackageAccessUser {
 
-	@BlacklistPackage("java.util")
+	@BlacklistPackage("java.util.regex")
 	@PublicTest
-	public void package_aBlacklistingUtil() {
+	public void package_aBlacklistingRegex() {
 		PackageAccessPenguin.useArrayList();
 	}
 
@@ -45,13 +45,13 @@ public class PackageAccessUser {
 	}
 
 	@BlacklistPackage("**")
-	@WhitelistPackage("java.util")
+	@WhitelistPackage("java.util.regex")
 	@PublicTest
 	public void package_dBlackAndWhitelisting() {
 		PackageAccessPenguin.useArrayList();
 	}
 
-	@BlacklistPackage("java.util")
+	@BlacklistPackage("java.util.regex")
 	@PublicTest
 	public void package_eBlackPenguinAgain() {
 		PackageAccessPenguin.useArrayList();
