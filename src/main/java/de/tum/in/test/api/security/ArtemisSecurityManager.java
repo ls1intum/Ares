@@ -116,11 +116,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean enterPublicInterface() {
-		return recursionBreak.get().getAndIncrement() > 1;
+		return recursionBreak.get().getAndIncrement() > 0;
 	}
 
 	private boolean exitPublicInterface() {
-		return recursionBreak.get().getAndDecrement() > 1;
+		return recursionBreak.get().getAndDecrement() > 0;
 	}
 
 	private <T> T externGet(Supplier<T> supplier) {
