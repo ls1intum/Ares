@@ -2,7 +2,7 @@ package de.tum.in.testuser.subject;
 
 import de.tum.in.test.api.TestUtils;
 
-public class PrivilegedExceptionPenguin {
+public final class PrivilegedExceptionPenguin {
 
 	private PrivilegedExceptionPenguin() {
 

@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
-public class ThreadPenguin {
+public final class ThreadPenguin {
 
 	private ThreadPenguin() {
 

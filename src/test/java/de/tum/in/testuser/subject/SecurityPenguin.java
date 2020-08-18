@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.xyz.Circumvention;
 import org.apache.xyz.MaliciousExceptionB;
 
-public class SecurityPenguin {
+public final class SecurityPenguin {
 
 	private SecurityPenguin() {
 

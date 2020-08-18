@@ -2,7 +2,7 @@ package de.tum.in.testuser.subject;
 
 import java.util.regex.Pattern;
 
-public class PackageAccessPenguin {
+public final class PackageAccessPenguin {
 
 	private PackageAccessPenguin() {
 

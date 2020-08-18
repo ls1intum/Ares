@@ -1,6 +1,6 @@
 package de.tum.in.testuser.subject;
 
-public class InputOutputPenguin extends MiniJava {
+public final class InputOutputPenguin extends MiniJava {
 
 	private InputOutputPenguin() {
 
