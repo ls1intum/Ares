@@ -18,8 +18,8 @@ public final class SecurityConstants {
 			SECURITY_PACKAGE_NAME);
 	static final Set<String> STACK_BLACKLIST = Set.of(BlacklistedInvoker.class.getName());
 
-	static final Set<String> PACKAGE_USE_BLACKLIST = Set.of(SECURITY_PACKAGE_NAME, "java.lang.reflect",
-			"de.tum.in.test.api.internal", "jdk.internal");
+	static final Set<String> PACKAGE_USE_BLACKLIST = Set.of(SECURITY_PACKAGE_NAME, "de.tum.in.test.api.internal", //$NON-NLS-1$
+			"jdk.internal", "sun."); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private SecurityConstants() {
 
