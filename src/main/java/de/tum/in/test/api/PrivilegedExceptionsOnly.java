@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions;
  * 
  * <pre>
  * int x = ...
- * TestUtils.privilegedThrow(() -> {
+ * TestUtils.privilegedThrow(() {@literal ->} {
  *     assertEquals(42, x, "Wrong value for x");
  * });
  * </pre>
