@@ -10,7 +10,7 @@ import java.util.Objects;
 import org.assertj.core.api.SoftAssertionError;
 import org.assertj.core.description.TextDescription;
 import org.assertj.core.error.MultipleAssertionsError;
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.AllowThreads;
@@ -21,7 +21,7 @@ import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.testuser.subject.CustomException;
 
 @AllowThreads(maxActiveCount = 100)
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 //@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
