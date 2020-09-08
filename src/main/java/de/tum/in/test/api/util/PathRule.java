@@ -3,6 +3,7 @@ package de.tum.in.test.api.util;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -75,13 +76,13 @@ public final class PathRule {
 				&& Objects.equals(pathPattern, other.pathPattern);
 	}
 
-	public static PathRule of(WhitelistPath whitelistedPath) {
-		return new PathRule(RuleType.WHITELIST, whitelistedPath.type(), whitelistedPath.level(),
-				whitelistedPath.value());
+	public static Stream<PathRule> allOf(WhitelistPath whitelistedPath) {
+		return Stream.of(whitelistedPath.value()).map(pathPattern -> new PathRule(RuleType.WHITELIST,
+				whitelistedPath.type(), whitelistedPath.level(), pathPattern));
 	}
 
-	public static PathRule of(BlacklistPath blacklistedPath) {
-		return new PathRule(RuleType.BLACKLIST, blacklistedPath.type(), blacklistedPath.level(),
-				blacklistedPath.value());
+	public static Stream<PathRule> allOf(BlacklistPath blacklistedPath) {
+		return Stream.of(blacklistedPath.value()).map(pathPattern -> new PathRule(RuleType.BLACKLIST,
+				blacklistedPath.type(), blacklistedPath.level(), pathPattern));
 	}
 }

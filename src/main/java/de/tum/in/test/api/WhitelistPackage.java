@@ -42,5 +42,5 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 @Repeatable(WhitelistPackages.class)
 public @interface WhitelistPackage {
 
-	String value();
+	String[] value();
 }

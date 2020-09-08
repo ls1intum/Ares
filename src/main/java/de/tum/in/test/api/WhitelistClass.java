@@ -26,5 +26,5 @@ import org.apiguardian.api.API.Status;
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
 @Repeatable(WhitelistClasses.class)
 public @interface WhitelistClass {
-	Class<?> value();
+	Class<?>[] value();
 }

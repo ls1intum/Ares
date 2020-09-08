@@ -1,6 +1,7 @@
 package de.tum.in.test.api.internal;
 
 import java.lang.StackWalker.StackFrame;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -43,12 +44,12 @@ public final class ConfigurationUtils {
 	}
 
 	public static Set<PathRule> generatePathWhiteList(TestContext context) {
-		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistPath.class).map(PathRule::of)
+		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistPath.class).flatMap(PathRule::allOf)
 				.collect(Collectors.toSet());
 	}
 
 	public static Set<PathRule> generatePathBlackList(TestContext context) {
-		return TestContextUtils.findRepeatableAnnotationsIn(context, BlacklistPath.class).map(PathRule::of)
+		return TestContextUtils.findRepeatableAnnotationsIn(context, BlacklistPath.class).flatMap(PathRule::allOf)
 				.collect(Collectors.toSet());
 	}
 
@@ -62,7 +63,7 @@ public final class ConfigurationUtils {
 
 	public static Set<String> getWhitelistedClasses(TestContext context) {
 		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistClass.class).map(WhitelistClass::value)
-				.map(Class::getName).collect(Collectors.toSet());
+				.flatMap(Arrays::stream).map(Class::getName).collect(Collectors.toSet());
 	}
 
 	public static boolean shouldMirrorOutput(TestContext context) {
@@ -86,12 +87,12 @@ public final class ConfigurationUtils {
 	}
 
 	public static Set<PackageRule> generatePackageBlackList(TestContext context) {
-		return TestContextUtils.findRepeatableAnnotationsIn(context, BlacklistPackage.class).map(PackageRule::of)
+		return TestContextUtils.findRepeatableAnnotationsIn(context, BlacklistPackage.class).flatMap(PackageRule::allOf)
 				.collect(Collectors.toSet());
 	}
 
 	public static Set<PackageRule> generatePackageWhiteList(TestContext context) {
-		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistPackage.class).map(PackageRule::of)
+		return TestContextUtils.findRepeatableAnnotationsIn(context, WhitelistPackage.class).flatMap(PackageRule::allOf)
 				.collect(Collectors.toSet());
 	}
 

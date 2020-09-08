@@ -2,6 +2,7 @@ package de.tum.in.test.api.util;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -65,11 +66,13 @@ public final class PackageRule {
 		return Pattern.compile(String.join("\\E.*\\Q", parts), Pattern.DOTALL);
 	}
 
-	public static PackageRule of(WhitelistPackage whitelistedPath) {
-		return new PackageRule(RuleType.WHITELIST, whitelistedPath.value());
+	public static Stream<PackageRule> allOf(WhitelistPackage whitelistedPackage) {
+		return Stream.of(whitelistedPackage.value())
+				.map(packagePattern -> new PackageRule(RuleType.WHITELIST, packagePattern));
 	}
 
-	public static PackageRule of(BlacklistPackage blacklistedPath) {
-		return new PackageRule(RuleType.BLACKLIST, blacklistedPath.value());
+	public static Stream<PackageRule> allOf(BlacklistPackage blacklistedPackage) {
+		return Stream.of(blacklistedPackage.value())
+				.map(packagePattern -> new PackageRule(RuleType.BLACKLIST, packagePattern));
 	}
 }

@@ -38,7 +38,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 @Repeatable(BlacklistPaths.class)
 public @interface BlacklistPath {
 
-	String value();
+	String[] value();
 
 	PathType type() default PathType.STARTS_WITH;
 

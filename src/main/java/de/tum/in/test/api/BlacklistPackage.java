@@ -48,5 +48,5 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
 @Repeatable(BlacklistPackages.class)
 public @interface BlacklistPackage {
 
-	String value();
+	String[] value();
 }
