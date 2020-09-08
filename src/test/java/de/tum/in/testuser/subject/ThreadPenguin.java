@@ -1,5 +1,7 @@
 package de.tum.in.testuser.subject;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,6 +12,21 @@ public final class ThreadPenguin {
 
 	private ThreadPenguin() {
 
+	}
+
+	public static void tryStartTwoThreads() {
+		Thread t1 = new Thread(() -> {
+			try {
+				Thread.sleep(100);
+			} catch (@SuppressWarnings("unused") InterruptedException e) {
+				// ignore
+			}
+		});
+		assertDoesNotThrow(() -> {
+			t1.start();
+		});
+
+		new Thread().start();
 	}
 
 	public static void tryBreakThreadGroup() {

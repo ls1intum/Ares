@@ -3,6 +3,7 @@ package de.tum.in.test.api;
 import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.platform.testkit.engine.EventConditions.*;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
 import java.util.concurrent.ForkJoinPool;
 
@@ -23,6 +24,7 @@ class ThreadTest {
 	private final String commonPoolInterruptable = "commonPoolInterruptable";
 	private final String testThreadBomb = "testThreadBomb";
 	private final String testThreadGroup = "testThreadGroup";
+	private final String threadLimitExceeded = "threadLimitExceeded";
 	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
 	private final String threadWhitelistingWithPathFail = "threadWhitelistingWithPathFail";
 	private final String threadWhitelistingWithPathPenguin = "threadWhitelistingWithPathPenguin";
@@ -43,6 +45,13 @@ class ThreadTest {
 	@TestTest
 	void test_testThreadGroup() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadGroup, SecurityException.class));
+	}
+	
+	@TestTest
+	void test_threadLimitExceeded() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(threadLimitExceeded), finishedWithFailure(instanceOf(SecurityException.class),
+						message(m -> m.contains("too many threads: 2 (max: 1)")))));
 	}
 
 	@TestTest
