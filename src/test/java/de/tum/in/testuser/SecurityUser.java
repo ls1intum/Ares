@@ -70,6 +70,11 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	public void trySetSecurityManager() {
+		SecurityPenguin.trySetSecurityManagerNull();
+	}
+
+	@PublicTest
 	public void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}

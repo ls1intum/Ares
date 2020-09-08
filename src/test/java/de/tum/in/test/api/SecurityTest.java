@@ -25,6 +25,7 @@ class SecurityTest {
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testMaliciousExceptionA = "testMaliciousExceptionA";
 	private final String testMaliciousExceptionB = "testMaliciousExceptionB";
+	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String useReflectionNormal = "useReflectionNormal";
 	private final String useReflectionPrivileged = "useReflectionPrivileged";
 	private final String useReflectionTrick = "useReflectionTrick";
@@ -63,6 +64,11 @@ class SecurityTest {
 	@TestTest
 	void test_testMaliciousExceptionB() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
+	}
+
+	@TestTest
+	void test_trySetSecurityManager() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(trySetSecurityManager, SecurityException.class));
 	}
 
 	@TestTest
