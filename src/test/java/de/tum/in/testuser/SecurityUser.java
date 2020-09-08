@@ -75,6 +75,11 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	public void trySetSystemOut() {
+		SecurityPenguin.trySetSystemOut();
+	}
+
+	@PublicTest
 	public void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}

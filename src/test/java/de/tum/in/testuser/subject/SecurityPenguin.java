@@ -1,6 +1,8 @@
 package de.tum.in.testuser.subject;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.security.AccessController;
@@ -116,5 +118,10 @@ public final class SecurityPenguin {
 
 	public static void trySetSecurityManagerNull() {
 		System.setSecurityManager(null);
+	}
+
+	@SuppressWarnings("resource")
+	public static void trySetSystemOut() {
+		System.setOut(new PrintStream(OutputStream.nullOutputStream()));
 	}
 }
