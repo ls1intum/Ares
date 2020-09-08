@@ -37,10 +37,7 @@ public class MiniJava {
 	 */
 	public static String readString(String text) {
 		// Exchange the reader in case System.in has changed.
-		// This is necessary for testing, as for every test input, System.in is changed.
-		// TODO: Consider whether a better solution is possible with mocking/a different
-		// InputStream implementation
-		// on the test side.
+		// This might be necessary for testing.
 		if (System.in != is) {
 			is = System.in;
 			bufferedReader = new BufferedReader(new InputStreamReader(is));
@@ -208,7 +205,7 @@ public class MiniJava {
 	 * Zeile.</i>
 	 */
 	public static void write(int output) {
-		write("" + output);
+		write(String.valueOf(output));
 	}
 
 	/**
@@ -218,7 +215,7 @@ public class MiniJava {
 	 * neue Zeile.</i>
 	 */
 	public static void write(double output) {
-		write("" + output);
+		write(String.valueOf(output));
 	}
 
 	/**
@@ -236,7 +233,7 @@ public class MiniJava {
 	 * <i>Identisch zu {@link #write(int)}</i>
 	 */
 	public static void writeLineConsole(int output) {
-		writeLineConsole("" + output);
+		writeLineConsole(String.valueOf(output));
 	}
 
 	/**
@@ -245,7 +242,7 @@ public class MiniJava {
 	 * <i>Identisch zu {@link #write(double)}</i>
 	 */
 	public static void writeLineConsole(double output) {
-		writeLineConsole("" + output);
+		writeLineConsole(String.valueOf(output));
 	}
 
 	/**
@@ -274,7 +271,7 @@ public class MiniJava {
 	 * Zeilenumbruch.</i>
 	 */
 	public static void writeConsole(int output) {
-		writeConsole("" + output);
+		writeConsole(String.valueOf(output));
 	}
 
 	/**
@@ -285,21 +282,21 @@ public class MiniJava {
 	 * einem Zeilenumbruch.</i>
 	 */
 	public static void writeConsole(double output) {
-		writeConsole("" + output);
+		writeConsole(String.valueOf(output));
 	}
 
 	public static void resetRandom() {
 		rand = null;
 	}
 
-	public static void setRandomWithSeed(int seed) throws IllegalAccessException {
+	public static void setRandomWithSeed(int seed) {
 		if (rand != null) {
-			throw new IllegalAccessException("Don't touch this");
+			throw new SecurityException("Don't touch this");
 		}
 		rand = new Random(seed);
 	}
 
-	public static void setRandom() throws IllegalAccessException {
+	public static void setRandom() {
 		setRandomWithSeed(144);
 	}
 
@@ -313,10 +310,8 @@ public class MiniJava {
 	 * <p>
 	 * <i>Zieht eine zufällige Karte, repräsentiert durch ihren Wert. Der Wert liegt
 	 * im Bereich 1 (inklusive) bis 105 (inklusive).</i>
-	 * 
-	 * @throws IllegalAccessException
 	 */
-	public static int drawCard() throws IllegalAccessException {
+	public static int drawCard() {
 		if (rand == null) {
 			setRandom();
 		}
@@ -328,10 +323,8 @@ public class MiniJava {
 	 * <p>
 	 * <i>Gibt eine zufällige Zahl zwischen 1 (inklusive) bis 6 (inklusive)
 	 * zurück.</i>
-	 * 
-	 * @throws IllegalAccessException
 	 */
-	public static int dice() throws IllegalAccessException {
+	public static int dice() {
 		if (rand == null) {
 			setRandom();
 		}
