@@ -101,7 +101,7 @@ public class ThreadUser {
 		if (failure.get() != null)
 			throw failure.get();
 	}
-	
+
 	@AllowThreads(maxActiveCount = 1)
 	@PublicTest
 	public void threadLimitExceeded() throws Throwable {
