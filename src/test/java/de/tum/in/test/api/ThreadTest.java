@@ -51,7 +51,7 @@ class ThreadTest {
 	void test_threadLimitExceeded() {
 		tests.assertThatEvents().haveExactly(1,
 				event(test(threadLimitExceeded), finishedWithFailure(instanceOf(SecurityException.class),
-						message(m -> m.contains("too many threads: 2 (max: 1)")))));
+						message(m -> m.contains("2 (max: 1)")))));
 	}
 
 	@TestTest
