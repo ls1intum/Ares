@@ -5,7 +5,6 @@ import static de.tum.in.test.api.internal.TestGuardUtils.*;
 import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -14,7 +13,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 
 import de.tum.in.test.api.Deadline;
@@ -27,66 +25,13 @@ import de.tum.in.test.api.internal.TestType;
  * @author Christian Femers
  */
 @API(status = Status.INTERNAL)
-public final class JupiterTestGuard implements InvocationInterceptor, DisplayNameGenerator {
+public final class JupiterTestGuard implements UnifiedInvocationInterceptor, DisplayNameGenerator {
 
 	private final DisplayNameGenerator defaultNameGen = new DisplayNameGenerator.ReplaceUnderscores();
 
 	@Override
-	public void interceptDynamicTest(Invocation<Void> invocation, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public <T> T interceptTestFactoryMethod(Invocation<T> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		return proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext,
-			ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptTestTemplateMethod(Invocation<Void> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public <T> T interceptTestClassConstructor(Invocation<T> invocation,
-			ReflectiveInvocationContext<Constructor<T>> invocationContext, ExtensionContext extensionContext)
-			throws Throwable {
-		return proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptBeforeEachMethod(Invocation<Void> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptBeforeAllMethod(Invocation<Void> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptAfterEachMethod(Invocation<Void> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	@Override
-	public void interceptAfterAllMethod(Invocation<Void> invocation,
-			ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-		proceedWithInvocation(invocation, extensionContext);
-	}
-
-	private static <T> T proceedWithInvocation(Invocation<T> invocation, ExtensionContext extensionContext)
-			throws Throwable {
+	public <T> T interceptGenericInvocation(Invocation<T> invocation, ExtensionContext extensionContext,
+			Optional<ReflectiveInvocationContext<?>> invocationContext) throws Throwable {
 		JupiterContext jupiterContext = JupiterContext.of(extensionContext);
 		checkForHidden(jupiterContext);
 		return doProceedAndPostProcess(invocation, jupiterContext);

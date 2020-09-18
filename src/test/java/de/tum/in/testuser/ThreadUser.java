@@ -21,11 +21,9 @@ import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.PublicTest;
-import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.testuser.subject.ThreadPenguin;
 
-@UseLocale("en")
 @AllowThreads(maxActiveCount = 100)
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
@@ -103,7 +101,7 @@ public class ThreadUser {
 		if (failure.get() != null)
 			throw failure.get();
 	}
-	
+
 	@AllowThreads(maxActiveCount = 1)
 	@PublicTest
 	public void threadLimitExceeded() throws Throwable {
