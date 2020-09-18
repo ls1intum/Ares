@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.AllowThreads;
@@ -23,7 +23,7 @@ import de.tum.in.testuser.subject.SecurityPenguin;
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @AllowThreads(maxActiveCount = 100)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 @UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
