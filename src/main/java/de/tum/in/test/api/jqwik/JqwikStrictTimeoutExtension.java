@@ -27,7 +27,7 @@ public class JqwikStrictTimeoutExtension implements AroundPropertyHook {
 
 	@Override
 	public int aroundPropertyProximity() {
-		return 30;
+		return 40;
 	}
 
 	@Override
