@@ -2,7 +2,7 @@ package de.tum.in.testuser;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.BlacklistPackage;
@@ -19,7 +19,7 @@ import de.tum.in.testuser.subject.PackageAccessPenguin;
 
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 @UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)

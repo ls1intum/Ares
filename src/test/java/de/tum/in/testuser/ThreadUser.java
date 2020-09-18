@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.AllowThreads;
@@ -21,15 +21,13 @@ import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.PublicTest;
-import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.testuser.subject.ThreadPenguin;
 
-@UseLocale("en")
 @AllowThreads(maxActiveCount = 100)
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
@@ -103,7 +101,7 @@ public class ThreadUser {
 		if (failure.get() != null)
 			throw failure.get();
 	}
-	
+
 	@AllowThreads(maxActiveCount = 1)
 	@PublicTest
 	public void threadLimitExceeded() throws Throwable {
