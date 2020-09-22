@@ -8,7 +8,7 @@ import java.net.SocketTimeoutException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,7 +33,7 @@ import de.tum.in.testuser.subject.NetworkPenguin;
 @AllowThreads(maxActiveCount = 100)
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(5)
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 public class NetworkUser {
