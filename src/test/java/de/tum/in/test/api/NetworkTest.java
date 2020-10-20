@@ -34,7 +34,6 @@ class NetworkTest {
 
 	@TestTest
 	void test_connectLocallyAllowed() {
-		// TODO should be 3
-		tests.assertThatEvents().haveExactly(2, event(test(connectLocallyAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(3, event(test(connectLocallyAllowed), finishedSuccessfullyRep()));
 	}
 }

@@ -23,6 +23,7 @@ import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
@@ -49,7 +50,7 @@ public class NetworkUser {
 	@BeforeAll
 	static void startServer() {
 		LOG.info("Starting server...");
-		serverThread = new Thread(() -> {
+		serverThread = new Thread(TestUtils.getRootThreadGroup(), () -> {
 			try (ServerSocket socket = new ServerSocket(PORT)) {
 				socket.setSoTimeout(50);
 				while (!Thread.interrupted()) {
