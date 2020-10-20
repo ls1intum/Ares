@@ -643,6 +643,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		whitelistedThreads.clear();
 	}
 
+	private void removeDeadThreads() {
+		whitelistedThreads.removeIf(thread -> thread.isAlive());
+	}
+
 	static boolean isStaticWhitelisted(String name) {
 		return SecurityConstants.STACK_WHITELIST.stream().anyMatch(name::startsWith);
 	}
@@ -671,7 +675,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String token = INSTANCE.generateAccessToken();
 		INSTANCE.blockThreadCreation = false;
 		INSTANCE.configuration = Objects.requireNonNull(configuration);
-		INSTANCE.unwhitelistThreads();
+		INSTANCE.removeDeadThreads();
 		if (!isInstalled())
 			System.setSecurityManager(INSTANCE);
 		INSTANCE.isActive = true;
