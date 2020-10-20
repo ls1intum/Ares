@@ -16,7 +16,7 @@ public final class TestUtils {
 
 	private TestUtils() {
 	}
-	
+
 	public static void invokeBlacklisted(Runnable action) {
 		BlacklistedInvoker.invoke(action);
 	}
@@ -24,7 +24,7 @@ public final class TestUtils {
 	public static <T, R> R invokeBlacklisted(T t, Function<T, R> action) {
 		return BlacklistedInvoker.invoke(t, action);
 	}
-	
+
 	public static <T> void invokeBlacklisted(T t, Consumer<T> action) {
 		BlacklistedInvoker.invoke(t, action);
 	}
@@ -51,5 +51,12 @@ public final class TestUtils {
 
 	public static void privilegedFail(String message) {
 		throw new PrivilegedException(new AssertionError(message));
+	}
+
+	public static ThreadGroup getRootThreadGroup() {
+		ThreadGroup group = Thread.currentThread().getThreadGroup();
+		for (ThreadGroup tg = group; tg != null; tg = group.getParent())
+			group = tg;
+		return group;
 	}
 }
