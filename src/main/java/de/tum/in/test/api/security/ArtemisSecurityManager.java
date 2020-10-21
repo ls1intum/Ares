@@ -259,7 +259,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (tg == null)
 				return;
 			if (isMainThreadAndInactive()) {
-				LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString));
+				if (LOG.isTraceEnabled()) {
+					LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString));
+				}
 				return;
 			}
 			if (!testThreadGroup.parentOf(tg))
@@ -276,7 +278,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			super.checkAccess(g);
 			if (isMainThreadAndInactive()) {
-				LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests", externGet(g::toString));
+				if (LOG.isTraceEnabled()) {
+					LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests",
+							externGet(g::toString));
+				}
 				return;
 			}
 			if (!testThreadGroup.parentOf(g))
@@ -669,12 +674,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			System.setSecurityManager(ORIGINAL);
 			INSTANCE.isPartlyDisabled = false;
 			INSTANCE.lastUninstallFailed = false;
-		} else if (isInstalled()) {
-			/*
-			 * Currently deactivated to see if we can leave the security manager on all the
-			 * time
-			 */
-//			throw new IllegalStateException(localized("security.already_installed")); //$NON-NLS-1$
 		}
 		if (LOG.isInfoEnabled())
 			LOG.info("Request install with {}", configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -708,14 +707,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			INSTANCE.checkCommonThreadPool();
 			INSTANCE.unwhitelistThreads();
 			INSTANCE.blockThreadCreation = false;
-			/*
-			 * Currently deactivated to see if we can leave the security manager on all the
-			 * time
-			 */
-			/*
-			 * INSTANCE.isPartlyDisabled = true; System.setSecurityManager(ORIGINAL);
-			 * INSTANCE.isPartlyDisabled = false; INSTANCE.configuration = null;
-			 */
 			INSTANCE.lastUninstallFailed = false;
 			INSTANCE.isActive = false;
 		} catch (Throwable t) {
