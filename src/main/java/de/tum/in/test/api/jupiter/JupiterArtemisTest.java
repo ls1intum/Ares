@@ -22,8 +22,10 @@ import de.tum.in.test.api.internal.TestType;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-@ExtendWith(JupiterTestExtension.class)
+@ExtendWith(JupiterIOExtension.class)
 @ExtendWith(JupiterTestGuard.class)
+@ExtendWith(JupiterSecurityExtension.class)
+@ExtendWith(JupiterStrictTimeoutExtension.class)
 public @interface JupiterArtemisTest {
 
 	TestType value();
