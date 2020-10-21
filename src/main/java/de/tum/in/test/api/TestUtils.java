@@ -16,7 +16,7 @@ public final class TestUtils {
 
 	private TestUtils() {
 	}
-	
+
 	public static void invokeBlacklisted(Runnable action) {
 		BlacklistedInvoker.invoke(action);
 	}
@@ -24,13 +24,17 @@ public final class TestUtils {
 	public static <T, R> R invokeBlacklisted(T t, Function<T, R> action) {
 		return BlacklistedInvoker.invoke(t, action);
 	}
-	
+
 	public static <T> void invokeBlacklisted(T t, Consumer<T> action) {
 		BlacklistedInvoker.invoke(t, action);
 	}
 
 	public static <R> R invokeBlacklisted(Supplier<R> action) {
 		return BlacklistedInvoker.invoke(action);
+	}
+
+	public static <R> R invokeCheckedBlacklisted(Callable<R> action) throws Exception {
+		return BlacklistedInvoker.invokeChecked(action);
 	}
 
 	public static void privilegedThrow(Runnable possiblyThrowingAction) {

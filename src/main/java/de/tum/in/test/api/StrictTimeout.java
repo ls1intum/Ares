@@ -12,9 +12,11 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.extension.ExtendWith;
 
+import de.tum.in.test.api.jqwik.JqwikStrictTimeoutExtension;
+import de.tum.in.test.api.jupiter.Hidden;
 import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
+import de.tum.in.test.api.jupiter.Public;
 
 /**
  * Works like
@@ -23,16 +25,20 @@ import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
  * preemptive timeout. Very different in behavior to {@link Timeout}. This
  * annotation does no cause problems with the ArtemisSecurityManager and can
  * terminate tests stuck in endless loops (which {@link Timeout} can not).
+ * <p>
+ * To use {@link StrictTimeout} <b>without</b> any {@link Public} or
+ * {@link Hidden}, you need to declare the {@link JupiterStrictTimeoutExtension}
+ * for JUnit 5 Jupiter or {@link JqwikStrictTimeoutExtension} for jqwik
+ * explicitly. However, his is not recommended as it is less effective.
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 2.0.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
-@ExtendWith(JupiterStrictTimeoutExtension.class)
 public @interface StrictTimeout {
 	/**
 	 * The duration of this timeout. <i>(per default in seconds)</i>

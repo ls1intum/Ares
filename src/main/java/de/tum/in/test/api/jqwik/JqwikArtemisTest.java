@@ -25,7 +25,8 @@ import net.jqwik.api.lifecycle.AddLifecycleHook;
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
 @AddLifecycleHook(JqwikTestGuard.class)
-@AddLifecycleHook(JqwikTestExtension.class)
+@AddLifecycleHook(JqwikIOExtension.class)
+@AddLifecycleHook(JqwikSecurityExtension.class)
 @AddLifecycleHook(JqwikStrictTimeoutExtension.class)
 public @interface JqwikArtemisTest {
 

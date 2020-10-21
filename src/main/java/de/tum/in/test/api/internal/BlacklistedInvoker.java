@@ -1,5 +1,6 @@
 package de.tum.in.test.api.internal;
 
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,6 +28,10 @@ public final class BlacklistedInvoker {
 
 	public static <R> R invoke(Supplier<R> action) {
 		return action.get();
+	}
+
+	public static <R> R invokeChecked(Callable<R> action) throws Exception {
+		return action.call();
 	}
 
 	public static <R> R invokeOrElse(Supplier<R> action, Supplier<R> alternative) {
