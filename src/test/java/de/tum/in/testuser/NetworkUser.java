@@ -114,10 +114,10 @@ public class NetworkUser {
 		ArtemisSecurityManager.requestThreadWhitelisting(serverThread);
 		serverThread.start();
 		try (Socket s = new Socket("localhost", 8080); PrintStream out = new PrintStream(s.getOutputStream())) {
-			s.setSoTimeout(500);
+			s.setSoTimeout(2500);
 			out.println("something");
 		}
-		serverThread.join(250);
+		serverThread.join(2500);
 		if (error.get() != null) {
 			throw error.get();
 		}
