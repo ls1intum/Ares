@@ -15,8 +15,7 @@ public final class ThrowableSanitizer {
 	}
 
 	static {
-		// Initialize
-		ThrowableSets.SAFE_TYPES.size();
+		ThrowableSets.init();
 	}
 
 	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SimpleThrowableSanitizer.INSTANCE,

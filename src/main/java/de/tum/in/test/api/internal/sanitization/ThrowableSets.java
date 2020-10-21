@@ -64,6 +64,10 @@ final class ThrowableSets {
 		}
 	}
 
+	public static void init() {
+		// just for initialization
+	}
+
 	static final class Java {
 
 		private Java() {

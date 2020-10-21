@@ -32,6 +32,6 @@ public final class Messages {
 	}
 
 	public static void init() {
-		// nothing
+		// just for initialization
 	}
 }
