@@ -141,7 +141,7 @@ public final class TestGuardUtils {
 			ZoneId zone;
 			if (zoneString == null) {
 				zone = ZoneId.systemDefault();
-				LOG.warn("No time zone found for deadline \"{}\", using system default \"{}\" now."
+				LOG.warn("No time zone found for deadline \"{}\", using system default \"{}\" now. "
 						+ "Please consider setting a time zone in case the build agents have a different time zone set.",
 						deadlineString, zone);
 			} else {
