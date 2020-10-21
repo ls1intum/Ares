@@ -79,20 +79,20 @@ public class NetworkUser {
 	@ParameterizedTest
 	@AllowLocalPort(PORT)
 	@ValueSource(strings = { "localhost", "127.0.0.1", "::1" })
-	public void connectLocallyAllowed(String host) throws Exception {
+	void connectLocallyAllowed(String host) throws Exception {
 		NetworkPenguin.tryConnect(host, PORT, MESSAGE);
 	}
 
 	@ParameterizedTest
 	@AllowLocalPort(PORT)
 	@ValueSource(ints = { 22, 80 })
-	public void connectLocallyNotAllowed(int port) throws Exception {
+	void connectLocallyNotAllowed(int port) throws Exception {
 		NetworkPenguin.tryConnect("localhost", port, MESSAGE);
 	}
 
 	@Test
 	@AllowLocalPort(80)
-	public void connectRemoteNotAllowed() throws Exception {
+	void connectRemoteNotAllowed() throws Exception {
 		NetworkPenguin.tryConnect("example.com", 80, null);
 	}
 }

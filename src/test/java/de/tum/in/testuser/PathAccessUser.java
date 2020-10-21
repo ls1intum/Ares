@@ -29,37 +29,37 @@ public class PathAccessUser {
 
 	@PublicTest
 	@WhitelistPath("")
-	public void accessPathAllowed() throws IOException {
+	void accessPathAllowed() throws IOException {
 		PathAccessPenguin.accessPath(Path.of("pom.xml"));
 	}
 
 	@PublicTest
-	public void accessPathNormal() throws IOException {
+	void accessPathNormal() throws IOException {
 		PathAccessPenguin.accessPath(Path.of("pom.xml"));
 	}
 
 	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
 	@PublicTest
-	public void accessPathRelativeGlobA() throws IOException {
+	void accessPathRelativeGlobA() throws IOException {
 		PathAccessPenguin.accessPath(Path.of("pom.xml").toAbsolutePath());
 	}
 
 	@WhitelistPath(value = "./pom.xml", type = PathType.GLOB)
 	@PublicTest
-	public void accessPathRelativeGlobB() throws IOException {
+	void accessPathRelativeGlobB() throws IOException {
 		PathAccessPenguin.accessPath(Path.of("pom.xml").toAbsolutePath());
 	}
 
 	@PublicTest
 	@WhitelistPath("")
-	public void accessPathTest() throws IOException {
+	void accessPathTest() throws IOException {
 		if (!Files.exists(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class")))
 			fail("File not present");
 		PathAccessPenguin.accessPath(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class"));
 	}
 
 	@PublicTest
-	public void weAccessPath() throws IOException {
+	void weAccessPath() throws IOException {
 		Files.readString(Path.of("pom.xml"));
 	}
 }

@@ -34,66 +34,66 @@ import de.tum.in.testuser.subject.SecurityPenguin;
 public class SecurityUser {
 
 	@Test
-	public void doSystemExit() {
+	void doSystemExit() {
 		System.exit(0);
 	}
 
 	@Test
-	public void longOutputJUnit4() {
+	void longOutputJUnit4() {
 		String a = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 		String b = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aluyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 		assertEquals(a, b);
 	}
 
 	@Test
-	public void longOutputJUnit5() {
+	void longOutputJUnit5() {
 		String a = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 		String b = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aluyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 		Assertions.assertEquals(a, b);
 	}
 
 	@Test
-	public void testEvilPermission() {
+	void testEvilPermission() {
 		assertFalse(SecurityPenguin.tryEvilPermission());
 	}
 
 	@Test
-	public void testExecuteGit() {
+	void testExecuteGit() {
 		SecurityPenguin.tryExecuteGit();
 	}
 
 	@PublicTest
-	public void testMaliciousExceptionA() {
+	void testMaliciousExceptionA() {
 		SecurityPenguin.maliciousExceptionA();
 	}
 
 	@PublicTest
-	public void testMaliciousExceptionB() {
+	void testMaliciousExceptionB() {
 		assertFalse(SecurityPenguin.maliciousExceptionB());
 	}
 
 	@PublicTest
-	public void trySetSecurityManager() {
+	void trySetSecurityManager() {
 		SecurityPenguin.trySetSecurityManagerNull();
 	}
 
 	@PublicTest
-	public void trySetSystemOut() {
+	void trySetSystemOut() {
 		SecurityPenguin.trySetSystemOut();
 	}
 
 	@PublicTest
-	public void useReflectionNormal() {
+	void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}
 
 	@PublicTest
-	public void useReflectionPrivileged() {
+	void useReflectionPrivileged() {
 		SecurityPenguin.useReflectionPrivileged();
 	}
 
 	@PublicTest
-	public void useReflectionTrick() {
+	void useReflectionTrick() {
 		SecurityPenguin.useReflection2();
 		Circumvention.thrown.ifPresent(e -> {
 			throw e;
@@ -101,7 +101,7 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	public void weUseReflection() {
+	void weUseReflection() {
 		try {
 			Class.forName("de.tum.in.test.api.io.IOTester").getDeclaredFields()[0].setAccessible(true);
 		} catch (ClassNotFoundException e) {

@@ -28,25 +28,25 @@ import de.tum.in.testuser.subject.PrivilegedExceptionPenguin;
 public class PrivilegedExceptionUser {
 
 	@PublicTest
-	public void nonprivilegedExceptionExtern() {
+	void nonprivilegedExceptionExtern() {
 		PrivilegedExceptionPenguin.throwNullPointerException();
 	}
 
 	@PrivilegedExceptionsOnly("ABC")
 	@PublicTest
-	public void nonprivilegedExceptionIntern() {
+	void nonprivilegedExceptionIntern() {
 		throw new NullPointerException("xy");
 	}
 
 	@PrivilegedExceptionsOnly("ABC")
 	@PublicTest
-	public void nonprivilegedExceptionTry() {
+	void nonprivilegedExceptionTry() {
 		PrivilegedExceptionPenguin.throwPrivilegedNullPointerException();
 	}
 
 	@PrivilegedExceptionsOnly("ABC")
 	@PublicTest
-	public void privilegedExceptionFail() {
+	void privilegedExceptionFail() {
 		TestUtils.privilegedThrow(() -> {
 			fail("xyz");
 		});
@@ -54,7 +54,7 @@ public class PrivilegedExceptionUser {
 
 	@PrivilegedExceptionsOnly("ABC")
 	@PublicTest
-	public void privilegedExceptionNormal() throws Exception {
+	void privilegedExceptionNormal() throws Exception {
 		TestUtils.privilegedThrow(() -> {
 			throw new NullPointerException("xyz");
 		});

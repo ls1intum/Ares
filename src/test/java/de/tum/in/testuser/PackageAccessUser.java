@@ -28,32 +28,32 @@ public class PackageAccessUser {
 
 	@BlacklistPackage("java.util.regex")
 	@PublicTest
-	public void package_aBlacklistingRegex() {
+	void package_aBlacklistingRegex() {
 		PackageAccessPenguin.useArrayList();
 	}
 
 	@BlacklistPackage("java.**")
 	@PublicTest
-	public void package_bBlacklistingJava() {
+	void package_bBlacklistingJava() {
 		PackageAccessPenguin.useArrayList();
 	}
 
 	@BlacklistPackage("**")
 	@PublicTest
-	public void package_cBlacklistingAll() {
+	void package_cBlacklistingAll() {
 		PackageAccessPenguin.useArrayList();
 	}
 
 	@BlacklistPackage("**")
 	@WhitelistPackage("java.util.regex")
 	@PublicTest
-	public void package_dBlackAndWhitelisting() {
+	void package_dBlackAndWhitelisting() {
 		PackageAccessPenguin.useArrayList();
 	}
 
 	@BlacklistPackage("java.util.regex")
 	@PublicTest
-	public void package_eBlackPenguinAgain() {
+	void package_eBlackPenguinAgain() {
 		PackageAccessPenguin.useArrayList();
 	}
 }
