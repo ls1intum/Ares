@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
@@ -43,6 +42,7 @@ import javax.security.auth.AuthPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.PathActionLevel;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.util.DelayedFilter;
@@ -55,6 +55,7 @@ import de.tum.in.test.api.util.DelayedFilter;
  */
 public final class ArtemisSecurityManager extends SecurityManager {
 
+	private static final int MAX_PORT = AllowLocalPort.MAXIMUM;
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
@@ -335,7 +336,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				throw new SecurityException(localized("security.error_awt") + permString); //$NON-NLS-1$
 			if (perm instanceof ManagementPermission)
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_management") + permString); //$NON-NLS-1$
-			if ((configuration == null || configuration.allowedLocalPort().isEmpty())
+			if ((configuration == null || configuration.allowLocalPortsAbove().isEmpty())
 					&& (perm instanceof NetPermission || perm instanceof SocketPermission))
 				throw new SecurityException(localized("security.error_networking") + permString); //$NON-NLS-1$
 			if (perm instanceof SecurityPermission) {
@@ -480,6 +481,14 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.checkForNonWhitelistedStackFrames(exceptionMessage);
 	}
 
+	private boolean isConnectionAllowed(String host, int port) {
+		var nwsfs = getNonWhitelistedStackFrames();
+		LOG.info("Connection use request: {}:{} [NWSFs: {}]", host, port, nwsfs.size()); //$NON-NLS-1$
+		if (nwsfs.isEmpty())
+			return true;
+		return configuration != null && isLocalHost(host) && isLocalPortUsageAllowed(port);
+	}
+
 	private static boolean isLocalHost(String host) {
 		try {
 			InetAddress address = InetAddress.getByName(host);
@@ -489,13 +498,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 	}
 
-	private boolean isConnectionAllowed(String host, int port) {
-		var nwsfs = getNonWhitelistedStackFrames();
-		LOG.info("Connection use request: {}:{} [NWSFs: {}]", host, port, nwsfs.size()); //$NON-NLS-1$
-		if (nwsfs.isEmpty())
+	private boolean isLocalPortUsageAllowed(int port) {
+		if (port < -1 || port > MAX_PORT)
+			return false;
+		if (port == -1 || port == 0)
 			return true;
-		return configuration != null && isLocalHost(host)
-				&& (configuration.allowedLocalPort().equals(OptionalInt.of(port)) || port == -1);
+		if (configuration == null)
+			return false;
+		return configuration.allowedLocalPorts().contains(port)
+				|| (configuration.allowLocalPortsAbove().orElse(MAX_PORT) < port
+						&& !configuration.excludedLocalPorts().contains(port));
 	}
 
 	@Override

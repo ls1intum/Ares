@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.AllowThreads;
@@ -36,10 +37,10 @@ public final class ConfigurationUtils {
 		config.addWhitelistedClassNames(generateClassWhiteList(context));
 		config.withPathWhitelist(generatePathWhiteList(context));
 		config.withPathBlacklist(generatePathBlackList(context));
-		config.withAllowedLocalPort(getAllowedLocalPort(context));
 		config.withAllowedThreadCount(getAllowedThreadCount(context));
 		config.withPackageBlacklist(generatePackageBlackList(context));
 		config.withPackageWhitelist(generatePackageWhiteList(context));
+		configureAllowLocalPort(config, context);
 		return config.build();
 	}
 
@@ -76,9 +77,12 @@ public final class ConfigurationUtils {
 				.orElse(MirrorOutput.DEFAULT_MAX_STD_OUT);
 	}
 
-	public static OptionalInt getAllowedLocalPort(TestContext context) {
-		return TestContextUtils.findAnnotationIn(context, AllowLocalPort.class).map(AllowLocalPort::value)
-				.map(OptionalInt::of).orElseGet(OptionalInt::empty);
+	public static void configureAllowLocalPort(ArtemisSecurityConfigurationBuilder config, TestContext context) {
+		TestContextUtils.findAnnotationIn(context, AllowLocalPort.class).ifPresent(allowLocalPort -> {
+			config.withAllowedLocalPorts(IntStream.of(allowLocalPort.value()).boxed().collect(Collectors.toSet()));
+			config.withAllowLocalPortsAbove(OptionalInt.of(allowLocalPort.allowPortsAbove()));
+			config.withExcludedLocalPorts(IntStream.of(allowLocalPort.exclude()).boxed().collect(Collectors.toSet()));
+		});
 	}
 
 	public static OptionalInt getAllowedThreadCount(TestContext context) {

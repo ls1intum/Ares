@@ -7,6 +7,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.tum.in.test.api.security.ConfigurationException;
+
 final class ThrowableSets {
 
 	/**
@@ -35,6 +37,7 @@ final class ThrowableSets {
 
 	static {
 		HashSet<Class<? extends Throwable>> join = new HashSet<>(Java.SAFE_TYPES);
+		join.addAll(Own.SAFE_TYPES);
 		if (classCanBeFound(JUNIT4_CHECK_CLASS))
 			join.addAll(JUnit4.SAFE_TYPES);
 		if (classCanBeFound(JUNIT5_CHECK_CLASS))
@@ -66,6 +69,15 @@ final class ThrowableSets {
 
 	public static void init() {
 		// just for initialization
+	}
+
+	static final class Own {
+
+		private Own() {
+
+		}
+
+		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(ConfigurationException.class);
 	}
 
 	static final class Java {

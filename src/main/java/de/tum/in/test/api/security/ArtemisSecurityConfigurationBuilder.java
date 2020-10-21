@@ -3,6 +3,7 @@ package de.tum.in.test.api.security;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 
+import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
@@ -23,7 +25,9 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Set<PathRule> blacklistedPaths;
 	private Set<PackageRule> blacklistedPackages;
 	private Set<PackageRule> whitelistedPackages;
-	private OptionalInt allowedLocalPort;
+	private Set<Integer> allowedLocalPorts;
+	private OptionalInt allowLocalPortsAbove;
+	private Set<Integer> excludedLocalPorts;
 	private OptionalInt allowedThreadCount;
 
 	private ArtemisSecurityConfigurationBuilder() {
@@ -33,7 +37,9 @@ public final class ArtemisSecurityConfigurationBuilder {
 		blacklistedPaths = Set.of();
 		blacklistedPackages = Set.of();
 		whitelistedPackages = Set.of();
-		allowedLocalPort = OptionalInt.empty();
+		allowedLocalPorts = Set.of();
+		allowLocalPortsAbove = OptionalInt.empty();
+		excludedLocalPorts = Set.of();
 		allowedThreadCount = OptionalInt.empty();
 	}
 
@@ -73,8 +79,18 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withAllowedLocalPort(OptionalInt allowedLocalPort) {
-		this.allowedLocalPort = Objects.requireNonNull(allowedLocalPort);
+	public ArtemisSecurityConfigurationBuilder withAllowedLocalPorts(Set<Integer> allowedLocalPorts) {
+		this.allowedLocalPorts = Objects.requireNonNull(allowedLocalPorts);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withAllowLocalPortsAbove(OptionalInt allowLocalPortsAbove) {
+		this.allowLocalPortsAbove = Objects.requireNonNull(allowLocalPortsAbove);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withExcludedLocalPorts(Set<Integer> excludedLocalPorts) {
+		this.excludedLocalPorts = Objects.requireNonNull(excludedLocalPorts);
 		return this;
 	}
 
@@ -109,9 +125,33 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfiguration build() {
+		validate();
 		return new ArtemisSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
-				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPort, allowedThreadCount,
-				blacklistedPackages, whitelistedPackages);
+				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
+				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages);
+	}
+
+	private void validate() {
+		if (allowedThreadCount.orElse(0) < 0)
+			throw new ConfigurationException("Allowed thread count must be non-negative");
+		if (!Collections.disjoint(allowedLocalPorts, excludedLocalPorts))
+			throw new ConfigurationException("Allowed and excluded local ports must not intersect");
+		allowedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
+		excludedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
+		allowLocalPortsAbove.ifPresent(value -> {
+			validatePortRange(value);
+			if (allowedLocalPorts.stream().anyMatch(allowed -> allowed > value))
+				throw new ConfigurationException("Allowed local port values must not be greater than allowPortsAbove");
+			if (excludedLocalPorts.stream().anyMatch(exclusion -> exclusion <= value))
+				throw new ConfigurationException("Local ports exclusion values must be greater than allowPortsAbove");
+		});
+	}
+
+	private static void validatePortRange(int value) {
+		if (value < AllowLocalPort.MINIMUM)
+			throw new ConfigurationException("Allow local port: port number must not be negative");
+		if (value > AllowLocalPort.MAXIMUM)
+			throw new ConfigurationException("Allow local port: port number must not exceed MAXIMUM");
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {

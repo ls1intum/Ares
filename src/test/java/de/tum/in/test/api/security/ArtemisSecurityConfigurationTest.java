@@ -28,7 +28,9 @@ import de.tum.in.test.api.util.RuleType;
 
 class ArtemisSecurityConfigurationTest {
 
-	private static final int PORT_NUMBER = 42;
+	private static final int ALLOWED_PORT_NUMBER = 42;
+	private static final int ALLOW_PORT_ABOVE = 1000;
+	private static final int EXCLUDED_PORT_NUMBER = 1024;
 	private static final int THREAD_COUNT = 314;
 	private static final String PATH_BLACKLIST = "target/classes";
 	private static final String PATH_WHITELIST = "target";
@@ -72,7 +74,9 @@ class ArtemisSecurityConfigurationTest {
 						&& PACKAGE_WHITELIST.equals(packageRule.getPackagePattern()));
 
 		assertThat(configurationOneA.allowedThreadCount()).isPresent().hasValue(THREAD_COUNT);
-		assertThat(configurationOneA.allowedLocalPort()).isPresent().hasValue(PORT_NUMBER);
+		assertThat(configurationOneA.allowedLocalPorts()).containsExactly(ALLOWED_PORT_NUMBER);
+		assertThat(configurationOneA.allowLocalPortsAbove()).isPresent().hasValue(ALLOW_PORT_ABOVE);
+		assertThat(configurationOneA.excludedLocalPorts()).containsExactly(EXCLUDED_PORT_NUMBER);
 
 	}
 
@@ -107,12 +111,12 @@ class ArtemisSecurityConfigurationTest {
 	static class TestTestClass {
 
 		@AllowThreads(maxActiveCount = THREAD_COUNT)
-		@AllowLocalPort(PORT_NUMBER)
+		@AllowLocalPort(value = ALLOWED_PORT_NUMBER, allowPortsAbove = ALLOW_PORT_ABOVE, exclude = EXCLUDED_PORT_NUMBER)
 		void testOne() {
 			// nothing to do
 		}
 
-		@AllowLocalPort(271)
+		@AllowLocalPort(value = 271)
 		void testTwo() {
 			// nothing to do
 		}
