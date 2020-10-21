@@ -1,5 +1,7 @@
 package de.tum.in.test.api.internal;
 
+import static de.tum.in.test.api.internal.BlacklistedInvoker.invokeChecked;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,7 @@ public final class TimeoutUtils {
 		ExecutorService executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
 		try {
 			Future<T> future = executorService.submit(action);
-			return future.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+			return invokeChecked(() -> future.get(timeout.toMillis(), TimeUnit.MILLISECONDS));
 		} catch (ExecutionException ex) {
 			// should never happen, but you never know
 			if (ex.getCause() instanceof ExecutionException)
