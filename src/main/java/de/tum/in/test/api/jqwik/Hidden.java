@@ -21,16 +21,20 @@ import de.tum.in.test.api.io.IOTester;
  * <p>
  * <b>This annotation must be accompanied by some jqwik test annotation, it will
  * not cause test execution by itself!</b>
+ * <p>
+ * Can be used on class level in addition to method level. This will cause all
+ * members of the class (e.g. test methods) to inherit this test case type,
+ * unless they declare another one.
  *
  * @see Deadline
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE, TYPE })
 @JqwikArtemisTest(TestType.HIDDEN)
 public @interface Hidden {
 	// marker only

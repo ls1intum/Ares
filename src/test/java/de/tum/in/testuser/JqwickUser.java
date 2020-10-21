@@ -16,11 +16,11 @@ import net.jqwik.api.Property;
 import net.jqwik.api.constraints.CharRange;
 import net.jqwik.api.constraints.Positive;
 
+@Hidden
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
 public class JqwickUser {
 
-	@Hidden
 	@Example
 	@Deadline("2200-01-01 16:00")
 	void exampleHiddenCustomDeadlineFuture() {
@@ -34,7 +34,6 @@ public class JqwickUser {
 		// nothing
 	}
 
-	@Hidden
 	@Example
 	void exampleHiddenNormal() {
 		// nothing

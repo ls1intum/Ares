@@ -13,6 +13,7 @@ import java.lang.reflect.ReflectPermission;
 import java.net.InetAddress;
 import java.net.NetPermission;
 import java.net.SocketPermission;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -475,7 +476,12 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private static boolean isLocalHost(String host) {
-		return Objects.equals(host, "localhost") || Objects.equals(host, "127.0.0.1"); //$NON-NLS-1$ //$NON-NLS-2$
+		try {
+			InetAddress address = InetAddress.getByName(host);
+			return address.isLoopbackAddress() || address.isAnyLocalAddress();
+		} catch (@SuppressWarnings("unused") UnknownHostException e) {
+			return false;
+		}
 	}
 
 	private boolean isConnectionAllowed(String host, int port) {
@@ -643,6 +649,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		whitelistedThreads.clear();
 	}
 
+	private void removeDeadThreads() {
+		whitelistedThreads.removeIf(Thread::isAlive);
+	}
+
 	static boolean isStaticWhitelisted(String name) {
 		return SecurityConstants.STACK_WHITELIST.stream().anyMatch(name::startsWith);
 	}
@@ -671,7 +681,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String token = INSTANCE.generateAccessToken();
 		INSTANCE.blockThreadCreation = false;
 		INSTANCE.configuration = Objects.requireNonNull(configuration);
-		INSTANCE.unwhitelistThreads();
+		INSTANCE.removeDeadThreads();
 		if (!isInstalled())
 			System.setSecurityManager(INSTANCE);
 		INSTANCE.isActive = true;

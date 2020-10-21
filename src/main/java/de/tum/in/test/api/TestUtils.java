@@ -56,4 +56,11 @@ public final class TestUtils {
 	public static void privilegedFail(String message) {
 		throw new PrivilegedException(new AssertionError(message));
 	}
+
+	public static ThreadGroup getRootThreadGroup() {
+		ThreadGroup group = Thread.currentThread().getThreadGroup();
+		for (ThreadGroup tg = group; tg != null; tg = group.getParent())
+			group = tg;
+		return group;
+	}
 }

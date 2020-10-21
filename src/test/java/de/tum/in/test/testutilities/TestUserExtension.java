@@ -44,6 +44,12 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 		var user = optionalAnnotation.get().value();
 		var tests = EngineTestKit.engine("junit-jupiter").selectors(selectClass(user)).execute();
 		var testResults = tests.testEvents();
+
+		if (testResults.count() == 0) {
+			tests.containerEvents().debug();
+			throw new IllegalStateException("Test execution of " + user + " failed, no tests run.");
+		}
+
 		getStore(context).put(TEST_RESULTS, testResults);
 
 		if (context.getTestClass().isPresent()) {

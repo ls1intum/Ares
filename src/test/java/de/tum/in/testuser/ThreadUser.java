@@ -34,7 +34,7 @@ import de.tum.in.testuser.subject.ThreadPenguin;
 public class ThreadUser {
 
 	@PublicTest
-	public void commonPoolInterruptable() throws InterruptedException, ExecutionException {
+	void commonPoolInterruptable() throws InterruptedException, ExecutionException {
 		// check functionality
 		var res = ForkJoinPool.commonPool().submit(() -> "A").get();
 		assertEquals("A", res);
@@ -60,17 +60,17 @@ public class ThreadUser {
 	@Disabled("Inconsistent on the CI environment")
 	@PublicTest
 	@StrictTimeout(2)
-	public void testThreadBomb() {
+	void testThreadBomb() {
 		ThreadPenguin.spawnEndlessThreads();
 	}
 
 	@PublicTest
-	public void testThreadGroup() {
+	void testThreadGroup() {
 		ThreadPenguin.tryBreakThreadGroup();
 	}
 
 	@PublicTest
-	public void threadWhitelistingWithPathCorrect() throws Throwable {
+	void threadWhitelistingWithPathCorrect() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
 		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		ArtemisSecurityManager.requestThreadWhitelisting(t);
@@ -87,7 +87,7 @@ public class ThreadUser {
 	}
 
 	@PublicTest
-	public void threadWhitelistingWithPathFail() throws Throwable {
+	void threadWhitelistingWithPathFail() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
 		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
@@ -104,12 +104,12 @@ public class ThreadUser {
 
 	@AllowThreads(maxActiveCount = 1)
 	@PublicTest
-	public void threadLimitExceeded() throws Throwable {
+	void threadLimitExceeded() throws Throwable {
 		ThreadPenguin.tryStartTwoThreads();
 	}
 
 	@PublicTest
-	public void threadWhitelistingWithPathPenguin() throws Throwable {
+	void threadWhitelistingWithPathPenguin() throws Throwable {
 		ThreadPenguin.tryThreadWhitelisting();
 	}
 
@@ -120,7 +120,7 @@ public class ThreadUser {
 	 * works by catching the {@link ThreadDeath}.
 	 */
 //	@PublicTest
-//	public void zz_unstoppable() {
+//	void zz_unstoppable() {
 //		long t = System.currentTimeMillis();
 //		while (System.currentTimeMillis() - t < 1000) {
 //			try {

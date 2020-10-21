@@ -12,6 +12,7 @@ import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.internal.TestType;
 import net.jqwik.api.lifecycle.AddLifecycleHook;
+import net.jqwik.api.lifecycle.PropagationMode;
 
 /**
  * This is only for internal use, to reduce redundancy.
@@ -24,10 +25,10 @@ import net.jqwik.api.lifecycle.AddLifecycleHook;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-@AddLifecycleHook(JqwikTestGuard.class)
-@AddLifecycleHook(JqwikIOExtension.class)
-@AddLifecycleHook(JqwikSecurityExtension.class)
-@AddLifecycleHook(JqwikStrictTimeoutExtension.class)
+@AddLifecycleHook(value = JqwikTestGuard.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikIOExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikSecurityExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikStrictTimeoutExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
 public @interface JqwikArtemisTest {
 
 	TestType value();

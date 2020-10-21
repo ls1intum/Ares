@@ -64,12 +64,12 @@ public class ExceptionFailureUser {
 	}
 
 	@PublicTest
-	public void assertionFailed() throws Exception {
+	void assertionFailed() throws Exception {
 		assertEquals(1, 2);
 	}
 
 	@PublicTest
-	public void assertJMultipleFailures() {
+	void assertJMultipleFailures() {
 		assertThat("ABC").satisfiesAnyOf(s -> {
 			fail("A");
 		}, s -> {
@@ -78,33 +78,33 @@ public class ExceptionFailureUser {
 	}
 
 	@PublicTest
-	public void customException() {
+	void customException() {
 		throw new CustomException();
 	}
 
 	@PublicTest
-	public void exceptionInInitializer() {
+	void exceptionInInitializer() {
 		assertEquals(InitFailure.x, 0);
 	}
 
 	@PublicTest
-	public void faultyGetCauseException() {
+	void faultyGetCauseException() {
 		throw new AssertionError("XYZ", new FaultyGetCauseException());
 	}
 
 	@PublicTest
-	public void faultyToStringException() {
+	void faultyToStringException() {
 		throw new FaultyToStringException();
 	}
 
 	@PublicTest
-	public void multipleAssertions() {
+	void multipleAssertions() {
 		throw new MultipleAssertionsError(new TextDescription("Failed with %d", 5),
 				List.of(new AssertionError("X", new CustomException())));
 	}
 
 	@PublicTest
-	public void multipleFailures() {
+	void multipleFailures() {
 		assertAll(() -> {
 			fail("A");
 		}, () -> {
@@ -113,12 +113,12 @@ public class ExceptionFailureUser {
 	}
 
 	@PublicTest
-	public void nullPointer() {
+	void nullPointer() {
 		Objects.requireNonNull(null, "XYZ");
 	}
 
 	@PublicTest
-	public void softAssertion() {
+	void softAssertion() {
 		throw new SoftAssertionError(List.of("A", "B"));
 	}
 }
