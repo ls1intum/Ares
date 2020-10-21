@@ -23,6 +23,10 @@ import net.jqwik.api.Property;
  * <p>
  * <b>This annotation must be accompanied by some jqwik test annotation, it will
  * not cause test execution by itself!</b>
+ * <p>
+ * Can be used on class level in addition to method level. This will cause all
+ * members of the class (e.g. test methods) to inherit this test case type,
+ * unless they declare another one.
  *
  * @author Christian Femers
  * @since 0.2.0

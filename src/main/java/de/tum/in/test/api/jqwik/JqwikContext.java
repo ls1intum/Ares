@@ -4,12 +4,15 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.junit.platform.commons.support.AnnotationSupport;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.internal.TestContextUtils;
 import de.tum.in.test.api.internal.TestType;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
+@API(status = Status.INTERNAL)
 public class JqwikContext extends TestContext {
 	private final PropertyLifecycleContext lifecycleContext;
 
@@ -52,7 +55,8 @@ public class JqwikContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return AnnotationSupport.findAnnotation(annotatedElement(), JqwikArtemisTest.class)
-				.map(JqwikArtemisTest::value);
+		Optional<TestType> map = TestContextUtils.findAnnotationIn(this, JqwikArtemisTest.class).map(JqwikArtemisTest::value);
+		System.out.println(map);
+		return map;
 	}
 }

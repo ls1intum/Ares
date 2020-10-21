@@ -4,12 +4,15 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.platform.commons.support.AnnotationSupport;
 
 import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.internal.TestContextUtils;
 import de.tum.in.test.api.internal.TestType;
 
+@API(status = Status.INTERNAL)
 public class JupiterContext extends TestContext {
 	private final ExtensionContext extensionContext;
 
@@ -52,7 +55,6 @@ public class JupiterContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return AnnotationSupport.findAnnotation(annotatedElement(), JupiterArtemisTest.class)
-				.map(JupiterArtemisTest::value);
+		return TestContextUtils.findAnnotationIn(this, JupiterArtemisTest.class).map(JupiterArtemisTest::value);
 	}
 }

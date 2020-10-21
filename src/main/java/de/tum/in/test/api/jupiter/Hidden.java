@@ -29,7 +29,8 @@ import de.tum.in.test.api.io.IOTester;
  * <p>
  * Can be used on class level in addition to method level to affect test class
  * initialization, {@link BeforeAll}, {@link AfterAll}, {@link BeforeEach},
- * {@link AfterEach}.
+ * {@link AfterEach}. This will also cause all members of the class (e.g. test
+ * methods) to inherit this test case type, unless they declare another one.
  *
  * @see Deadline
  * @author Christian Femers
