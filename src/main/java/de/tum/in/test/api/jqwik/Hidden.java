@@ -25,12 +25,12 @@ import de.tum.in.test.api.io.IOTester;
  * @see Deadline
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE, TYPE })
 @JqwikArtemisTest(TestType.HIDDEN)
 public @interface Hidden {
 	// marker only

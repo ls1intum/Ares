@@ -9,6 +9,10 @@ import java.lang.annotation.Target;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import de.tum.in.test.api.internal.TestType;
 import de.tum.in.test.api.io.IOTester;
@@ -20,15 +24,19 @@ import de.tum.in.test.api.io.IOTester;
  * <b>This annotation must be accompanied by some JUnit 5 test annotation, it
  * will not cause test execution by itself!</b> This makes it usable with
  * different JUnit 5 runners.
+ * <p>
+ * Can be used on class level in addition to method level to affect test class
+ * initialization, {@link BeforeAll}, {@link AfterAll}, {@link BeforeEach},
+ * {@link AfterEach}.
  *
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE, TYPE })
 @JupiterArtemisTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only

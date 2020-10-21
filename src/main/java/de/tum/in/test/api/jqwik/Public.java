@@ -26,12 +26,12 @@ import net.jqwik.api.Property;
  *
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented
 @Retention(RUNTIME)
-@Target({METHOD, ANNOTATION_TYPE})
+@Target({ METHOD, ANNOTATION_TYPE, TYPE })
 @JqwikArtemisTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only
