@@ -5,9 +5,12 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
 
+@ExtendWith(JupiterStrictTimeoutExtension.class)
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
 @SuppressWarnings({ "static-method", "unused" })

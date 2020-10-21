@@ -33,6 +33,10 @@ public final class TestUtils {
 		return BlacklistedInvoker.invoke(action);
 	}
 
+	public static <R> R invokeCheckedBlacklisted(Callable<R> action) throws Exception {
+		return BlacklistedInvoker.invokeChecked(action);
+	}
+
 	public static void privilegedThrow(Runnable possiblyThrowingAction) {
 		try {
 			possiblyThrowingAction.run();
