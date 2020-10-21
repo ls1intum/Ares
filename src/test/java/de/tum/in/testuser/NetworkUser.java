@@ -1,10 +1,13 @@
 package de.tum.in.testuser;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -94,5 +97,40 @@ public class NetworkUser {
 	@AllowLocalPort(80)
 	void connectRemoteNotAllowed() throws Exception {
 		NetworkPenguin.tryConnect("example.com", 80, null);
+	}
+
+	@Test
+	@AllowLocalPort(allowPortsAbove = AllowLocalPort.IANA_REGISTERED_LOWER_BORDER)
+	void serverAllowedAndAccept() throws Throwable {
+		var error = new AtomicReference<Throwable>();
+		var serverThread = new Thread(TestUtils.getRootThreadGroup(), () -> {
+			try {
+				NetworkPenguin.tryStartServer(8080, "something");
+			} catch (Exception e) {
+				fail(e);
+			}
+		}, "server-8080");
+		serverThread.setUncaughtExceptionHandler((thread, t) -> error.set(t));
+		ArtemisSecurityManager.requestThreadWhitelisting(serverThread);
+		serverThread.start();
+		try (Socket s = new Socket("localhost", 8080); PrintStream out = new PrintStream(s.getOutputStream())) {
+			s.setSoTimeout(500);
+			out.println("something");
+		}
+		serverThread.join(250);
+		if (error.get() != null) {
+			throw error.get();
+		}
+	}
+
+	@Test
+	@AllowLocalPort(8083)
+	void serverAllowedAndTimeout() throws Exception {
+		NetworkPenguin.tryStartServer(8083, "none");
+	}
+
+	@Test
+	void serverNotAllowed() throws Exception {
+		NetworkPenguin.tryStartServer(80, "none");
 	}
 }

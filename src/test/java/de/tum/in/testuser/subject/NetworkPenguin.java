@@ -15,7 +15,7 @@ public final class NetworkPenguin {
 
 	public static void tryStartServer(int port, String expectLine) throws Exception {
 		try (ServerSocket socket = new ServerSocket(port)) {
-			socket.setSoTimeout(100);
+			socket.setSoTimeout(500);
 			connectAndCheckSentLine(socket::accept, expectLine);
 		}
 	}

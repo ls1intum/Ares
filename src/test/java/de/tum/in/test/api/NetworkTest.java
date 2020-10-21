@@ -4,6 +4,8 @@ import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
+import java.net.SocketTimeoutException;
+
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.testutilities.TestTest;
@@ -20,6 +22,9 @@ class NetworkTest {
 	private final String connectRemoteNotAllowed = "connectRemoteNotAllowed";
 	private final String connectLocallyNotAllowed = "connectLocallyNotAllowed(int)";
 	private final String connectLocallyAllowed = "connectLocallyAllowed(java.lang.String)";
+	private final String serverAllowedAndAccept = "serverAllowedAndAccept";
+	private final String serverAllowedAndTimeout = "serverAllowedAndTimeout";
+	private final String serverNotAllowed = "serverNotAllowed";
 
 	@TestTest
 	void test_connectRemoteNotAllowed() {
@@ -35,5 +40,20 @@ class NetworkTest {
 	@TestTest
 	void test_connectLocallyAllowed() {
 		tests.assertThatEvents().haveExactly(3, event(test(connectLocallyAllowed), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_serverAllowedAndAccept() {
+		tests.assertThatEvents().haveExactly(1, event(test(serverAllowedAndAccept), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_serverAllowedAndTimeout() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(serverAllowedAndTimeout, SocketTimeoutException.class));
+	}
+
+	@TestTest
+	void test_serverNotAllowed() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(serverNotAllowed, SecurityException.class));
 	}
 }
