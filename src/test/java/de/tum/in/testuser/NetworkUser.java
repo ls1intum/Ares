@@ -105,15 +105,15 @@ public class NetworkUser {
 		var error = new AtomicReference<Throwable>();
 		var serverThread = new Thread(TestUtils.getRootThreadGroup(), () -> {
 			try {
-				NetworkPenguin.tryStartServer(8080, "something");
+				NetworkPenguin.tryStartServer(45458, "something");
 			} catch (Exception e) {
 				fail(e);
 			}
-		}, "server-8080");
+		}, "server-45458");
 		serverThread.setUncaughtExceptionHandler((thread, t) -> error.set(t));
 		ArtemisSecurityManager.requestThreadWhitelisting(serverThread);
 		serverThread.start();
-		try (Socket s = new Socket("localhost", 8080); PrintStream out = new PrintStream(s.getOutputStream())) {
+		try (Socket s = new Socket("localhost", 45458); PrintStream out = new PrintStream(s.getOutputStream())) {
 			s.setSoTimeout(2500);
 			out.println("something");
 		}
