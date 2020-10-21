@@ -24,9 +24,8 @@ import de.tum.in.test.api.StrictTimeout;
  * completely because the extension will get registered and executed twice!</b>
  * 
  * @author Christian Femers
- *
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public class JupiterStrictTimeoutExtension implements UnifiedInvocationInterceptor {
 
 	@Override

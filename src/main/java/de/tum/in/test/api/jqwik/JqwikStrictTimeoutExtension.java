@@ -2,6 +2,8 @@ package de.tum.in.test.api.jqwik;
 
 import java.time.Duration;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.Assertions;
 
 import de.tum.in.test.api.StrictTimeout;
@@ -15,14 +17,19 @@ import net.jqwik.engine.facades.DomainContextFacadeImpl;
 
 /**
  * This class manages the {@link StrictTimeout} annotation and how it is
- * processed, using
+ * processed, similar to
  * {@link Assertions#assertTimeoutPreemptively(Duration, org.junit.jupiter.api.function.ThrowingSupplier)}
  * <p>
  * <i>Adaption for jqwik.</i>
+ * <p>
+ * Use <code>@AddLifecycleHook(JqwikStrictTimeoutExtension.class)</code> only on
+ * test methods or classes that are not marked {@link Public} or {@link Hidden}
+ * to use {@link StrictTimeout}. <b>Doing otherwise will break the tests
+ * completely because the extension will get registered and executed twice!</b>
  *
  * @author Christian Femers
- *
  */
+@API(status = Status.MAINTAINED)
 public class JqwikStrictTimeoutExtension implements AroundPropertyHook {
 
 	@Override
