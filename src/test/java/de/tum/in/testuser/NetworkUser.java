@@ -30,6 +30,7 @@ import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 import de.tum.in.testuser.subject.NetworkPenguin;
 
+@Public
 @UseLocale("en")
 @AllowThreads(maxActiveCount = 100)
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
@@ -46,7 +47,6 @@ public class NetworkUser {
 
 	private static Thread serverThread;
 
-	@Public
 	@BeforeAll
 	static void startServer() {
 		LOG.info("Starting server...");
@@ -76,7 +76,6 @@ public class NetworkUser {
 		serverThread.join();
 	}
 
-	@Public
 	@ParameterizedTest
 	@AllowLocalPort(PORT)
 	@ValueSource(strings = { "localhost", "127.0.0.1", "::1" })
@@ -84,7 +83,6 @@ public class NetworkUser {
 		NetworkPenguin.tryConnect(host, PORT, MESSAGE);
 	}
 
-	@Public
 	@ParameterizedTest
 	@AllowLocalPort(PORT)
 	@ValueSource(ints = { 22, 80 })
@@ -92,7 +90,6 @@ public class NetworkUser {
 		NetworkPenguin.tryConnect("localhost", port, MESSAGE);
 	}
 
-	@Public
 	@Test
 	@AllowLocalPort(80)
 	public void connectRemoteNotAllowed() throws Exception {
