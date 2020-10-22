@@ -1,5 +1,8 @@
 package de.tum.in.testuser;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
@@ -10,6 +13,7 @@ import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jqwik.Hidden;
 import de.tum.in.test.api.jqwik.Public;
+import de.tum.in.test.api.localization.UseLocale;
 import net.jqwik.api.Example;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
@@ -17,6 +21,7 @@ import net.jqwik.api.constraints.CharRange;
 import net.jqwik.api.constraints.Positive;
 
 @Hidden
+@UseLocale("de")
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
 public class JqwickUser {
@@ -151,5 +156,11 @@ public class JqwickUser {
 	@Public
 	void testPublicIncomplete() {
 		// nothing
+	}
+
+	@Public
+	@Example
+	void testLocaleDe() {
+		assertThat(Locale.getDefault()).isEqualTo(Locale.GERMAN);
 	}
 }

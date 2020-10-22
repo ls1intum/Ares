@@ -1,22 +1,23 @@
 package de.tum.in.test.api;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.testutilities.TestTest;
+import de.tum.in.test.testutilities.UserBased;
+import de.tum.in.test.testutilities.UserTestResults;
 import de.tum.in.testuser.JqwickUser;
+import net.jqwik.engine.JqwikTestEngine;
 
+@UserBased(value = JqwickUser.class, testEngineId = JqwikTestEngine.ENGINE_ID)
 class JqwickTest {
 
+	@UserTestResults
 	private static Events tests;
 
 	private final String exampleHiddenCustomDeadlineFuture = "exampleHiddenCustomDeadlineFuture";
@@ -36,17 +37,8 @@ class JqwickTest {
 	private final String provokeTimeoutSleepProperty = "provokeTimeoutSleepProperty";
 	private final String provokeTimeoutSleepTries = "provokeTimeoutSleepTries";
 	private final String testHiddenIncomplete = "testHiddenIncomplete";
+	private final String testLocaleDe = "testLocaleDe";
 	private final String testPublicIncomplete = "testPublicIncomplete";
-
-	@BeforeAll
-	@Tag("test-test")
-	static void verifyJqwik() {
-		var results = EngineTestKit.engine("jqwik").selectors(selectClass(JqwickUser.class)).execute();
-		tests = results.testEvents();
-
-		results.containerEvents().assertStatistics(stats -> stats.started(2).succeeded(2));
-		tests.assertStatistics(stats -> stats.started(16));
-	}
 
 	@TestTest
 	void test_exampleHiddenCustomDeadlineFuture() {
@@ -138,6 +130,11 @@ class JqwickTest {
 	@TestTest
 	void test_testHiddenIncomplete() {
 		tests.assertThatEvents().doNotHave(event(test(testHiddenIncomplete)));
+	}
+
+	@TestTest
+	void test_testLocaleDe() {
+		tests.assertThatEvents().haveExactly(1, event(test(testLocaleDe), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
