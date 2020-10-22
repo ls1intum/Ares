@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.engine.descriptor.JupiterEngineDescriptor;
 
 /**
  * Sets the user(s) for a specific test class. A user in this context is the
@@ -25,5 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
 public @interface UserBased {
+
 	Class<?>[] value();
+
+	String testEngineId() default JupiterEngineDescriptor.ENGINE_ID;
 }

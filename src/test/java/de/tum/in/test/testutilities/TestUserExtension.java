@@ -42,9 +42,10 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 		var optionalAnnotation = AnnotationSupport.findAnnotation(context.getElement(), UserBased.class);
 		if (optionalAnnotation.isEmpty())
 			fail("No annotated element found for @UserBased");
+		var testEngineId = optionalAnnotation.get().testEngineId();
 		var users = List.of(optionalAnnotation.get().value());
 		var userSelectors = users.stream().map(DiscoverySelectors::selectClass).toArray(ClassSelector[]::new);
-		var tests = EngineTestKit.engine("junit-jupiter").selectors(userSelectors).execute();
+		var tests = EngineTestKit.engine(testEngineId).selectors(userSelectors).execute();
 		var testResults = tests.testEvents();
 
 		if (testResults.count() == 0) {
