@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 @API(status = Status.INTERNAL)
-public class LocaleExtension implements BeforeAllCallback, AfterAllCallback {
+public class JupiterLocaleExtension implements BeforeAllCallback, AfterAllCallback {
 
 	private static final String OLD_LOCALE_KEY = "old-locale";
 

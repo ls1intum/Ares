@@ -26,7 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
 @API(status = Status.EXPERIMENTAL)
-@ExtendWith(LocaleExtension.class)
+@ExtendWith(JupiterLocaleExtension.class)
 public @interface UseLocale {
 	String value();
 }
