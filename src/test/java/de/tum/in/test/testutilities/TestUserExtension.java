@@ -1,7 +1,6 @@
 package de.tum.in.test.testutilities;
 
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -20,6 +19,8 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.support.HierarchyTraversalMode;
 import org.junit.platform.commons.support.ReflectionSupport;
+import org.junit.platform.engine.discovery.ClassSelector;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.testkit.engine.EngineTestKit;
 
 class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor, ParameterResolver {
@@ -41,13 +42,14 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 		var optionalAnnotation = AnnotationSupport.findAnnotation(context.getElement(), UserBased.class);
 		if (optionalAnnotation.isEmpty())
 			fail("No annotated element found for @UserBased");
-		var user = optionalAnnotation.get().value();
-		var tests = EngineTestKit.engine("junit-jupiter").selectors(selectClass(user)).execute();
+		var users = List.of(optionalAnnotation.get().value());
+		var userSelectors = users.stream().map(DiscoverySelectors::selectClass).toArray(ClassSelector[]::new);
+		var tests = EngineTestKit.engine("junit-jupiter").selectors(userSelectors).execute();
 		var testResults = tests.testEvents();
 
 		if (testResults.count() == 0) {
 			tests.containerEvents().debug();
-			throw new IllegalStateException("Test execution of " + user + " failed, no tests run.");
+			throw new IllegalStateException("Test execution of " + users + " failed, no tests run.");
 		}
 
 		getStore(context).put(TEST_RESULTS, testResults);

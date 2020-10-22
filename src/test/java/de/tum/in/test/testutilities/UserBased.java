@@ -12,10 +12,10 @@ import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Sets the user for a specific test class. A user in this context is the user
- * of the test API, so the user is a different test class that is not called
- * "Test" because it is not the main test itself, but executed using the JUnit
- * platform.
+ * Sets the user(s) for a specific test class. A user in this context is the
+ * user of the test API, so the user is a different test class that is not
+ * called "Test" because it is not the main test itself, but executed using the
+ * JUnit platform.
  * 
  * @author Christian Femers
  */
@@ -25,5 +25,5 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
 public @interface UserBased {
-	Class<?> value();
+	Class<?>[] value();
 }
