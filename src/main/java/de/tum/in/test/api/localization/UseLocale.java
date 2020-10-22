@@ -12,10 +12,13 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import de.tum.in.test.api.jqwik.JqwikLocaleExtension;
+import de.tum.in.test.api.jupiter.JupiterLocaleExtension;
+import net.jqwik.api.lifecycle.AddLifecycleHook;
+
 /**
- * Used to specify a specific locale for a test class.
- * <p>
- * <i>Does not work for jqwick.</i>
+ * Used to specify a specific locale for a test class like <code>de</code> or
+ * <code>en_US</code>.
  *
  * @see Locale#Locale(String)
  * @author Christian Femers
@@ -27,6 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Target({ TYPE, ANNOTATION_TYPE })
 @API(status = Status.EXPERIMENTAL)
 @ExtendWith(JupiterLocaleExtension.class)
+@AddLifecycleHook(JqwikLocaleExtension.class)
 public @interface UseLocale {
 	String value();
 }
