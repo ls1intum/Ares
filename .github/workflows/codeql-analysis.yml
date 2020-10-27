@@ -40,6 +40,15 @@ jobs:
       with:
         java-version: 11
 
+    # Use Maven dependency cache
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2.1.1
+      with:
+        path: ~/.m2/repository
+        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ajts-maven-
+
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild

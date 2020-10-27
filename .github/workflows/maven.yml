@@ -24,6 +24,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2.1.1
+      with:
+        path: ~/.m2/repository
+        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ajts-maven-
     - name: Test with Maven and JDK ${{ matrix.java }}
       run: mvn -B clean test
   sonar-scanner:
@@ -39,6 +46,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2.1.1
+      with:
+        path: ~/.m2/repository
+        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ajts-maven-
     - name: Run SonarScanner for SonarCloud
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -54,6 +68,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2.1.1
+      with:
+        path: ~/.m2/repository
+        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ajts-maven-
     - name: Build and Deploy with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
