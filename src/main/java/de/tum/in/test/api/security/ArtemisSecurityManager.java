@@ -667,7 +667,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private void removeDeadThreads() {
-		whitelistedThreads.removeIf(Thread::isAlive);
+		whitelistedThreads.removeIf(thread -> !thread.isAlive());
 	}
 
 	static boolean isStaticWhitelisted(String name) {
