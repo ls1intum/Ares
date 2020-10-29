@@ -20,7 +20,6 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  */
 public final class ReportingUtils {
 
-	private static final String LINEBREAK_REPLACEMENT = "  ";
 	private static final Logger LOG = LoggerFactory.getLogger(ReportingUtils.class);
 
 	static {
@@ -89,10 +88,8 @@ public final class ReportingUtils {
 		var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
 		if (first.isPresent()) {
 			String call = first.get().toString();
-			tryPostProcessMessageOrAddSuppressed(newT, old -> {
-				return Objects.toString(old, "") + "  "
-						+ Messages.formatLocalized("reporting.problem_location_hint", call);
-			});
+			tryPostProcessMessageOrAddSuppressed(newT, old -> Objects.toString(old, "") + "\n"
+					+ Messages.formatLocalized("reporting.problem_location_hint", call));
 		}
 	}
 
@@ -103,10 +100,9 @@ public final class ReportingUtils {
 	}
 
 	/**
-	 * This will replace any newlines by spaces, so that multiline messages are
-	 * displayed fully in the Artemis user interface.
+	 * This is currently just returning the message
 	 */
 	private static String postProcessMessage(String message) {
-		return message != null ? message.replaceAll("\r?\n", LINEBREAK_REPLACEMENT) : null;
+		return message;
 	}
 }
