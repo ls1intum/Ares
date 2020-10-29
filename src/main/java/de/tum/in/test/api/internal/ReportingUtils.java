@@ -100,9 +100,9 @@ public final class ReportingUtils {
 	}
 
 	/**
-	 * This is currently just returning the message
+	 * This is currently just returning the message with normalized newlines
 	 */
 	private static String postProcessMessage(String message) {
-		return message;
+		return message == null ? null : message.replace("\r", "");
 	}
 }
