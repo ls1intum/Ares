@@ -125,6 +125,6 @@ class ExceptionFailureTest {
 	void test_softAssertion() {
 		tests.assertThatEvents().haveExactly(1,
 				event(test(softAssertion), finishedWithFailure(instanceOf(SoftAssertionError.class),
-						message(m -> m.contains("The following 2 assertions failed:  1) A  2) B")))));
+						message(m -> m.contains("The following 2 assertions failed:\n1) A\n2) B")))));
 	}
 }
