@@ -1,5 +1,6 @@
 package de.tum.in.test.api.util;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -74,5 +75,13 @@ public final class PackageRule {
 	public static Stream<PackageRule> allOf(BlacklistPackage blacklistedPackage) {
 		return Stream.of(blacklistedPackage.value())
 				.map(packagePattern -> new PackageRule(RuleType.BLACKLIST, packagePattern));
+	}
+
+	public static Stream<PackageRule> from(RuleType ruleType, String... packagePatterns) {
+		return Stream.of(packagePatterns).map(packagePattern -> new PackageRule(ruleType, packagePattern));
+	}
+
+	public static Stream<PackageRule> from(RuleType ruleType, Collection<String> packagePatterns) {
+		return packagePatterns.stream().map(packagePattern -> new PackageRule(ruleType, packagePattern));
 	}
 }
