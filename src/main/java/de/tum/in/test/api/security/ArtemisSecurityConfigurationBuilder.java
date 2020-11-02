@@ -29,6 +29,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private OptionalInt allowLocalPortsAbove;
 	private Set<Integer> excludedLocalPorts;
 	private OptionalInt allowedThreadCount;
+	private Set<PackageRule> trustedPackages;
 
 	private ArtemisSecurityConfigurationBuilder() {
 		testClass = Optional.empty();
@@ -41,6 +42,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 		allowLocalPortsAbove = OptionalInt.empty();
 		excludedLocalPorts = Set.of();
 		allowedThreadCount = OptionalInt.empty();
+		trustedPackages = Set.of();
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
@@ -124,11 +126,16 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public ArtemisSecurityConfigurationBuilder withTrustedPackages(Set<PackageRule> trustedPackages) {
+		this.trustedPackages = trustedPackages;
+		return this;
+	}
+
 	public ArtemisSecurityConfiguration build() {
 		validate();
 		return new ArtemisSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
 				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
-				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages);
+				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages, trustedPackages);
 	}
 
 	private void validate() {

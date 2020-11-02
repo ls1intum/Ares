@@ -29,12 +29,13 @@ public final class ArtemisSecurityConfiguration {
 	private final OptionalInt allowedThreadCount;
 	private final Set<PackageRule> blacklistedPackages;
 	private final Set<PackageRule> whitelistedPackages;
+	private final Set<PackageRule> trustedPackages;
 
 	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath,
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,
-			Set<PackageRule> whitelistedPackages) {
+			Set<PackageRule> whitelistedPackages, Set<PackageRule> trustedPackages) {
 		this.testClass = Objects.requireNonNull(testClass);
 		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
@@ -47,6 +48,7 @@ public final class ArtemisSecurityConfiguration {
 		this.allowedThreadCount = Objects.requireNonNull(allowedThreadCount);
 		this.blacklistedPackages = Set.copyOf(blacklistedPackages);
 		this.whitelistedPackages = Set.copyOf(whitelistedPackages);
+		this.trustedPackages = Set.copyOf(trustedPackages);
 	}
 
 	public Optional<Class<?>> testClass() {
@@ -97,6 +99,10 @@ public final class ArtemisSecurityConfiguration {
 		return whitelistedPackages;
 	}
 
+	public Set<PackageRule> trustedPackages() {
+		return trustedPackages;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -128,14 +134,15 @@ public final class ArtemisSecurityConfiguration {
 		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s,"
 				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s,"
 				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s,"
-				+ " blacklistedPackages=%s, whitelistedPackages=%s]", whitelistedClassNames, executionPath, testClass,
-				testMethod, whitelistedPaths, blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
-				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages);
+				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s]", whitelistedClassNames,
+				executionPath, testClass, testMethod, whitelistedPaths, blacklistedPaths, allowedLocalPorts,
+				allowLocalPortsAbove, excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages,
+				trustedPackages);
 	}
 
 	public String shortDesc() {
 		return String.format(
-				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s]",
-				testMethod, executionPath, whitelistedPaths, blacklistedPaths, allowedLocalPorts);
+				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s, trustedPackages=%s]",
+				testMethod, executionPath, whitelistedPaths, blacklistedPaths, allowedLocalPorts, trustedPackages);
 	}
 }

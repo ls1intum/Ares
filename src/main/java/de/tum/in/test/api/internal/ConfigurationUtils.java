@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPackage;
@@ -23,6 +24,7 @@ import de.tum.in.test.api.security.ArtemisSecurityConfiguration;
 import de.tum.in.test.api.security.ArtemisSecurityConfigurationBuilder;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
+import de.tum.in.test.api.util.RuleType;
 
 public final class ConfigurationUtils {
 
@@ -40,6 +42,7 @@ public final class ConfigurationUtils {
 		config.withAllowedThreadCount(getAllowedThreadCount(context));
 		config.withPackageBlacklist(generatePackageBlackList(context));
 		config.withPackageWhitelist(generatePackageWhiteList(context));
+		config.withTrustedPackages(getTrustedPackages(context));
 		configureAllowLocalPort(config, context);
 		return config.build();
 	}
@@ -103,5 +106,12 @@ public final class ConfigurationUtils {
 	public static Optional<String> getNonprivilegedFailureMessage(TestContext context) {
 		return TestContextUtils.findAnnotationIn(context, PrivilegedExceptionsOnly.class)
 				.map(PrivilegedExceptionsOnly::value);
+	}
+
+	public static Set<PackageRule> getTrustedPackages(TestContext context) {
+		return TestContextUtils.findRepeatableAnnotationsIn(context, AddTrustedPackage.class)
+				.map(AddTrustedPackage::value)
+				.flatMap(packagePatterns -> PackageRule.from(RuleType.WHITELIST, packagePatterns))
+				.collect(Collectors.toSet());
 	}
 }

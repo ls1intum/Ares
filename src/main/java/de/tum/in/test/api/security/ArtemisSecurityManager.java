@@ -458,7 +458,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private boolean isCallNotWhitelisted(String call) {
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-						&& (configuration == null || !configuration.whitelistedClassNames().contains(call)));
+						&& (configuration == null || !(configuration.whitelistedClassNames().contains(call)
+								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(call)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
