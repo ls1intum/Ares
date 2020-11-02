@@ -12,6 +12,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.support.ReflectionSupport;
 
+import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPackage;
@@ -36,6 +37,7 @@ class ArtemisSecurityConfigurationTest {
 	private static final String PATH_WHITELIST = "target";
 	private static final String PACKAGE_WHITELIST = "java.util.regex";
 	private static final String PACKAGE_BLACKLIST = "java.util**";
+	private static final String TRUSTED_PACKAGE = "abc.def.**";
 
 	private static final String TEST_ONE = "testOne";
 	private static final String TEST_TWO = "testTwo";
@@ -78,6 +80,9 @@ class ArtemisSecurityConfigurationTest {
 		assertThat(configurationOneA.allowLocalPortsAbove()).isPresent().hasValue(ALLOW_PORT_ABOVE);
 		assertThat(configurationOneA.excludedLocalPorts()).containsExactly(EXCLUDED_PORT_NUMBER);
 
+		assertThat(configurationOneA.trustedPackages()).hasSize(1)
+				.allMatch(packageRule -> packageRule.getRuleType() == RuleType.WHITELIST //
+						&& TRUSTED_PACKAGE.equals(packageRule.getPackagePattern()));
 	}
 
 	@Test
@@ -108,6 +113,7 @@ class ArtemisSecurityConfigurationTest {
 	@BlacklistPath(PATH_BLACKLIST)
 	@BlacklistPackage(PACKAGE_BLACKLIST)
 	@WhitelistPackage(PACKAGE_WHITELIST)
+	@AddTrustedPackage(TRUSTED_PACKAGE)
 	static class TestTestClass {
 
 		@AllowThreads(maxActiveCount = THREAD_COUNT)
