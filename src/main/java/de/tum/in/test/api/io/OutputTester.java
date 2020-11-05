@@ -149,8 +149,9 @@ public final class OutputTester implements LineAcceptor {
 	 * Fast-forward lines are not being escaped and look like
 	 * 
 	 * <pre>
-	 * >> any number of lines because xyz should appear here >>
-	 * >> 42 >>
+	 * {@code >>>>}
+	 * {@code >>} any number of lines because xyz should appear here {@code >>}
+	 * {@code >>} 42 {@code >>}
 	 * </pre>
 	 * 
 	 * Both special formats can be escaped by a <code>\</code> at the beginning.
@@ -182,8 +183,9 @@ public final class OutputTester implements LineAcceptor {
 	 * Fast-forward lines are not being escaped and look like
 	 * 
 	 * <pre>
-	 * >> any number of lines because xyz should appear here >>
-	 * >> 42 >>
+	 * {@code >>>>}
+	 * {@code >>} any number of lines because xyz should appear here {@code >>}
+	 * {@code >>} 42 {@code >>}
 	 * </pre>
 	 * 
 	 * Both special formats can be escaped by a <code>\</code> at the beginning.
