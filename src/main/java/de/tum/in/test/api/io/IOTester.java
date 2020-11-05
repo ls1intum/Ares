@@ -7,6 +7,9 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * Class for testing console input and output of programs.
  *
@@ -14,6 +17,7 @@ import java.util.List;
  * @since 0.1.0
  * @version 1.0.1
  */
+@API(status = Status.MAINTAINED)
 public final class IOTester {
 
 	static final String LINE_SEPERATOR = "\n"; //$NON-NLS-1$
@@ -117,6 +121,18 @@ public final class IOTester {
 
 	public OutputTester getErrTester() {
 		return errTester;
+	}
+
+	public InputTester in() {
+		return getInTester();
+	}
+
+	public OutputTester out() {
+		return getOutTester();
+	}
+
+	public OutputTester err() {
+		return getErrTester();
 	}
 
 	public static synchronized boolean isInstalled() {

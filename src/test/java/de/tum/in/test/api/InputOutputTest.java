@@ -18,6 +18,7 @@ class InputOutputTest {
 	private static Events tests;
 
 	private final String makeUTF8Error = "makeUTF8Error";
+	private final String testLinesMatch = "testLinesMatch";
 	private final String testPenguin1 = "testPenguin1";
 	private final String testPenguin2 = "testPenguin2";
 	private final String testPolarBear = "testPolarBear";
@@ -29,6 +30,11 @@ class InputOutputTest {
 	@TestTest
 	void test_makeUTF8Error() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(makeUTF8Error, IllegalArgumentException.class));
+	}
+
+	@TestTest
+	void test_testLinesMatch() {
+		tests.assertThatEvents().haveExactly(1, event(test(testLinesMatch), finishedSuccessfullyRep()));
 	}
 
 	@TestTest

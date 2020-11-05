@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * Can provide console input, and throws an exception if more is requested than
  * is available. The provided lines get numbered.
@@ -15,6 +18,7 @@ import java.util.List;
  * @since 0.1.0
  * @version 1.0.1
  */
+@API(status = Status.MAINTAINED)
 public final class InputTester implements LineProvider {
 
 	private final List<Line> expectedInput = new ArrayList<>();

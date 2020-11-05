@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * This is basically a String with additional information and some constraints.
  * <p>
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
  * @since 0.1.0
  * @version 1.0.0
  */
+@API(status = Status.MAINTAINED)
 public interface Line {
 
 	String text();
