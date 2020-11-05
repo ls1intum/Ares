@@ -111,8 +111,20 @@ public final class OutputTester implements LineAcceptor {
 		actualOutput.clear();
 	}
 
+	/**
+	 * Returns the output as list of lines, always including all lines.
+	 * 
+	 * @return all actual output as {@link Line}s.
+	 * @deprecated Use {@link #getLines(OutputTestOptions...)} instead, which allows
+	 *             to specify options.
+	 */
+	@Deprecated(since = "1.3.2")
 	public List<Line> getOutput() {
 		return Collections.unmodifiableList(actualOutput);
+	}
+
+	public List<Line> getLines(OutputTestOptions... outputOptions) {
+		return Collections.unmodifiableList(processLines(outputOptions));
 	}
 
 	public String getOutputAsString(OutputTestOptions... outputOptions) {
@@ -288,7 +300,7 @@ public final class OutputTester implements LineAcceptor {
 
 	private List<Line> processLines(OutputTestOptions... outputOptions) {
 		boolean ignoreLastEmpty = !OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE.isIn(outputOptions);
-		if (ignoreLastEmpty && actualOutput.size() > 0 && actualOutput.get(actualOutput.size() - 1).text().isEmpty())
+		if (ignoreLastEmpty && !actualOutput.isEmpty() && actualOutput.get(actualOutput.size() - 1).text().isEmpty())
 			return actualOutput.subList(0, actualOutput.size() - 1);
 		return actualOutput;
 	}
