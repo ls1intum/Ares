@@ -85,9 +85,13 @@ public final class IOTester {
 	}
 
 	public synchronized void reset() {
-		inTester.reset();
+		inTester.resetInput();
 		outTester.resetOutput();
 		errTester.resetOutput();
+
+		in.resetInternalState();
+		out.resetInternalState();
+		err.resetInternalState();
 	}
 
 	public IOTester provideInputLines(String... givenInputLines) {
@@ -95,18 +99,58 @@ public final class IOTester {
 		return this;
 	}
 
+	/**
+	 * Returns all standard output as lines
+	 * 
+	 * @return a list of all standard output lines
+	 * @deprecated See {@link OutputTester#getOutput()}, use
+	 *             <code>out().getLines()</code> instead. (With
+	 *             <code>OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE</code> if
+	 *             testing for the last empty line is desired.)
+	 */
+	@Deprecated(since = "1.3.2")
 	public List<Line> getOutput() {
 		return outTester.getOutput();
 	}
 
+	/**
+	 * Returns all error output as lines
+	 * 
+	 * @return a list of all error output lines
+	 * @deprecated See {@link OutputTester#getOutput()} use
+	 *             <code>err().getLines()</code> instead. (With
+	 *             <code>OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE</code> if
+	 *             testing for the last empty line is desired.)
+	 */
+	@Deprecated(since = "1.3.2")
 	public List<Line> getErrorOutput() {
 		return errTester.getOutput();
 	}
 
+	/**
+	 * Returns all standard output as single string.
+	 * 
+	 * @return all standard output lines as single string.
+	 * @deprecated See {@link OutputTester#getOutput()}, use
+	 *             <code>out().getOutputAsString()</code> instead. (With
+	 *             <code>OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE</code> if
+	 *             testing for the last empty line is desired)
+	 */
+	@Deprecated(since = "1.3.2")
 	public String getOutputAsString() {
 		return Line.joinLinesToString(getOutput(), LINE_SEPERATOR);
 	}
 
+	/**
+	 * Returns all error output as single string.
+	 * 
+	 * @return all error output lines as single string.
+	 * @deprecated See {@link OutputTester#getOutput()}, use
+	 *             <code>err().getOutputAsString()</code> instead. (With
+	 *             <code>OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE</code> if
+	 *             testing for the last empty line is desired)
+	 */
+	@Deprecated(since = "1.3.2")
 	public String getErrorOutputAsString() {
 		return Line.joinLinesToString(getErrorOutput(), LINE_SEPERATOR);
 	}
@@ -123,14 +167,35 @@ public final class IOTester {
 		return errTester;
 	}
 
+	/**
+	 * Testing counterpart to {@link System#in}.
+	 * <p>
+	 * Returns the input tester.
+	 * 
+	 * @return the {@link InputTester} for {@link System#in}
+	 */
 	public InputTester in() {
 		return getInTester();
 	}
 
+	/**
+	 * Testing counterpart to {@link System#out}.
+	 * <p>
+	 * Returns the standard output tester.
+	 * 
+	 * @return the {@link OutputTester} for {@link System#out}
+	 */
 	public OutputTester out() {
 		return getOutTester();
 	}
 
+	/**
+	 * Testing counterpart to {@link System#err}.
+	 * <p>
+	 * Returns the error output tester.
+	 * 
+	 * @return the {@link OutputTester} for {@link System#err}
+	 */
 	public OutputTester err() {
 		return getErrTester();
 	}

@@ -51,7 +51,7 @@ public final class InputTester implements LineProvider {
 		Arrays.stream(lines).map(Line::of).forEach(this::addExpectedLine);
 	}
 
-	public void reset() {
+	public void resetInput() {
 		expectedInput.clear();
 		position = 0;
 	}

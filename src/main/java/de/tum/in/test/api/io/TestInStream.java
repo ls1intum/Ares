@@ -43,6 +43,10 @@ final class TestInStream extends InputStream {
 		return res;
 	}
 
+	void resetInternalState() {
+		input = null;
+	}
+
 	private void tryLoadNextLine(boolean force) {
 		if (force || lineProvider.hasNextLine()) {
 			Line currentLine = lineProvider.getNextLine();

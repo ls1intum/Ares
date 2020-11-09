@@ -82,6 +82,11 @@ final class TestOutStream extends OutputStream {
 			mirror.close();
 	}
 
+	void resetInternalState() {
+		charCount = 0;
+		currentInput.reset();
+	}
+
 	private void checkCharCount(int newChars) throws IOException {
 		if (closed) {
 			throw new IOException("Stream closed");

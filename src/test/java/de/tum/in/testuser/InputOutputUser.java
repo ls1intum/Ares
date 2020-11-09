@@ -114,7 +114,7 @@ public class InputOutputUser {
 
 		InputOutputPenguin.writeTwoLines();
 
-		List<Line> lines = tester.getOutput();
+		List<Line> lines = tester.out().getLines();
 
 		if (lines.isEmpty())
 			fail("Es wird nichts ausgegeben!");
@@ -128,7 +128,7 @@ public class InputOutputUser {
 
 		InputOutputPenguin.writeTwoLines();
 
-		List<Line> lines = tester.getOutput();
+		List<Line> lines = tester.out().getLines();
 
 		String secondLine = lines.get(0).text();
 		assertEquals("Pinguine sind  die Besten!", secondLine);
@@ -139,7 +139,7 @@ public class InputOutputUser {
 
 		InputOutputPenguin.writeTwoLines();
 
-		List<Line> lines = tester.getOutput();
+		List<Line> lines = tester.out().getLines();
 
 		if (lines.size() < 2)
 			fail("Es wird keine zweite Zeile ausgegeben!");
@@ -156,9 +156,9 @@ public class InputOutputUser {
 
 		InputOutputPenguin.calculateSquare();
 
-		var out = tester.getOutput();
+		var out = tester.out().getLines();
 
-		assertEquals("Keine Fehlerausgabe erwartet", 4, out.size());
+		assertEquals("Keine Fehlerausgabe erwartet", 3, out.size());
 		assertEquals("Zahl eingeben:", out.get(0).text());
 		assertEquals("Ausgabe:", out.get(1).text());
 		assertEquals("25", out.get(2).text());
@@ -168,7 +168,7 @@ public class InputOutputUser {
 	void testSquareWrong(IOTester tester) {
 		InputOutputPenguin.calculateSquare();
 
-		assertEquals("Keine Fehlerausgabe erwartet", 0, tester.getErrorOutput().size());
+		assertEquals("Keine Fehlerausgabe erwartet", 0, tester.err().getLines().size());
 	}
 
 	@PublicTest

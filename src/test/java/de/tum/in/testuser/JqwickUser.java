@@ -1,5 +1,6 @@
 package de.tum.in.testuser;
 
+import static de.tum.in.test.api.io.OutputTestOptions.DONT_IGNORE_LAST_EMPTY_LINE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Locale;
@@ -95,7 +96,8 @@ public class JqwickUser {
 	void propertyUseIOTesterCorrect(@ForAll IOTester test, @ForAll @CharRange(from = 'a', to = 'z') String s) {
 		test.reset();
 		System.out.println(s);
-		Assertions.assertThat(test.getOutput()).containsExactly(Line.of(s), Line.of(""));
+		Assertions.assertThat(test.out().getLines(DONT_IGNORE_LAST_EMPTY_LINE)).containsExactly(Line.of(s),
+				Line.of(""));
 	}
 
 	@Public
@@ -103,7 +105,8 @@ public class JqwickUser {
 	void propertyUseIOTesterWrong(@ForAll IOTester test, @ForAll @CharRange(from = 'a', to = 'z') String s) {
 		test.reset();
 		System.out.println(s.length() < 5 ? s : s.substring(0, 5));
-		Assertions.assertThat(test.getOutput()).containsExactly(Line.of(s), Line.of(""));
+		Assertions.assertThat(test.out().getLines(DONT_IGNORE_LAST_EMPTY_LINE)).containsExactly(Line.of(s),
+				Line.of(""));
 	}
 
 	@Public
