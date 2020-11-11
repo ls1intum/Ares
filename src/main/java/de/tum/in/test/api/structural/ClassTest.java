@@ -29,6 +29,7 @@ public abstract class ClassTest extends StructuralTest {
      * This method collects the classes in the structure oracle file for which at least one class property is specified.
      * These classes are then transformed into JUnit 5 dynamic tests.
      * @return A dynamic test container containing the test for each class which is then executed by JUnit.
+     * @throws an exception if the URI of the class name cannot be generated (which seems to be unlikely)
      */
     protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
         List<DynamicNode> tests = new ArrayList<>();

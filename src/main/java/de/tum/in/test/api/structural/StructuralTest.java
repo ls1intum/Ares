@@ -205,8 +205,8 @@ public abstract class StructuralTest {
      * This method creates a hash table where the name of a parameter type is hashed to the number of the occurrences in
      * the passed string collection.
      *
-     * @param parameterTypeNames
-     * @return
+     * @param parameterTypeNames the parameters for which the hash table should be produced
+     * @return the hash table with the number of occurrences
      */
     protected static Map<String, Integer> createParametersHashMap(String... parameterTypeNames) {
         Map<String, Integer> parametersHashTable = new HashMap<String, Integer>();
@@ -226,8 +226,7 @@ public abstract class StructuralTest {
     /**
      * This method retrieves the JSON array in the structure oracle.
      *
-     * @param structureOracleFileName: The file name of the structure oracle file, which is placed in the same folder as
-     *                                 StructuralTest.
+     * @param structureOracleFileUrl: The file url of the structure oracle file, which is used for the structural tests.
      * @return The JSONArray representation of the structure oracle.
      */
     protected static JSONArray retrieveStructureOracleJSON(URL structureOracleFileUrl) {

@@ -100,6 +100,7 @@ public abstract class BehaviorTest {
 
     /**
      * Instantiate an object of a given class by its qualified name and the constructor arguments, if applicable.
+     * @param constructor: The actual constructor that should be used for creating a new instance of the object
      * @param constructorArgs: Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
      * @return The instance of this class.
      */
@@ -230,6 +231,7 @@ public abstract class BehaviorTest {
      * @param object: The instance of the class that should invoke the method.
      * @param method: The method that has to get invoked.
      * @param params: Parameter instances of the method. Do not include if the method has no parameters.
+     * @throws the exception that was catched and which will be rethrown
      * @return The return value of the method.
      */
     protected Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
