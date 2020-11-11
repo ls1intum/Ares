@@ -222,10 +222,8 @@ public class ClassNameScanner {
      */
     private void walkProjectFileStructure(String assignmentFolderName, File node, Map<String, List<String>> foundTypes) {
         String fileName = node.getName();
-        boolean isJavaFile = fileName.endsWith(".java");
-        boolean isKotlinFile = fileName.endsWith(".kv");
 
-        if(isJavaFile || isKotlinFile) {
+        if(fileName.endsWith(".java") || fileName.endsWith(".kv")) {
             String[] fileNameComponents = fileName.split("\\.");
             String fileExtension = fileNameComponents[fileNameComponents.length - 1];
 
