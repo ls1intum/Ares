@@ -88,6 +88,16 @@
 			<artifactId>assertj-core</artifactId>
 			<version>3.18.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20190722</version>
+		</dependency>
+		<dependency>
+			<groupId>me.xdrop</groupId>
+			<artifactId>fuzzywuzzy</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 		<!-- For testing we use a test framework testing framework -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
