@@ -8,6 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
 
+import net.jqwik.api.Example;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.CharRange;
+import net.jqwik.api.constraints.Positive;
+
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.io.IOTester;
@@ -15,11 +21,6 @@ import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jqwik.Hidden;
 import de.tum.in.test.api.jqwik.Public;
 import de.tum.in.test.api.localization.UseLocale;
-import net.jqwik.api.Example;
-import net.jqwik.api.ForAll;
-import net.jqwik.api.Property;
-import net.jqwik.api.constraints.CharRange;
-import net.jqwik.api.constraints.Positive;
 
 @Hidden
 @UseLocale("de")

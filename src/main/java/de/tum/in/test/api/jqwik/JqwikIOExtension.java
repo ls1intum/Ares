@@ -5,8 +5,6 @@ import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.internal.IOTesterManager;
-import de.tum.in.test.api.io.IOTester;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
@@ -16,6 +14,9 @@ import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 import net.jqwik.api.providers.ArbitraryProvider;
 import net.jqwik.api.providers.TypeUsage;
 import net.jqwik.engine.providers.RegisteredArbitraryProviders;
+
+import de.tum.in.test.api.internal.IOTesterManager;
+import de.tum.in.test.api.io.IOTester;
 
 /**
  * <p>
