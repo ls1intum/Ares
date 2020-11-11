@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 3.2 (27.10.2020)
+ * @version 5.0 (11.11.2020)
  * <br><br>
  *
  * This class serves as an API to Java Reflection to facilitate various operations that are performed

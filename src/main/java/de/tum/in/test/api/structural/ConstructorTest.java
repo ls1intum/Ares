@@ -19,7 +19,7 @@ import org.junit.jupiter.api.DynamicNode;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 4.0 (27.10.2020)
+ * @version 5.0 (11.11.2020)
  * <br><br>
  * This test evaluates if the specified constructors in the structure oracle are correctly implemented with the expected parameter types and annotations,
  * based on its definition in the structure oracle (test.json).

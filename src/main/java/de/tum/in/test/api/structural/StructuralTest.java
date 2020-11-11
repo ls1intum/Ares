@@ -20,7 +20,7 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 4.0 (27.10.2020)
+ * @version 5.0 (11.11.2020)
  *          <br>
  *          <br>
  *          This test and its subclasses evaluate if the following specified elements of a given class in the structure
