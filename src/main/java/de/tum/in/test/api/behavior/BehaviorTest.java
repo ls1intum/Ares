@@ -231,7 +231,7 @@ public abstract class BehaviorTest {
      * @param object: The instance of the class that should invoke the method.
      * @param method: The method that has to get invoked.
      * @param params: Parameter instances of the method. Do not include if the method has no parameters.
-     * @throws the exception that was catched and which will be rethrown
+     * @throws Throwable the exception that was catched and which will be rethrown
      * @return The return value of the method.
      */
     protected Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
