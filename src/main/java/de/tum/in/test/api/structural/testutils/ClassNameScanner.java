@@ -101,7 +101,7 @@ public class ClassNameScanner {
                 boolean hasWrongCase = observedClassName.equalsIgnoreCase(expectedClassName);
                 boolean hasTypos = FuzzySearch.ratio(observedClassName, expectedClassName) > 90;
                 //The previous implementation
-//				boolean hasTypos = DiffUtils.levEditDistance(observedClassName, expectedClassName, 1) < Math.ceil(expectedClassName.length() / 4);
+    			//boolean hasTypos = DiffUtils.levEditDistance(observedClassName, expectedClassName, 1) < Math.ceil(expectedClassName.length() / 4);
 
                 foundObservedClassName = observedClassName;
                 foundObservedPackageName = observedPackageNames.toString();
