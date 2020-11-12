@@ -65,11 +65,15 @@ public abstract class ConstructorTest extends StructuralTest {
      */
     protected void testConstructors(ExpectedClassStructure expectedClassStructure) {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
-        Class<?> actualClass = findClassForTestType(expectedClassStructure, "constructor");
+        Class<?> observedClass = findClassForTestType(expectedClassStructure, "constructor");
+        if (observedClass == null) {
+            fail("Class " + expectedClassName + " not found for constructor test");
+            return;
+        }
 
         if (expectedClassStructure.hasProperty(JSON_PROPERTY_CONSTRUCTORS)) {
             JSONArray expectedConstructors = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_CONSTRUCTORS);
-            checkConstructors(expectedClassName, actualClass, expectedConstructors);
+            checkConstructors(expectedClassName, observedClass, expectedConstructors);
         }
     }
 

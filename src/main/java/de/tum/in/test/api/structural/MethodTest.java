@@ -66,6 +66,10 @@ public abstract class MethodTest extends StructuralTest {
     public void testMethods(ExpectedClassStructure expectedClassStructure) {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "method");
+        if (observedClass == null) {
+            fail("Class " + expectedClassName + " not found for method test");
+            return;
+        }
 
         if (expectedClassStructure.hasProperty(JSON_PROPERTY_METHODS)) {
             JSONArray methodsJSON = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_METHODS);
@@ -99,7 +103,7 @@ public abstract class MethodTest extends StructuralTest {
                 String observedName = observedMethod.getName();
                 Class<?>[] observedParameters = observedMethod.getParameterTypes();
                 String[] observedModifiers = Modifier.toString(observedMethod.getModifiers()).split(" ");
-                String observedReturntype = observedMethod.getReturnType().getSimpleName();
+                String observedReturnType = observedMethod.getReturnType().getSimpleName();
                 Annotation[] observedAnnotations = observedMethod.getAnnotations();
 
                 // If the names don't match, then proceed to the next observed method
@@ -114,10 +118,10 @@ public abstract class MethodTest extends StructuralTest {
                 parametersAreRight = checkParameters(observedParameters, expectedParameters);
                 modifiersAreRight = checkModifiers(observedModifiers, expectedModifiers);
                 annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
-                returnTypeIsRight = expectedReturnType.equals(observedReturntype);
+                returnTypeIsRight = expectedReturnType.equals(observedReturnType);
 
                 // If all are correct, then we found our method and we can break the loop
-                if(nameIsRight && parametersAreRight && modifiersAreRight && annotationsAreRight && returnTypeIsRight) {
+                if(parametersAreRight && modifiersAreRight && annotationsAreRight && returnTypeIsRight) {
                     break;
                 }
             }
@@ -139,9 +143,6 @@ public abstract class MethodTest extends StructuralTest {
             }
             if (!returnTypeIsRight) {
                 fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");
-            }
-            if (!(nameIsRight && parametersAreRight && modifiersAreRight && returnTypeIsRight)) {
-                fail("The method '" + expectedName + "' of the class " + expectedClassName + " is not implemented as expected.");
             }
         }
     }

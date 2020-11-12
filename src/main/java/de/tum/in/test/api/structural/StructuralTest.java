@@ -86,7 +86,7 @@ public abstract class StructuralTest {
         ScanResultType scanResultEnum = classNameScanner.getScanResult().getResult();
         String classNameScanMessage = classNameScanner.getScanResult().getMessage();
 
-        if (!scanResultEnum.equals(ScanResultType.CORRECTNAME_CORRECTPLACE)) {
+        if (!scanResultEnum.equals(ScanResultType.CORRECT_NAME_CORRECT_PLACE)) {
             fail(classNameScanMessage);
         }
 
@@ -123,7 +123,7 @@ public abstract class StructuralTest {
         // If at least one isn't, then the modifiers don't match.
         boolean allModifiersAreImplemented = true;
         for (Object expectedModifier : expectedModifiers) {
-            allModifiersAreImplemented &= Arrays.asList(observedModifiers).contains((String) expectedModifier);
+            allModifiersAreImplemented &= Arrays.asList(observedModifiers).contains(expectedModifier);
         }
 
         return allModifiersAreImplemented;
@@ -155,7 +155,7 @@ public abstract class StructuralTest {
                 }
             }
 
-            if (expectedAnnotationFound == false) {
+            if (!expectedAnnotationFound) {
                 return false;
             }
         }
@@ -209,14 +209,14 @@ public abstract class StructuralTest {
      * @return the hash table with the number of occurrences
      */
     protected static Map<String, Integer> createParametersHashMap(String... parameterTypeNames) {
-        Map<String, Integer> parametersHashTable = new HashMap<String, Integer>();
+        Map<String, Integer> parametersHashTable = new HashMap<>();
 
         for (String parameterTypeName : parameterTypeNames) {
             if (!parametersHashTable.containsKey(parameterTypeName)) {
                 parametersHashTable.put(parameterTypeName, 1);
             } else {
                 Integer currentParameterCount = parametersHashTable.get(parameterTypeName);
-                parametersHashTable.replace(parameterTypeName, currentParameterCount, currentParameterCount++);
+                parametersHashTable.replace(parameterTypeName, currentParameterCount, currentParameterCount + 1);
             }
         }
 
@@ -268,7 +268,7 @@ public abstract class StructuralTest {
      *
      * @author Christian Femers
      */
-    protected class ExpectedClassStructure {
+    protected static class ExpectedClassStructure {
 
         private final String expectedClassName;
         private final String expectedPackageName;

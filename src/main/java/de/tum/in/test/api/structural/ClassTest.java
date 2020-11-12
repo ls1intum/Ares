@@ -58,7 +58,7 @@ public abstract class ClassTest extends StructuralTest {
     }
 
     protected static boolean hasAdditionalProperties(JSONObject jsonObject) {
-        List<String> keys = new ArrayList<String>(jsonObject.keySet());
+        List<String> keys = new ArrayList<>(jsonObject.keySet());
         keys.remove(JSON_PROPERTY_NAME);
         keys.remove(JSON_PROPERTY_PACKAGE);
         return keys.size() > 0;
@@ -72,6 +72,11 @@ public abstract class ClassTest extends StructuralTest {
     protected void testClass(ExpectedClassStructure expectedClassStructure) {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "class");
+        if (observedClass == null) {
+            fail("Class " + expectedClassName + " not found for class test");
+            return;
+        }
+
 
         JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
 

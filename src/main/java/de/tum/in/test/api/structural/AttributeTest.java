@@ -68,6 +68,10 @@ public abstract class AttributeTest extends StructuralTest {
     protected void testAttributes(ExpectedClassStructure expectedClassStructure) {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "attribute");
+        if (observedClass == null) {
+            fail("Class " + expectedClassName + " not found for class test");
+            return;
+        }
 
         if (expectedClassStructure.hasProperty(JSON_PROPERTY_ATTRIBUTES)) {
             JSONArray expectedAttributes = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_ATTRIBUTES);
@@ -118,7 +122,7 @@ public abstract class AttributeTest extends StructuralTest {
                 annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
 
                 // If all are correct, then we found our attribute and we can break the loop
-                if(nameIsRight && typeIsRight && modifiersAreRight && annotationsAreRight) {
+                if(typeIsRight && modifiersAreRight && annotationsAreRight) {
                     break;
                 }
             }
@@ -188,7 +192,7 @@ public abstract class AttributeTest extends StructuralTest {
         boolean expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
 
         if(expectedTypeIsGeneric) {
-            boolean mainTypeIsRight = false;
+            boolean mainTypeIsRight;
             boolean genericTypeIsRight = false;
 
             String expectedMainTypeName = expectedTypeName.split("<")[0];

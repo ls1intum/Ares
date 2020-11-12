@@ -2,7 +2,7 @@ package de.tum.in.test.api.structural.testutils;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 3.0 (25.09.2019)
+ * @version 5.0 (11.11.2020)
  *
  * This class represents the result object generated from the ClassNamesScanner.
  * It consists of an enum representing the type of the result and a string
@@ -10,8 +10,8 @@ package de.tum.in.test.api.structural.testutils;
  */
 public class ScanResult {
 
-    private ScanResultType type;
-    private String message;
+    private final ScanResultType type;
+    private final String message;
 
     public ScanResult(ScanResultType result, String message) {
         this.type = result;

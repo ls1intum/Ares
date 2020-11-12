@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 3.0 (25.09.2019)
+ * @version 5.0 (11.11.2020)
  *
  * This class scans the submission project if the current expected class is actually
  * present in it or not. The result is returned as an instance of ScanResult.
@@ -72,7 +72,7 @@ public class ClassNameScanner {
     private ScanResult computeScanResult() {
         // Initialize the type and the message of the scan result.
         ScanResultType scanResultType = ScanResultType.UNDEFINED;
-        String scanResultMessage = "";
+        String scanResultMessage;
 
         boolean classIsFound = observedClasses.containsKey(expectedClassName);
         boolean classIsCorrectlyPlaced;
@@ -84,10 +84,10 @@ public class ClassNameScanner {
         if(classIsFound) {
             List<String> observedPackageNames = observedClasses.get(expectedClassName);
             classIsPresentMultipleTimes = observedPackageNames.size() > 1;
-            classIsCorrectlyPlaced = classIsPresentMultipleTimes ? false : (observedPackageNames.contains(expectedPackageName));
+            classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
 
-            scanResultType = classIsPresentMultipleTimes ? ScanResultType.CORRECTNAME_MULTIPLETIMESPRESENT :
-                    (classIsCorrectlyPlaced ? ScanResultType.CORRECTNAME_CORRECTPLACE : ScanResultType.CORRECTNAME_MISPLACED);
+            scanResultType = classIsPresentMultipleTimes ? ScanResultType.CORRECT_NAME_MULTIPLE_TIMES_PRESENT :
+                    (classIsCorrectlyPlaced ? ScanResultType.CORRECT_NAME_CORRECT_PLACE : ScanResultType.CORRECT_NAME_MISPLACED);
 
             foundObservedClassName = expectedClassName;
             foundObservedPackageName = observedPackageNames.toString();
@@ -96,7 +96,7 @@ public class ClassNameScanner {
             for(String observedClassName : observedClasses.keySet()) {
                 Collection<String> observedPackageNames = observedClasses.get(observedClassName);
                 classIsPresentMultipleTimes = observedPackageNames.size() > 1;
-                classIsCorrectlyPlaced = classIsPresentMultipleTimes ? false : (observedPackageNames.contains(expectedPackageName));
+                classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
 
                 boolean hasWrongCase = observedClassName.equalsIgnoreCase(expectedClassName);
                 boolean hasTypos = FuzzySearch.ratio(observedClassName, expectedClassName) > 90;
@@ -107,12 +107,12 @@ public class ClassNameScanner {
                 foundObservedPackageName = observedPackageNames.toString();
 
                 if(hasWrongCase) {
-                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.WRONGCASE_MULTIPLETIMESPRESENT :
-                            (classIsCorrectlyPlaced ? ScanResultType.WRONGCASE_CORRECTPLACE : ScanResultType.WRONGCASE_MISPLACED);
+                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.WRONG_CASE_MULTIPLE_TIMES_PRESENT :
+                            (classIsCorrectlyPlaced ? ScanResultType.WRONG_CASE_CORRECT_PLACE : ScanResultType.WRONG_CASE_MISPLACED);
                     break;
                 } else if(hasTypos) {
-                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.TYPOS_MULTIPLETIMESPRESENT :
-                            (classIsCorrectlyPlaced ? ScanResultType.TYPOS_CORRECTPLACE : ScanResultType.TYPOS_MISPLACED);
+                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.TYPOS_MULTIPLE_TIMES_PRESENT :
+                            (classIsCorrectlyPlaced ? ScanResultType.TYPOS_CORRECT_PLACE : ScanResultType.TYPOS_MISPLACED);
                     break;
                 } else {
                     scanResultType = ScanResultType.NOTFOUND;
@@ -121,38 +121,38 @@ public class ClassNameScanner {
         }
 
         switch (scanResultType) {
-            case CORRECTNAME_CORRECTPLACE :
+            case CORRECT_NAME_CORRECT_PLACE:
                 scanResultMessage = "The class " + foundObservedClassName + " has the correct name and is in the correct package.";
                 break;
-            case CORRECTNAME_MISPLACED :
+            case CORRECT_NAME_MISPLACED:
                 scanResultMessage = "The class " + foundObservedClassName + " has the correct name,"
                         + " but the package it's in, " + foundObservedPackageName + ", deviates from the expectation."
                         + "  Make sure it is placed in the correct package.";
                 break;
-            case CORRECTNAME_MULTIPLETIMESPRESENT:
+            case CORRECT_NAME_MULTIPLE_TIMES_PRESENT:
                 scanResultMessage = "The class " + foundObservedClassName + " has the correct name,"
                         + " but it is located multiple times in the project and in the packages: "
                         + foundObservedPackageName +", which deviates from the expectation."
                         + " Make sure to place the class in the correct package and remove any superfluous ones.";
                 break;
-            case WRONGCASE_CORRECTPLACE:
+            case WRONG_CASE_CORRECT_PLACE:
                 scanResultMessage = "The exercise expects a class with the name " + expectedClassName
                         + ". We found that you implemented a class " + foundObservedClassName + ", which deviates from the expectation."
                         + " Check for wrong upper case / lower case lettering.";
                 break;
-            case WRONGCASE_MISPLACED:
+            case WRONG_CASE_MISPLACED:
                 scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName
                         + ". We found that you implemented a class " + foundObservedClassName + ", in the package " + foundObservedPackageName
                         + ", which deviates from the expectation."
                         + " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
                 break;
-            case WRONGCASE_MULTIPLETIMESPRESENT:
+            case WRONG_CASE_MULTIPLE_TIMES_PRESENT:
                 scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName
                         + ". We found that you implemented a class " + foundObservedClassName + ", in the packages " + foundObservedPackageName
                         + ", which deviates from the expectation."
                         + " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
                 break;
-            case TYPOS_CORRECTPLACE:
+            case TYPOS_CORRECT_PLACE:
                 scanResultMessage = "The exercise expects a class with the name " + expectedClassName
                         + ". We found that you implemented a class " + foundObservedClassName + ", which deviates from the expectation."
                         + " Check for typos in the class name.";
@@ -163,7 +163,7 @@ public class ClassNameScanner {
                         + ", which deviates from the expectation."
                         + " Check for typos in the class name and make sure you place it in the correct package.";
                 break;
-            case TYPOS_MULTIPLETIMESPRESENT:
+            case TYPOS_MULTIPLE_TIMES_PRESENT:
                 scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName
                         + ". We found that you implemented a class " + foundObservedClassName + ", in the packages " + observedClasses.get(foundObservedClassName).toString()
                         + ", which deviates from the expectation."
@@ -242,14 +242,16 @@ public class ClassNameScanner {
                 foundTypes.get(className).add(packageName);
             }
             else {
-                foundTypes.put(className, Arrays.asList(packageName));
+                foundTypes.put(className, Collections.singletonList(packageName));
             }
         }
 
         if(node.isDirectory()) {
             String[] subNodes = node.list();
-            for(String currentSubNode : subNodes) {
-                walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundTypes);
+            if (subNodes != null && subNodes.length > 0) {
+                for (String currentSubNode : subNodes) {
+                    walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundTypes);
+                }
             }
         }
     }
