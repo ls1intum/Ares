@@ -3,3 +3,5 @@
 /reports
 !/.settings/org.eclipse.*
 !/.settings/eclipse*rules*
+/artemis-java-test-sandbox.iml
+/.idea
