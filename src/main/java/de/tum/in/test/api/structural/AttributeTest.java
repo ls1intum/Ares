@@ -38,14 +38,14 @@ public abstract class AttributeTest extends StructuralTest {
         List<DynamicNode> tests = new ArrayList<>();
 
         if (structureOracleJSON == null) {
-            fail("The AttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete AttributeTest.java!");
+            fail("The LocalAttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalAttributeTest.java!");
         }
 
         for (int i = 0; i < structureOracleJSON.length(); i++) {
             JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
 
             // Only test the classes that have attributes defined in the oracle.
-            if(expectedClassJSON.has(JSON_PROPERTY_CLASS) && (expectedClassJSON.has(JSON_PROPERTY_ATTRIBUTES) || expectedClassJSON.has("enumValues"))) {
+            if(expectedClassJSON.has(JSON_PROPERTY_CLASS) && (expectedClassJSON.has(JSON_PROPERTY_ATTRIBUTES) || expectedClassJSON.has(JSON_PROPERTY_ENUM_VALUES))) {
                 JSONObject expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
                 String expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
                 String expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
@@ -69,7 +69,7 @@ public abstract class AttributeTest extends StructuralTest {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "attribute");
         if (observedClass == null) {
-            fail("Class " + expectedClassName + " not found for class test");
+            fail(THE_CLASS + expectedClassName + " was not found for attribute test");
             return;
         }
 
@@ -77,8 +77,8 @@ public abstract class AttributeTest extends StructuralTest {
             JSONArray expectedAttributes = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_ATTRIBUTES);
             checkAttributes(expectedClassName, observedClass, expectedAttributes);
         }
-        if (expectedClassStructure.hasProperty("enumValues")) {
-            JSONArray expectedEnumValues = expectedClassStructure.getPropertyAsJsonArray("enumValues");
+        if (expectedClassStructure.hasProperty(JSON_PROPERTY_ENUM_VALUES)) {
+            JSONArray expectedEnumValues = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_ENUM_VALUES);
             checkEnumValues(expectedClassName, observedClass, expectedEnumValues);
         }
     }
@@ -155,11 +155,11 @@ public abstract class AttributeTest extends StructuralTest {
         Object[] observedEnumValues = observedClass.getEnumConstants();
 
         if (observedEnumValues == null) {
-            fail("The enum '" + expectedClassName + "' does not contain any enum constants. Make sure to implement them.");
+            fail(THE_ENUM + "'" + expectedClassName + "' does not contain any enum constants. Make sure to implement them.");
             return;
         }
         if (expectedEnumValues.length() != observedEnumValues.length) {
-            fail("The enum '" + expectedClassName + "' does not contain all the expected enum values. Make sure to implement the missing enums.");
+            fail(THE_ENUM + "'" + expectedClassName + "' does not contain all the expected enum values. Make sure to implement the missing enums.");
             return;
         }
 
@@ -175,7 +175,7 @@ public abstract class AttributeTest extends StructuralTest {
                 }
             }
             if(!enumValueExists) {
-                fail("The class '" + expectedClassName + "' does not include the enum value: " + expectedEnumValue
+                fail(THE_CLASS + "'" + expectedClassName + "' does not include the enum value: " + expectedEnumValue
                         + ". Make sure to implement it as expected.");
             }
         }

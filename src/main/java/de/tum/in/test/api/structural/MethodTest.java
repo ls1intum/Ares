@@ -36,7 +36,7 @@ public abstract class MethodTest extends StructuralTest {
         List<DynamicNode> tests = new ArrayList<>();
 
         if (structureOracleJSON == null) {
-            fail("The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!");
+            fail("The LocalMethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalMethodTest.java!");
         }
 
         for (int i = 0; i < structureOracleJSON.length(); i++) {
@@ -67,7 +67,7 @@ public abstract class MethodTest extends StructuralTest {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "method");
         if (observedClass == null) {
-            fail("Class " + expectedClassName + " not found for method test");
+            fail(THE_CLASS + expectedClassName + " was not found for method test");
             return;
         }
 

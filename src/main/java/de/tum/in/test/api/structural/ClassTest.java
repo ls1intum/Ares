@@ -35,7 +35,7 @@ public abstract class ClassTest extends StructuralTest {
         List<DynamicNode> tests = new ArrayList<>();
 
         if (structureOracleJSON == null) {
-            fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
+            fail("The LocalClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalClassTest.java!");
         }
 
         for (int i = 0; i < structureOracleJSON.length(); i++) {
@@ -73,7 +73,7 @@ public abstract class ClassTest extends StructuralTest {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "class");
         if (observedClass == null) {
-            fail("Class " + expectedClassName + " not found for class test");
+            fail(THE_CLASS + expectedClassName + " was not found for class test");
             return;
         }
 
@@ -81,19 +81,19 @@ public abstract class ClassTest extends StructuralTest {
         JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
 
         if (expectedClassPropertiesJSON.has("isAbstract") && !Modifier.isAbstract(observedClass.getModifiers())) {
-            fail("The class '" + expectedClassName + "' is not abstract as it is expected.");
+            fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
         }
 
         if (expectedClassPropertiesJSON.has("isEnum") && !observedClass.isEnum()) {
-            fail("The type '" + expectedClassName + "' is not an enum as it is expected.");
+            fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
         }
 
         if (expectedClassPropertiesJSON.has("isInterface") && !Modifier.isInterface(observedClass.getModifiers())) {
-            fail("The type '" + expectedClassName + "' is not an interface as it is expected.");
+            fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
         }
 
         if(expectedClassPropertiesJSON.has("isEnum") && !observedClass.isEnum()) {
-            fail("The type '" + expectedClassName + "' is not an enum as it is expected.");
+            fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
         }
 
         if(expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)) {
@@ -102,7 +102,7 @@ public abstract class ClassTest extends StructuralTest {
                 String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
                 String actualSuperClassName = observedClass.getSuperclass().getSimpleName();
 
-                String failMessage = "The class '" + expectedClassName + "' is not a subclass of the class '"
+                String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
                         + expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
                 if (!expectedSuperClassName.equals(actualSuperClassName)) {
                     fail(failMessage);
@@ -127,7 +127,7 @@ public abstract class ClassTest extends StructuralTest {
                 }
 
                 if (!implementsInterface) {
-                    fail("The class '" + expectedClassName + "' does not implement the interface '" + expectedInterface + "' as expected."
+                    fail(THE_CLASS + "'" + expectedClassName + "' does not implement the interface '" + expectedInterface + "' as expected."
                             + " Implement the interface and its methods.");
                 }
             }

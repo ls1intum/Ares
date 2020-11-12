@@ -73,6 +73,11 @@ public abstract class StructuralTest {
     protected static final String JSON_PROPERTY_NAME = "name";
     protected static final String JSON_PROPERTY_TYPE = "type";
     protected static final String JSON_PROPERTY_RETURN_TYPE = "returnType";
+    protected static final String JSON_PROPERTY_ENUM_VALUES = "enumValues";
+
+    protected static final String THE_CLASS = "The class ";
+    protected static final String THE_TYPE = "The type ";
+    protected static final String THE_ENUM = "The enum ";
 
     protected static JSONArray structureOracleJSON;
 

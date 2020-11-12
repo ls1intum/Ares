@@ -36,7 +36,7 @@ public abstract class ConstructorTest extends StructuralTest {
         List<DynamicNode> tests = new ArrayList<>();
 
         if (structureOracleJSON == null) {
-            fail("The ConstructorTest can only run if the structural oracle (test.json) is present. If you do not provide it, delete ConstructorTest.java!");
+            fail("The LocalConstructorTest can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalConstructorTest.java!");
         }
 
         for (int i = 0; i < structureOracleJSON.length(); i++) {
@@ -67,7 +67,7 @@ public abstract class ConstructorTest extends StructuralTest {
         String expectedClassName = expectedClassStructure.getExpectedClassName();
         Class<?> observedClass = findClassForTestType(expectedClassStructure, "constructor");
         if (observedClass == null) {
-            fail("Class " + expectedClassName + " not found for constructor test");
+            fail(THE_CLASS + expectedClassName + " was not found for constructor test");
             return;
         }
 
