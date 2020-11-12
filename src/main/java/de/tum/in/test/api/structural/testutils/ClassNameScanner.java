@@ -44,8 +44,9 @@ public class ClassNameScanner {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClassNameScanner.class);
 
-    protected static final String DEVIATES_FROM_THE_EXPECTATION = ", which deviates from the expectation.";
-    protected static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
+    private static final String DEVIATES_FROM_THE_EXPECTATION = ", which deviates from the expectation.";
+    private static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
+    private static final String THE_CLASS = "The class ";
 
     // The class name and package name of the expected class that is currently being searched after.
     private final String expectedClassName;
@@ -130,15 +131,15 @@ public class ClassNameScanner {
 
         switch (scanResultType) {
             case CORRECT_NAME_CORRECT_PLACE:
-                scanResultMessage = "The class " + foundObservedClassName + " has the correct name and is in the correct package.";
+                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name and is in the correct package.";
                 break;
             case CORRECT_NAME_MISPLACED:
-                scanResultMessage = "The class " + foundObservedClassName + " has the correct name,"
+                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name,"
                         + " but the package it's in, " + foundObservedPackageName + ", deviates from the expectation."
                         + "  Make sure it is placed in the correct package.";
                 break;
             case CORRECT_NAME_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = "The class " + foundObservedClassName + " has the correct name,"
+                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name,"
                         + " but it is located multiple times in the project and in the packages: "
                         + foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
                         + " Make sure to place the class in the correct package and remove any superfluous ones.";
