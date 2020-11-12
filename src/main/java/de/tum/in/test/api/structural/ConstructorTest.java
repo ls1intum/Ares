@@ -51,7 +51,7 @@ public abstract class ConstructorTest extends StructuralTest {
                 tests.add(dynamicTest("testConstructors[" + expectedClassName + "]", () -> testConstructors(expectedClassStructure)));
             }
         }
-        if (tests.size() == 0) {
+        if (tests.isEmpty()) {
             fail("No tests for constructors available in the structural oracle (test.json). Either provide constructor information or delete ConstructorTest.java!");
         }
         // Using a custom URI here to workaround surefire rendering the JUnit XML without the correct test names.

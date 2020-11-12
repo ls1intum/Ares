@@ -26,7 +26,10 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 public abstract class BehaviorTest {
 
-    /**
+    private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";
+	private static final String BECAUSE = " because";
+
+	/**
      * Retrieve the actual class by its qualified name.
      * @param qualifiedClassName: The qualified name of the class that needs to get retrieved (package.classname)
      * @return The wanted class object.
@@ -67,32 +70,32 @@ public abstract class BehaviorTest {
      * @return The instance of this class.
      */
     protected Object newInstance(Class<?> clazz, Object... constructorArgs) {
-        String failMessage = "Could not instantiate the class " + clazz.getSimpleName() + " because";
+        String failMessage = "Could not instantiate the class " + clazz.getSimpleName() + BECAUSE;
         Class<?>[] constructorArgTypes = getParameterTypes(failMessage + " a fitting constructor could not be found because", constructorArgs);
 
         try {
             Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
             return constructor.newInstance(constructorArgs);
         } catch (IllegalAccessException iae) {
-            fail(failMessage += " access to its constructor with the parameters: " + getParameterTypesAsString(constructorArgTypes) + " was denied."
+            fail(failMessage + " access to its constructor with the parameters: " + getParameterTypesAsString(constructorArgTypes) + " was denied."
                     + " Make sure to check the modifiers of the constructor.");
         } catch (IllegalArgumentException iae) {
-            fail(failMessage += " the actual constructor or none of the actual constructors of this class match the expected one."
+            fail(failMessage + " the actual constructor or none of the actual constructors of this class match the expected one."
                     + " We expect, amongst others, one with " + getParameterTypesAsString(constructorArgTypes) + " parameters, which is not exist."
                     + " Make sure to implement this constructor correctly.");
         } catch (InstantiationException ie) {
-            fail(failMessage += " the class is abstract and should not have a constructor."
+            fail(failMessage + " the class is abstract and should not have a constructor."
                     + " Make sure to remove the constructor of the class.");
         } catch (InvocationTargetException ite) {
-            fail(failMessage += " the constructor with " + constructorArgs.length + " parameters threw an exception and could not be initialized."
+            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters threw an exception and could not be initialized."
                     + " Make sure to check the constructor implementation.");
         } catch (ExceptionInInitializerError eiie) {
-            fail(failMessage += " the constructor with " + constructorArgs.length + " parameters could not be initialized.");
+            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters could not be initialized.");
         } catch (NoSuchMethodException nsme) {
-            fail(failMessage += " the class does not have a constructor with the arguments: "
+            fail(failMessage + " the class does not have a constructor with the arguments: "
                     + getParameterTypesAsString(constructorArgTypes) + ". Make sure to implement this constructor properly.");
         } catch (SecurityException se) {
-            fail(failMessage += " access to the package of the class was denied.");
+            fail(failMessage + " access to the package of the class was denied.");
         }
 
         return null;
@@ -106,7 +109,7 @@ public abstract class BehaviorTest {
      */
     protected Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
         String failMessage = "Could not instantiate the class "
-                + constructor.getDeclaringClass().getSimpleName() + " because";
+                + constructor.getDeclaringClass().getSimpleName() + BECAUSE;
 
         try {
             return constructor.newInstance(constructorArgs);
@@ -145,16 +148,16 @@ public abstract class BehaviorTest {
     protected Object valueForAttribute(Object object, String attributeName) {
         requireNonNull(object, "Could not retrieve the value of attribute '" + attributeName + "' because the object was null.");
         String failMessage = "Could not retrieve the attribute '" + attributeName + "' from the class "
-                + object.getClass().getSimpleName() + " because";
+                + object.getClass().getSimpleName() + BECAUSE;
 
         try {
             return object.getClass().getDeclaredField(attributeName).get(object);
         } catch (NoSuchFieldException nsfe) {
-            fail(failMessage += " the attribute does not exist. Make sure to implement the attribute correctly.");
+            fail(failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
         } catch (SecurityException se) {
-            fail(failMessage += " access to the package of the class was denied.");
+            fail(failMessage + " access to the package of the class was denied.");
         } catch (IllegalAccessException iae) {
-            fail(failMessage += " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
+            fail(failMessage + " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
         }
 
         return null;
@@ -169,7 +172,7 @@ public abstract class BehaviorTest {
      * @return The wanted method.
      */
     protected Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
-        requireNonNull(object, "Could not find the method named '" + methodName + "' because the object was null.");
+        requireNonNull(object, COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' because the object was null.");
         return getMethod(object.getClass(), methodName, parameterTypes);
     }
 
@@ -181,21 +184,21 @@ public abstract class BehaviorTest {
      * @return The wanted method.
      */
     protected Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
-        String failMessage = "Could not find the method '" + methodName + "' with the parameters: "
-                + getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName() + " because";
+        String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
+                + getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName() + BECAUSE;
 
         if (parameterTypes == null || parameterTypes.length == 0) {
-            failMessage = "Could not find the method '" + methodName + "' from the class " + declaringClass.getSimpleName() + " because";
+            failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' from the class " + declaringClass.getSimpleName() + BECAUSE;
         }
 
         try {
             return declaringClass.getMethod(methodName, parameterTypes);
         } catch (NoSuchMethodException nsme) {
-            fail(failMessage += " the method does not exist. Make sure to implement this method properly.");
+            fail(failMessage + " the method does not exist. Make sure to implement this method properly.");
         } catch (NullPointerException npe) {
-            fail(failMessage += " the name of the method is null. Make sure to check the name of the method.");
+            fail(failMessage + " the name of the method is null. Make sure to check the name of the method.");
         } catch (SecurityException se) {
-            fail(failMessage += " access to the package class was denied.");
+            fail(failMessage + " access to the package class was denied.");
         }
 
         return null;
@@ -211,15 +214,15 @@ public abstract class BehaviorTest {
     protected Object invokeMethod(Object object, Method method, Object... params) {
         // NOTE: object can be null, if method is static
         String failMessage = "Could not invoke the method '" + method.getName()
-                + "' in the class " + method.getDeclaringClass().getSimpleName() + " because";
+                + "' in the class " + method.getDeclaringClass().getSimpleName() + BECAUSE;
         try {
             return method.invoke(object, params);
         } catch (IllegalAccessException iae) {
-            fail(failMessage += " access to the method was denied. Make sure to check the modifiers of the method.");
+            fail(failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
         } catch (IllegalArgumentException iae) {
-            fail(failMessage += " the parameters are not implemented right. Make sure to check the parameters of the method");
+            fail(failMessage + " the parameters are not implemented right. Make sure to check the parameters of the method");
         } catch (InvocationTargetException e) {
-            fail(failMessage += " of an exception within the method: " + e.getCause().toString());
+            fail(failMessage + " of an exception within the method: " + e.getCause().toString());
         }
 
         return null;
@@ -237,13 +240,13 @@ public abstract class BehaviorTest {
     protected Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
         // NOTE: object can be null, if method is static
         String failMessage = "Could not invoke the method '" + method.getName()
-                + "' in the class " + method.getDeclaringClass().getSimpleName() + " because";
+                + "' in the class " + method.getDeclaringClass().getSimpleName() + BECAUSE;
         try {
             return method.invoke(object, params);
         } catch (IllegalAccessException iae) {
-            fail(failMessage += " access to the method was denied. Make sure to check the modifiers of the method.");
+            fail(failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
         } catch (IllegalArgumentException iae) {
-            fail(failMessage += " the parameters are not implemented right. Make sure to check the parameters of the method");
+            fail(failMessage + " the parameters are not implemented right. Make sure to check the parameters of the method");
         } catch (InvocationTargetException e) {
             throw e.getCause();
         }
@@ -262,7 +265,7 @@ public abstract class BehaviorTest {
      * @return The return value of the method.
      */
     protected Object invokeMethod(Object object, String methodName, Object... params) {
-        String failMessage = "Could not find the method '" + methodName + "' because";
+        String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
         Class<?>[] parameterTypes = getParameterTypes(failMessage, params);
         Method method = getMethod(object, methodName, parameterTypes);
         return invokeMethod(object, method, params);
@@ -277,10 +280,10 @@ public abstract class BehaviorTest {
     protected Constructor<?> getConstructor(Class<?> declaringClass, Class<?>... parameterTypes) {
         String failMessage = "Could not find the constructor with the parameters: "
                 + getParameterTypesAsString(parameterTypes)
-                + " in the class " + declaringClass.getSimpleName() + " because";
+                + " in the class " + declaringClass.getSimpleName() + BECAUSE;
 
         if (parameterTypes == null || parameterTypes.length == 0) {
-            failMessage = "Could not find the constructor from the " + declaringClass.getSimpleName() + " because";
+            failMessage = "Could not find the constructor from the " + declaringClass.getSimpleName() + BECAUSE;
         }
 
         try {

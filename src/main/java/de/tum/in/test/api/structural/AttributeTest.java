@@ -53,7 +53,7 @@ public abstract class AttributeTest extends StructuralTest {
                 tests.add(dynamicTest("testAttributes[" + expectedClassName + "]", () -> testAttributes(expectedClassStructure)));
             }
         }
-        if (tests.size() == 0) {
+        if (tests.isEmpty()) {
             fail("No tests for attributes available in the structural oracle (test.json). Either provide attributes information or delete AttributeTest.java!");
         }
         // Using a custom URI here to workaround surefire rendering the JUnit XML without the correct test names.

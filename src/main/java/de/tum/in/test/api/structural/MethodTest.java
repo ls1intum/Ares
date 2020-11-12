@@ -51,7 +51,7 @@ public abstract class MethodTest extends StructuralTest {
                 tests.add(dynamicTest("testMethods[" + expectedClassName + "]", () -> testMethods(expectedClassStructure)));
             }
         }
-        if (tests.size() == 0) {
+        if (tests.isEmpty()) {
             fail("No tests for methods available in the structural oracle (test.json). Either provide attributes information or delete MethodTest.java!");
         }
         // Using a custom URI here to workaround surefire rendering the JUnit XML without the correct test names.
