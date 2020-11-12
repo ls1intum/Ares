@@ -105,33 +105,27 @@ public abstract class AttributeTest extends StructuralTest {
             var annotationsAreCorrect = false;
 
             for(Field observedAttribute : observedClass.getDeclaredFields()) {
-                String observedName = observedAttribute.getName();
-                String[] observedModifiers = Modifier.toString(observedAttribute.getModifiers()).split(" ");
-                Annotation[] observedAnnotations = observedAttribute.getAnnotations();
 
-                // If the names don't match, then proceed to the next observed attribute
-                if(!expectedName.equals(observedName)) {
-                    //TODO: we should also take wrong case and typos into account
-                    continue;
-                } else {
+                if (expectedName.equals(observedAttribute.getName())) {
                     nameIsCorrect = true;
-                }
+                    typeIsCorrect = checkType(observedAttribute, expectedTypeName);
+                    modifiersAreCorrect = checkModifiers(Modifier.toString(observedAttribute.getModifiers()).split(" "), expectedModifiers);
+                    annotationsAreCorrect = checkAnnotations(observedAttribute.getAnnotations(), expectedAnnotations);
 
-                typeIsCorrect = checkType(observedAttribute, expectedTypeName);
-                modifiersAreCorrect = checkModifiers(observedModifiers, expectedModifiers);
-                annotationsAreCorrect = checkAnnotations(observedAnnotations, expectedAnnotations);
-
-                // If all are correct, then we found our attribute and we can break the loop
-                if(typeIsCorrect && modifiersAreCorrect && annotationsAreCorrect) {
-                    break;
+                    // If all are correct, then we found our attribute and we can break the loop
+                    if(typeIsCorrect && modifiersAreCorrect && annotationsAreCorrect) {
+                        break;
+                    }
                 }
+                //TODO: we should also take wrong case and typos into account (the else case)
             }
 
             checkAttributeCorrectness(nameIsCorrect, typeIsCorrect, modifiersAreCorrect, annotationsAreCorrect, expectedName, expectedClassName);
         }
     }
 
-    private void checkAttributeCorrectness(boolean nameIsCorrect, boolean typeIsCorrect, boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName, String expectedClassName) {
+    private void checkAttributeCorrectness(boolean nameIsCorrect, boolean typeIsCorrect, boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName,
+            String expectedClassName) {
         String expectedAttributeInformation = "the expected attribute '" + expectedName + "' of the class '" + expectedClassName + "'";
         if (!nameIsCorrect) {
             fail("The name of " + expectedAttributeInformation + " is not implemented as expected.");
