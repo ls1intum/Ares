@@ -129,21 +129,15 @@ public abstract class StructuralTest {
             return false;
         }
 
-        // Otherwise check if each expected modifier is contained in the array of the observed ones.
+        // Otherwise check if all expected modifiers are contained in the array of the observed ones.
         // If at least one isn't, then the modifiers don't match.
-        boolean allModifiersAreImplemented = true;
-        for (Object expectedModifier : expectedModifiers) {
-            allModifiersAreImplemented &= Arrays.asList(observedModifiers).contains(expectedModifier);
-        }
-
-        return allModifiersAreImplemented;
+        return Arrays.asList(observedModifiers).containsAll(expectedModifiers.toList());
     }
 
     protected static boolean checkAnnotations(Annotation[] observedAnnotations, JSONArray expectedAnnotations) {
 
         // If both the observed and expected elements have no annotations, then they match.
-        // A note: for technical reasons, we get in case of no observed annotations, a string array with an empty
-        // string.
+        // A note: for technical reasons, we get in case of no observed annotations, a string array with an empty string.
         if (observedAnnotations.length == 0 && expectedAnnotations.length() == 0) {
             return true;
         }
