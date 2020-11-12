@@ -47,6 +47,7 @@ public class ClassNameScanner {
     private static final String DEVIATES_FROM_THE_EXPECTATION = ", which deviates from the expectation.";
     private static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
     private static final String THE_CLASS = "The class ";
+    private static final String EXPECTS_CLASS_WITH_NAME = "The exercise expects a class with the name ";
 
     // The class name and package name of the expected class that is currently being searched after.
     private final String expectedClassName;
@@ -145,41 +146,41 @@ public class ClassNameScanner {
                         + " Make sure to place the class in the correct package and remove any superfluous ones.";
                 break;
             case WRONG_CASE_CORRECT_PLACE:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering.";
                 break;
             case WRONG_CASE_MISPLACED:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the package " + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
                 break;
             case WRONG_CASE_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the packages " + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
                 break;
             case TYPOS_CORRECT_PLACE:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name.";
                 break;
             case TYPOS_MISPLACED:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the package " + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place it in the correct package.";
                 break;
             case TYPOS_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName + ". "
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the packages " + observedClasses.get(foundObservedClassName).toString()
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
                 break;
             case NOTFOUND:
-                scanResultMessage = "The exercise expects a class with the name " + expectedClassName + " in the package " + expectedPackageName
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName
                         + ". You did not implement the class in the exercise.";
                 break;
             default:
