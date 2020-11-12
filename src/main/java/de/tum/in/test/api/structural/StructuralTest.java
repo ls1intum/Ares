@@ -92,8 +92,7 @@ public abstract class StructuralTest {
      * @return The current class that undergoes the tests.
      */
     protected static Class<?> findClassForTestType(ExpectedClassStructure expectedClassStructure, String typeOfTest) {
-        ClassNameScanner classNameScanner = new ClassNameScanner(expectedClassStructure.getExpectedClassName(),
-                expectedClassStructure.getExpectedPackageName());
+        ClassNameScanner classNameScanner = new ClassNameScanner(expectedClassStructure.getExpectedClassName(), expectedClassStructure.getExpectedPackageName());
         ScanResultType scanResultEnum = classNameScanner.getScanResult().getResult();
         String classNameScanMessage = classNameScanner.getScanResult().getMessage();
 

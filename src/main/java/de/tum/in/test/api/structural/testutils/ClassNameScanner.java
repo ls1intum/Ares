@@ -1,6 +1,7 @@
 package de.tum.in.test.api.structural.testutils;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -16,6 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
@@ -55,7 +58,7 @@ public class ClassNameScanner {
     private final String expectedClassName;
     private final String expectedPackageName;
 
-    // The names of the classes observed in the project
+    // Mapping between the class name and the observed package names (list) in the project
     private final Map<String, List<String>> observedClasses;
     private final ScanResult scanResult;
 
@@ -74,6 +77,7 @@ public class ClassNameScanner {
      * This method computes the scan result of the submission for the expected class name.
      * It first checks if the class is in the project at all.
      * If that's the case, it then checks if that class is properly placed or not and generates feedback accordingly.
+     *
      * Otherwise the method loops over the observed classes and checks if any of the observed classes is actually the
      * expected one but with the wrong case or types in the name.
      * It again checks in each case if the class is misplaced or not and delivers the feedback.
@@ -82,66 +86,63 @@ public class ClassNameScanner {
      * @return An instance of ScanResult containing the result type and the feedback message.
      */
     private ScanResult computeScanResult() {
-        // Initialize the type and the message of the scan result.
-        ScanResultType scanResultType = ScanResultType.UNDEFINED;
-        String scanResultMessage;
 
-        boolean classIsFound = observedClasses.containsKey(expectedClassName);
-        boolean classIsCorrectlyPlaced;
-        boolean classIsPresentMultipleTimes;
-
-        String foundObservedClassName = null;
-        String foundObservedPackageName = null;
-
-        if(classIsFound) {
+        if(observedClasses.containsKey(expectedClassName)) {
+            // the class was found in the correct package
             List<String> observedPackageNames = observedClasses.get(expectedClassName);
-            classIsPresentMultipleTimes = observedPackageNames.size() > 1;
-            classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
+            return createScanResult(getScanResultTypeClassFound(observedPackageNames), expectedClassName, observedPackageNames.toString());
+        }
 
-            if (classIsPresentMultipleTimes) {
-                scanResultType = ScanResultType.CORRECT_NAME_MULTIPLE_TIMES_PRESENT;
-            }
-            else {
-                scanResultType = classIsCorrectlyPlaced ? ScanResultType.CORRECT_NAME_CORRECT_PLACE : ScanResultType.CORRECT_NAME_MISPLACED;
+        // if the class was NOT found in the correct package, we try to to find it in a different package or try to find similar classes (e.g. with typos)
+        for(var observedClass : observedClasses.entrySet()) {
+            var foundObservedClassName = observedClass.getKey();
+            var observedPackageNames = observedClass.getValue();
+            var foundObservedPackageNames = observedPackageNames.toString();
+
+            boolean classPresentMultiple = observedPackageNames.size() > 1;
+            boolean classCorrectlyPlaced = !classPresentMultiple && (observedPackageNames.contains(expectedPackageName));
+
+            // 1) check whether the class might have the wrong case
+            if(foundObservedClassName.equalsIgnoreCase(expectedClassName)) {
+                return createScanResult(foundObservedPackageNames, classPresentMultiple, classCorrectlyPlaced, WRONG_CASE_MULTIPLE, WRONG_CASE_CORRECT_PLACE, WRONG_CASE_MISPLACED);
             }
 
-            foundObservedClassName = expectedClassName;
-            foundObservedPackageName = observedPackageNames.toString();
+            // 2) check whether there are similar classes (e.g. the student has a small typo in the class name)
+            if(FuzzySearch.ratio(foundObservedClassName, expectedClassName) > 90) {
+                return createScanResult(foundObservedPackageNames, classPresentMultiple, classCorrectlyPlaced, TYPOS_MULTIPLE, TYPOS_CORRECT_PLACE, TYPOS_MISPLACED);
+            }
+        }
+        return createScanResult(ScanResultType.NOTFOUND, expectedClassName, null);
+    }
+
+    private ScanResult createScanResult(String foundObservedPackageName, boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
+            ScanResultType correctPlace, ScanResultType misplaced) {
+        ScanResultType scanResultType;
+        if (classPresentMultiple) {
+            scanResultType = multipleTimes;
         }
         else {
-            for(var observedClass : observedClasses.entrySet()) {
-                var observedClassName = observedClass.getKey();
-                var observedPackageNames = observedClass.getValue();
-                classIsPresentMultipleTimes = observedPackageNames.size() > 1;
-                classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
-
-                boolean hasWrongCase = observedClassName.equalsIgnoreCase(expectedClassName);
-                boolean hasTypos = FuzzySearch.ratio(observedClassName, expectedClassName) > 90;
-
-                foundObservedClassName = observedClassName;
-                foundObservedPackageName = observedPackageNames.toString();
-
-                if(hasWrongCase) {
-                    if (classIsPresentMultipleTimes) {
-                        scanResultType = ScanResultType.WRONG_CASE_MULTIPLE_TIMES_PRESENT;
-                    }
-                    else {
-                        scanResultType = classIsCorrectlyPlaced ? ScanResultType.WRONG_CASE_CORRECT_PLACE : ScanResultType.WRONG_CASE_MISPLACED;
-                    }
-                    break;
-                } else if(hasTypos) {
-                    if (classIsPresentMultipleTimes) {
-                        scanResultType = ScanResultType.TYPOS_MULTIPLE_TIMES_PRESENT;
-                    }
-                    else {
-                        scanResultType = classIsCorrectlyPlaced ? ScanResultType.TYPOS_CORRECT_PLACE : ScanResultType.TYPOS_MISPLACED;
-                    }
-                    break;
-                } else {
-                    scanResultType = ScanResultType.NOTFOUND;
-                }
-            }
+            scanResultType = classCorrectlyPlaced ? correctPlace : misplaced;
         }
+        return createScanResult(scanResultType, expectedClassName, foundObservedPackageName);
+    }
+
+    private ScanResultType getScanResultTypeClassFound(List<String> observedPackageNames) {
+        ScanResultType scanResultType;
+        boolean classIsPresentMultipleTimes = observedPackageNames.size() > 1;
+        boolean classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
+
+        if (classIsPresentMultipleTimes) {
+            scanResultType = CORRECT_NAME_MULTIPLE;
+        }
+        else {
+            scanResultType = classIsCorrectlyPlaced ? CORRECT_NAME_CORRECT_PLACE : CORRECT_NAME_MISPLACED;
+        }
+        return scanResultType;
+    }
+
+    private ScanResult createScanResult(ScanResultType scanResultType, String foundObservedClassName, String foundObservedPackageName) {
+        String scanResultMessage;
 
         switch (scanResultType) {
             case CORRECT_NAME_CORRECT_PLACE:
@@ -152,7 +153,7 @@ public class ClassNameScanner {
                         + " but the package it's in, " + foundObservedPackageName + ", deviates from the expectation."
                         + "  Make sure it is placed in the correct package.";
                 break;
-            case CORRECT_NAME_MULTIPLE_TIMES_PRESENT:
+            case CORRECT_NAME_MULTIPLE:
                 scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
                         + " but it is located multiple times in the project and in the packages: "
                         + foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
@@ -169,7 +170,7 @@ public class ClassNameScanner {
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
                 break;
-            case WRONG_CASE_MULTIPLE_TIMES_PRESENT:
+            case WRONG_CASE_MULTIPLE:
                 scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
@@ -186,7 +187,7 @@ public class ClassNameScanner {
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place it in the correct package.";
                 break;
-            case TYPOS_MULTIPLE_TIMES_PRESENT:
+            case TYPOS_MULTIPLE:
                 scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
                         + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + observedClasses.get(foundObservedClassName).toString()
                         + DEVIATES_FROM_THE_EXPECTATION
@@ -210,7 +211,7 @@ public class ClassNameScanner {
      * @return The map containing the type names as keys and the type packages as values.
      */
     private Map<String, List<String>> retrieveObservedClasses() {
-        Map<String, List<String>> observedTypes = new HashMap<>();
+        Map<String, List<String>> observedClasses = new HashMap<>();
 
         try {
             File pomFile = new File("pom.xml");
@@ -228,14 +229,14 @@ public class ClassNameScanner {
                     Element buildNodeElement = (Element) buildNode;
                     String sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0).getTextContent();
                     String assignmentFolderName = sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
-                    walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedTypes);
+                    walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
             LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
         }
 
-        return observedTypes;
+        return observedClasses;
     }
 
     /**
@@ -243,11 +244,12 @@ public class ClassNameScanner {
      * each type it finds e.g. filenames ending with .java and .kt to the passed JSON object.
      * @param assignmentFolderName: The root folder where the method starts walking the project structure.
      * @param node: The current node the method is visiting.
-     * @param foundTypes: The JSON object where the type names and packages get appended.
+     * @param foundClasses: The JSON object where the type names and packages get appended.
      */
-    private void walkProjectFileStructure(String assignmentFolderName, File node, Map<String, List<String>> foundTypes) {
+    private void walkProjectFileStructure(String assignmentFolderName, File node, Map<String, List<String>> foundClasses) {
         String fileName = node.getName();
 
+        // support Java and Kotlin files
         if(fileName.endsWith(".java") || fileName.endsWith(".kt")) {
             String[] fileNameComponents = fileName.split("\\.");
             String fileExtension = fileNameComponents[fileNameComponents.length - 1];
@@ -263,11 +265,11 @@ public class ClassNameScanner {
                 packageName = packageName.substring(1);
             }
 
-            if(foundTypes.containsKey(className)) {
-                foundTypes.get(className).add(packageName);
+            if(foundClasses.containsKey(className)) {
+                foundClasses.get(className).add(packageName);
             }
             else {
-                foundTypes.put(className, Collections.singletonList(packageName));
+                foundClasses.put(className, Collections.singletonList(packageName));
             }
         }
 
@@ -275,7 +277,7 @@ public class ClassNameScanner {
             String[] subNodes = node.list();
             if (subNodes != null && subNodes.length > 0) {
                 for (String currentSubNode : subNodes) {
-                    walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundTypes);
+                    walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundClasses);
                 }
             }
         }
