@@ -242,28 +242,16 @@ public abstract class StructuralTest {
             return null;
         }
 
-        BufferedReader bufferedReader = null;
         StringBuilder result = new StringBuilder();
 
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(structureOracleFileUrl.openStream()));
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(structureOracleFileUrl.openStream()))) {
             char[] buffer = new char[8192];
             int length;
-
             while ((length = bufferedReader.read(buffer, 0, buffer.length)) != -1) {
                 result.append(buffer, 0, length);
             }
-
         } catch (IOException e) {
             LOG.error("Could not open stream from URL: " + structureOracleFileUrl.toString(), e);
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    LOG.error("Could not close BufferedReader.", e);
-                }
-            }
         }
 
         return new JSONArray(result.toString());

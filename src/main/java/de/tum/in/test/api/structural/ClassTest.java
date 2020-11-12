@@ -61,7 +61,7 @@ public abstract class ClassTest extends StructuralTest {
         List<String> keys = new ArrayList<>(jsonObject.keySet());
         keys.remove(JSON_PROPERTY_NAME);
         keys.remove(JSON_PROPERTY_PACKAGE);
-        return keys.size() > 0;
+        return !keys.isEmpty();
     }
 
     /**
