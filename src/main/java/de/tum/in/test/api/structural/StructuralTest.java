@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 import de.tum.in.test.api.structural.testutils.ScanResultType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
@@ -55,6 +57,8 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  *          test will fail (limitation of JUnit)
  */
 public abstract class StructuralTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StructuralTest.class);
 
     protected static final String JSON_PROPERTY_SUPERCLASS = "superclass";
     protected static final String JSON_PROPERTY_INTERFACES = "interfaces";
@@ -251,15 +255,13 @@ public abstract class StructuralTest {
             }
 
         } catch (IOException e) {
-            System.err.println("Could not open stream from URL: " + structureOracleFileUrl.toString());
-            e.printStackTrace();
+            LOG.error("Could not open stream from URL: " + structureOracleFileUrl.toString(), e);
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    System.err.println("Could not close BufferedReader.");
-                    e.printStackTrace();
+                    LOG.error("Could not close BufferedReader.", e);
                 }
             }
         }

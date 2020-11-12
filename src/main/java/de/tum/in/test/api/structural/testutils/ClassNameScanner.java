@@ -1,6 +1,8 @@
 package de.tum.in.test.api.structural.testutils;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,6 +40,8 @@ import java.util.*;
  *  on the length of the class name and is defined as ceiling(classNameLength / 4).
  */
 public class ClassNameScanner {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClassNameScanner.class);
 
     // The class name and package name of the expected class that is currently being searched after.
     private final String expectedClassName;
@@ -206,8 +210,7 @@ public class ClassNameScanner {
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            System.err.println("Could not retrieve the source directory from the pom.xml file. Contact your instructor.");
-            e.printStackTrace();
+            LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
         }
 
         return observedTypes;
