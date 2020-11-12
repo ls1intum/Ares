@@ -28,8 +28,11 @@ public abstract class BehaviorTest {
 
     private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";
 	private static final String BECAUSE = " because";
+    private static final String THE_CONSTRUCTOR_WITH = " the constructor with ";
 
-	/**
+    public static final String ACCESS_DENIED = " access to the package of the class was denied.";
+
+    /**
      * Retrieve the actual class by its qualified name.
      * @param qualifiedClassName: The qualified name of the class that needs to get retrieved (package.classname)
      * @return The wanted class object.
@@ -87,15 +90,15 @@ public abstract class BehaviorTest {
             fail(failMessage + " the class is abstract and should not have a constructor."
                     + " Make sure to remove the constructor of the class.");
         } catch (InvocationTargetException ite) {
-            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters threw an exception and could not be initialized."
+            fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters threw an exception and could not be initialized."
                     + " Make sure to check the constructor implementation.");
         } catch (ExceptionInInitializerError eiie) {
-            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters could not be initialized.");
+            fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters could not be initialized.");
         } catch (NoSuchMethodException nsme) {
             fail(failMessage + " the class does not have a constructor with the arguments: "
                     + getParameterTypesAsString(constructorArgTypes) + ". Make sure to implement this constructor properly.");
         } catch (SecurityException se) {
-            fail(failMessage + " access to the package of the class was denied.");
+            fail(failMessage + ACCESS_DENIED);
         }
 
         return null;
@@ -128,12 +131,12 @@ public abstract class BehaviorTest {
             fail(failMessage + " the class is abstract and should not have a constructor."
                     + " Make sure to remove the constructor of the class.");
         } catch (InvocationTargetException ite) {
-            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters threw an exception and could not be initialized."
+            fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters threw an exception and could not be initialized."
                     + " Make sure to check the constructor implementation.");
         } catch (ExceptionInInitializerError eiie) {
-            fail(failMessage + " the constructor with " + constructorArgs.length + " parameters could not be initialized.");
+            fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters could not be initialized.");
         } catch (SecurityException se) {
-            fail(failMessage + " access to the package of the class was denied.");
+            fail(failMessage + ACCESS_DENIED);
         }
 
         return null;
@@ -155,7 +158,7 @@ public abstract class BehaviorTest {
         } catch (NoSuchFieldException nsfe) {
             fail(failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
         } catch (SecurityException se) {
-            fail(failMessage + " access to the package of the class was denied.");
+            fail(failMessage + ACCESS_DENIED);
         } catch (IllegalAccessException iae) {
             fail(failMessage + " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
         }
@@ -275,9 +278,10 @@ public abstract class BehaviorTest {
      * Retrieve a constructor with arguments of a given class.
      * @param declaringClass: The class that declares this constructor.
      * @param parameterTypes: The parameter types of this method. Do not include if the method has no parameters.
+     * @param <T> The type parameter of the constructor and class
      * @return The wanted method.
      */
-    protected Constructor<?> getConstructor(Class<?> declaringClass, Class<?>... parameterTypes) {
+    protected <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<T>... parameterTypes) {
         String failMessage = "Could not find the constructor with the parameters: "
                 + getParameterTypesAsString(parameterTypes)
                 + " in the class " + declaringClass.getSimpleName() + BECAUSE;
