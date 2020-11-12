@@ -95,8 +95,8 @@ public abstract class AttributeTest extends StructuralTest {
             JSONObject expectedAttribute = expectedAttributes.getJSONObject(i);
             String expectedName = expectedAttribute.getString(JSON_PROPERTY_NAME);
             String expectedTypeName = expectedAttribute.getString(JSON_PROPERTY_TYPE);
-            JSONArray expectedModifiers = expectedAttribute.has(JSON_PROPERTY_MODIFIERS) ? expectedAttribute.getJSONArray(JSON_PROPERTY_MODIFIERS) : new JSONArray();
-            JSONArray expectedAnnotations = expectedAttribute.has(JSON_PROPERTY_ANNOTATIONS) ? expectedAttribute.getJSONArray(JSON_PROPERTY_ANNOTATIONS) : new JSONArray();
+            JSONArray expectedModifiers = getExpectedJsonProperty(expectedAttribute, JSON_PROPERTY_MODIFIERS);
+            JSONArray expectedAnnotations = getExpectedJsonProperty(expectedAttribute, JSON_PROPERTY_ANNOTATIONS);
 
             // We check for each expected attribute if the name and the type is right.
             boolean nameIsRight = false;

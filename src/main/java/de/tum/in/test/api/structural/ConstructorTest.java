@@ -87,9 +87,9 @@ public abstract class ConstructorTest extends StructuralTest {
     protected void checkConstructors(String expectedClassName, Class<?> observedClass, JSONArray expectedConstructors) {
         for (int i = 0; i < expectedConstructors.length(); i++) {
             JSONObject expectedConstructor = expectedConstructors.getJSONObject(i);
-            JSONArray expectedParameters = expectedConstructor.has(JSON_PROPERTY_PARAMETERS) ? expectedConstructor.getJSONArray(JSON_PROPERTY_PARAMETERS) : new JSONArray();
-            JSONArray expectedModifiers = expectedConstructor.has(JSON_PROPERTY_MODIFIERS) ? expectedConstructor.getJSONArray(JSON_PROPERTY_MODIFIERS) : new JSONArray();
-            JSONArray expectedAnnotations = expectedConstructor.has(JSON_PROPERTY_ANNOTATIONS) ? expectedConstructor.getJSONArray(JSON_PROPERTY_ANNOTATIONS) : new JSONArray();
+            JSONArray expectedParameters = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_PARAMETERS);
+            JSONArray expectedModifiers = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_MODIFIERS);
+            JSONArray expectedAnnotations = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_ANNOTATIONS);
 
             boolean parametersAreRight = false;
             boolean modifiersAreRight = false;

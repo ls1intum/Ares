@@ -88,9 +88,9 @@ public abstract class MethodTest extends StructuralTest {
         for(int i = 0; i < expectedMethods.length(); i++) {
             JSONObject expectedMethod = expectedMethods.getJSONObject(i);
             String expectedName = expectedMethod.getString(JSON_PROPERTY_NAME);
-            JSONArray expectedParameters = expectedMethod.has(JSON_PROPERTY_PARAMETERS) ? expectedMethod.getJSONArray(JSON_PROPERTY_PARAMETERS) : new JSONArray();
-            JSONArray expectedModifiers = expectedMethod.has(JSON_PROPERTY_MODIFIERS) ? expectedMethod.getJSONArray(JSON_PROPERTY_MODIFIERS) : new JSONArray();
-            JSONArray expectedAnnotations = expectedMethod.has(JSON_PROPERTY_ANNOTATIONS) ? expectedMethod.getJSONArray(JSON_PROPERTY_ANNOTATIONS) : new JSONArray();
+            JSONArray expectedParameters = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_PARAMETERS);
+            JSONArray expectedModifiers = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_MODIFIERS);
+            JSONArray expectedAnnotations = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_ANNOTATIONS);
             String expectedReturnType = expectedMethod.getString(JSON_PROPERTY_RETURN_TYPE);
 
             boolean nameIsRight = false;

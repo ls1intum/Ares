@@ -99,6 +99,16 @@ public abstract class StructuralTest {
     }
 
     /**
+     * get the expected elements or an empty json array
+     * @param element the class, attribute, method or constructor json object element
+     * @param jsonPropertyKey the key used in json
+     * @return a json array of the elements (can be empty)
+     */
+    protected static JSONArray getExpectedJsonProperty(JSONObject element, String jsonPropertyKey) {
+        return element.has(jsonPropertyKey) ? element.getJSONArray(jsonPropertyKey) : new JSONArray();
+    }
+
+    /**
      * This method checks if the visibility modifiers of the observed structural element match the ones in the
      * expected structural element.
      *
