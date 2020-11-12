@@ -14,11 +14,11 @@ import java.util.Objects;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 import de.tum.in.test.api.structural.testutils.ScanResultType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)

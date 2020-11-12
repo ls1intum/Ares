@@ -1,13 +1,13 @@
 package de.tum.in.test.api.behavior;
 
+import static java.util.Objects.requireNonNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.StringJoiner;
-
-import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Stephan Krusche (krusche@in.tum.de)
