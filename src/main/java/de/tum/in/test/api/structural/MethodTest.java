@@ -100,33 +100,26 @@ public abstract class MethodTest extends StructuralTest {
             boolean annotationsAreCorrect = false;
 
             for(Method observedMethod : observedClass.getDeclaredMethods()) {
-                String observedName = observedMethod.getName();
-                Class<?>[] observedParameters = observedMethod.getParameterTypes();
-                String[] observedModifiers = Modifier.toString(observedMethod.getModifiers()).split(" ");
-                String observedReturnType = observedMethod.getReturnType().getSimpleName();
-                Annotation[] observedAnnotations = observedMethod.getAnnotations();
 
-                // If the names don't match, then proceed to the next observed method
-                if(!expectedName.equals(observedName)) {
-                    //TODO: we should also take wrong case and typos into account
-                    //TODO: check if overloading is supported properly
-                    continue;
-                } else {
+                //TODO: check if overloading is supported properly
+
+                if (expectedName.equals(observedMethod.getName())) {
                     nameIsCorrect = true;
-                }
+                    parametersAreCorrect = checkParameters(observedMethod.getParameterTypes(), expectedParameters);
+                    modifiersAreCorrect = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "), expectedModifiers);
+                    annotationsAreCorrect = checkAnnotations(observedMethod.getAnnotations(), expectedAnnotations);
+                    returnTypeIsCorrect = expectedReturnType.equals(observedMethod.getReturnType().getSimpleName());
 
-                parametersAreCorrect = checkParameters(observedParameters, expectedParameters);
-                modifiersAreCorrect = checkModifiers(observedModifiers, expectedModifiers);
-                annotationsAreCorrect = checkAnnotations(observedAnnotations, expectedAnnotations);
-                returnTypeIsCorrect = expectedReturnType.equals(observedReturnType);
-
-                // If all are correct, then we found our method and we can break the loop
-                if(parametersAreCorrect && modifiersAreCorrect && annotationsAreCorrect && returnTypeIsCorrect) {
-                    break;
+                    // If all are correct, then we found the desired method and we can break the loop
+                    if(parametersAreCorrect && modifiersAreCorrect && annotationsAreCorrect && returnTypeIsCorrect) {
+                        break;
+                    }
                 }
+                //TODO: we should also take wrong case and typos into account (i.e. the else case)
             }
 
-            checkMethodCorrectness(expectedClassName, expectedName, expectedParameters, nameIsCorrect, parametersAreCorrect, modifiersAreCorrect, returnTypeIsCorrect, annotationsAreCorrect);
+            checkMethodCorrectness(expectedClassName, expectedName, expectedParameters, nameIsCorrect, parametersAreCorrect, modifiersAreCorrect, returnTypeIsCorrect,
+                    annotationsAreCorrect);
         }
     }
 
