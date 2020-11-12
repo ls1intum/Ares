@@ -104,17 +104,15 @@ public abstract class ClassTest extends StructuralTest {
     }
 
     private void checkSuperclass(String expectedClassName, Class<?> observedClass, JSONObject expectedClassPropertiesJSON) {
-        if(expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)) {
-            // Filter out the enums, since there is a separate test for them
-            if(!expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
-                String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
-                String actualSuperClassName = observedClass.getSuperclass().getSimpleName();
+        // Filter out the enums, since there is a separate test for them
+        if(expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS) && !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
+            String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
+            String actualSuperClassName = observedClass.getSuperclass().getSimpleName();
 
-                String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
-                        + expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
-                if (!expectedSuperClassName.equals(actualSuperClassName)) {
-                    fail(failMessage);
-                }
+            String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
+                    + expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
+            if (!expectedSuperClassName.equals(actualSuperClassName)) {
+                fail(failMessage);
             }
         }
     }
