@@ -98,33 +98,44 @@ public class ClassNameScanner {
             classIsPresentMultipleTimes = observedPackageNames.size() > 1;
             classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
 
-            scanResultType = classIsPresentMultipleTimes ? ScanResultType.CORRECT_NAME_MULTIPLE_TIMES_PRESENT :
-                    (classIsCorrectlyPlaced ? ScanResultType.CORRECT_NAME_CORRECT_PLACE : ScanResultType.CORRECT_NAME_MISPLACED);
+            if (classIsPresentMultipleTimes) {
+                scanResultType = ScanResultType.CORRECT_NAME_MULTIPLE_TIMES_PRESENT;
+            }
+            else {
+                scanResultType = classIsCorrectlyPlaced ? ScanResultType.CORRECT_NAME_CORRECT_PLACE : ScanResultType.CORRECT_NAME_MISPLACED;
+            }
 
             foundObservedClassName = expectedClassName;
             foundObservedPackageName = observedPackageNames.toString();
         }
         else {
-            for(String observedClassName : observedClasses.keySet()) {
-                Collection<String> observedPackageNames = observedClasses.get(observedClassName);
+            for(var observedClass : observedClasses.entrySet()) {
+                var observedClassName = observedClass.getKey();
+                var observedPackageNames = observedClass.getValue();
                 classIsPresentMultipleTimes = observedPackageNames.size() > 1;
                 classIsCorrectlyPlaced = !classIsPresentMultipleTimes && (observedPackageNames.contains(expectedPackageName));
 
                 boolean hasWrongCase = observedClassName.equalsIgnoreCase(expectedClassName);
                 boolean hasTypos = FuzzySearch.ratio(observedClassName, expectedClassName) > 90;
-                //The previous implementation
-    			//boolean hasTypos = DiffUtils.levEditDistance(observedClassName, expectedClassName, 1) < Math.ceil(expectedClassName.length() / 4);
 
                 foundObservedClassName = observedClassName;
                 foundObservedPackageName = observedPackageNames.toString();
 
                 if(hasWrongCase) {
-                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.WRONG_CASE_MULTIPLE_TIMES_PRESENT :
-                            (classIsCorrectlyPlaced ? ScanResultType.WRONG_CASE_CORRECT_PLACE : ScanResultType.WRONG_CASE_MISPLACED);
+                    if (classIsPresentMultipleTimes) {
+                        scanResultType = ScanResultType.WRONG_CASE_MULTIPLE_TIMES_PRESENT;
+                    }
+                    else {
+                        scanResultType = classIsCorrectlyPlaced ? ScanResultType.WRONG_CASE_CORRECT_PLACE : ScanResultType.WRONG_CASE_MISPLACED;
+                    }
                     break;
                 } else if(hasTypos) {
-                    scanResultType = classIsPresentMultipleTimes ? ScanResultType.TYPOS_MULTIPLE_TIMES_PRESENT :
-                            (classIsCorrectlyPlaced ? ScanResultType.TYPOS_CORRECT_PLACE : ScanResultType.TYPOS_MISPLACED);
+                    if (classIsPresentMultipleTimes) {
+                        scanResultType = ScanResultType.TYPOS_MULTIPLE_TIMES_PRESENT;
+                    }
+                    else {
+                        scanResultType = classIsCorrectlyPlaced ? ScanResultType.TYPOS_CORRECT_PLACE : ScanResultType.TYPOS_MISPLACED;
+                    }
                     break;
                 } else {
                     scanResultType = ScanResultType.NOTFOUND;
