@@ -48,6 +48,8 @@ public class ClassNameScanner {
     private static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
     private static final String THE_CLASS = "The class ";
     private static final String EXPECTS_CLASS_WITH_NAME = "The exercise expects a class with the name ";
+    private static final String IN_THE_PACKAGE = " in the package ";
+    private static final String CORRECT_NAME = " has the correct name";
 
     // The class name and package name of the expected class that is currently being searched after.
     private final String expectedClassName;
@@ -132,15 +134,15 @@ public class ClassNameScanner {
 
         switch (scanResultType) {
             case CORRECT_NAME_CORRECT_PLACE:
-                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name and is in the correct package.";
+                scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + " and is in the correct package.";
                 break;
             case CORRECT_NAME_MISPLACED:
-                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name,"
+                scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
                         + " but the package it's in, " + foundObservedPackageName + ", deviates from the expectation."
                         + "  Make sure it is placed in the correct package.";
                 break;
             case CORRECT_NAME_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = THE_CLASS + foundObservedClassName + " has the correct name,"
+                scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
                         + " but it is located multiple times in the project and in the packages: "
                         + foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
                         + " Make sure to place the class in the correct package and remove any superfluous ones.";
@@ -151,14 +153,14 @@ public class ClassNameScanner {
                         + " Check for wrong upper case / lower case lettering.";
                 break;
             case WRONG_CASE_MISPLACED:
-                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the package " + foundObservedPackageName
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
                 break;
             case WRONG_CASE_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the packages " + foundObservedPackageName
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE " + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
                 break;
@@ -168,19 +170,19 @@ public class ClassNameScanner {
                         + " Check for typos in the class name.";
                 break;
             case TYPOS_MISPLACED:
-                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the package " + foundObservedPackageName
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE " + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place it in the correct package.";
                 break;
             case TYPOS_MULTIPLE_TIMES_PRESENT:
-                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + ", in the packages " + observedClasses.get(foundObservedClassName).toString()
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," IN_THE_PACKAGE " + observedClasses.get(foundObservedClassName).toString()
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
                 break;
             case NOTFOUND:
-                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + " in the package " + expectedPackageName
+                scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
                         + ". You did not implement the class in the exercise.";
                 break;
             default:
