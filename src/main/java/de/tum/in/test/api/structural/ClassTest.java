@@ -77,9 +77,15 @@ public abstract class ClassTest extends StructuralTest {
             return;
         }
 
-
         JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
 
+        checkBasicClassProperties(expectedClassName, observedClass, expectedClassPropertiesJSON);
+        checkSuperclass(expectedClassName, observedClass, expectedClassPropertiesJSON);
+        checkInterfaces(expectedClassName, observedClass, expectedClassPropertiesJSON);
+        checkAnnotations(expectedClassName, observedClass, expectedClassPropertiesJSON);
+    }
+
+    private void checkBasicClassProperties(String expectedClassName, Class<?> observedClass, JSONObject expectedClassPropertiesJSON) {
         if (expectedClassPropertiesJSON.has("isAbstract") && !Modifier.isAbstract(observedClass.getModifiers())) {
             fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
         }
@@ -95,7 +101,9 @@ public abstract class ClassTest extends StructuralTest {
         if(expectedClassPropertiesJSON.has("isEnum") && !observedClass.isEnum()) {
             fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
         }
+    }
 
+    private void checkSuperclass(String expectedClassName, Class<?> observedClass, JSONObject expectedClassPropertiesJSON) {
         if(expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)) {
             // Filter out the enums, since there is a separate test for them
             if(!expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
@@ -109,7 +117,9 @@ public abstract class ClassTest extends StructuralTest {
                 }
             }
         }
+    }
 
+    private void checkInterfaces(String expectedClassName, Class<?> observedClass, JSONObject expectedClassPropertiesJSON) {
         if(expectedClassPropertiesJSON.has(JSON_PROPERTY_INTERFACES)) {
             JSONArray expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
             Class<?>[] observedInterfaces = observedClass.getInterfaces();
@@ -132,7 +142,9 @@ public abstract class ClassTest extends StructuralTest {
                 }
             }
         }
+    }
 
+    private void checkAnnotations(String expectedClassName, Class<?> observedClass, JSONObject expectedClassPropertiesJSON) {
         if(expectedClassPropertiesJSON.has(JSON_PROPERTY_ANNOTATIONS)) {
             JSONArray expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
             Annotation[] observedAnnotations = observedClass.getAnnotations();

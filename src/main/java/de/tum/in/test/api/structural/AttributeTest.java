@@ -99,10 +99,10 @@ public abstract class AttributeTest extends StructuralTest {
             JSONArray expectedAnnotations = getExpectedJsonProperty(expectedAttribute, JSON_PROPERTY_ANNOTATIONS);
 
             // We check for each expected attribute if the name and the type is right.
-            boolean nameIsRight = false;
-            boolean typeIsRight = false;
-            boolean modifiersAreRight = false;
-            boolean annotationsAreRight = false;
+            var nameIsCorrect = false;
+            var typeIsCorrect = false;
+            var modifiersAreCorrect = false;
+            var annotationsAreCorrect = false;
 
             for(Field observedAttribute : observedClass.getDeclaredFields()) {
                 String observedName = observedAttribute.getName();
@@ -114,33 +114,36 @@ public abstract class AttributeTest extends StructuralTest {
                     //TODO: we should also take wrong case and typos into account
                     continue;
                 } else {
-                    nameIsRight = true;
+                    nameIsCorrect = true;
                 }
 
-                typeIsRight = checkType(observedAttribute, expectedTypeName);
-                modifiersAreRight = checkModifiers(observedModifiers, expectedModifiers);
-                annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
+                typeIsCorrect = checkType(observedAttribute, expectedTypeName);
+                modifiersAreCorrect = checkModifiers(observedModifiers, expectedModifiers);
+                annotationsAreCorrect = checkAnnotations(observedAnnotations, expectedAnnotations);
 
                 // If all are correct, then we found our attribute and we can break the loop
-                if(typeIsRight && modifiersAreRight && annotationsAreRight) {
+                if(typeIsCorrect && modifiersAreCorrect && annotationsAreCorrect) {
                     break;
                 }
             }
 
-            String expectedAttributeInformation = "the expected attribute '" + expectedName + "' of the class '" + expectedClassName + "'";
+            checkAttributeCorrectness(nameIsCorrect, typeIsCorrect, modifiersAreCorrect, annotationsAreCorrect, expectedName, expectedClassName);
+        }
+    }
 
-            if (!nameIsRight) {
-                fail("The name of " + expectedAttributeInformation + " is not implemented as expected.");
-            }
-            if (!typeIsRight) {
-                fail("The type of " + expectedAttributeInformation + " is not implemented as expected.");
-            }
-            if (!modifiersAreRight) {
-                fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
+    private void checkAttributeCorrectness(boolean nameIsCorrect, boolean typeIsCorrect, boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName, String expectedClassName) {
+        String expectedAttributeInformation = "the expected attribute '" + expectedName + "' of the class '" + expectedClassName + "'";
+        if (!nameIsCorrect) {
+            fail("The name of " + expectedAttributeInformation + " is not implemented as expected.");
+        }
+        if (!typeIsCorrect) {
+            fail("The type of " + expectedAttributeInformation + " is not implemented as expected.");
+        }
+        if (!modifiersAreCorrect) {
+            fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!annotationsAreCorrect) {
+            fail("The annotation(s) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
         }
     }
 

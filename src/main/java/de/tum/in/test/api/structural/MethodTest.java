@@ -93,11 +93,11 @@ public abstract class MethodTest extends StructuralTest {
             JSONArray expectedAnnotations = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_ANNOTATIONS);
             String expectedReturnType = expectedMethod.getString(JSON_PROPERTY_RETURN_TYPE);
 
-            boolean nameIsRight = false;
-            boolean parametersAreRight = false;
-            boolean modifiersAreRight = false;
-            boolean returnTypeIsRight = false;
-            boolean annotationsAreRight = false;
+            boolean nameIsCorrect = false;
+            boolean parametersAreCorrect = false;
+            boolean modifiersAreCorrect = false;
+            boolean returnTypeIsCorrect = false;
+            boolean annotationsAreCorrect = false;
 
             for(Method observedMethod : observedClass.getDeclaredMethods()) {
                 String observedName = observedMethod.getName();
@@ -112,38 +112,43 @@ public abstract class MethodTest extends StructuralTest {
                     //TODO: check if overloading is supported properly
                     continue;
                 } else {
-                    nameIsRight = true;
+                    nameIsCorrect = true;
                 }
 
-                parametersAreRight = checkParameters(observedParameters, expectedParameters);
-                modifiersAreRight = checkModifiers(observedModifiers, expectedModifiers);
-                annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
-                returnTypeIsRight = expectedReturnType.equals(observedReturnType);
+                parametersAreCorrect = checkParameters(observedParameters, expectedParameters);
+                modifiersAreCorrect = checkModifiers(observedModifiers, expectedModifiers);
+                annotationsAreCorrect = checkAnnotations(observedAnnotations, expectedAnnotations);
+                returnTypeIsCorrect = expectedReturnType.equals(observedReturnType);
 
                 // If all are correct, then we found our method and we can break the loop
-                if(parametersAreRight && modifiersAreRight && annotationsAreRight && returnTypeIsRight) {
+                if(parametersAreCorrect && modifiersAreCorrect && annotationsAreCorrect && returnTypeIsCorrect) {
                     break;
                 }
             }
 
-            String expectedMethodInformation = "the expected method '" + expectedName + "' of the class '" + expectedClassName + "' with "
-                    + ((expectedParameters.length() == 0) ? "no parameters" : "the parameters: " + expectedParameters.toString());
+            checkMethodCorrectness(expectedClassName, expectedName, expectedParameters, nameIsCorrect, parametersAreCorrect, modifiersAreCorrect, returnTypeIsCorrect, annotationsAreCorrect);
+        }
+    }
 
-            if (!nameIsRight) {
-                fail(expectedMethodInformation + " was not found or is named wrongly.");
-            }
-            if (!parametersAreRight) {
-                fail("The parameters of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!modifiersAreRight) {
-                fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!returnTypeIsRight) {
-                fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");
-            }
+    private void checkMethodCorrectness(String expectedClassName, String expectedName, JSONArray expectedParameters, boolean nameIsCorrect, boolean parametersAreCorrect,
+            boolean modifiersAreCorrect, boolean returnTypeIsCorrect, boolean annotationsAreCorrect) {
+        String expectedMethodInformation = "the expected method '" + expectedName + "' of the class '" + expectedClassName + "' with "
+                + ((expectedParameters.length() == 0) ? "no parameters" : "the parameters: " + expectedParameters.toString());
+
+        if (!nameIsCorrect) {
+            fail(expectedMethodInformation + " was not found or is named wrongly.");
+        }
+        if (!parametersAreCorrect) {
+            fail("The parameters of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!modifiersAreCorrect) {
+            fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!annotationsAreCorrect) {
+            fail("The annotation(s) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!returnTypeIsCorrect) {
+            fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");
         }
     }
 }

@@ -110,18 +110,23 @@ public abstract class ConstructorTest extends StructuralTest {
                 }
             }
 
-            String expectedConstructorInformation = "the expected constructor of the class '" + expectedClassName + "' with "
-                    + ((expectedParameters.length() == 0) ? "no parameters" : "the parameters: " + expectedParameters.toString());
+            checkConstructorCorrectness(expectedClassName, expectedParameters, parametersAreRight, modifiersAreRight, annotationsAreRight);
+        }
+    }
 
-            if (!parametersAreRight) {
-                fail("The parameters of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!modifiersAreRight) {
-                fail("The access modifiers of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
-            if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-            }
+    private void checkConstructorCorrectness(String expectedClassName, JSONArray expectedParameters, boolean parametersAreCorrect, boolean modifiersAreCorrect,
+            boolean annotationsAreCorrect) {
+        String expectedConstructorInformation = "the expected constructor of the class '" + expectedClassName + "' with "
+                + ((expectedParameters.length() == 0) ? "no parameters" : "the parameters: " + expectedParameters.toString());
+
+        if (!parametersAreCorrect) {
+            fail("The parameters of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!modifiersAreCorrect) {
+            fail("The access modifiers of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+        }
+        if (!annotationsAreCorrect) {
+            fail("The annotation(s) of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
         }
     }
 }
