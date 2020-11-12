@@ -156,9 +156,11 @@ public abstract class AttributeTest extends StructuralTest {
 
         if (observedEnumValues == null) {
             fail("The enum '" + expectedClassName + "' does not contain any enum constants. Make sure to implement them.");
+            return;
         }
         if (expectedEnumValues.length() != observedEnumValues.length) {
             fail("The enum '" + expectedClassName + "' does not contain all the expected enum values. Make sure to implement the missing enums.");
+            return;
         }
 
         for(int i = 0; i < expectedEnumValues.length(); i++) {
