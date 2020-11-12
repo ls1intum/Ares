@@ -34,7 +34,7 @@ public abstract class BehaviorTest {
 
     /**
      * Retrieve the actual class by its qualified name.
-     * @param qualifiedClassName: The qualified name of the class that needs to get retrieved (package.classname)
+     * @param qualifiedClassName The qualified name of the class that needs to get retrieved (package.classname)
      * @return The wanted class object.
      */
     protected Class<?> getClass(String qualifiedClassName) {
@@ -54,8 +54,8 @@ public abstract class BehaviorTest {
      * <p>
      * This method does not support passing null, passing subclasses of the parameter types or invoking constructors with primitive parameters.
      * Use {@link #newInstance(Constructor, Object...)} for that.
-     * @param qualifiedClassName: The qualified name of the class that needs to get retrieved (package.classname)
-     * @param constructorArgs: Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
+     * @param qualifiedClassName The qualified name of the class that needs to get retrieved (package.classname)
+     * @param constructorArgs Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
      * @return The instance of this class.
      * @see #newInstance(Class, Object...)
      */
@@ -68,8 +68,8 @@ public abstract class BehaviorTest {
      * <p>
      * This method does not support passing null, passing subclasses of the parameter types or invoking constructors with primitive parameters.
      * Use {@link #newInstance(Constructor, Object...)} for that.
-     * @param clazz: new instance of which is required
-     * @param constructorArgs: Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
+     * @param clazz new instance of which is required
+     * @param constructorArgs Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
      * @return The instance of this class.
      */
     protected Object newInstance(Class<?> clazz, Object... constructorArgs) {
@@ -106,8 +106,8 @@ public abstract class BehaviorTest {
 
     /**
      * Instantiate an object of a given class by its qualified name and the constructor arguments, if applicable.
-     * @param constructor: The actual constructor that should be used for creating a new instance of the object
-     * @param constructorArgs: Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
+     * @param constructor The actual constructor that should be used for creating a new instance of the object
+     * @param constructorArgs Parameter instances of the constructor of the class, that it has to get instantiated with. Do not include, if the constructor has no arguments.
      * @return The instance of this class.
      */
     protected Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
@@ -144,8 +144,8 @@ public abstract class BehaviorTest {
 
     /**
      * Retrieve an attribute value of a given instance of a class by the attribute name.
-     * @param object: The instance of the class that contains the attribute. Must not be null, even for static fields.
-     * @param attributeName: The name of the attribute whose value needs to get retrieved.
+     * @param object The instance of the class that contains the attribute. Must not be null, even for static fields.
+     * @param attributeName The name of the attribute whose value needs to get retrieved.
      * @return The instance of the attribute with the wanted value.
      */
     protected Object valueForAttribute(Object object, String attributeName) {
@@ -169,9 +169,9 @@ public abstract class BehaviorTest {
     /**
      * Helper method that retrieves a method with arguments of a given object by its name.
      *
-     * @param object: instance of the class that defines the method.
-     * @param methodName: the name of the method.
-     * @param parameterTypes: The parameter types of this method. Do not include if the method has no parameters.
+     * @param object instance of the class that defines the method.
+     * @param methodName the name of the method.
+     * @param parameterTypes The parameter types of this method. Do not include if the method has no parameters.
      * @return The wanted method.
      */
     protected Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
@@ -181,9 +181,9 @@ public abstract class BehaviorTest {
 
     /**
      * Retrieve a method with arguments of a given class by its name.
-     * @param declaringClass: The class that declares this method.
-     * @param methodName: The name of this method.
-     * @param parameterTypes: The parameter types of this method. Do not include if the method has no parameters.
+     * @param declaringClass The class that declares this method.
+     * @param methodName The name of this method.
+     * @param parameterTypes The parameter types of this method. Do not include if the method has no parameters.
      * @return The wanted method.
      */
     protected Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
@@ -209,9 +209,9 @@ public abstract class BehaviorTest {
 
     /**
      * Invoke a given method of a given object with instances of the parameters.
-     * @param object: The instance of the class that should invoke the method. Can be null if the method is static.
-     * @param method: The method that has to get invoked.
-     * @param params: Parameter instances of the method. Do not include if the method has no parameters.
+     * @param object The instance of the class that should invoke the method. Can be null if the method is static.
+     * @param method The method that has to get invoked.
+     * @param params Parameter instances of the method. Do not include if the method has no parameters.
      * @return The return value of the method.
      */
     protected Object invokeMethod(Object object, Method method, Object... params) {
@@ -234,9 +234,9 @@ public abstract class BehaviorTest {
     /**
      * Invoke a given method of a given object with instances of the parameters,
      * and rethrow an exception if one occurs during the method execution.
-     * @param object: The instance of the class that should invoke the method.
-     * @param method: The method that has to get invoked.
-     * @param params: Parameter instances of the method. Do not include if the method has no parameters.
+     * @param object The instance of the class that should invoke the method.
+     * @param method The method that has to get invoked.
+     * @param params Parameter instances of the method. Do not include if the method has no parameters.
      * @throws Throwable the exception that was caught and which will be rethrown
      * @return The return value of the method.
      */
@@ -262,9 +262,9 @@ public abstract class BehaviorTest {
      * <p>
      * This method does not support invoking static methods and passing null, passing subclasses of the parameter types or invoking
      * methods with primitive parameters. Use {@link #invokeMethod(Object, Method, Object...)} for that.
-     * @param object: The instance of the class that should invoke the method. Must not be null, even for static methods.
-     * @param methodName: The method name that has to get invoked.
-     * @param params: Parameter instances of the method. Do not include if the method has no parameters.
+     * @param object The instance of the class that should invoke the method. Must not be null, even for static methods.
+     * @param methodName The method name that has to get invoked.
+     * @param params Parameter instances of the method. Do not include if the method has no parameters.
      * @return The return value of the method.
      */
     protected Object invokeMethod(Object object, String methodName, Object... params) {
@@ -276,8 +276,8 @@ public abstract class BehaviorTest {
 
     /**
      * Retrieve a constructor with arguments of a given class.
-     * @param declaringClass: The class that declares this constructor.
-     * @param parameterTypes: The parameter types of this method. Do not include if the method has no parameters.
+     * @param declaringClass The class that declares this constructor.
+     * @param parameterTypes The parameter types of this method. Do not include if the method has no parameters.
      * @param <T> The type parameter of the constructor and class
      * @return The wanted method.
      */
@@ -305,8 +305,8 @@ public abstract class BehaviorTest {
 
     /**
      * Retrieves the parameters types of a given collection of parameter instances.
-     * @param failMessage: The beginning of message of the failure message if one of params is null
-     * @param params: The instances of the parameters.
+     * @param failMessage The beginning of message of the failure message if one of params is null
+     * @param params The instances of the parameters.
      * @return The parameter types of the instances as an array.
      */
     private Class<?>[] getParameterTypes(String failMessage, Object... params) {
@@ -318,7 +318,7 @@ public abstract class BehaviorTest {
 
     /**
      * Generates a string representation of a given collection of parameter types.
-     * @param parameterTypes: The parameter types we want a string representation of.
+     * @param parameterTypes The parameter types we want a string representation of.
      * @return The string representation of the parameter types.
      */
     private String getParameterTypesAsString(Class<?>... parameterTypes) {

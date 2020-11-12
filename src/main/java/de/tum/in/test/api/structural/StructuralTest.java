@@ -86,8 +86,8 @@ public abstract class StructuralTest {
     /**
      * Scans the project and returns the class, if it's found. If not, return the message of the NamesScanner.
      *
-     * @param expectedClassStructure: The class structure that we expect to find a class for.
-     * @param typeOfTest:             The name of the test type that currently called the NamesScanner. The name is
+     * @param expectedClassStructure The class structure that we expect to find a class for.
+     * @param typeOfTest             The name of the test type that currently called the NamesScanner. The name is
      *                                displayed in the feedback, if it's negative.
      * @return The current class that undergoes the tests.
      */
@@ -122,8 +122,8 @@ public abstract class StructuralTest {
      * This method checks if the visibility modifiers of the observed structural element match the ones in the
      * expected structural element.
      *
-     * @param observedModifiers: The observed modifiers as a string array.
-     * @param expectedModifiers: The expected modifiers as a JSONArray.
+     * @param observedModifiers The observed modifiers as a string array.
+     * @param expectedModifiers The expected modifiers as a JSONArray.
      * @return True if they match, false otherwise.
      */
     protected static boolean checkModifiers(String[] observedModifiers, JSONArray expectedModifiers) {
@@ -181,8 +181,8 @@ public abstract class StructuralTest {
      * This method checks if the parameters of the actual structural element (in this case method or constructor)
      * match the ones in the expected structural element.
      *
-     * @param observedParameters: The actual parameter types as a classes array.
-     * @param expectedParameters: The expected parameter type names as a JSONArray.
+     * @param observedParameters The actual parameter types as a classes array.
+     * @param expectedParameters The expected parameter type names as a JSONArray.
      * @return True if they match, false otherwise.
      */
     protected static boolean checkParameters(Class<?>[] observedParameters, JSONArray expectedParameters) {
@@ -240,7 +240,7 @@ public abstract class StructuralTest {
     /**
      * This method retrieves the JSON array in the structure oracle.
      *
-     * @param structureOracleFileUrl: The file url of the structure oracle file, which is used for the structural tests.
+     * @param structureOracleFileUrl The file url of the structure oracle file, which is used for the structural tests.
      * @return The JSONArray representation of the structure oracle.
      */
     protected static JSONArray retrieveStructureOracleJSON(URL structureOracleFileUrl) {

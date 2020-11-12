@@ -242,9 +242,9 @@ public class ClassNameScanner {
     /**
      * This method recursively walks the actual folder file structure starting from the assignment folder and adds
      * each type it finds e.g. filenames ending with .java and .kt to the passed JSON object.
-     * @param assignmentFolderName: The root folder where the method starts walking the project structure.
-     * @param node: The current node the method is visiting.
-     * @param foundClasses: The JSON object where the type names and packages get appended.
+     * @param assignmentFolderName The root folder where the method starts walking the project structure.
+     * @param node The current node the method is visiting.
+     * @param foundClasses The JSON object where the type names and packages get appended.
      */
     private void walkProjectFileStructure(String assignmentFolderName, File node, Map<String, List<String>> foundClasses) {
         String fileName = node.getName();
