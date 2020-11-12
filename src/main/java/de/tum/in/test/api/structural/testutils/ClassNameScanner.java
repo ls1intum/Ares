@@ -160,7 +160,7 @@ public class ClassNameScanner {
                 break;
             case WRONG_CASE_MULTIPLE_TIMES_PRESENT:
                 scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE " + foundObservedPackageName
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
                 break;
@@ -171,13 +171,13 @@ public class ClassNameScanner {
                 break;
             case TYPOS_MISPLACED:
                 scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE " + foundObservedPackageName
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + foundObservedPackageName
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place it in the correct package.";
                 break;
             case TYPOS_MULTIPLE_TIMES_PRESENT:
                 scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName + ". "
-                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," IN_THE_PACKAGE " + observedClasses.get(foundObservedClassName).toString()
+                        + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE + observedClasses.get(foundObservedClassName).toString()
                         + DEVIATES_FROM_THE_EXPECTATION
                         + " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
                 break;
