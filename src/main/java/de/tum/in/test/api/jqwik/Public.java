@@ -10,11 +10,12 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.internal.TestType;
-import de.tum.in.test.api.io.IOTester;
 import net.jqwik.api.Example;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
+
+import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.io.IOTester;
 
 /**
  * Marks a <b>PUBLIC</b> {@link Property}/{@link Example}, uses the

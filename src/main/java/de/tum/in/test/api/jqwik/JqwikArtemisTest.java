@@ -10,9 +10,10 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.internal.TestType;
 import net.jqwik.api.lifecycle.AddLifecycleHook;
 import net.jqwik.api.lifecycle.PropagationMode;
+
+import de.tum.in.test.api.internal.TestType;
 
 /**
  * This is only for internal use, to reduce redundancy.

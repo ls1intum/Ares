@@ -6,14 +6,15 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.Assertions;
 
-import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.internal.TimeoutUtils;
 import net.jqwik.api.domains.DomainContext;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
 import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 import net.jqwik.engine.facades.DomainContextFacadeImpl;
+
+import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.internal.TimeoutUtils;
 
 /**
  * This class manages the {@link StrictTimeout} annotation and how it is

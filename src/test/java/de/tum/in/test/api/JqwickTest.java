@@ -8,11 +8,12 @@ import java.lang.annotation.AnnotationFormatError;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
+import net.jqwik.engine.JqwikTestEngine;
+
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
 import de.tum.in.testuser.JqwickUser;
-import net.jqwik.engine.JqwikTestEngine;
 
 @UserBased(value = JqwickUser.class, testEngineId = JqwikTestEngine.ENGINE_ID)
 class JqwickTest {

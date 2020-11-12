@@ -35,7 +35,7 @@ class IOTesterTest {
 			assertThat(tester.out().getLines()).isNotEmpty();
 			assertThat(tester.err().getLines()).isNotEmpty();
 			assertThat(scanner.nextLine()).isEqualTo("X");
-			
+
 			tester.in().addLinesToInput("Y");
 
 			tester.reset();

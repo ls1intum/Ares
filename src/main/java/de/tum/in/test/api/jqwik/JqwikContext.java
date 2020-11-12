@@ -7,10 +7,11 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import net.jqwik.api.lifecycle.PropertyLifecycleContext;
+
 import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.internal.TestContextUtils;
 import de.tum.in.test.api.internal.TestType;
-import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
 @API(status = Status.INTERNAL)
 public class JqwikContext extends TestContext {

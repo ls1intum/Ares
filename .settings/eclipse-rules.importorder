@@ -1,0 +1,9 @@
+#Organize Import Order
+#Wed Nov 11 22:57:46 CET 2020
+0=java
+1=javax
+2=org
+3=com
+4=net
+5=ch
+6=de.tum

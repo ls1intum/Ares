@@ -33,6 +33,24 @@ jobs:
           ajts-maven-
     - name: Test with Maven and JDK ${{ matrix.java }}
       run: mvn -B clean test
+  code-style:
+    runs-on: ubuntu-latest
+    name: Check Code Style
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 15
+      uses: actions/setup-java@v1
+      with:
+        java-version: 15
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2.1.3
+      with:
+        path: ~/.m2/repository
+        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ajts-maven-
+    - name: Check code style with Maven
+      run: mvn -B spotless:check
   sonar-scanner:
     needs: test
     runs-on: ubuntu-latest
@@ -60,7 +78,7 @@ jobs:
       run: mvn -B -P coverage clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=artemis-java-test-sandbox -Dsonar.organization=maisikoleni -Dsonar.host.url=https://sonarcloud.io
   deploy:
     if: startsWith(github.event.ref, 'refs/tags/')
-    needs: test
+    needs: [code-style, test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

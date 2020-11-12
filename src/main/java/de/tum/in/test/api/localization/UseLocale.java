@@ -12,9 +12,10 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import net.jqwik.api.lifecycle.AddLifecycleHook;
+
 import de.tum.in.test.api.jqwik.JqwikLocaleExtension;
 import de.tum.in.test.api.jupiter.JupiterLocaleExtension;
-import net.jqwik.api.lifecycle.AddLifecycleHook;
 
 /**
  * Used to specify a specific locale for a test class like <code>de</code> or
