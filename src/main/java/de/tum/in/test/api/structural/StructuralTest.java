@@ -101,11 +101,9 @@ public abstract class StructuralTest {
 				expectedClassStructure.getExpectedPackageName());
 		ScanResultType scanResultEnum = classNameScanner.getScanResult().getResult();
 		String classNameScanMessage = classNameScanner.getScanResult().getMessage();
-
 		if (!scanResultEnum.equals(ScanResultType.CORRECT_NAME_CORRECT_PLACE)) {
 			fail(classNameScanMessage);
 		}
-
 		try {
 			return Class.forName(expectedClassStructure.getQualifiedClassName());
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
@@ -186,7 +184,6 @@ public abstract class StructuralTest {
 					break;
 				}
 			}
-
 			if (!expectedAnnotationFound) {
 				return false;
 			}
@@ -248,7 +245,6 @@ public abstract class StructuralTest {
 	 */
 	protected static Map<String, Integer> createParametersHashMap(String... parameterTypeNames) {
 		Map<String, Integer> parametersHashTable = new HashMap<>();
-
 		for (String parameterTypeName : parameterTypeNames) {
 			if (!parametersHashTable.containsKey(parameterTypeName)) {
 				parametersHashTable.put(parameterTypeName, 1);
