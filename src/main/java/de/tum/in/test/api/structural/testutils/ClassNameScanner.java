@@ -59,13 +59,13 @@ public class ClassNameScanner {
     private final String expectedPackageName;
 
     // Mapping between the class name and the observed package names (list) in the project
-    private final Map<String, List<String>> observedClasses;
+    private final Map<String, List<String>> observedClasses = new HashMap<>();
     private final ScanResult scanResult;
 
     public ClassNameScanner(String expectedClassName, String expectedPackageName) {
         this.expectedClassName = expectedClassName;
         this.expectedPackageName = expectedPackageName;
-        this.observedClasses = retrieveObservedClasses();
+        findObservedClassesInProject();
         this.scanResult = computeScanResult();
     }
 
@@ -208,10 +208,8 @@ public class ClassNameScanner {
     /**
      * This method retrieves the actual type names and their packages by walking the project file structure.
      * The root node (which is the assignment folder) is defined in the pom.xml file of the project.
-     * @return The map containing the type names as keys and the type packages as values.
      */
-    private Map<String, List<String>> retrieveObservedClasses() {
-        Map<String, List<String>> observedClasses = new HashMap<>();
+    private void findObservedClassesInProject() {
 
         try {
             File pomFile = new File("pom.xml");
@@ -235,8 +233,6 @@ public class ClassNameScanner {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
         }
-
-        return observedClasses;
     }
 
     /**
