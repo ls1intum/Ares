@@ -133,13 +133,13 @@ public abstract class MethodTest extends StructuralTest {
                 fail(expectedMethodInformation + " was not found or is named wrongly.");
             }
             if (!parametersAreRight) {
-                fail("The parameters of " + expectedMethodInformation + " are not implemented as expected.");
+                fail("The parameters of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!modifiersAreRight) {
-                fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation + " are not implemented as expected.");
+                fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedMethodInformation + " are not implemented as expected.");
+                fail("The annotation(s) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!returnTypeIsRight) {
                 fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");

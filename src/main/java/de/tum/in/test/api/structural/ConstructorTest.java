@@ -114,13 +114,13 @@ public abstract class ConstructorTest extends StructuralTest {
                     + ((expectedParameters.length() == 0) ? "no parameters" : "the parameters: " + expectedParameters.toString());
 
             if (!parametersAreRight) {
-                fail("The parameters of " + expectedConstructorInformation + " are not implemented as expected.");
+                fail("The parameters of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!modifiersAreRight) {
-                fail("The access modifiers of " + expectedConstructorInformation + " are not implemented as expected.");
+                fail("The access modifiers of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedConstructorInformation + " are not implemented as expected.");
+                fail("The annotation(s) of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
         }
     }

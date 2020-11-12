@@ -136,10 +136,10 @@ public abstract class AttributeTest extends StructuralTest {
                 fail("The type of " + expectedAttributeInformation + " is not implemented as expected.");
             }
             if (!modifiersAreRight) {
-                fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation + " are not implemented as expected.");
+                fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
             if (!annotationsAreRight) {
-                fail("The annotation(s) of " + expectedAttributeInformation + " are not implemented as expected.");
+                fail("The annotation(s) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
             }
         }
     }

@@ -79,6 +79,8 @@ public abstract class StructuralTest {
     protected static final String THE_TYPE = "The type ";
     protected static final String THE_ENUM = "The enum ";
 
+    protected static final String NOT_IMPLEMENTED_AS_EXPECTED = " are not implemented as expected.";
+
     protected static JSONArray structureOracleJSON;
 
     /**
