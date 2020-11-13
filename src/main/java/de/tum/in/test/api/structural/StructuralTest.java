@@ -107,7 +107,8 @@ public abstract class StructuralTest {
 		try {
 			return Class.forName(expectedClassStructure.getQualifiedClassName());
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
-			fail("Problem during " + typeOfTest + " test: " + classNameScanMessage);
+			// Note: this error happens when the ClassNameScanner finds the correct file, e.g. 'Course.java', but the class 'Course' was not yet created correctly in this file.
+			fail("Problem during " + typeOfTest + " test: " + classNameScanMessage + ". Double check that you have implemented the class correctly!");
 			return null;
 		}
 	}
