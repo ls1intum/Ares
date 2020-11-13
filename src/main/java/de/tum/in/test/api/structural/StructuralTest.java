@@ -101,6 +101,7 @@ public abstract class StructuralTest {
 				expectedClassStructure.getExpectedPackageName());
 		ScanResultType scanResultEnum = classNameScanner.getScanResult().getResult();
 		String classNameScanMessage = classNameScanner.getScanResult().getMessage();
+		// please note: inner classes are not supported
 		if (!scanResultEnum.equals(ScanResultType.CORRECT_NAME_CORRECT_PLACE)) {
 			fail(classNameScanMessage);
 		}

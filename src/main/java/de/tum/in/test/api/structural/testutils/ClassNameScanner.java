@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
  * <p>
  * A note on the limit of allowed number of typos: the maximal number depends on
  * the length of the class name and is defined as ceiling(classNameLength / 4).
- * 
+ *
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
@@ -75,6 +75,8 @@ public class ClassNameScanner {
 	 */
 	private final Map<String, List<String>> observedClasses = new HashMap<>();
 	private final ScanResult scanResult;
+
+	public static String pomXmlPath = "pom.xml";
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -236,7 +238,7 @@ public class ClassNameScanner {
 	 */
 	private void findObservedClassesInProject() {
 		try {
-			File pomFile = new File("pom.xml");
+			File pomFile = new File(pomXmlPath);
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			// make sure to avoid loading external files which would not be compliant
 			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
@@ -265,7 +267,7 @@ public class ClassNameScanner {
 	 * This method recursively walks the actual folder file structure starting from
 	 * the assignment folder and adds each type it finds e.g. filenames ending with
 	 * <code>.java</code> and <code>.kt</code> to the passed JSON object.
-	 * 
+	 *
 	 * @param assignmentFolderName The root folder where the method starts walking
 	 *                             the project structure.
 	 * @param node                 The current node the method is visiting.
@@ -274,6 +276,12 @@ public class ClassNameScanner {
 	 */
 	private void walkProjectFileStructure(String assignmentFolderName, File node,
 			Map<String, List<String>> foundClasses) {
+
+		// Example:
+		// * assignmentFolderName: assignment/src
+		// * fileName: assignment/src/de/tum/in/ase/eist/BubbleSort.java
+		// Required Package Name: de.tum.in.ase.eist
+
 		String fileName = node.getName();
 
 		// support Java and Kotlin files
@@ -282,7 +290,7 @@ public class ClassNameScanner {
 			String fileExtension = fileNameComponents[fileNameComponents.length - 1];
 
 			String className = fileNameComponents[fileNameComponents.length - 2];
-			String packageName = node.getPath().substring(0, node.getPath().indexOf(fileExtension));
+			String packageName = node.getPath().substring(0, node.getPath().indexOf("." + fileExtension));
 			packageName = packageName.substring(
 					packageName.indexOf(assignmentFolderName) + assignmentFolderName.length() + 1,
 					packageName.lastIndexOf(File.separator + className));
@@ -298,6 +306,8 @@ public class ClassNameScanner {
 				foundClasses.put(className, Collections.singletonList(packageName));
 			}
 		}
+
+		// TODO: we should also support inner classes here
 
 		if (node.isDirectory()) {
 			String[] subNodes = node.list();
