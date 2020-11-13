@@ -10,7 +10,8 @@ import java.util.Set;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.platform.commons.util.LruCache;
+
+import de.tum.in.test.api.util.LruCache;
 
 @API(status = Status.INTERNAL)
 public final class Messages {
