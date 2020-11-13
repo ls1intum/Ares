@@ -1,8 +1,6 @@
 package de.tum.in.test.api.io;
 
 import java.nio.CharBuffer;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
