@@ -1,8 +1,6 @@
 package de.tum.in.test.api.io;
 
 import java.nio.CharBuffer;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,13 +47,7 @@ public final class OutputTester implements LineAcceptor {
 	private final String randomString;
 
 	public OutputTester() {
-		long randomBitsTemp;
-		try {
-			randomBitsTemp = SecureRandom.getInstanceStrong().nextLong();
-		} catch (@SuppressWarnings("unused") NoSuchAlgorithmException e) {
-			randomBitsTemp = ThreadLocalRandom.current().nextLong();
-		}
-		randomBits = randomBitsTemp;
+		randomBits = ThreadLocalRandom.current().nextLong();
 		randomString = Long.toUnsignedString(randomBits, 16);
 	}
 
