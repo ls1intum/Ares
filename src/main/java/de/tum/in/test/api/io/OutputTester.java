@@ -1,6 +1,7 @@
 package de.tum.in.test.api.io;
 
 import java.nio.CharBuffer;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.opentest4j.ValueWrapper;
  * @see IOTester
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 public final class OutputTester implements LineAcceptor {
@@ -34,6 +35,7 @@ public final class OutputTester implements LineAcceptor {
 	private static final int MAX_SPACES = 16;
 	private static final int RANDOM_BOUND = MAX_SPACES * MAX_SPACES;
 	private static final char[] SPACES = " ".repeat(MAX_SPACES).toCharArray();
+	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 	private static final Pattern EXPECTED_LINE_PATTERN = Pattern.compile("`" // line start
 			+ "\\(\\?x\\)" // comments enabled
 			+ "#([0-9A-F]{8})\\R" // the line number
@@ -47,7 +49,7 @@ public final class OutputTester implements LineAcceptor {
 	private final String randomString;
 
 	public OutputTester() {
-		randomBits = ThreadLocalRandom.current().nextLong();
+		randomBits = SECURE_RANDOM.nextLong();
 		randomString = Long.toUnsignedString(randomBits, 16);
 	}
 

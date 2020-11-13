@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.platform.commons.util.LruCache;
+import de.tum.in.test.api.util.LruCache;
 
 public enum PathType {
 	/**
