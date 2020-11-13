@@ -49,13 +49,7 @@ public final class OutputTester implements LineAcceptor {
 	private final String randomString;
 
 	public OutputTester() {
-		long randomBitsTemp;
-		try {
-			randomBitsTemp = SecureRandom.getInstanceStrong().nextLong();
-		} catch (@SuppressWarnings("unused") NoSuchAlgorithmException e) {
-			randomBitsTemp = ThreadLocalRandom.current().nextLong();
-		}
-		randomBits = randomBitsTemp;
+		randomBits = ThreadLocalRandom.current().nextLong();
 		randomString = Long.toUnsignedString(randomBits, 16);
 	}
 
