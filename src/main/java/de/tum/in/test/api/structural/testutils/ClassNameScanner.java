@@ -14,8 +14,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import me.xdrop.fuzzywuzzy.FuzzySearch;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -23,6 +21,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import info.debatty.java.stringsimilarity.Damerau;
+import info.debatty.java.stringsimilarity.JaroWinkler;
+import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 
 /**
  * This class scans the submission project if the current expected class is
@@ -54,6 +56,22 @@ import org.xml.sax.SAXException;
 public class ClassNameScanner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ClassNameScanner.class);
+
+	/**
+	 * Jaro-Winkler string similarity for typo correction to compute the overall
+	 * similarity
+	 */
+	private static final JaroWinkler JARO_WINKLER = new JaroWinkler();
+	/**
+	 * Normalized Levenshtein as alternative to spot some typos better (e.g. in
+	 * longer strings)
+	 */
+	private static final NormalizedLevenshtein NORMALIZED_LEVENSHTEIN = new NormalizedLevenshtein();
+	/**
+	 * Damerau-Levenshtein to compute the edit distance to have an absolute value
+	 * for the amount of difference
+	 */
+	private static final Damerau DAMERAU_LEVENSHTEIN = new Damerau();
 
 	private static final String DEVIATES_FROM_THE_EXPECTATION = ", which deviates from the expectation.";
 	private static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
@@ -134,7 +152,7 @@ public class ClassNameScanner {
 			 * 2) check whether there are similar classes (e.g. the student has a small typo
 			 * in the class name)
 			 */
-			if (FuzzySearch.ratio(foundObservedClassName, expectedClassName) > 90) {
+			if (isMisspelledWithHighProbability(this.expectedClassName, foundObservedClassName)) {
 				return createScanResult(foundObservedPackageNames, classPresentMultiple, classCorrectlyPlaced,
 						TYPOS_MULTIPLE, TYPOS_CORRECT_PLACE, TYPOS_MISPLACED);
 			}
@@ -317,5 +335,43 @@ public class ClassNameScanner {
 				}
 			}
 		}
+	}
+
+	static boolean isMisspelledWithHighProbability(String a, String b) {
+		/**
+		 * This based on observations and experiments with
+		 * https://github.com/src-d/datasets/tree/master/Typos and collections real (not
+		 * misspelled) classes.
+		 */
+		/*
+		 * This is a fast check which should work often and not be a problem for the
+		 * user to spot (as this requires a significant length difference). Such "long"
+		 * typos seem to occur almost never by accident.
+		 */
+		int lengthDifferenceAbs = Math.abs(a.length() - b.length());
+		if (lengthDifferenceAbs > 2)
+			return false;
+		/**
+		 * This is the case for most typos, simply one missing or added character or two
+		 * next to each other are swapped. (We only use this rule for strings with
+		 * length of at least two)
+		 */
+		double distance = DAMERAU_LEVENSHTEIN.distance(a, b);
+		if (distance <= 1.0 && Math.max(a.length(), b.length()) > 2)
+			return true;
+		/**
+		 * We accept everything with a distance below three as typo. At three and above,
+		 * misspelled identifiers can be easily recognized by a human or might not be
+		 * spelling errors.
+		 */
+		if (distance > 2)
+			return false;
+		/*
+		 * Otherwise, if the JW-similarity is below 0.9, it is unlikely that the two
+		 * names should be the same. Often, they are opposites or different concepts
+		 * that share some letters. It is similar for NL-similarity (which has some
+		 * benefits for long strings).
+		 */
+		return JARO_WINKLER.similarity(a, b) > 0.9 || NORMALIZED_LEVENSHTEIN.similarity(a, b) > 0.9;
 	}
 }
