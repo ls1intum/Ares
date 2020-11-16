@@ -29,7 +29,7 @@ import org.junit.jupiter.api.DynamicNode;
  */
 public abstract class AttributeTest extends StructuralTest {
 
-	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s]+\\.)+");
+	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++");
 
 	/**
 	 * This method collects the classes in the structure oracle file for which
