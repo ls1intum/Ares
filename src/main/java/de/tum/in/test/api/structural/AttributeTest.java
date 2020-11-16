@@ -186,7 +186,7 @@ public abstract class AttributeTest extends StructuralTest {
 			String expectedEnumValue = expectedEnumValues.getString(i);
 			boolean enumValueExists = false;
 			for (Object observedEnumValue : observedEnumValues) {
-				if (expectedEnumValue.equals(observedEnumValue.toString())) {
+				if (expectedEnumValue.equals(((Enum<?>) observedEnumValue).name())) {
 					enumValueExists = true;
 					break;
 				}
