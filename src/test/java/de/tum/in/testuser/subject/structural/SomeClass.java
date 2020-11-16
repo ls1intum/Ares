@@ -9,7 +9,19 @@ public class SomeClass implements SomeInterface {
 	public static final int SOME_CONSTANT = 42;
 
 	private String someAttribute;
+	private Integer anotherAttribute;
 	private List<Function<? super String, Integer>> doSomethingOperations;
+
+	public SomeClass() {
+	}
+
+	public SomeClass(Boolean bool) {
+		throw new RuntimeException();
+	}
+
+	public SomeClass(Integer anotherAttribute) {
+		this.anotherAttribute = anotherAttribute;
+	}
 
 	SomeClass(String someAttribute) {
 		this.someAttribute = someAttribute;
@@ -20,18 +32,34 @@ public class SomeClass implements SomeInterface {
 		return someAttribute;
 	}
 
+	public final Integer getAnotherAttribute() {
+		return anotherAttribute;
+	}
+
 	public final void setSomeAttribute(String someAttribute) {
 		this.someAttribute = someAttribute;
 	}
 
 	@Override
 	public int doSomething(String someString) {
-		int chosenOperation = ThreadLocalRandom.current().nextInt(doSomethingOperations.size());
+		int chosenOperation = superSecretMethod();
 		return doSomethingOperations.get(chosenOperation).apply(someString);
 	}
 
 	@Override
 	public int doSomethingElse(int someInt) {
 		return Math.max(SOME_CONSTANT, someInt);
+	}
+
+	public void throwException() {
+		throw new RuntimeException();
+	}
+
+	public Class<?> initializeFailingClass() throws ClassNotFoundException {
+		return Class.forName("de.tum.in.testuser.subject.structural.SomeFailingClass");
+	}
+
+	private int superSecretMethod() {
+		return ThreadLocalRandom.current().nextInt(doSomethingOperations.size());
 	}
 }
