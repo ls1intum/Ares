@@ -343,7 +343,7 @@ public abstract class BehaviorTest {
 		try {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			fail(failMessage + " the method does not exist. Make sure to implement this method properly.");
+			fail(failMessage + " the constructor does not exist. Make sure to implement this constructor properly.");
 		} catch (@SuppressWarnings("unused") SecurityException se) {
 			fail(failMessage + " access to the package class was denied.");
 		}
