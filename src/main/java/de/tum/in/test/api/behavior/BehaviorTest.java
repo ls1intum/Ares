@@ -59,7 +59,7 @@ public abstract class BehaviorTest {
 					+ "' was not found within the submission. Make sure to implement it properly.");
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
 			fail("The class '" + className
-					+ "' could not be initialized because an exception was thrown in a static initializer block."
+					+ "' could not be initialized because an exception was thrown in a static initializer block. "
 					+ "Make sure to implement the static initialization without errors.");
 		}
 		// unreachable
