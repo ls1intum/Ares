@@ -1,7 +1,5 @@
 package de.tum.in.test.api.behavior;
 
-import org.opentest4j.AssertionFailedError;
-
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -10,6 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.StringJoiner;
+
+import org.opentest4j.AssertionFailedError;
 
 /**
  *
@@ -69,8 +69,8 @@ public abstract class BehaviorTest {
 	}
 
 	/**
-	 * Instantiate an object of a class by its qualified name and the
-	 * constructor arguments, if applicable.
+	 * Instantiate an object of a class by its qualified name and the constructor
+	 * arguments, if applicable.
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
@@ -80,7 +80,8 @@ public abstract class BehaviorTest {
 	 *                           retrieved (package.classname)
 	 * @param constructorArgs    Parameter instances of the constructor of the
 	 *                           class, that it should use to get instantiated with.
-	 *                           Do not include, if the constructor has no arguments.
+	 *                           Do not include, if the constructor has no
+	 *                           arguments.
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
@@ -89,17 +90,17 @@ public abstract class BehaviorTest {
 	}
 
 	/**
-	 * Instantiate an object of a given class using the given constructor
-	 * arguments, if applicable.
+	 * Instantiate an object of a given class using the given constructor arguments,
+	 * if applicable.
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
 	 * {@link #newInstance(Constructor, Object...)} for that.
 	 * 
 	 * @param clazz           The class for which a new instance should be created
-	 * @param constructorArgs Parameter instances of the constructor of the
-	 *                        class, that it should use to get instantiated with.
-	 *                        Do not include, if the constructor has no arguments.
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with. Do not
+	 *                        include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
 	protected Object newInstance(Class<?> clazz, Object... constructorArgs) {
@@ -127,9 +128,9 @@ public abstract class BehaviorTest {
 	 * 
 	 * @param constructor     The actual constructor that should be used for
 	 *                        creating a new instance of the object
-	 * @param constructorArgs Parameter instances of the constructor of the
-	 *                        class, that it should use to get instantiated with.
-	 *                        Do not include, if the constructor has no arguments.
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with. Do not
+	 *                        include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
 	protected Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
@@ -374,8 +375,7 @@ public abstract class BehaviorTest {
 	private static String getParameterTypesAsString(Class<?>... parameterTypes) {
 		StringJoiner joiner = new StringJoiner(", ", "[ ", " ]");
 		joiner.setEmptyValue("none");
-		Arrays.stream(parameterTypes)
-				.map(type -> requireNonNull(type, "One of the supplied types was null."))
+		Arrays.stream(parameterTypes).map(type -> requireNonNull(type, "One of the supplied types was null."))
 				.map(Class::getSimpleName).forEach(joiner::add);
 		return joiner.toString();
 	}

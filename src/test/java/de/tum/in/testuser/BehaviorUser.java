@@ -1,17 +1,12 @@
 package de.tum.in.testuser;
 
+import org.junit.jupiter.api.Test;
+
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.behavior.BehaviorTest;
 import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 import de.tum.in.testuser.subject.structural.SomeClass;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Constructor;
-
-import static org.junit.Assert.assertEquals;
 
 @Public
 @StrictTimeout(10)

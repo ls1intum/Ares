@@ -1,15 +1,15 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.testutilities.CustomConditions.*;
+import static org.junit.platform.testkit.engine.EventConditions.event;
+
+import org.junit.platform.testkit.engine.Events;
+import org.opentest4j.AssertionFailedError;
+
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
 import de.tum.in.testuser.BehaviorUser;
-import de.tum.in.testuser.StructuralUser;
-import org.junit.platform.testkit.engine.Events;
-import org.opentest4j.AssertionFailedError;
-
-import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.event;
 
 @UserBased(BehaviorUser.class)
 class BehaviorTest {
@@ -42,8 +42,7 @@ class BehaviorTest {
 
 	@TestTest
 	void test_testNewInstance() {
-		tests.assertThatEvents().haveExactly(1,
-				event(testWithSegments(testNewInstance), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testNewInstance), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
@@ -108,8 +107,7 @@ class BehaviorTest {
 
 	@TestTest
 	void test_testGetMethod() {
-		tests.assertThatEvents().haveExactly(1,
-				event(testWithSegments(testGetMethod), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testGetMethod), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
@@ -132,8 +130,7 @@ class BehaviorTest {
 
 	@TestTest
 	void test_invokeMethod() {
-		tests.assertThatEvents().haveExactly(1,
-				event(testWithSegments(testInvokeMethod), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testInvokeMethod), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
@@ -162,8 +159,7 @@ class BehaviorTest {
 
 	@TestTest
 	void test_testGetConstructor() {
-		tests.assertThatEvents().haveExactly(1,
-				event(testWithSegments(testGetConstructor), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testGetConstructor), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
