@@ -1,81 +1,125 @@
 [ {
   "class" : {
-    "name" : "MergeSort",
-    "package" : "de.tum.in.testuser.subject.structural.solution",
-    "interfaces" : [ "SortStrategy" ]
+    "name" : "DoesNotExist",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "isInterface" : true
   }
 }, {
   "class" : {
-    "name" : "Context",
-    "package" : "de.tum.in.testuser.subject.structural.solution"
-  },
-  "methods" : [ {
-    "name" : "getDates",
-    "modifiers" : [ "public" ],
-    "returnType" : "List"
-  }, {
-    "name" : "setDates",
-    "modifiers" : [ "public" ],
-    "parameters" : [ "List" ],
-    "returnType" : "void"
-  }, {
-    "name" : "setSortAlgorithm",
-    "modifiers" : [ "public" ],
-    "parameters" : [ "SortStrategy" ],
-    "returnType" : "void"
-  }, {
-    "name" : "getSortAlgorithm",
-    "modifiers" : [ "public" ],
-    "returnType" : "SortStrategy"
-  }, {
-    "name" : "sort",
-    "modifiers" : [ "public" ],
-    "returnType" : "void"
-  } ],
-  "attributes" : [ {
-    "name" : "sortAlgorithm",
-    "modifiers" : [ "private" ],
-    "type" : "SortStrategy"
-  }, {
-    "name" : "dates",
-    "modifiers" : [ "private" ],
-    "type" : "List"
-  } ]
-}, {
-  "class" : {
-    "name" : "Policy",
-    "package" : "de.tum.in.testuser.subject.structural.solution"
-  },
-  "methods" : [ {
-    "name" : "configure",
-    "modifiers" : [ "public" ],
-    "returnType" : "void"
-  } ],
-  "attributes" : [ {
-    "name" : "context",
-    "modifiers" : [ "private" ],
-    "type" : "Context"
-  } ],
-  "constructors" : [ {
-    "modifiers" : [ "public" ],
-    "parameters" : [ "Context" ]
-  } ]
-}, {
-  "class" : {
-    "name" : "SortStrategy",
-    "package" : "de.tum.in.testuser.subject.structural.solution",
+    "name" : "SomeInterface",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "annotations" : [ "FunctionalInterface" ],
     "isInterface" : true
   },
   "methods" : [ {
-    "name" : "performSort",
+    "name" : "doSomething",
     "modifiers" : [ "public", "abstract" ],
-    "parameters" : [ "List" ],
-    "returnType" : "void"
+    "parameters" : [ "String" ],
+    "returnType" : "int"
+  }, {
+    "name" : "doSomethingElse",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "int" ],
+    "returnType" : "int"
+  }, {
+    "name" : "getOne",
+    "modifiers" : [ "public", "static" ],
+    "returnType" : "SomeEnum"
+  } ],
+  "attributes" : [ {
+    "name" : "ANOTHER_CONSTANT",
+    "modifiers" : [ "public", "static", "final" ],
+    "type" : "int"
   } ]
 }, {
   "class" : {
-    "name" : "BubbleSort",
-    "package" : "de.tum.in.testuser.subject.structural.solution",
-    "interfaces" : [ "SortStrategy" ]
+    "name" : "MisspelledClas",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "isInterface" : true
+  }
+}, {
+  "class" : {
+    "name" : "SomeClass",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "superclass" : "Object",
+    "interfaces" : [ "SomeInterface" ]
+  },
+  "methods" : [ {
+    "name" : "getSomeAttribute",
+    "modifiers" : [ "public", "final" ],
+    "returnType" : "String"
+  }, {
+    "name" : "setSomeAttribute",
+    "modifiers" : [ "public", "final" ],
+    "parameters" : [ "String" ],
+    "returnType" : "void"
+  }, {
+    "name" : "doSomething",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "String" ],
+    "returnType" : "int"
+  }, {
+    "name" : "doSomethingElse",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "int" ],
+    "returnType" : "int"
+  } ],
+  "constructors" : [ {
+    "parameters" : [ "String" ]
+  } ],
+  "attributes" : [ {
+    "name" : "SOME_CONSTANT",
+    "modifiers" : [ "public", "static", "final" ],
+    "type" : "int"
+  }, {
+    "name" : "someAttribute",
+    "modifiers" : [ "private" ],
+    "type" : "String"
+  }, {
+    "name" : "doSomethingOperations",
+    "modifiers" : [ "private" ],
+    "type" : "List<Function<? super String, Integer>>"
+  } ]
+}, {
+  "class" : {
+    "name" : "SomeEnum",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "isEnum" : true
+  },
+  "methods" : [ {
+    "name" : "doesNotExist",
+    "modifiers" : [ "public" ],
+    "returnType" : "void"
+  } ],
+  "enumValues" : [  "ONE", "TWO" ],
+  "constructors" : [ {
+    "modifiers" : [ "public" ],
+    "parameters" : [ "int" ]
+  } ]
+}, {
+  "class" : {
+    "name" : "SomeAbstractClass",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "isAbstract" : true
+  },
+  "methods" : [ {
+    "name" : "doNothing",
+    "modifiers" : [ "abstract" ],
+    "returnType" : "void"
+  } ],
+  "constructors" : [ {
+    "modifiers" : [ "protected" ],
+    "parameters" : [ "int", "String" ]
+  } ],
+  "attributes" : [ {
+    "name" : "someInt",
+    "modifiers" : [ "public", "static", "final" ],
+    "type" : "int"
+  } ]
+}, {
+  "class" : {
+    "name" : "Misspelledclass",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "isInterface" : true
   }
 } ]
