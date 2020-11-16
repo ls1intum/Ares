@@ -344,8 +344,6 @@ public abstract class BehaviorTest {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			fail(failMessage + " the method does not exist. Make sure to implement this method properly.");
-		} catch (@SuppressWarnings("unused") NullPointerException npe) {
-			fail(failMessage + " the name of the method is null. Make sure to check the name of the method.");
 		} catch (@SuppressWarnings("unused") SecurityException se) {
 			fail(failMessage + " access to the package class was denied.");
 		}
@@ -376,7 +374,9 @@ public abstract class BehaviorTest {
 	private static String getParameterTypesAsString(Class<?>... parameterTypes) {
 		StringJoiner joiner = new StringJoiner(", ", "[ ", " ]");
 		joiner.setEmptyValue("none");
-		Arrays.stream(parameterTypes).map(Class::getSimpleName).forEach(joiner::add);
+		Arrays.stream(parameterTypes)
+				.map(type -> requireNonNull(type, "One of the supplied types was null."))
+				.map(Class::getSimpleName).forEach(joiner::add);
 		return joiner.toString();
 	}
 }
