@@ -29,7 +29,7 @@ import de.tum.in.test.api.jupiter.Public;
  * To use {@link StrictTimeout} <b>without</b> any {@link Public} or
  * {@link Hidden}, you need to declare the {@link JupiterStrictTimeoutExtension}
  * for JUnit 5 Jupiter or {@link JqwikStrictTimeoutExtension} for jqwik
- * explicitly. However, his is not recommended as it is less effective.
+ * explicitly. However, this is not recommended as it is less effective.
  *
  * @author Christian Femers
  * @since 0.1.0
