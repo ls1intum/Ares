@@ -307,7 +307,7 @@ public abstract class BehaviorTest {
 			fail(failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			fail(failMessage
-					+ " the parameters are not implemented right. Make sure to check the parameters of the method");
+					+ " the parameters are not implemented right. Make sure to check the parameters of the method.");
 		} catch (@SuppressWarnings("unused") NullPointerException e) {
 			fail(failMessage + " the object was null and the method is an instance method. "
 					+ "Make sure to check the static modifier of the method.");
