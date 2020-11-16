@@ -1,10 +1,13 @@
 package de.tum.in.test.testutilities;
 
+import static org.assertj.core.api.Assertions.allOf;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
@@ -27,12 +30,12 @@ public final class CustomConditions {
 	}
 
 	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
-		return event(test(testName), finishedWithFailure(instanceOf(errorType)));
+		return event(testWithSegments(testName), finishedWithFailure(instanceOf(errorType)));
 	}
 
 	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType,
 			String message) {
-		return event(test(testName), finishedWithFailure(instanceOf(errorType), message(message)));
+		return event(testWithSegments(testName), finishedWithFailure(instanceOf(errorType), message(message)));
 	}
 
 	public static Condition<Event> finishedSuccessfullyRep() {
@@ -40,5 +43,10 @@ public final class CustomConditions {
 			ter.getThrowable().ifPresent(Throwable::printStackTrace);
 			return ter.getStatus() == TestExecutionResult.Status.SUCCESSFUL;
 		}, "status is SUCCESSFUL"));
+	}
+
+	public static Condition<Event> testWithSegments(String segementsSeparatedWithSlash) {
+		return allOf(Stream.of(segementsSeparatedWithSlash.split("/")).map(EventConditions::test)
+				.collect(Collectors.toList()));
 	}
 }
