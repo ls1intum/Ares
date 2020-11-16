@@ -45,7 +45,7 @@ public class BehaviorUser extends BehaviorTest {
 
 	@Test
 	void testNewInstance_noSuchMethod() {
-		newInstance(CLASS_NAME, true);
+		newInstance(CLASS_NAME, true, true);
 	}
 
 	@Test
