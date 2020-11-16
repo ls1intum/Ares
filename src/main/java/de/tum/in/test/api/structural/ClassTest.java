@@ -109,9 +109,6 @@ public abstract class ClassTest extends StructuralTest {
 		if (expectedClassPropertiesJSON.has("isInterface") && !Modifier.isInterface(observedClass.getModifiers())) {
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
 		}
-		if (expectedClassPropertiesJSON.has("isEnum") && !observedClass.isEnum()) {
-			fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
-		}
 	}
 
 	private static void checkSuperclass(String expectedClassName, Class<?> observedClass,
