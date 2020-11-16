@@ -368,7 +368,7 @@ public class ClassNameScanner {
 		if (distance <= 1.0 && Math.max(a.length(), b.length()) > 2)
 			return true;
 		/**
-		 * We accept everything with a distance below three as typo. At three and above,
+		 * We accept everything with a distance below two as typo. At three and above,
 		 * misspelled identifiers can be easily recognized by a human or might not be
 		 * spelling errors.
 		 */
