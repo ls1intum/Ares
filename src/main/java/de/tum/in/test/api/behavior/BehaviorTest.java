@@ -267,14 +267,9 @@ public abstract class BehaviorTest {
 		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
-			return method.invoke(object, params);
-		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			fail(failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
-		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			fail(failMessage
-					+ " the parameters are not implemented right. Make sure to check the parameters of the method");
-		} catch (InvocationTargetException e) {
-			fail(failMessage + " of an exception within the method: " + e.getCause());
+			invokeMethodRethrowing(object, method, params);
+		} catch (Throwable e) {
+			fail(failMessage + " of an exception within the method: " + e);
 		}
 		// unreachable
 		return null;
