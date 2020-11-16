@@ -102,25 +102,7 @@ public abstract class BehaviorTest {
 
 		try {
 			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
-			return constructor.newInstance(constructorArgs);
-		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			fail(failMessage + " access to its constructor with the parameters: "
-					+ getParameterTypesAsString(constructorArgTypes) + " was denied."
-					+ " Make sure to check the modifiers of the constructor.");
-		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			fail(failMessage
-					+ " the actual constructor or none of the actual constructors of this class match the expected one."
-					+ " We expect, amongst others, one with " + getParameterTypesAsString(constructorArgTypes)
-					+ " parameters, which does not exist." + " Make sure to implement this constructor correctly.");
-		} catch (@SuppressWarnings("unused") InstantiationException ie) {
-			fail(failMessage + " the class is abstract and should not have a constructor."
-					+ " Make sure to remove the constructor of the class.");
-		} catch (@SuppressWarnings("unused") InvocationTargetException ite) {
-			fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
-					+ " parameters threw an exception and could not be initialized."
-					+ " Make sure to check the constructor implementation.");
-		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
-			fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters could not be initialized.");
+			return newInstance(constructor, constructorArgs);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			fail(failMessage + " the class does not have a constructor with the arguments: "
 					+ getParameterTypesAsString(constructorArgTypes)
@@ -168,8 +150,6 @@ public abstract class BehaviorTest {
 					+ " Make sure to check the constructor implementation.");
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
 			fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters could not be initialized.");
-		} catch (@SuppressWarnings("unused") SecurityException se) {
-			fail(failMessage + ACCESS_DENIED);
 		}
 		// unreachable
 		return null;
