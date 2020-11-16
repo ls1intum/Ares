@@ -9,9 +9,9 @@ import org.opentest4j.AssertionFailedError;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
-import de.tum.in.testuser.StructualUser;
+import de.tum.in.testuser.StructuralUser;
 
-@UserBased(StructualUser.class)
+@UserBased(StructuralUser.class)
 class StructuralTest {
 
 	@UserTestResults

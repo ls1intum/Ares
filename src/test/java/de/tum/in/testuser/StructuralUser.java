@@ -21,7 +21,7 @@ import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 @StrictTimeout(10)
 @WhitelistPath("")
 @AddTrustedPackage("org.json**")
-public class StructualUser {
+public class StructuralUser {
 
 	@BeforeAll
 	static void setupTest() {
@@ -32,7 +32,7 @@ public class StructualUser {
 	class AttributeTestUser extends AttributeTest {
 
 		@TestFactory
-		public DynamicContainer testAttributes() throws URISyntaxException {
+		DynamicContainer testAttributes() throws URISyntaxException {
 			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
 			return generateTestsForAllClasses();
 		}
@@ -42,7 +42,7 @@ public class StructualUser {
 	class ClassTestUser extends ClassTest {
 
 		@TestFactory
-		public DynamicContainer testClasses() throws URISyntaxException {
+		DynamicContainer testClasses() throws URISyntaxException {
 			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
 			return generateTestsForAllClasses();
 		}
@@ -52,7 +52,7 @@ public class StructualUser {
 	class MethodTestUser extends MethodTest {
 
 		@TestFactory
-		public DynamicContainer testMethods() throws URISyntaxException {
+		DynamicContainer testMethods() throws URISyntaxException {
 			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
 			return generateTestsForAllClasses();
 		}
@@ -62,7 +62,7 @@ public class StructualUser {
 	class ConstructorTestUser extends ConstructorTest {
 
 		@TestFactory
-		public DynamicContainer testConstructors() throws URISyntaxException {
+		DynamicContainer testConstructors() throws URISyntaxException {
 			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
 			return generateTestsForAllClasses();
 		}
