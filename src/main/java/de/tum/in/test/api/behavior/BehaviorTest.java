@@ -48,14 +48,19 @@ public abstract class BehaviorTest {
 	 * @return The wanted class object.
 	 */
 	protected Class<?> getClass(String qualifiedClassName) {
+		// The simple class name is the last part of the qualified class name.
+		String[] qualifiedClassNameSegments = qualifiedClassName.split("\\.");
+		String className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
+
 		try {
 			return Class.forName(qualifiedClassName);
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
-			// The simple class name is the last part of the qualified class name.
-			String[] qualifiedClassNameSegments = qualifiedClassName.split("\\.");
-			String className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
 			fail("The class '" + className
 					+ "' was not found within the submission. Make sure to implement it properly.");
+		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
+			fail("The class '" + className
+					+ "' could not be initialized because an exception was thrown in a static initializer block."
+					+ "Make sure to implement the static initialization without errors.");
 		}
 		// unreachable
 		return null;
