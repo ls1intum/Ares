@@ -286,7 +286,7 @@ public abstract class BehaviorTest {
 			throw e.getCause();
 		} catch (NullPointerException e) {
 			fail(failMessage + " the object was null and the method is an instance method. "
-					+ "Make sure to check the static modifier of the method");
+					+ "Make sure to check the static modifier of the method.");
 		} catch (ExceptionInInitializerError e) {
 			fail(failMessage + " the static initialization provoked by this method failed. "
 					+ "Make sure to check the initialization triggered by this method.");
