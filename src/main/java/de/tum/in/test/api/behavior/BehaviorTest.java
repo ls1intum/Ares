@@ -308,10 +308,10 @@ public abstract class BehaviorTest {
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			fail(failMessage
 					+ " the parameters are not implemented right. Make sure to check the parameters of the method");
-		} catch (NullPointerException e) {
+		} catch (@SuppressWarnings("unused") NullPointerException e) {
 			fail(failMessage + " the object was null and the method is an instance method. "
 					+ "Make sure to check the static modifier of the method.");
-		} catch (ExceptionInInitializerError e) {
+		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
 			fail(failMessage + " the static initialization provoked by this method failed. "
 					+ "Make sure to check the initialization triggered by this method.");
 		} catch (InvocationTargetException e) {
