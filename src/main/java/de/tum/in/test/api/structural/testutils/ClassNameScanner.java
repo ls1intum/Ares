@@ -94,7 +94,7 @@ public class ClassNameScanner {
 	private final Map<String, List<String>> observedClasses = new HashMap<>();
 	private final ScanResult scanResult;
 
-	public static String pomXmlPath = "pom.xml";
+	private static String pomXmlPath = "pom.xml";
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -145,31 +145,31 @@ public class ClassNameScanner {
 			 * 1) check whether the class might have the wrong case
 			 */
 			if (foundObservedClassName.equalsIgnoreCase(expectedClassName)) {
-				return createScanResult(foundObservedPackageNames, classPresentMultiple, classCorrectlyPlaced,
-						WRONG_CASE_MULTIPLE, WRONG_CASE_CORRECT_PLACE, WRONG_CASE_MISPLACED);
+				return createScanResult(foundObservedClassName, foundObservedPackageNames, classPresentMultiple,
+						classCorrectlyPlaced, WRONG_CASE_MULTIPLE, WRONG_CASE_CORRECT_PLACE, WRONG_CASE_MISPLACED);
 			}
 			/*
 			 * 2) check whether there are similar classes (e.g. the student has a small typo
 			 * in the class name)
 			 */
 			if (isMisspelledWithHighProbability(this.expectedClassName, foundObservedClassName)) {
-				return createScanResult(foundObservedPackageNames, classPresentMultiple, classCorrectlyPlaced,
-						TYPOS_MULTIPLE, TYPOS_CORRECT_PLACE, TYPOS_MISPLACED);
+				return createScanResult(foundObservedClassName, foundObservedPackageNames, classPresentMultiple,
+						classCorrectlyPlaced, TYPOS_MULTIPLE, TYPOS_CORRECT_PLACE, TYPOS_MISPLACED);
 			}
 		}
 		return createScanResult(ScanResultType.NOTFOUND, expectedClassName, null);
 	}
 
-	private ScanResult createScanResult(String foundObservedPackageName, boolean classPresentMultiple,
-			boolean classCorrectlyPlaced, ScanResultType multipleTimes, ScanResultType correctPlace,
-			ScanResultType misplaced) {
+	private ScanResult createScanResult(String foundObservedClassName, String foundObservedPackageName,
+			boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
+			ScanResultType correctPlace, ScanResultType misplaced) {
 		ScanResultType scanResultType;
 		if (classPresentMultiple) {
 			scanResultType = multipleTimes;
 		} else {
 			scanResultType = classCorrectlyPlaced ? correctPlace : misplaced;
 		}
-		return createScanResult(scanResultType, expectedClassName, foundObservedPackageName);
+		return createScanResult(scanResultType, foundObservedClassName, foundObservedPackageName);
 	}
 
 	private ScanResultType getScanResultTypeClassFound(List<String> observedPackageNames) {
@@ -335,6 +335,14 @@ public class ClassNameScanner {
 				}
 			}
 		}
+	}
+
+	public static String getPomXmlPath() {
+		return pomXmlPath;
+	}
+
+	public static void setPomXmlPath(String path) {
+		pomXmlPath = path;
 	}
 
 	static boolean isMisspelledWithHighProbability(String a, String b) {
