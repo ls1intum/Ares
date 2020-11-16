@@ -240,6 +240,28 @@ public abstract class BehaviorTest {
 	}
 
 	/**
+	 * Invoke a given method name of a given object with instances of the
+	 * parameters.
+	 * <p>
+	 * This method does not support invoking static methods and passing null,
+	 * passing subclasses of the parameter types or invoking methods with primitive
+	 * parameters. Use {@link #invokeMethod(Object, Method, Object...)} for that.
+	 *
+	 * @param object     The instance of the class that should invoke the method.
+	 *                   Must not be null, even for static methods.
+	 * @param methodName The method name that has to get invoked.
+	 * @param params     Parameter instances of the method. Do not include if the
+	 *                   method has no parameters.
+	 * @return The return value of the method.
+	 */
+	protected Object invokeMethod(Object object, String methodName, Object... params) {
+		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
+		Class<?>[] parameterTypes = getParameterTypes(failMessage, params);
+		Method method = getMethod(object, methodName, parameterTypes);
+		return invokeMethod(object, method, params);
+	}
+
+	/**
 	 * Invoke a given method of a given object with instances of the parameters.
 	 * 
 	 * @param object The instance of the class that should invoke the method. Can be
@@ -297,28 +319,6 @@ public abstract class BehaviorTest {
 		}
 		// unreachable
 		return null;
-	}
-
-	/**
-	 * Invoke a given method name of a given object with instances of the
-	 * parameters.
-	 * <p>
-	 * This method does not support invoking static methods and passing null,
-	 * passing subclasses of the parameter types or invoking methods with primitive
-	 * parameters. Use {@link #invokeMethod(Object, Method, Object...)} for that.
-	 * 
-	 * @param object     The instance of the class that should invoke the method.
-	 *                   Must not be null, even for static methods.
-	 * @param methodName The method name that has to get invoked.
-	 * @param params     Parameter instances of the method. Do not include if the
-	 *                   method has no parameters.
-	 * @return The return value of the method.
-	 */
-	protected Object invokeMethod(Object object, String methodName, Object... params) {
-		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
-		Class<?>[] parameterTypes = getParameterTypes(failMessage, params);
-		Method method = getMethod(object, methodName, parameterTypes);
-		return invokeMethod(object, method, params);
 	}
 
 	/**
