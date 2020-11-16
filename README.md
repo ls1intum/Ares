@@ -52,7 +52,7 @@ If you want to use jqwik (>= 1.2.4) or JUnit 4 (JUnit 5 vintage), simply include
 ## Basic Usage
 
 *AJTS provides a high level of security which comes at the cost of usability.
-Severaly steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does.
+Several steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does.
 Please study at least this complete basic usage guide before using AJTS in production.*
 
 #### Table of Contents
@@ -131,7 +131,7 @@ In this example,
 While Artemis has a feature to mark test cases as hidden, this will not prevent the contents of the test case leaking through static variables, files and similar, be it accidentally or on purpose.
 To prevent that, **the hidden test case must not be executed before the deadline at all.**
 
-The public test case does not need to be hidden, as it's purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop.
+The public test case does not need to be hidden, as its purpose is to give direct feedback. However, there are still multiple possible problems like crashing the Maven build by `System.exit(0)` or containing an endless loop.
 Both can have a negative impact on the interactive learning experience because the students get confronted with an incomprehensible log of a failed build.
 Such errors can be explained, but that takes a lot of time, especially if it happens a lot (and it will, if the number of students is sufficiently large).
 
@@ -195,8 +195,12 @@ public String getName() {
     return name;
 }
 ```
-You will now with AJTS get the following error message:<br>
-`java.lang.SecurityException: do not use System.exit(int)  /// potential problem location: Penguin.getName(Penguin.java:12) ///`
+You will now with AJTS get the following error message:
+
+```
+java.lang.SecurityException: do not use System.exit(int)
+/// potential problem location: Penguin.getName(Penguin.java:12) ///
+```
 
 As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`.
 This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code.
