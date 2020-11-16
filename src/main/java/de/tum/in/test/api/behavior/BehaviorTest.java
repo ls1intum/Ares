@@ -1,5 +1,7 @@
 package de.tum.in.test.api.behavior;
 
+import org.opentest4j.AssertionFailedError;
+
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -253,6 +255,8 @@ public abstract class BehaviorTest {
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
 			invokeMethodRethrowing(object, method, params);
+		} catch (AssertionFailedError e) {
+			throw e;
 		} catch (Throwable e) {
 			fail(failMessage + " of an exception within the method: " + e);
 		}
