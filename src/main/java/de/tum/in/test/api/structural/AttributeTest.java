@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +28,8 @@ import org.junit.jupiter.api.DynamicNode;
  * @version 5.0 (11.11.2020)
  */
 public abstract class AttributeTest extends StructuralTest {
+
+	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s]+\\.)+");
 
 	/**
 	 * This method collects the classes in the structure oracle file for which
@@ -218,13 +221,12 @@ public abstract class AttributeTest extends StructuralTest {
 			String observedMainTypeName = observedAttribute.getType().getSimpleName();
 			mainTypeIsRight = expectedMainTypeName.equals(observedMainTypeName);
 
-			String expectedGenericTypeName = expectedTypeName.split("<")[1].replace(">", "");
 			if (observedAttribute.getGenericType() instanceof ParameterizedType) {
-				Type observedGenericType = ((ParameterizedType) observedAttribute.getGenericType())
-						.getActualTypeArguments()[0];
-				String observedGenericTypeName = observedGenericType.toString()
-						.substring(observedGenericType.toString().lastIndexOf(".") + 1);
-				genericTypeIsRight = expectedGenericTypeName.equals(observedGenericTypeName);
+				Type observedGenericType = observedAttribute.getGenericType();
+				// this removes all package names, see section 4.5.1 of the JLS
+				String observedGenericTypeName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(observedGenericType.toString())
+						.replaceAll("");
+				genericTypeIsRight = expectedTypeName.equals(observedGenericTypeName);
 			}
 
 			return mainTypeIsRight && genericTypeIsRight;
