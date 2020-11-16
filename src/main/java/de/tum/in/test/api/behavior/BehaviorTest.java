@@ -62,8 +62,8 @@ public abstract class BehaviorTest {
 	}
 
 	/**
-	 * Instantiate an object of a given class with the constructor arguments, if
-	 * applicable.
+	 * Instantiate an object of a class by its qualified name and the
+	 * constructor arguments, if applicable.
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
@@ -72,8 +72,8 @@ public abstract class BehaviorTest {
 	 * @param qualifiedClassName The qualified name of the class that needs to get
 	 *                           retrieved (package.classname)
 	 * @param constructorArgs    Parameter instances of the constructor of the
-	 *                           class, that it has to get instantiated with. Do not
-	 *                           include, if the constructor has no arguments.
+	 *                           class, that it should use to get instantiated with.
+	 *                           Do not include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
@@ -82,17 +82,17 @@ public abstract class BehaviorTest {
 	}
 
 	/**
-	 * Instantiate an object of a given class by its qualified name and the
-	 * constructor arguments, if applicable.
+	 * Instantiate an object of a given class using the given constructor
+	 * arguments, if applicable.
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
 	 * {@link #newInstance(Constructor, Object...)} for that.
 	 * 
-	 * @param clazz           new instance of which is required
-	 * @param constructorArgs Parameter instances of the constructor of the class,
-	 *                        that it has to get instantiated with. Do not include,
-	 *                        if the constructor has no arguments.
+	 * @param clazz           The class for which a new instance should be created
+	 * @param constructorArgs Parameter instances of the constructor of the
+	 *                        class, that it should use to get instantiated with.
+	 *                        Do not include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
 	protected Object newInstance(Class<?> clazz, Object... constructorArgs) {
@@ -111,7 +111,7 @@ public abstract class BehaviorTest {
 			fail(failMessage
 					+ " the actual constructor or none of the actual constructors of this class match the expected one."
 					+ " We expect, amongst others, one with " + getParameterTypesAsString(constructorArgTypes)
-					+ " parameters, which is not exist." + " Make sure to implement this constructor correctly.");
+					+ " parameters, which does not exist." + " Make sure to implement this constructor correctly.");
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
 			fail(failMessage + " the class is abstract and should not have a constructor."
 					+ " Make sure to remove the constructor of the class.");
@@ -133,14 +133,14 @@ public abstract class BehaviorTest {
 	}
 
 	/**
-	 * Instantiate an object of a given class by its qualified name and the
+	 * Instantiate an object of a class by using a specific constructor and
 	 * constructor arguments, if applicable.
 	 * 
 	 * @param constructor     The actual constructor that should be used for
 	 *                        creating a new instance of the object
-	 * @param constructorArgs Parameter instances of the constructor of the class,
-	 *                        that it has to get instantiated with. Do not include,
-	 *                        if the constructor has no arguments.
+	 * @param constructorArgs Parameter instances of the constructor of the
+	 *                        class, that it should use to get instantiated with.
+	 *                        Do not include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
 	protected Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
@@ -157,7 +157,7 @@ public abstract class BehaviorTest {
 			fail(failMessage
 					+ " the actual constructor or none of the actual constructors of this class match the expected one."
 					+ " We expect, amongst others, one with "
-					+ getParameterTypesAsString(constructor.getParameterTypes()) + " parameters, which is not exist."
+					+ getParameterTypesAsString(constructor.getParameterTypes()) + " parameters, which does not exist."
 					+ " Make sure to implement this constructor correctly.");
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
 			fail(failMessage + " the class is abstract and should not have a constructor."
