@@ -42,7 +42,7 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 		List<DynamicNode> tests = new ArrayList<>();
 
 		if (structureOracleJSON == null) {
-			fail("The LocalMethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalMethodTest.java!");
+			fail("The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!");
 		}
 
 		for (int i = 0; i < structureOracleJSON.length(); i++) {

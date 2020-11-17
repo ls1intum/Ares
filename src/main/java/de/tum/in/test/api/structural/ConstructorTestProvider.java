@@ -41,7 +41,7 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 		List<DynamicNode> tests = new ArrayList<>();
 
 		if (structureOracleJSON == null) {
-			fail("The LocalConstructorTest can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalConstructorTest.java!");
+			fail("The ConstructorTest can only run if the structural oracle (test.json) is present. If you do not provide it, delete ConstructorTest.java!");
 		}
 
 		for (int i = 0; i < structureOracleJSON.length(); i++) {

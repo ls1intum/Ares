@@ -44,7 +44,7 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
 		if (structureOracleJSON == null) {
-			fail("The LocalAttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete LocalAttributeTest.java!");
+			fail("The AttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete AttributeTest.java!");
 		}
 		for (int i = 0; i < structureOracleJSON.length(); i++) {
 			JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
