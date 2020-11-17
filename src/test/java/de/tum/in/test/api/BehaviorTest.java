@@ -167,5 +167,4 @@ class BehaviorTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetConstructor_nsf, AssertionFailedError.class,
 				"Could not find the constructor with the parameters: [ String, Boolean ] in the class SomeClass because the constructor does not exist. Make sure to implement this constructor properly."));
 	}
-
 }
