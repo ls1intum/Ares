@@ -1,7 +1,6 @@
 package de.tum.in.test.api.util;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +29,7 @@ import org.opentest4j.AssertionFailedError;
  * <li>Invoking a method with certain parameter instances and retrieving its
  * return type.</li>
  * </ul>
- * 
+ *
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
@@ -46,7 +45,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Retrieve the actual class by its qualified name.
-	 * 
+	 *
 	 * @param qualifiedClassName The qualified name of the class that needs to get
 	 *                           retrieved (package.classname)
 	 * @return The wanted class object.
@@ -59,15 +58,13 @@ public final class ReflectionTestUtils {
 		try {
 			return Class.forName(qualifiedClassName);
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
-			fail("The class '" + className
+			throw failure("The class '" + className
 					+ "' was not found within the submission. Make sure to implement it properly.");
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
-			fail("The class '" + className
+			throw failure("The class '" + className
 					+ "' could not be initialized because an exception was thrown in a static initializer block. "
 					+ "Make sure to implement the static initialization without errors.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
@@ -77,7 +74,7 @@ public final class ReflectionTestUtils {
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
 	 * {@link #newInstance(Constructor, Object...)} for that.
-	 * 
+	 *
 	 * @param qualifiedClassName The qualified name of the class that needs to get
 	 *                           retrieved (package.classname)
 	 * @param constructorArgs    Parameter instances of the constructor of the
@@ -98,7 +95,7 @@ public final class ReflectionTestUtils {
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
 	 * {@link #newInstance(Constructor, Object...)} for that.
-	 * 
+	 *
 	 * @param clazz           The class for which a new instance should be created
 	 * @param constructorArgs Parameter instances of the constructor of the class,
 	 *                        that it should use to get instantiated with. Do not
@@ -114,18 +111,16 @@ public final class ReflectionTestUtils {
 			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
 			return newInstance(constructor, constructorArgs);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			fail(failMessage + " the class does not have a constructor with the arguments: "
+			throw failure(failMessage + " the class does not have a constructor with the arguments: "
 					+ getParameterTypesAsString(constructorArgTypes)
 					+ ". Make sure to implement this constructor properly.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
 	 * Instantiate an object of a class by using a specific constructor and
 	 * constructor arguments, if applicable.
-	 * 
+	 *
 	 * @param constructor     The actual constructor that should be used for
 	 *                        creating a new instance of the object
 	 * @param constructorArgs Parameter instances of the constructor of the class,
@@ -140,33 +135,32 @@ public final class ReflectionTestUtils {
 		try {
 			return constructor.newInstance(constructorArgs);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			fail(failMessage + " access to its constructor with the parameters: "
+			throw failure(failMessage + " access to its constructor with the parameters: "
 					+ getParameterTypesAsString(constructor.getParameterTypes()) + " was denied."
 					+ " Make sure to check the modifiers of the constructor.");
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			fail(failMessage
+			throw failure(failMessage
 					+ " the actual constructor or none of the actual constructors of this class match the expected one."
 					+ " We expect, amongst others, one with "
 					+ getParameterTypesAsString(constructor.getParameterTypes()) + " parameters, which does not exist."
 					+ " Make sure to implement this constructor correctly.");
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
-			fail(failMessage + " the class is abstract and should not have a constructor."
+			throw failure(failMessage + " the class is abstract and should not have a constructor."
 					+ " Make sure to remove the constructor of the class.");
 		} catch (@SuppressWarnings("unused") InvocationTargetException ite) {
-			fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
+			throw failure(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
 					+ " parameters threw an exception and could not be initialized."
 					+ " Make sure to check the constructor implementation.");
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
-			fail(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length + " parameters could not be initialized.");
+			throw failure(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
+					+ " parameters could not be initialized.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
 	 * Retrieve an attribute value of a given instance of a class by the attribute
 	 * name.
-	 * 
+	 *
 	 * @param object        The instance of the class that contains the attribute.
 	 *                      Must not be null, even for static fields.
 	 * @param attributeName The name of the attribute whose value needs to get
@@ -182,13 +176,12 @@ public final class ReflectionTestUtils {
 		try {
 			return object.getClass().getDeclaredField(attributeName).get(object);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
-			fail(failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
+			throw failure(
+					failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			fail(failMessage
+			throw failure(failMessage
 					+ " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
@@ -208,7 +201,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Retrieve a method with arguments of a given class by its name.
-	 * 
+	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
 	 * @param parameterTypes The parameter types of this method. Do not include if
@@ -228,12 +221,10 @@ public final class ReflectionTestUtils {
 		try {
 			return declaringClass.getMethod(methodName, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			fail(failMessage + " the method does not exist. Make sure to implement this method properly.");
+			throw failure(failMessage + " the method does not exist. Make sure to implement this method properly.");
 		} catch (@SuppressWarnings("unused") NullPointerException npe) {
-			fail(failMessage + " the name of the method is null. Make sure to check the name of the method.");
+			throw failure(failMessage + " the name of the method is null. Make sure to check the name of the method.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
@@ -260,7 +251,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters.
-	 * 
+	 *
 	 * @param object The instance of the class that should invoke the method. Can be
 	 *               null if the method is static.
 	 * @param method The method that has to get invoked.
@@ -273,20 +264,18 @@ public final class ReflectionTestUtils {
 		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
-			invokeMethodRethrowing(object, method, params);
+			return invokeMethodRethrowing(object, method, params);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			fail(failMessage + " of an exception within the method: " + e);
+			throw failure(failMessage + " of an exception within the method: " + e);
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters, and
 	 * rethrow an exception if one occurs during the method execution.
-	 * 
+	 *
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method. Do not include if the method
@@ -301,27 +290,25 @@ public final class ReflectionTestUtils {
 		try {
 			return method.invoke(object, params);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			fail(failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
+			throw failure(
+					failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			fail(failMessage
+			throw failure(failMessage
 					+ " the parameters are not implemented right. Make sure to check the parameters of the method.");
 		} catch (@SuppressWarnings("unused") NullPointerException e) {
-			fail(failMessage + " the object was null and the method is an instance method. "
+			throw failure(failMessage + " the object was null and the method is an instance method. "
 					+ "Make sure to check the static modifier of the method.");
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
-			fail(failMessage + " the static initialization provoked by this method failed. "
+			throw failure(failMessage + " the static initialization provoked by this method failed. "
 					+ "Make sure to check the initialization triggered by this method.");
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
-
-		// unreachable
-		return null;
 	}
 
 	/**
 	 * Retrieve a constructor with arguments of a given class.
-	 * 
+	 *
 	 * @param declaringClass The class that declares this constructor.
 	 * @param parameterTypes The parameter types of this method. Do not include if
 	 *                       the method has no parameters.
@@ -340,15 +327,14 @@ public final class ReflectionTestUtils {
 		try {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			fail(failMessage + " the constructor does not exist. Make sure to implement this constructor properly.");
+			throw failure(
+					failMessage + " the constructor does not exist. Make sure to implement this constructor properly.");
 		}
-		// unreachable
-		return null;
 	}
 
 	/**
 	 * Retrieves the parameters types of a given collection of parameter instances.
-	 * 
+	 *
 	 * @param failMessage The beginning of message of the failure message if one of
 	 *                    params is null
 	 * @param params      The instances of the parameters.
@@ -362,7 +348,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Generates a string representation of a given collection of parameter types.
-	 * 
+	 *
 	 * @param parameterTypes The parameter types we want a string representation of.
 	 * @return The string representation of the parameter types.
 	 */
@@ -372,5 +358,9 @@ public final class ReflectionTestUtils {
 		Arrays.stream(parameterTypes).map(type -> requireNonNull(type, "One of the supplied types was null."))
 				.map(Class::getSimpleName).forEach(joiner::add);
 		return joiner.toString();
+	}
+
+	private static AssertionError failure(String failureMessage) {
+		return new AssertionFailedError(failureMessage);
 	}
 }

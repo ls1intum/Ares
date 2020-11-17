@@ -1,6 +1,10 @@
 package de.tum.in.testuser;
 
 import static de.tum.in.test.api.util.ReflectionTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +30,8 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testNewInstance() {
-		newInstance(CLASS_NAME, 1);
+		var instance = newInstance(CLASS_NAME, 1);
+		assertThat(instance).isInstanceOf(SomeClass.class);
 	}
 
 	@Test
@@ -67,7 +72,8 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testValueForAttribute() {
-		valueForAttribute(CLASS_INSTANCE, "SOME_CONSTANT");
+		var value = valueForAttribute(CLASS_INSTANCE, "SOME_CONSTANT");
+		assertThat(value).isEqualTo(SomeClass.SOME_CONSTANT);
 	}
 
 	@Test
@@ -82,7 +88,8 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testGetMethod() {
-		getMethod(CLASS_INSTANCE, "getAnotherAttribute");
+		var method = getMethod(CLASS_INSTANCE, "getAnotherAttribute");
+		assertThat(method).isInstanceOf(Method.class);
 	}
 
 	@Test
@@ -102,7 +109,8 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testInvokeMethod() {
-		invokeMethod(CLASS_INSTANCE, "getAnotherAttribute");
+		var returnValue = invokeMethod(CLASS_INSTANCE, "getAnotherAttribute");
+		assertThat(returnValue).isEqualTo(CLASS_INSTANCE.getAnotherAttribute());
 	}
 
 	@Test
@@ -130,7 +138,8 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testGetConstructor() {
-		getConstructor(CLASS_INSTANCE.getClass());
+		var constructor = getConstructor(CLASS_INSTANCE.getClass());
+		assertThat(constructor).isInstanceOf(Constructor.class);
 	}
 
 	@Test

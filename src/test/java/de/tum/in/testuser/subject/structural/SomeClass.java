@@ -15,7 +15,7 @@ public class SomeClass implements SomeInterface {
 	public SomeClass() {
 	}
 
-	public SomeClass(Boolean bool) {
+	public SomeClass(@SuppressWarnings("unused") Boolean bool) {
 		throw new RuntimeException();
 	}
 
