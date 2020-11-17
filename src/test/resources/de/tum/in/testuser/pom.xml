@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.tum.in.ase</groupId>
+	<artifactId>some-project</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0</version>
+	<name>Some Project</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<sourceDirectory>${project.basedir}/src/test/java</sourceDirectory>
+		<testSourceDirectory>${project.basedir}/test</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/test</directory>
+			</testResource>
+		</testResources>
+	</build>
+</project>

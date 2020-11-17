@@ -2,7 +2,10 @@ package de.tum.in.test.api.jupiter;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -22,22 +25,22 @@ public class JupiterContext extends TestContext {
 
 	@Override
 	public Optional<Method> testMethod() {
-		return extensionContext.getTestMethod();
+		return findOptionalsInHierarchy(ExtensionContext::getTestMethod).findFirst();
 	}
 
 	@Override
 	public Optional<Class<?>> testClass() {
-		return extensionContext.getTestClass();
+		return findOptionalsInHierarchy(ExtensionContext::getTestClass).findFirst();
 	}
 
 	@Override
 	public Optional<Object> testInstance() {
-		return extensionContext.getTestInstance();
+		return findOptionalsInHierarchy(ExtensionContext::getTestInstance).findFirst();
 	}
 
 	@Override
 	public Optional<AnnotatedElement> annotatedElement() {
-		return extensionContext.getElement();
+		return findOptionalsInHierarchy(ExtensionContext::getElement).findFirst();
 	}
 
 	@Override
@@ -45,16 +48,24 @@ public class JupiterContext extends TestContext {
 		return extensionContext.getDisplayName();
 	}
 
+	@Override
+	public Optional<TestType> findTestType() {
+		return TestContextUtils.findAnnotationIn(this, JupiterArtemisTest.class).map(JupiterArtemisTest::value);
+	}
+
 	public ExtensionContext getExtensionContext() {
 		return extensionContext;
 	}
 
-	public static JupiterContext of(ExtensionContext extensionContext) {
-		return new JupiterContext(extensionContext);
+	private <T> Stream<T> findOptionalsInHierarchy(Function<ExtensionContext, Optional<T>> getter) {
+		return hierarchy().map(getter).filter(Optional::isPresent).map(Optional::get);
 	}
 
-	@Override
-	public Optional<TestType> findTestType() {
-		return TestContextUtils.findAnnotationIn(this, JupiterArtemisTest.class).map(JupiterArtemisTest::value);
+	private Stream<ExtensionContext> hierarchy() {
+		return Stream.iterate(extensionContext, Objects::nonNull, ec -> ec.getParent().orElse(null));
+	}
+
+	public static JupiterContext of(ExtensionContext extensionContext) {
+		return new JupiterContext(extensionContext);
 	}
 }
