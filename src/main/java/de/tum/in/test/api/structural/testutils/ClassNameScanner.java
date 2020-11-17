@@ -348,8 +348,8 @@ public class ClassNameScanner {
 	static boolean isMisspelledWithHighProbability(String a, String b) {
 		/**
 		 * This based on observations and experiments with
-		 * https://github.com/src-d/datasets/tree/master/Typos and collections real (not
-		 * misspelled) classes.
+		 * https://github.com/src-d/datasets/tree/master/Typos and collections of real
+		 * (not misspelled) classes.
 		 */
 		/*
 		 * This is a fast check which should work often and not be a problem for the
