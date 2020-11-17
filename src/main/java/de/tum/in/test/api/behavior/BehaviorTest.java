@@ -40,7 +40,6 @@ public abstract class BehaviorTest {
 	private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";
 	private static final String BECAUSE = " because";
 	private static final String THE_CONSTRUCTOR_WITH = " the constructor with ";
-	private static final String ACCESS_DENIED = " access to the package of the class was denied.";
 
 	/**
 	 * Retrieve the actual class by its qualified name.
@@ -115,8 +114,6 @@ public abstract class BehaviorTest {
 			fail(failMessage + " the class does not have a constructor with the arguments: "
 					+ getParameterTypesAsString(constructorArgTypes)
 					+ ". Make sure to implement this constructor properly.");
-		} catch (@SuppressWarnings("unused") SecurityException se) {
-			fail(failMessage + ACCESS_DENIED);
 		}
 		// unreachable
 		return null;
@@ -183,8 +180,6 @@ public abstract class BehaviorTest {
 			return object.getClass().getDeclaredField(attributeName).get(object);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
 			fail(failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
-		} catch (@SuppressWarnings("unused") SecurityException se) {
-			fail(failMessage + ACCESS_DENIED);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			fail(failMessage
 					+ " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
@@ -233,8 +228,6 @@ public abstract class BehaviorTest {
 			fail(failMessage + " the method does not exist. Make sure to implement this method properly.");
 		} catch (@SuppressWarnings("unused") NullPointerException npe) {
 			fail(failMessage + " the name of the method is null. Make sure to check the name of the method.");
-		} catch (@SuppressWarnings("unused") SecurityException se) {
-			fail(failMessage + " access to the package class was denied.");
 		}
 		// unreachable
 		return null;
@@ -345,8 +338,6 @@ public abstract class BehaviorTest {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			fail(failMessage + " the constructor does not exist. Make sure to implement this constructor properly.");
-		} catch (@SuppressWarnings("unused") SecurityException se) {
-			fail(failMessage + " access to the package class was denied.");
 		}
 		// unreachable
 		return null;
