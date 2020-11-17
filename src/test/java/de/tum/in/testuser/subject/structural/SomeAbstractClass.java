@@ -4,7 +4,6 @@ public abstract class SomeAbstractClass {
 
 	public static int someInt = 2;
 
-	@SuppressWarnings("unused")
 	public SomeAbstractClass() {
 		// nothing
 	}
