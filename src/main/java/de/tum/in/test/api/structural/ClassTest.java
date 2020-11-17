@@ -100,15 +100,22 @@ public abstract class ClassTest extends StructuralTest {
 
 	private static void checkBasicClassProperties(String expectedClassName, Class<?> observedClass,
 			JSONObject expectedClassPropertiesJSON) {
-		if (expectedClassPropertiesJSON.has("isAbstract") && !Modifier.isAbstract(observedClass.getModifiers())) {
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract")
+				&& !Modifier.isAbstract(observedClass.getModifiers())) {
 			fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
 		}
-		if (expectedClassPropertiesJSON.has("isEnum") && !observedClass.isEnum()) {
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) {
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
 		}
-		if (expectedClassPropertiesJSON.has("isInterface") && !Modifier.isInterface(observedClass.getModifiers())) {
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface")
+				&& !Modifier.isInterface(observedClass.getModifiers())) {
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
 		}
+	}
+
+	private static boolean checkBooleanOf(JSONObject expectedClassPropertiesJSON, String booleanProperty) {
+		return expectedClassPropertiesJSON.has(booleanProperty)
+				&& expectedClassPropertiesJSON.getBoolean(booleanProperty);
 	}
 
 	private static void checkSuperclass(String expectedClassName, Class<?> observedClass,
