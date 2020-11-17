@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.TestFactory;
 
-import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.Public;
@@ -20,7 +19,6 @@ import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 @Public
 @StrictTimeout(10)
 @WhitelistPath("")
-@AddTrustedPackage("org.json**")
 public class StructuralUser {
 
 	@BeforeAll
