@@ -19,11 +19,8 @@ import de.tum.in.testuser.subject.structural.SomeClass;
 public class ReflectionTestUtilsUser {
 
 	private static final String SUBJECT_PACKAGE = "de.tum.in.testuser.subject.structural";
-
 	private static final String CLASS_NAME = SUBJECT_PACKAGE + ".SomeClass";
-
 	private static final String ABSTRACT_CLASS_NAME = SUBJECT_PACKAGE + ".SomeAbstractClass";
-
 	private static final String FAILING_CLASS_NAME = SUBJECT_PACKAGE + ".SomeFailingClass";
 
 	private static final SomeClass CLASS_INSTANCE = new SomeClass(1);
