@@ -12,7 +12,7 @@ import de.tum.in.testuser.subject.structural.SomeClass;
 @StrictTimeout(10)
 @WhitelistPath("")
 // No assertions in tests, public modifier, class naming
-@SuppressWarnings({"squid:S2699", "squid:S5786", "squid:S3577"})
+@SuppressWarnings({ "squid:S2699", "squid:S5786", "squid:S3577" })
 public class BehaviorUser extends BehaviorTest {
 
 	private static final String SUBJECT_PACKAGE = "de.tum.in.testuser.subject.structural";
