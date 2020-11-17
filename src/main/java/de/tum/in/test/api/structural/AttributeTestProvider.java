@@ -27,7 +27,7 @@ import org.junit.jupiter.api.DynamicNode;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
-public abstract class AttributeTest extends StructuralTest {
+public abstract class AttributeTestProvider extends StructuralTestProvider {
 
 	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++");
 

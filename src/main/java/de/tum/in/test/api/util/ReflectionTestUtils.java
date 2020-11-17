@@ -1,4 +1,4 @@
-package de.tum.in.test.api.behavior;
+package de.tum.in.test.api.util;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -12,7 +12,6 @@ import java.util.StringJoiner;
 import org.opentest4j.AssertionFailedError;
 
 /**
- *
  * This class serves as an API to Java Reflection to facilitate various
  * operations that are performed regularly in the functional tests. Facilitation
  * mainly means automatically handling all the various errors Reflection is able
@@ -35,11 +34,15 @@ import org.opentest4j.AssertionFailedError;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
-public abstract class BehaviorTest {
+public final class ReflectionTestUtils {
 
 	private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";
 	private static final String BECAUSE = " because";
 	private static final String THE_CONSTRUCTOR_WITH = " the constructor with ";
+
+	private ReflectionTestUtils() {
+
+	}
 
 	/**
 	 * Retrieve the actual class by its qualified name.
@@ -48,7 +51,7 @@ public abstract class BehaviorTest {
 	 *                           retrieved (package.classname)
 	 * @return The wanted class object.
 	 */
-	protected Class<?> getClass(String qualifiedClassName) {
+	public static Class<?> getClazz(String qualifiedClassName) {
 		// The simple class name is the last part of the qualified class name.
 		String[] qualifiedClassNameSegments = qualifiedClassName.split("\\.");
 		String className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
@@ -84,8 +87,8 @@ public abstract class BehaviorTest {
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
-	protected Object newInstance(String qualifiedClassName, Object... constructorArgs) {
-		return newInstance(getClass(qualifiedClassName), constructorArgs);
+	public static Object newInstance(String qualifiedClassName, Object... constructorArgs) {
+		return newInstance(getClazz(qualifiedClassName), constructorArgs);
 	}
 
 	/**
@@ -102,7 +105,7 @@ public abstract class BehaviorTest {
 	 *                        include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
-	protected Object newInstance(Class<?> clazz, Object... constructorArgs) {
+	public static Object newInstance(Class<?> clazz, Object... constructorArgs) {
 		String failMessage = "Could not instantiate the class " + clazz.getSimpleName() + BECAUSE;
 		Class<?>[] constructorArgTypes = getParameterTypes(
 				failMessage + " a fitting constructor could not be found because", constructorArgs);
@@ -130,7 +133,7 @@ public abstract class BehaviorTest {
 	 *                        include, if the constructor has no arguments.
 	 * @return The instance of this class.
 	 */
-	protected Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
+	public static Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
 		String failMessage = "Could not instantiate the class " + constructor.getDeclaringClass().getSimpleName()
 				+ BECAUSE;
 
@@ -170,7 +173,7 @@ public abstract class BehaviorTest {
 	 *                      retrieved.
 	 * @return The instance of the attribute with the wanted value.
 	 */
-	protected Object valueForAttribute(Object object, String attributeName) {
+	public static Object valueForAttribute(Object object, String attributeName) {
 		requireNonNull(object,
 				"Could not retrieve the value of attribute '" + attributeName + "' because the object was null.");
 		String failMessage = "Could not retrieve the attribute '" + attributeName + "' from the class "
@@ -198,7 +201,7 @@ public abstract class BehaviorTest {
 	 *                       the method has no parameters.
 	 * @return The wanted method.
 	 */
-	protected Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
+	public static Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
 		requireNonNull(object, COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' because the object was null.");
 		return getMethod(object.getClass(), methodName, parameterTypes);
 	}
@@ -212,7 +215,7 @@ public abstract class BehaviorTest {
 	 *                       the method has no parameters.
 	 * @return The wanted method.
 	 */
-	protected Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
+	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
 		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;
@@ -248,7 +251,7 @@ public abstract class BehaviorTest {
 	 *                   method has no parameters.
 	 * @return The return value of the method.
 	 */
-	protected Object invokeMethod(Object object, String methodName, Object... params) {
+	public static Object invokeMethod(Object object, String methodName, Object... params) {
 		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
 		Class<?>[] parameterTypes = getParameterTypes(failMessage, params);
 		Method method = getMethod(object, methodName, parameterTypes);
@@ -265,7 +268,7 @@ public abstract class BehaviorTest {
 	 *               has no parameters.
 	 * @return The return value of the method.
 	 */
-	protected Object invokeMethod(Object object, Method method, Object... params) {
+	public static Object invokeMethod(Object object, Method method, Object... params) {
 		// NOTE: object can be null, if method is static
 		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
@@ -291,7 +294,7 @@ public abstract class BehaviorTest {
 	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
 	 */
-	protected Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
+	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		// NOTE: object can be null, if method is static
 		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
@@ -325,7 +328,7 @@ public abstract class BehaviorTest {
 	 * @param <T>            The type parameter of the constructor and class
 	 * @return The wanted method.
 	 */
-	protected <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
+	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		String failMessage = "Could not find the constructor with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;

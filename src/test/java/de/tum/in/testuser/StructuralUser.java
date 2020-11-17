@@ -11,10 +11,10 @@ import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.structural.AttributeTest;
-import de.tum.in.test.api.structural.ClassTest;
-import de.tum.in.test.api.structural.ConstructorTest;
-import de.tum.in.test.api.structural.MethodTest;
+import de.tum.in.test.api.structural.AttributeTestProvider;
+import de.tum.in.test.api.structural.ClassTestProvider;
+import de.tum.in.test.api.structural.ConstructorTestProvider;
+import de.tum.in.test.api.structural.MethodTestProvider;
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 
 @Public
@@ -29,7 +29,7 @@ public class StructuralUser {
 	}
 
 	@Nested
-	class AttributeTestUser extends AttributeTest {
+	class AttributeTestUser extends AttributeTestProvider {
 
 		@TestFactory
 		DynamicContainer testAttributes() throws URISyntaxException {
@@ -39,7 +39,7 @@ public class StructuralUser {
 	}
 
 	@Nested
-	class ClassTestUser extends ClassTest {
+	class ClassTestUser extends ClassTestProvider {
 
 		@TestFactory
 		DynamicContainer testClasses() throws URISyntaxException {
@@ -49,7 +49,7 @@ public class StructuralUser {
 	}
 
 	@Nested
-	class MethodTestUser extends MethodTest {
+	class MethodTestUser extends MethodTestProvider {
 
 		@TestFactory
 		DynamicContainer testMethods() throws URISyntaxException {
@@ -59,7 +59,7 @@ public class StructuralUser {
 	}
 
 	@Nested
-	class ConstructorTestUser extends ConstructorTest {
+	class ConstructorTestUser extends ConstructorTestProvider {
 
 		@TestFactory
 		DynamicContainer testConstructors() throws URISyntaxException {

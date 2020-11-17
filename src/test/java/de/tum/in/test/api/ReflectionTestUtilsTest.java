@@ -9,10 +9,10 @@ import org.opentest4j.AssertionFailedError;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
-import de.tum.in.testuser.BehaviorUser;
+import de.tum.in.testuser.ReflectionTestUtilsUser;
 
-@UserBased(BehaviorUser.class)
-class BehaviorTest {
+@UserBased(ReflectionTestUtilsUser.class)
+class ReflectionTestUtilsTest {
 
 	@UserTestResults
 	private static Events tests;

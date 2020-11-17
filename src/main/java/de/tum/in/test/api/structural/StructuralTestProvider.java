@@ -25,15 +25,16 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * a given class in the structure oracle are correctly implemented (in case they
  * are specified):
  * <ol>
- * <li>{@link ClassTest} checks the class itself, i.e. if a specified superclass
- * is extended and if specified interfaces and annotations are implemented</li>
- * <li>{@link ConstructorTest} checks declared constructors their including
- * access modifiers, annotations and parameters</li>
- * <li>{@link MethodTest} checks the declared methods including their access
- * modifiers, annotations, parameters and return type</li>
- * <li>{@link AttributeTest} checks the declared attributes including their
- * access modifiers, annotations and types and the declared enum values of an
- * enum</li>
+ * <li>{@link ClassTestProvider} checks the class itself, i.e. if a specified
+ * superclass is extended and if specified interfaces and annotations are
+ * implemented</li>
+ * <li>{@link ConstructorTestProvider} checks declared constructors their
+ * including access modifiers, annotations and parameters</li>
+ * <li>{@link MethodTestProvider} checks the declared methods including their
+ * access modifiers, annotations, parameters and return type</li>
+ * <li>{@link AttributeTestProvider} checks the declared attributes including
+ * their access modifiers, annotations and types and the declared enum values of
+ * an enum</li>
  * </ol>
  * 
  * All these elements are tests based on the test.json that specifies the
@@ -45,18 +46,19 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * <p>
  * To deactivate a check, simply remove the specified elements in the test.json
  * file. If no constructors should be tested for correctness, remove
- * {@link ConstructorTest}, otherwise one test will fail (limitation of JUnit).
- * If no methods should be tested for correctness, remove {@link MethodTest},
- * otherwise one test will fail (limitation of JUnit) If no attributes and no
- * enums should be tested for correctness, remove {@link AttributeTest},
- * otherwise one test will fail (limitation of JUnit)
+ * {@link ConstructorTestProvider}, otherwise one test will fail (limitation of
+ * JUnit). If no methods should be tested for correctness, remove
+ * {@link MethodTestProvider}, otherwise one test will fail (limitation of
+ * JUnit) If no attributes and no enums should be tested for correctness, remove
+ * {@link AttributeTestProvider}, otherwise one test will fail (limitation of
+ * JUnit)
  * 
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
-public abstract class StructuralTest {
+public abstract class StructuralTestProvider {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StructuralTest.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StructuralTestProvider.class);
 
 	protected static final String JSON_PROPERTY_SUPERCLASS = "superclass";
 	protected static final String JSON_PROPERTY_INTERFACES = "interfaces";
@@ -81,7 +83,7 @@ public abstract class StructuralTest {
 
 	protected static JSONArray structureOracleJSON;
 
-	protected StructuralTest() {
+	protected StructuralTestProvider() {
 		// make constructor only protected
 	}
 

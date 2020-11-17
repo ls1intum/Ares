@@ -25,7 +25,7 @@ import org.junit.jupiter.api.DynamicNode;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
-public abstract class ConstructorTest extends StructuralTest {
+public abstract class ConstructorTestProvider extends StructuralTestProvider {
 
 	/**
 	 * This method collects the classes in the structure oracle file for which

@@ -1,17 +1,18 @@
 package de.tum.in.testuser;
 
+import static de.tum.in.test.api.util.ReflectionTestUtils.*;
+
 import org.junit.jupiter.api.Test;
 
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.behavior.BehaviorTest;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.testuser.subject.structural.SomeClass;
 
 @Public
 @StrictTimeout(10)
 @WhitelistPath("")
-public class BehaviorUser extends BehaviorTest {
+public class ReflectionTestUtilsUser {
 
 	private static final String SUBJECT_PACKAGE = "de.tum.in.testuser.subject.structural";
 
@@ -50,7 +51,7 @@ public class BehaviorUser extends BehaviorTest {
 
 	@Test
 	void testNewInstance_illegalArguments() {
-		var constructor = getConstructor(getClass(CLASS_NAME), Integer.class);
+		var constructor = getConstructor(getClazz(CLASS_NAME), Integer.class);
 		newInstance(constructor, "");
 	}
 
