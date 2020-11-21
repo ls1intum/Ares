@@ -120,12 +120,13 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 				// TODO: check if overloading is supported properly
 
 				if (expectedName.equals(observedMethod.getName())) {
+					String observedReturnTypeName = observedMethod.getReturnType().getCanonicalName();
 					checks.name = true;
 					checks.parameters = checkParameters(observedMethod.getParameterTypes(), expectedParameters);
 					checks.modifiers = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "),
 							expectedModifiers);
 					checks.annotations = checkAnnotations(observedMethod.getAnnotations(), expectedAnnotations);
-					checks.returnType = expectedReturnType.equals(observedMethod.getReturnType().getSimpleName());
+					checks.returnType = checkExpectedName(observedReturnTypeName, expectedReturnType);
 
 					// If all are correct, then we found the desired method and we can break the
 					// loop

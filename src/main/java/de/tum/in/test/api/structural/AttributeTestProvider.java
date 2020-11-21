@@ -218,8 +218,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 			boolean genericTypeIsRight = false;
 
 			String expectedMainTypeName = expectedTypeName.split("<")[0];
-			String observedMainTypeName = observedAttribute.getType().getSimpleName();
-			mainTypeIsRight = expectedMainTypeName.equals(observedMainTypeName);
+			String observedMainTypeName = observedAttribute.getType().getCanonicalName();
+			mainTypeIsRight = checkExpectedName(observedMainTypeName, expectedMainTypeName);
 
 			if (observedAttribute.getGenericType() instanceof ParameterizedType) {
 				Type observedGenericType = observedAttribute.getGenericType();
@@ -231,7 +231,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 
 			return mainTypeIsRight && genericTypeIsRight;
 		}
-		String observedTypeName = observedAttribute.getType().getSimpleName();
-		return expectedTypeName.equals(observedTypeName);
+		String observedTypeName = observedAttribute.getType().getCanonicalName();
+
+		return checkExpectedName(observedTypeName, expectedTypeName);
 	}
 }

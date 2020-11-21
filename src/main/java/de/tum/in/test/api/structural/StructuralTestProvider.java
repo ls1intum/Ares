@@ -186,7 +186,8 @@ public abstract class StructuralTestProvider {
 			boolean expectedAnnotationFound = false;
 			String expectedAnnotationAsString = (String) expectedAnnotation;
 			for (Annotation observedAnnotation : observedAnnotations) {
-				if (expectedAnnotationAsString.equals(observedAnnotation.annotationType().getSimpleName())) {
+				String observedAnnotationAsString = observedAnnotation.annotationType().getCanonicalName();
+				if (checkExpectedName(observedAnnotationAsString, expectedAnnotationAsString)) {
 					expectedAnnotationFound = true;
 					break;
 				}
@@ -235,11 +236,43 @@ public abstract class StructuralTestProvider {
 
 		String[] observedParameterTypeNames = new String[observedParameters.length];
 		for (int i = 0; i < observedParameters.length; i++) {
+			// TODO: Canonical names should be supported as well.
 			observedParameterTypeNames[i] = observedParameters[i].getSimpleName();
 		}
 		Map<String, Integer> observedParametersHashtable = createParametersHashMap(observedParameterTypeNames);
 
 		return expectedParametersHashtable.equals(observedParametersHashtable);
+	}
+
+	/**
+	 * This method checks whether the actual canonical name of any implemented
+	 * structural element matches its expected name. The expected name can be
+	 * provided as a simple or canonical name.
+	 *
+	 * @param expectedName        The expected simple or canonical name of any
+	 *                            structural element
+	 * @param actualCanonicalName The expected canonical name of any structural
+	 *                            element
+	 * @return True if the names match, false if not.
+	 */
+	protected static boolean checkExpectedName(String actualCanonicalName, String expectedName) {
+		/*
+		 * If the given expected name contains a '.' it can be assumed that it
+		 * represents a full canonical name. If it does not, we can assume it represents
+		 * a simple name.
+		 */
+		if (expectedName.contains(".")) {
+			return expectedName.equals(actualCanonicalName);
+		}
+		/*
+		 * The simple name of an element is always the same as the last element of its
+		 * canonical name, therefore this last element is used for comparison with the
+		 * expected name.
+		 */
+		String[] actualCanonicalNameElements = actualCanonicalName.split("\\.");
+		String actualSimpleName = actualCanonicalNameElements[actualCanonicalNameElements.length - 1];
+
+		return expectedName.equals(actualSimpleName);
 	}
 
 	/**

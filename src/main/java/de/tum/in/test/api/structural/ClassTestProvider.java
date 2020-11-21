@@ -123,16 +123,12 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 		// Filter out the enums, since there is a separate test for them
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
 				&& !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
-			String actualSuperClassName;
 			String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
-			if (expectedSuperClassName.contains(".")) {
-				actualSuperClassName = observedClass.getSuperclass().getCanonicalName();
-			} else {
-				actualSuperClassName = observedClass.getSuperclass().getSimpleName();
-			}
-			String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
-					+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
-			if (!expectedSuperClassName.equals(actualSuperClassName)) {
+			String observedSuperClassName = observedClass.getSuperclass().getCanonicalName();
+
+			if (!checkExpectedName(observedSuperClassName, expectedSuperClassName)) {
+				String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
+						+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
 				fail(failMessage);
 			}
 		}
@@ -145,11 +141,9 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			Class<?>[] observedInterfaces = observedClass.getInterfaces();
 			for (int i = 0; i < expectedInterfaces.length(); i++) {
 				String expectedInterface = expectedInterfaces.getString(i);
-				boolean hasSpecificPackage = expectedInterface.contains(".");
 				boolean implementsInterface = false;
 				for (Class<?> observedInterface : observedInterfaces) {
-					if ((hasSpecificPackage && expectedInterface.equals(observedInterface.getCanonicalName()))
-							|| expectedInterface.equals(observedInterface.getSimpleName())) {
+					if (checkExpectedName(observedInterface.getCanonicalName(), expectedInterface)) {
 						implementsInterface = true;
 						break;
 					}
