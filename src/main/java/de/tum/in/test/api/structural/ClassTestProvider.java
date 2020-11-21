@@ -27,150 +27,150 @@ import org.junit.jupiter.api.DynamicNode;
  */
 public abstract class ClassTestProvider extends StructuralTestProvider {
 
-    /**
-     * This method collects the classes in the structure oracle file for which at
-     * least one class property is specified. These classes are then transformed
-     * into JUnit 5 dynamic tests.
-     *
-     * @return A dynamic test container containing the test for each class which is
-     *         then executed by JUnit.
-     * @throws URISyntaxException an exception if the URI of the class name cannot
-     *                            be generated (which seems to be unlikely)
-     */
-    protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
-        List<DynamicNode> tests = new ArrayList<>();
-        if (structureOracleJSON == null) {
-            fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
-        }
-        for (int i = 0; i < structureOracleJSON.length(); i++) {
-            JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
-            JSONObject expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
-            /*
-             * Only test the classes that have additional properties (except name and
-             * package) defined in the structure oracle.
-             */
-            if (expectedClassPropertiesJSON.has(JSON_PROPERTY_NAME)
-                    && expectedClassPropertiesJSON.has(JSON_PROPERTY_PACKAGE)
-                    && hasAdditionalProperties(expectedClassPropertiesJSON)) {
-                String expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
-                String expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
-                ExpectedClassStructure expectedClassStructure = new ExpectedClassStructure(expectedClassName,
-                        expectedPackageName, expectedClassJSON);
-                tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure)));
-            }
-        }
-        if (tests.isEmpty()) {
-            fail("No tests for classes available in the structural oracle (test.json). Either provide attributes information or delete ClassTest.java!");
-        }
-        /*
-         * Using a custom URI here to workaround surefire rendering the JUnit XML
-         * without the correct test names.
-         */
-        return dynamicContainer(getClass().getName(), new URI(getClass().getName()), tests.stream());
-    }
+	/**
+	 * This method collects the classes in the structure oracle file for which at
+	 * least one class property is specified. These classes are then transformed
+	 * into JUnit 5 dynamic tests.
+	 *
+	 * @return A dynamic test container containing the test for each class which is
+	 *         then executed by JUnit.
+	 * @throws URISyntaxException an exception if the URI of the class name cannot
+	 *                            be generated (which seems to be unlikely)
+	 */
+	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
+		List<DynamicNode> tests = new ArrayList<>();
+		if (structureOracleJSON == null) {
+			fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
+		}
+		for (int i = 0; i < structureOracleJSON.length(); i++) {
+			JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
+			JSONObject expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
+			/*
+			 * Only test the classes that have additional properties (except name and
+			 * package) defined in the structure oracle.
+			 */
+			if (expectedClassPropertiesJSON.has(JSON_PROPERTY_NAME)
+					&& expectedClassPropertiesJSON.has(JSON_PROPERTY_PACKAGE)
+					&& hasAdditionalProperties(expectedClassPropertiesJSON)) {
+				String expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
+				String expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
+				ExpectedClassStructure expectedClassStructure = new ExpectedClassStructure(expectedClassName,
+						expectedPackageName, expectedClassJSON);
+				tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure)));
+			}
+		}
+		if (tests.isEmpty()) {
+			fail("No tests for classes available in the structural oracle (test.json). Either provide attributes information or delete ClassTest.java!");
+		}
+		/*
+		 * Using a custom URI here to workaround surefire rendering the JUnit XML
+		 * without the correct test names.
+		 */
+		return dynamicContainer(getClass().getName(), new URI(getClass().getName()), tests.stream());
+	}
 
-    protected static boolean hasAdditionalProperties(JSONObject jsonObject) {
-        List<String> keys = new ArrayList<>(jsonObject.keySet());
-        keys.remove(JSON_PROPERTY_NAME);
-        keys.remove(JSON_PROPERTY_PACKAGE);
-        return !keys.isEmpty();
-    }
+	protected static boolean hasAdditionalProperties(JSONObject jsonObject) {
+		List<String> keys = new ArrayList<>(jsonObject.keySet());
+		keys.remove(JSON_PROPERTY_NAME);
+		keys.remove(JSON_PROPERTY_PACKAGE);
+		return !keys.isEmpty();
+	}
 
-    /**
-     * This method gets passed the expected class structure generated by the method
-     * {@link #generateTestsForAllClasses()}, checks if the class is found at all in
-     * the assignment and then proceeds to check its properties.
-     *
-     * @param expectedClassStructure The class structure that we expect to find and
-     *                               test against.
-     */
-    protected void testClass(ExpectedClassStructure expectedClassStructure) {
-        String expectedClassName = expectedClassStructure.getExpectedClassName();
-        Class<?> observedClass = findClassForTestType(expectedClassStructure, "class");
-        if (observedClass == null) {
-            fail(THE_CLASS + expectedClassName + " was not found for class test");
-            return;
-        }
-        JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
-        checkBasicClassProperties(expectedClassName, observedClass, expectedClassPropertiesJSON);
-        checkSuperclass(expectedClassName, observedClass, expectedClassPropertiesJSON);
-        checkInterfaces(expectedClassName, observedClass, expectedClassPropertiesJSON);
-        checkAnnotations(expectedClassName, observedClass, expectedClassPropertiesJSON);
-    }
+	/**
+	 * This method gets passed the expected class structure generated by the method
+	 * {@link #generateTestsForAllClasses()}, checks if the class is found at all in
+	 * the assignment and then proceeds to check its properties.
+	 *
+	 * @param expectedClassStructure The class structure that we expect to find and
+	 *                               test against.
+	 */
+	protected void testClass(ExpectedClassStructure expectedClassStructure) {
+		String expectedClassName = expectedClassStructure.getExpectedClassName();
+		Class<?> observedClass = findClassForTestType(expectedClassStructure, "class");
+		if (observedClass == null) {
+			fail(THE_CLASS + expectedClassName + " was not found for class test");
+			return;
+		}
+		JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
+		checkBasicClassProperties(expectedClassName, observedClass, expectedClassPropertiesJSON);
+		checkSuperclass(expectedClassName, observedClass, expectedClassPropertiesJSON);
+		checkInterfaces(expectedClassName, observedClass, expectedClassPropertiesJSON);
+		checkAnnotations(expectedClassName, observedClass, expectedClassPropertiesJSON);
+	}
 
-    private static void checkBasicClassProperties(String expectedClassName, Class<?> observedClass,
-                                                  JSONObject expectedClassPropertiesJSON) {
-        if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract")
-                && !Modifier.isAbstract(observedClass.getModifiers())) {
-            fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
-        }
-        if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) {
-            fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
-        }
-        if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface")
-                && !Modifier.isInterface(observedClass.getModifiers())) {
-            fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
-        }
-    }
+	private static void checkBasicClassProperties(String expectedClassName, Class<?> observedClass,
+			JSONObject expectedClassPropertiesJSON) {
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract")
+				&& !Modifier.isAbstract(observedClass.getModifiers())) {
+			fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
+		}
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) {
+			fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
+		}
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface")
+				&& !Modifier.isInterface(observedClass.getModifiers())) {
+			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
+		}
+	}
 
-    private static boolean checkBooleanOf(JSONObject expectedClassPropertiesJSON, String booleanProperty) {
-        return expectedClassPropertiesJSON.has(booleanProperty)
-                && expectedClassPropertiesJSON.getBoolean(booleanProperty);
-    }
+	private static boolean checkBooleanOf(JSONObject expectedClassPropertiesJSON, String booleanProperty) {
+		return expectedClassPropertiesJSON.has(booleanProperty)
+				&& expectedClassPropertiesJSON.getBoolean(booleanProperty);
+	}
 
-    private static void checkSuperclass(String expectedClassName, Class<?> observedClass,
-                                        JSONObject expectedClassPropertiesJSON) {
-        // Filter out the enums, since there is a separate test for them
-        if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
-                && !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
-            String actualSuperClassName;
-            String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
-            if (expectedSuperClassName.contains(".")) {
-                actualSuperClassName = observedClass.getSuperclass().getCanonicalName();
-            } else {
-                actualSuperClassName = observedClass.getSuperclass().getSimpleName();
-            }
-            String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
-                    + expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
-            if (!expectedSuperClassName.equals(actualSuperClassName)) {
-                fail(failMessage);
-            }
-        }
-    }
+	private static void checkSuperclass(String expectedClassName, Class<?> observedClass,
+			JSONObject expectedClassPropertiesJSON) {
+		// Filter out the enums, since there is a separate test for them
+		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
+				&& !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
+			String actualSuperClassName;
+			String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
+			if (expectedSuperClassName.contains(".")) {
+				actualSuperClassName = observedClass.getSuperclass().getCanonicalName();
+			} else {
+				actualSuperClassName = observedClass.getSuperclass().getSimpleName();
+			}
+			String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
+					+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
+			if (!expectedSuperClassName.equals(actualSuperClassName)) {
+				fail(failMessage);
+			}
+		}
+	}
 
-    private static void checkInterfaces(String expectedClassName, Class<?> observedClass,
-                                        JSONObject expectedClassPropertiesJSON) {
-        if (expectedClassPropertiesJSON.has(JSON_PROPERTY_INTERFACES)) {
-            JSONArray expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
-            Class<?>[] observedInterfaces = observedClass.getInterfaces();
-            for (int i = 0; i < expectedInterfaces.length(); i++) {
-                String expectedInterface = expectedInterfaces.getString(i);
-                boolean hasSpecificPackage = expectedInterface.contains(".");
-                boolean implementsInterface = false;
-                for (Class<?> observedInterface : observedInterfaces) {
-                    if ((hasSpecificPackage && expectedInterface.equals(observedInterface.getCanonicalName())) ||
-                            expectedInterface.equals(observedInterface.getSimpleName())) {
-                        implementsInterface = true;
-                        break;
-                    }
-                }
-                if (!implementsInterface) {
-                    fail(THE_CLASS + "'" + expectedClassName + "' does not implement the interface '"
-                            + expectedInterface + "' as expected." + " Implement the interface and its methods.");
-                }
-            }
-        }
-    }
+	private static void checkInterfaces(String expectedClassName, Class<?> observedClass,
+			JSONObject expectedClassPropertiesJSON) {
+		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_INTERFACES)) {
+			JSONArray expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
+			Class<?>[] observedInterfaces = observedClass.getInterfaces();
+			for (int i = 0; i < expectedInterfaces.length(); i++) {
+				String expectedInterface = expectedInterfaces.getString(i);
+				boolean hasSpecificPackage = expectedInterface.contains(".");
+				boolean implementsInterface = false;
+				for (Class<?> observedInterface : observedInterfaces) {
+					if ((hasSpecificPackage && expectedInterface.equals(observedInterface.getCanonicalName()))
+							|| expectedInterface.equals(observedInterface.getSimpleName())) {
+						implementsInterface = true;
+						break;
+					}
+				}
+				if (!implementsInterface) {
+					fail(THE_CLASS + "'" + expectedClassName + "' does not implement the interface '"
+							+ expectedInterface + "' as expected." + " Implement the interface and its methods.");
+				}
+			}
+		}
+	}
 
-    private static void checkAnnotations(String expectedClassName, Class<?> observedClass,
-                                         JSONObject expectedClassPropertiesJSON) {
-        if (expectedClassPropertiesJSON.has(JSON_PROPERTY_ANNOTATIONS)) {
-            JSONArray expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
-            Annotation[] observedAnnotations = observedClass.getAnnotations();
-            boolean annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
-            if (!annotationsAreRight) {
-                fail("The annotation(s) of the class '" + expectedClassName + "' are not implemented as expected.");
-            }
-        }
-    }
+	private static void checkAnnotations(String expectedClassName, Class<?> observedClass,
+			JSONObject expectedClassPropertiesJSON) {
+		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_ANNOTATIONS)) {
+			JSONArray expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
+			Annotation[] observedAnnotations = observedClass.getAnnotations();
+			boolean annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
+			if (!annotationsAreRight) {
+				fail("The annotation(s) of the class '" + expectedClassName + "' are not implemented as expected.");
+			}
+		}
+	}
 }
