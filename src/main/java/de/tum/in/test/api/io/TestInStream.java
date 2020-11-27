@@ -19,7 +19,7 @@ final class TestInStream extends InputStream {
 	@Override
 	public int read() throws IOException {
 		if (input == null)
-			tryLoadNextLine(true);
+			tryLoadNextLine();
 		int res = input.read();
 		if (input.available() == 0)
 			input = null;
@@ -28,15 +28,13 @@ final class TestInStream extends InputStream {
 
 	@Override
 	public int available() throws IOException {
-		if (input == null)
-			tryLoadNextLine(false);
 		return input == null ? 0 : input.available();
 	}
 
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		if (input == null)
-			tryLoadNextLine(true);
+			tryLoadNextLine();
 		int res = input.read(b, off, len);
 		if (input.available() == 0)
 			input = null;
@@ -47,11 +45,9 @@ final class TestInStream extends InputStream {
 		input = null;
 	}
 
-	private void tryLoadNextLine(boolean force) {
-		if (force || lineProvider.hasNextLine()) {
-			Line currentLine = lineProvider.getNextLine();
-			byte[] bytes = currentLine.text().concat(IOTester.LINE_SEPERATOR).getBytes(StandardCharsets.UTF_8);
-			input = new ByteArrayInputStream(bytes);
-		}
+	private void tryLoadNextLine() {
+		Line currentLine = lineProvider.getNextLine();
+		byte[] bytes = currentLine.text().concat(IOTester.LINE_SEPERATOR).getBytes(StandardCharsets.UTF_8);
+		input = new ByteArrayInputStream(bytes);
 	}
 }

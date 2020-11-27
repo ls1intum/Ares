@@ -27,7 +27,7 @@ class IOTesterTest {
 	@Test
 	void testReset() {
 		try (Scanner scanner = new Scanner(System.in)) {
-			tester.in().addLinesToInput("X");
+			tester.in().addLinesToInput("X", "Y");
 
 			System.out.println("A");
 			System.err.println("B");
@@ -36,7 +36,7 @@ class IOTesterTest {
 			assertThat(tester.err().getLines()).isNotEmpty();
 			assertThat(scanner.nextLine()).isEqualTo("X");
 
-			tester.in().addLinesToInput("Y");
+			tester.in().addLinesToInput("Z");
 
 			tester.reset();
 
