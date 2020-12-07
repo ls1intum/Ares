@@ -258,7 +258,7 @@ public final class OutputTester implements LineAcceptor {
 		String failureMessage = afe.getMessage();
 		Matcher matcher = EXPECTED_LINE_PATTERN.matcher(failureMessage);
 		if (matcher.find()) {
-			int lineNumber = Integer.parseInt(matcher.group(1));
+			int lineNumber = Integer.parseInt(matcher.group(1), 16);
 			String expectedLine = lines.get(lineNumber);
 			StringBuilder cleanExpectedLine = new StringBuilder(expectedLine);
 			if (startsWithEscape(expectedLine))
