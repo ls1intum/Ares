@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -40,7 +41,7 @@ public final class OutputTester implements LineAcceptor {
 			+ "\\(\\?x\\)" // comments enabled
 			+ "#([0-9A-F]{8})\\R" // the line number
 			+ ".+`" // actual line content and end of line
-			+ "\\s*(?=\\R|$)" // optional whitespace and lookahead for line break or end of the string
+			+ "(?=[^`]*(?:\\R|$))" // lookahead for not quoted text and then line break or end of the string
 	);
 
 	private final List<Line> actualOutput = new ArrayList<>();
@@ -107,7 +108,7 @@ public final class OutputTester implements LineAcceptor {
 
 	/**
 	 * Returns the output as list of lines, always including all lines.
-	 * 
+	 *
 	 * @return all actual output as {@link Line}s.
 	 * @deprecated Use {@link #getLines(OutputTestOptions...)} instead, which allows
 	 *             to specify options.
@@ -144,24 +145,24 @@ public final class OutputTester implements LineAcceptor {
 	 * Assertions.assertLinesMatch}. The main difference is that we make the RegEx
 	 * matching predictable by using <code>||</code> at the start and at the end of
 	 * a line like
-	 * 
+	 *
 	 * <pre>
 	 * ||some pattern here||
 	 * ||\d+||
 	 * </pre>
-	 * 
+	 *
 	 * for regular expressions and otherwise do a literal comparison.
 	 * <p>
 	 * Fast-forward lines are not being escaped and look like
-	 * 
+	 *
 	 * <pre>
 	 * {@code >>>>}
 	 * {@code >>} any number of lines because xyz should appear here {@code >>}
 	 * {@code >>} 42 {@code >>}
 	 * </pre>
-	 * 
+	 *
 	 * Both special formats can be escaped by a <code>\</code> at the beginning.
-	 * 
+	 *
 	 * @param message       the error message for the assertion failure.
 	 * @param expectedLines the expected line patterns as described above. The
 	 *                      strings are allowed to contain line breaks, which means
@@ -178,24 +179,24 @@ public final class OutputTester implements LineAcceptor {
 	 * Assertions.assertLinesMatch}. The main difference is that we make the RegEx
 	 * matching predictable by using <code>||</code> at the start and at the end of
 	 * a line like
-	 * 
+	 *
 	 * <pre>
 	 * ||some pattern here||
 	 * ||\d+||
 	 * </pre>
-	 * 
+	 *
 	 * for regular expressions and otherwise do a literal comparison.
 	 * <p>
 	 * Fast-forward lines are not being escaped and look like
-	 * 
+	 *
 	 * <pre>
 	 * {@code >>>>}
 	 * {@code >>} any number of lines because xyz should appear here {@code >>}
 	 * {@code >>} 42 {@code >>}
 	 * </pre>
-	 * 
+	 *
 	 * Both special formats can be escaped by a <code>\</code> at the beginning.
-	 * 
+	 *
 	 * @param message       the error message for the assertion failure.
 	 * @param outputOptions the {@link OutputTestOptions} for this test.
 	 * @param expectedLines the expected line patterns as described above. The
@@ -241,12 +242,15 @@ public final class OutputTester implements LineAcceptor {
 			}
 			expectedLinePatterns.add(newLine.toString());
 		}
+		var linesAsString = getLinesAsString(outputOptions);
 		// use JUnit 5 API to to the line comparison
 		try {
-			org.junit.jupiter.api.Assertions.assertLinesMatch(expectedLinePatterns, getLinesAsString(outputOptions),
-					message);
+			org.junit.jupiter.api.Assertions.assertLinesMatch(expectedLinePatterns, linesAsString, message);
 		} catch (AssertionFailedError afe) {
 			throw tryCleanUpAssertionFailedError(lines, afe);
+		} catch (@SuppressWarnings("unused") NoSuchElementException nsee) {
+			throw new AssertionFailedError("The output does not contain enough lines for the test to work, only "
+					+ linesAsString.size() + " lines found.");
 		}
 	}
 
