@@ -270,7 +270,6 @@ public abstract class StructuralTestProvider {
 			}
 		}
 		String actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
-
 		/*
 		 * If the given expected name contains a '.' it can be assumed that it
 		 * represents a full canonical name. If it does not, we can assume it represents
@@ -279,9 +278,7 @@ public abstract class StructuralTestProvider {
 		if (expectedTypeName.contains(".")) {
 			return expectedTypeName.equals(actualName);
 		}
-
 		return expectedTypeName.equals(actualSimpleName);
-
 	}
 
 	/**
