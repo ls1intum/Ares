@@ -107,6 +107,20 @@ public class InputOutputUser {
 					"|| (( |", //
 					"Something");
 		}).isInstanceOf(AssertionFailedError.class).hasMessageContainingAll("more actual lines than expected: 1");
+
+		assertThatThrownBy(() -> {
+			tester.out().assertLinesMatch("This should not pass", //
+					">> 11 >>", //
+					"ABCDEF");
+		}).isInstanceOf(AssertionFailedError.class)
+				.hasMessageContainingAll("expected line #2:`ABCDEF` not found - actual lines depleted");
+
+		assertThatThrownBy(() -> {
+			tester.out().assertLinesMatch("This should not pass", //
+					">> 12 >>", //
+					"ABCDEF");
+		}).isInstanceOf(AssertionFailedError.class).hasMessageContainingAll(
+				"The output does not contain enough lines for the test to work, only 11 lines found.");
 	}
 
 	@PublicTest
