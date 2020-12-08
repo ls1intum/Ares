@@ -6,11 +6,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,6 +82,8 @@ public abstract class StructuralTestProvider {
 	protected static final String THE_ENUM = "The enum ";
 
 	protected static final String NOT_IMPLEMENTED_AS_EXPECTED = " are not implemented as expected.";
+
+	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++");
 
 	protected static JSONArray structureOracleJSON;
 
@@ -186,7 +190,8 @@ public abstract class StructuralTestProvider {
 			boolean expectedAnnotationFound = false;
 			String expectedAnnotationAsString = (String) expectedAnnotation;
 			for (Annotation observedAnnotation : observedAnnotations) {
-				if (expectedAnnotationAsString.equals(observedAnnotation.annotationType().getSimpleName())) {
+				if (checkExpectedType(observedAnnotation.annotationType(), observedAnnotation.annotationType(),
+						expectedAnnotationAsString)) {
 					expectedAnnotationFound = true;
 					break;
 				}
@@ -224,8 +229,8 @@ public abstract class StructuralTestProvider {
 		}
 		/*
 		 * Create hash tables to store how often a parameter type occurs. Checking the
-		 * occurrences of a certain parameter type is enough, since the parameter names
-		 * or their order are not relevant to us.
+		 * occurrences of a certain parameter type is enough, since the parameter order
+		 * is not relevant to us.
 		 */
 		String[] expectedParameterTypeNames = new String[expectedParameters.length()];
 		for (int i = 0; i < expectedParameters.length(); i++) {
@@ -235,11 +240,45 @@ public abstract class StructuralTestProvider {
 
 		String[] observedParameterTypeNames = new String[observedParameters.length];
 		for (int i = 0; i < observedParameters.length; i++) {
+			// TODO: Canonical names should be supported as well.
 			observedParameterTypeNames[i] = observedParameters[i].getSimpleName();
 		}
 		Map<String, Integer> observedParametersHashtable = createParametersHashMap(observedParameterTypeNames);
 
 		return expectedParametersHashtable.equals(observedParametersHashtable);
+	}
+
+	/**
+	 * This method checks whether the actual type of any implemented structural
+	 * element matches its expected name.
+	 *
+	 * @param actualClass       The class of the structural element
+	 * @param actualGenericType The actual generic type of the structural element
+	 * @param expectedTypeName  The expected name, provided as a simple or canonical
+	 *                          (generic) name.
+	 * @return True if the names match, false if not.
+	 */
+	protected static boolean checkExpectedType(Class<?> actualClass, Type actualGenericType, String expectedTypeName) {
+		boolean expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
+		String actualName;
+		if (expectedTypeIsGeneric) {
+			actualName = actualGenericType.getTypeName();
+		} else {
+			actualName = actualClass.getCanonicalName();
+			if (actualName == null) {
+				actualName = actualClass.getName();
+			}
+		}
+		String actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
+		/*
+		 * If the given expected name contains a '.' it can be assumed that it
+		 * represents a full canonical name. If it does not, we can assume it represents
+		 * a simple name.
+		 */
+		if (expectedTypeName.contains(".")) {
+			return expectedTypeName.equals(actualName);
+		}
+		return expectedTypeName.equals(actualSimpleName);
 	}
 
 	/**

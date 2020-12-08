@@ -125,7 +125,8 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 					checks.modifiers = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "),
 							expectedModifiers);
 					checks.annotations = checkAnnotations(observedMethod.getAnnotations(), expectedAnnotations);
-					checks.returnType = expectedReturnType.equals(observedMethod.getReturnType().getSimpleName());
+					checks.returnType = checkExpectedType(observedMethod.getReturnType(),
+							observedMethod.getGenericReturnType(), expectedReturnType);
 
 					// If all are correct, then we found the desired method and we can break the
 					// loop
