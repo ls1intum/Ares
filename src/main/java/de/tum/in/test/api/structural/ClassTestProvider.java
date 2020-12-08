@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -124,9 +125,9 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
 				&& !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
 			String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
-			String observedSuperClassName = observedClass.getSuperclass().getCanonicalName();
 
-			if (!checkExpectedName(observedSuperClassName, expectedSuperClassName)) {
+			if (!checkExpectedType(observedClass.getSuperclass(), observedClass.getGenericSuperclass(),
+					expectedSuperClassName)) {
 				String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
 						+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
 				fail(failMessage);
@@ -139,11 +140,14 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_INTERFACES)) {
 			JSONArray expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
 			Class<?>[] observedInterfaces = observedClass.getInterfaces();
+			Type[] observedGenericInterfaceTypes = observedClass.getGenericInterfaces();
 			for (int i = 0; i < expectedInterfaces.length(); i++) {
 				String expectedInterface = expectedInterfaces.getString(i);
 				boolean implementsInterface = false;
-				for (Class<?> observedInterface : observedInterfaces) {
-					if (checkExpectedName(observedInterface.getCanonicalName(), expectedInterface)) {
+				for (int j = 0; j < observedInterfaces.length; j++) {
+					Class<?> observedInterface = observedInterfaces[j];
+					Type observedGenericInterfaceType = observedGenericInterfaceTypes[j];
+					if (checkExpectedType(observedInterface, observedGenericInterfaceType, expectedInterface)) {
 						implementsInterface = true;
 						break;
 					}

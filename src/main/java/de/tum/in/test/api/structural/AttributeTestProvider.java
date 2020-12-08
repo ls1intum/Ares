@@ -6,13 +6,10 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,8 +25,6 @@ import org.junit.jupiter.api.DynamicNode;
  * @version 5.0 (11.11.2020)
  */
 public abstract class AttributeTestProvider extends StructuralTestProvider {
-
-	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++");
 
 	/**
 	 * This method collects the classes in the structure oracle file for which
@@ -125,7 +120,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 			for (Field observedAttribute : observedClass.getDeclaredFields()) {
 				if (expectedName.equals(observedAttribute.getName())) {
 					nameIsCorrect = true;
-					typeIsCorrect = checkType(observedAttribute, expectedTypeName);
+					typeIsCorrect = checkExpectedType(observedAttribute.getType(), observedAttribute.getGenericType(),
+							expectedTypeName);
 					modifiersAreCorrect = checkModifiers(Modifier.toString(observedAttribute.getModifiers()).split(" "),
 							expectedModifiers);
 					annotationsAreCorrect = checkAnnotations(observedAttribute.getAnnotations(), expectedAnnotations);
@@ -199,40 +195,5 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 						+ ". Make sure to implement it as expected.");
 			}
 		}
-	}
-
-	/**
-	 * This method checks if the type of an observed attribute matches the expected
-	 * one. It first checks if the type of the attribute is a generic one or not. In
-	 * the first case, it sees if the main and the generic types match, otherwise it
-	 * only looks up the simple name of the attribute.
-	 * 
-	 * @param observedAttribute The observed attribute we need to check.
-	 * @param expectedTypeName  The name of the expected type.
-	 * @return True, if the types match, false otherwise.
-	 */
-	protected boolean checkType(Field observedAttribute, String expectedTypeName) {
-		boolean expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
-		if (expectedTypeIsGeneric) {
-			boolean mainTypeIsRight;
-			boolean genericTypeIsRight = false;
-
-			String expectedMainTypeName = expectedTypeName.split("<")[0];
-			String observedMainTypeName = observedAttribute.getType().getCanonicalName();
-			mainTypeIsRight = checkExpectedName(observedMainTypeName, expectedMainTypeName);
-
-			if (observedAttribute.getGenericType() instanceof ParameterizedType) {
-				Type observedGenericType = observedAttribute.getGenericType();
-				// this removes all package names, see section 4.5.1 of the JLS
-				String observedGenericTypeName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(observedGenericType.toString())
-						.replaceAll("");
-				genericTypeIsRight = expectedTypeName.equals(observedGenericTypeName);
-			}
-
-			return mainTypeIsRight && genericTypeIsRight;
-		}
-		String observedTypeName = observedAttribute.getType().getCanonicalName();
-
-		return checkExpectedName(observedTypeName, expectedTypeName);
 	}
 }
