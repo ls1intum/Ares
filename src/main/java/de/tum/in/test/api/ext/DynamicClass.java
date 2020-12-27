@@ -1,6 +1,7 @@
 package de.tum.in.test.api.ext;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -78,7 +79,7 @@ public class DynamicClass<T> implements Checkable {
 		Class<T> rClass = getC();
 		if (rClass.isPrimitive()) {
 			if (obj == null)
-				throw new NullPointerException("null kann nicht nach " + getName() + " konvertiert werden.");
+				throw new NullPointerException("null kann nicht nach " + getName() + " gecastet werden.");
 			Class<?> objClass = obj.getClass();
 			Class<?> wrapper = primitiveWrappers.get(rClass);
 			if (objClass.equals(wrapper))
@@ -108,7 +109,7 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public static <T> DynamicClass<T> toDynamic(Class<T> clazz) {
-		return new DynamicClass<>(Objects.requireNonNull(clazz, "class most not be null"));
+		return new DynamicClass<>(Objects.requireNonNull(clazz, "class must not be null"));
 	}
 
 	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) {

@@ -39,7 +39,7 @@ public class DynamicField<T> implements Checkable {
 				f = of.get();
 				f.setAccessible(true);
 			} else
-				fail("Feld " + fName + " konnte nicht gefunden/geraten werden");
+				fail("Feld " + fName + " konnte nicht gefunden werden");
 		}
 		return f;
 	}
