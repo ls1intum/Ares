@@ -7,56 +7,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.EXPERIMENTAL)
 public class DynamicField<T> implements Checkable {
 
-	final DynamicClass<?> dClass;
-	final List<String> fName;
-	final DynamicClass<T> fType;
-	final DynamicMethod<T> backup;
-	final boolean ignoreCase;
-	Class<?> c;
-	Field f;
+	private final DynamicClass<?> owner;
+	private final List<String> name;
+	private final DynamicClass<T> type;
+	private final boolean ignoreCase;
+	private Field field;
 
-	public DynamicField(DynamicClass<?> dClass, Class<T> fType, DynamicMethod<T> backup, boolean ignoreCase,
-			String... fNames) {
-		this(dClass, DynamicClass.toDynamic(fType), backup, ignoreCase, fNames);
+	public DynamicField(DynamicClass<?> dClass, Class<T> fType, boolean ignoreCase, String... possibleNames) {
+		this(dClass, DynamicClass.toDynamic(fType), ignoreCase, possibleNames);
 	}
 
-	public DynamicField(DynamicClass<?> dClass, DynamicClass<T> fType, DynamicMethod<T> backup, boolean ignoreCase,
-			String... fNames) {
-		this.dClass = Objects.requireNonNull(dClass);
+	public DynamicField(DynamicClass<?> dClass, DynamicClass<T> fType, boolean ignoreCase, String... possibleNames) {
+		this.owner = Objects.requireNonNull(dClass);
+		if (ignoreCase)
+			this.name = Stream.of(possibleNames).map(String::toLowerCase).collect(Collectors.toUnmodifiableList());
+		else
+			this.name = List.of(possibleNames);
+		this.type = Objects.requireNonNull(fType);
 		this.ignoreCase = ignoreCase;
-		this.fName = List.of(Objects.requireNonNull(fNames));
-		this.fType = Objects.requireNonNull(fType);
-		this.backup = backup;
 	}
 
-	public Field getF() {
-		if (f == null) {
-			var of = findField(dClass.getC());
+	public Field toField() {
+		if (field == null) {
+			var of = findField(owner.toClass());
 			if (of.isPresent()) {
-				f = of.get();
-				f.setAccessible(true);
+				field = of.get();
+				field.setAccessible(true);
 			} else
-				fail("Feld " + fName + " konnte nicht gefunden werden");
+				fail("Feld " + name + " konnte nicht gefunden werden");
 		}
-		return f;
+		return field;
 	}
 
 	@SuppressWarnings("unchecked")
 	public T getOf(Object o) {
 		try {
-			return (T) getF().get(o);
+			return (T) toField().get(o);
 		} catch (IllegalAccessException e) {
-			fail("Feld " + fName + " der Klasse " + dClass
+			fail("Feld " + name + " der Klasse " + owner
 					+ " konnte nicht aufgerufen werden, Zugriff auf das Feld nicht möglich", e);
 		} catch (IllegalArgumentException e) {
-			fail("Feld " + fName + " von Klasse " + dClass
+			fail("Feld " + name + " von Klasse " + owner
 					+ " wurde nicht auf einem passenden Objekt aufgerufen (-> Testfehler)", e);
 		} catch (ClassCastException e) {
-			fail("Feld " + fName + " der Klasse " + dClass + " kann nicht nach " + fType.getName() + "gecastet werden",
-					e);
+			fail("Feld " + name + " der Klasse " + owner + " kann nicht nach " + type.getName() + "gecastet werden", e);
 		}
 		return null; // unreachable
 	}
@@ -65,33 +68,39 @@ public class DynamicField<T> implements Checkable {
 		try {
 			return getOf(null);
 		} catch (NullPointerException e) {
-			fail("Feld " + fName + " der Klasse " + dClass + " ist nicht statisch", e);
+			fail("Feld " + name + " der Klasse " + owner + " ist nicht statisch", e);
 		}
 		return null; // unreachable
 	}
 
-	public Optional<Field> findField(Class<?> c) {
-		return fieldsOf(c).stream().filter(f -> fName.contains(f.getName())).findFirst();
+	private Optional<Field> findField(Class<?> c) {
+		return fieldsOf(c).stream().filter(f -> name.contains(ignoreCase ? f.getName().toLowerCase() : f.getName()))
+				.findFirst();
 	}
 
-	public List<Field> fieldsOf(Class<?> c) {
+	private List<Field> fieldsOf(Class<?> c) {
 		ArrayList<Field> al = new ArrayList<>();
-		while (c != Object.class) {
-			for (Field ff : c.getDeclaredFields())
-				if (fType.getC().isAssignableFrom(ff.getType()))
+		Class<?> current = c;
+		while (current != Object.class) {
+			for (Field ff : current.getDeclaredFields())
+				if (type.toClass().isAssignableFrom(ff.getType()))
 					al.add(ff);
-			c = c.getSuperclass();
+			current = current.getSuperclass();
 		}
 		return al;
 	}
 
 	@Override
 	public String toString() {
-		return dClass.toString() + "." + fName;
+		return owner.toString() + "." + name;
 	}
 
 	@Override
-	public void check() {
-		getF();
+	public void check(Check... checks) {
+		int modifiers = toField().getModifiers();
+		String desc = "Feld " + this;
+		for (Check check : checks) {
+			check.checkModifiers(modifiers, desc);
+		}
 	}
 }
