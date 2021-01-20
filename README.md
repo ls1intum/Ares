@@ -83,7 +83,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.4.5</version>
+        <version>1.4.6</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
