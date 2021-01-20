@@ -65,6 +65,11 @@ public class ThreadUser {
 	}
 
 	@PublicTest
+	void testThreadExtension() throws Throwable {
+		new ThreadPenguin().start();
+	}
+
+	@PublicTest
 	void testThreadGroup() {
 		ThreadPenguin.tryBreakThreadGroup();
 	}

@@ -2,16 +2,15 @@ package de.tum.in.testuser.subject;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicReference;
 
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
-public final class ThreadPenguin {
+public final class ThreadPenguin extends Thread {
 
-	private ThreadPenguin() {
-
+	public ThreadPenguin() {
+		super("ThreadPenguin");
 	}
 
 	public static void tryStartTwoThreads() {

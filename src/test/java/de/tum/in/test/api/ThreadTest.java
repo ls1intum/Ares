@@ -23,6 +23,7 @@ class ThreadTest {
 
 	private final String commonPoolInterruptable = "commonPoolInterruptable";
 	private final String testThreadBomb = "testThreadBomb";
+	private final String testThreadExtension = "testThreadExtension";
 	private final String testThreadGroup = "testThreadGroup";
 	private final String threadLimitExceeded = "threadLimitExceeded";
 	private final String threadWhitelistingWithPathCorrect = "threadWhitelistingWithPathCorrect";
@@ -40,6 +41,11 @@ class ThreadTest {
 	@TestTest
 	void test_testThreadBomb() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testThreadBomb, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testThreadExtension() {
+		tests.assertThatEvents().haveExactly(1, event(test(testThreadExtension), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
