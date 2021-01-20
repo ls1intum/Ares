@@ -7,7 +7,6 @@ import java.io.FilePermission;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
 import java.lang.Thread.State;
-import java.lang.invoke.LambdaMetafactory;
 import java.lang.management.ManagementPermission;
 import java.lang.reflect.ReflectPermission;
 import java.net.InetAddress;
@@ -16,6 +15,7 @@ import java.net.SocketPermission;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
@@ -32,6 +32,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -405,8 +406,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				checkForNonWhitelistedStackFrames(() -> {
 					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg),
 							isPackageWhitelisted(pkg));
-					return formatLocalized("security.error_disallowed_package", pkg);
-				}); // $NON-NLS-1$
+					return formatLocalized("security.error_disallowed_package", pkg); // $NON-NLS-1$
+				}, stackFrame -> true);
 			}
 		} finally {
 			exitPublicInterface();
@@ -430,6 +431,17 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message) {
 		var nonWhitelisted = getNonWhitelistedStackFrames();
+		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
+	}
+
+	private void checkForNonWhitelistedStackFrames(Supplier<String> message,
+			Predicate<StackFrame> takeFromTopWhileFilter) {
+		var nonWhitelisted = getNonWhitelistedStackFrames(takeFromTopWhileFilter);
+		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
+	}
+
+	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message,
+			List<StackFrame> nonWhitelisted) {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
@@ -439,20 +451,24 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private List<StackFrame> getNonWhitelistedStackFrames() {
-		// one for LambdaMetafactory itself and one for the caller
+		// one for AccessController itself and one for the caller
 		DelayedFilter<StackFrame> delayedIsNotPrivileged = new DelayedFilter<>(2, this::isNotPrivileged, true);
+		return getNonWhitelistedStackFrames(delayedIsNotPrivileged);
+	}
+
+	private List<StackFrame> getNonWhitelistedStackFrames(Predicate<StackFrame> takeFromTopWhileFilter) {
 		List<StackFrame> result;
 		if (isCurrentThreadWhitelisted()) {
-			result = stackWalker.walk(sfs -> sfs.takeWhile(delayedIsNotPrivileged)
+			result = stackWalker.walk(sfs -> sfs.takeWhile(takeFromTopWhileFilter)
 					.filter(this::isStackFrameNotWhitelisted).collect(Collectors.toList()));
 		} else {
-			result = stackWalker.walk(sfs -> sfs.takeWhile(delayedIsNotPrivileged).collect(Collectors.toList()));
+			result = stackWalker.walk(sfs -> sfs.takeWhile(takeFromTopWhileFilter).collect(Collectors.toList()));
 		}
 		return result;
 	}
 
 	private boolean isNotPrivileged(StackFrame stackFrame) {
-		return !LambdaMetafactory.class.getName().equals(stackFrame.getClassName());
+		return !AccessController.class.getName().equals(stackFrame.getClassName());
 	}
 
 	private boolean isCallNotWhitelisted(String call) {
