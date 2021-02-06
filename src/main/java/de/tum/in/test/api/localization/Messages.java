@@ -6,7 +6,6 @@ import java.util.Locale.Category;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -18,18 +17,7 @@ public final class Messages {
 
 	private static final String BUNDLE_NAME = "de.tum.in.test.api.localization.messages"; //$NON-NLS-1$
 
-	/**
-	 * Must match the localizations in the resources.
-	 */
-	private static final Set<Locale> SUPPORTED_LOCALES = Set.of(Locale.ROOT, Locale.GERMAN);
-
 	private static Map<Locale, ResourceBundle> resourceBundleCache = Collections.synchronizedMap(new LruCache<>(100));
-
-	static {
-		for (Locale locale : SUPPORTED_LOCALES) {
-			resourceBundleCache.put(locale, loadBundleForLocale(locale));
-		}
-	}
 
 	private Messages() {
 
