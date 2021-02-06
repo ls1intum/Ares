@@ -1,6 +1,7 @@
 package de.tum.in.test.testutilities;
 
 import static org.assertj.core.api.Assertions.allOf;
+import static org.junit.platform.commons.util.FunctionUtils.where;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
@@ -30,12 +31,13 @@ public final class CustomConditions {
 	}
 
 	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType) {
-		return event(testWithSegments(testName), finishedWithFailure(instanceOf(errorType)));
+		return event(testWithSegments(testName), finishedWithFailure(instanceOf(errorType), messageLocalized()));
 	}
 
 	public static Condition<? super Event> testFailedWith(String testName, Class<? extends Throwable> errorType,
 			String message) {
-		return event(testWithSegments(testName), finishedWithFailure(instanceOf(errorType), message(message)));
+		return event(testWithSegments(testName),
+				finishedWithFailure(instanceOf(errorType), message(message), messageLocalized()));
 	}
 
 	public static Condition<Event> finishedSuccessfullyRep() {
@@ -48,5 +50,10 @@ public final class CustomConditions {
 	public static Condition<Event> testWithSegments(String segementsSeparatedWithSlash) {
 		return allOf(Stream.of(segementsSeparatedWithSlash.split("/")).map(EventConditions::test)
 				.collect(Collectors.toList()));
+	}
+
+	public static Condition<Throwable> messageLocalized() {
+		return new Condition<>(where(Throwable::getMessage, m -> !m.startsWith("!") || !m.endsWith("!")),
+				"message is correctly localized");
 	}
 }
