@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,6 +61,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
+	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -350,7 +352,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (perm instanceof AuthPermission)
 				throw new SecurityException(localized("security.error_modify_auth") + permString); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
-				checkPathAccess(Path.of(permName), PathActionLevel.getLevelOf(permActions));
+				checkPathAccess(permName, PathActionLevel.getLevelOf(permActions));
 			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString);
 		} finally {
@@ -358,13 +360,25 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 	}
 
-	private void checkPathAccess(Path p, PathActionLevel pathActionLevel) {
+	private void checkPathAccess(String path, PathActionLevel pathActionLevel) {
 		boolean whitelisted = false;
 		boolean blacklisted = false;
 		try {
-			Path pa = p.toAbsolutePath();
-			blacklisted = isPathBlacklisted(pa, pathActionLevel);
-			whitelisted = isPathWhitelisted(pa, pathActionLevel);
+			if ("<<ALL FILES>>".equals(path)) { //$NON-NLS-1$
+				blacklisted = true;
+			} else {
+				String commonPath = getFilePermissionsCommonPath(path);
+				if (commonPath == null) {
+					Path pa = Path.of(path).toAbsolutePath();
+					blacklisted = isPathBlacklisted(pa, pathActionLevel);
+					whitelisted = isPathWhitelisted(pa, pathActionLevel);
+				} else {
+					Path pa = Path.of(commonPath).toAbsolutePath();
+					blacklisted = !configuration.blacklistedPaths().isEmpty();
+					whitelisted = !blacklisted && configuration.whitelistedPaths().orElse(Set.of()).stream()
+							.anyMatch(pm -> pm.matchesRecursivelyWithLevel(pa, pathActionLevel));
+				}
+			}
 			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
@@ -374,11 +388,19 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			LOG.trace("Allowing read access for main thread inbetween tests"); // appears very often
 			return;
 		}
-		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", p, blacklisted, whitelisted); //$NON-NLS-1$
+		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", path, blacklisted, whitelisted); //$NON-NLS-1$
 		checkForNonWhitelistedStackFrames(() -> {
 			LOG.warn(message);
-			return formatLocalized("security.error_path_access", p); //$NON-NLS-1$
+			return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
 		});
+	}
+
+	private static String getFilePermissionsCommonPath(String path) {
+		if (RECURSIVE_FILE_PERMISSION.matcher(path).find())
+			return path.substring(0, path.length() - 2);
+		if (path.equals("*") || path.equals("-")) //$NON-NLS-1$ //$NON-NLS-2$
+			return ""; //$NON-NLS-1$
+		return null;
 	}
 
 	private boolean isPathWhitelisted(Path pa, PathActionLevel pathActionLevel) {

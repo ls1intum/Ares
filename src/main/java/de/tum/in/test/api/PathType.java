@@ -24,6 +24,12 @@ public enum PathType {
 		public PathMatcher convertToPathMatcher(String s) {
 			return Path.of(s).toAbsolutePath().normalize()::equals;
 		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// children cannot have an exactly equal path
+			return false;
+		}
 	},
 	/**
 	 * The path must start with the given path; given path may be specified relative
@@ -33,6 +39,12 @@ public enum PathType {
 		public PathMatcher convertToPathMatcher(String s) {
 			Path begin = Path.of(s).toAbsolutePath().normalize();
 			return p -> p.normalize().startsWith(begin);
+		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// children will start with the same path as well
+			return true;
 		}
 	},
 	/**
@@ -47,6 +59,12 @@ public enum PathType {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + normalizedGlob.getNormalizedGlobPattern());
 			return p -> pm.matches(relativizeSafe(p, normalizedGlob.getRelativeOffset()));
 		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// this is definitely safe
+			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**");
+		}
 	},
 	/**
 	 * applies relative RegEx for a relativized path
@@ -58,6 +76,12 @@ public enum PathType {
 		public PathMatcher convertToPathMatcher(String s) {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
 			return p -> pm.matches(relativizeSafe(p, NO_OFFSET));
+		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// no easy conclusions possible, because of lookahead and similar constructs
+			return false;
 		}
 	},
 	/**
@@ -71,6 +95,12 @@ public enum PathType {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + s);
 			return p -> pm.matches(p.normalize());
 		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// this is definitely safe
+			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**");
+		}
 	},
 	/**
 	 * applies absolute RegEx for an absolute path
@@ -83,6 +113,12 @@ public enum PathType {
 			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
 			return p -> pm.matches(p.normalize());
 		}
+
+		@Override
+		public boolean isPatternRecursive(String pathPattern) {
+			// no easy conclusions possible, because of lookahead and similar constructs
+			return false;
+		}
 	};
 
 	/**
@@ -91,6 +127,18 @@ public enum PathType {
 	 * @author Christian Femers
 	 */
 	public abstract PathMatcher convertToPathMatcher(String s);
+
+	/**
+	 * Returns <code>true</code> only for patterns that are recursive, meaning that
+	 * any paths of children match as well. This method does not represent an "if
+	 * and only if" statement, it may return false for some recursive patterns.
+	 *
+	 * @param pathPattern the path pattern used for matching
+	 * @return true if the method can safely determine that the pattern will match
+	 *         any children of a given path as well
+	 * @author Christian Femers
+	 */
+	public abstract boolean isPatternRecursive(String pathPattern);
 
 	static final FileSystem DEFAULT_FS = FileSystems.getDefault();
 	static final Path CURRENT_PATH = Path.of("").toAbsolutePath();

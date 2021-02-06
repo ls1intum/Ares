@@ -55,6 +55,14 @@ public final class PathRule {
 		return request.isBelowOrEqual(actionLevel) && pathMatcher.matches(path);
 	}
 
+	public boolean matchesRecursivelyWithLevel(Path path, PathActionLevel request) {
+		// common ancestor must match
+		if (!matchesWithLevel(path, request))
+			return false;
+		// then pattern must allow children
+		return pathType.isPatternRecursive(pathPattern);
+	}
+
 	@Override
 	public String toString() {
 		return String.format("PathRule[\"%s\" (%s) in %s; level %s]", pathPattern, pathType, ruleType, actionLevel);
