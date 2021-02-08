@@ -42,7 +42,7 @@ jobs:
 
     # Use Maven dependency cache
     - name: Cache Maven Dependencies
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
         key: ajts-maven-${{ hashFiles('**/pom.xml') }}
