@@ -1,7 +1,5 @@
 package de.tum.in.test.api.internal.sanitization;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,21 +10,8 @@ import org.opentest4j.MultipleFailuresError;
 enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
-	private static final String HEADING_NAME = "heading";
-
 	private final Set<Class<? extends Throwable>> types = Set.of(MultipleFailuresError.class,
 			AssertJMultipleFailuresError.class);
-
-	private static final VarHandle HEADING;
-
-	static {
-		try {
-			var lookup = MethodHandles.privateLookupIn(MultipleFailuresError.class, MethodHandles.lookup());
-			HEADING = lookup.findVarHandle(MultipleFailuresError.class, HEADING_NAME, String.class);
-		} catch (IllegalAccessException | NoSuchFieldException e) {
-			throw new ExceptionInInitializerError(e);
-		}
-	}
 
 	@Override
 	public boolean canSanitize(Throwable t) {
@@ -34,14 +19,23 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) {
-		String heading = (String) HEADING.get(t);
+	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
+		MultipleFailuresError mfe = (MultipleFailuresError) t;
+		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(mfe).sanitize();
 		// list is safe here because of defensive copying in MultipleFailuresError
-		List<Throwable> failures = ((MultipleFailuresError) t).getFailures().stream().map(ThrowableSanitizer::sanitize)
-				.collect(Collectors.toList());
-		MultipleFailuresError mfe = createNewInstance(t, heading, failures);
-		SanitizationUtils.copyThrowableInfoSafe(t, mfe);
-		return mfe;
+		List<Throwable> failures = mfe.getFailures().stream().map(ThrowableSanitizer::sanitize)
+				.collect(Collectors.toUnmodifiableList());
+		/*
+		 * Message already contains the failures and separating both is more difficult.
+		 * So we just pass the message constructed be the old object, as the new object
+		 * will in absence of failures only return the heading.
+		 */
+		MultipleFailuresError newMfe = createNewInstance(mfe, info.getMessage(), List.of());
+		SanitizationUtils.copyThrowableInfoSafe(info, newMfe);
+		// Retain failure information in the suppressed Throwables
+		for (Throwable failure : failures)
+			newMfe.addSuppressed(failure);
+		return newMfe;
 	}
 
 	private static MultipleFailuresError createNewInstance(Throwable t, String heading, List<Throwable> failures) {

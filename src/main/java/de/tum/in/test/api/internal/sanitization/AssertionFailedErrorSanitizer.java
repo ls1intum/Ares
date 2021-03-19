@@ -18,15 +18,15 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) {
+	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
 		AssertionFailedError afe = (AssertionFailedError) t;
-		ValueWrapper expected = invoke(afe::getExpected);
-		ValueWrapper actual = invoke(afe::getActual);
-		if (expected == null && actual == null)
-			return SimpleThrowableSanitizer.INSTANCE.sanitize(afe);
-		AssertionFailedError newAfe = new AssertionFailedError(invoke(afe::getMessage), sanitizeValue(expected),
+		ValueWrapper expected = afe.getExpected();
+		ValueWrapper actual = afe.getExpected();
+		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(t).sanitize();
+		String newMessage = messageTransformer.apply(info);
+		AssertionFailedError newAfe = new AssertionFailedError(newMessage, sanitizeValue(expected),
 				sanitizeValue(actual));
-		SanitizationUtils.copyThrowableInfoSafe(afe, newAfe);
+		SanitizationUtils.copyThrowableInfoSafe(info, newAfe);
 		return newAfe;
 	}
 

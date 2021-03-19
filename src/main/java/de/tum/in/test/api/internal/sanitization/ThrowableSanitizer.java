@@ -18,21 +18,23 @@ public final class ThrowableSanitizer {
 		ThrowableSets.init();
 	}
 
-	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SimpleThrowableSanitizer.INSTANCE,
+	private static final List<SpecificThrowableSanitizer> SANITIZERS = List.of(SafeTypeThrowableSanitizer.INSTANCE,
 			AssertionFailedErrorSanitizer.INSTANCE, PrivilegedExceptionSanitizer.INSTANCE,
 			MultipleFailuresErrorSanitizer.INSTANCE, MultipleAssertionsErrorSanitizer.INSTANCE,
 			ExceptionInInitializerErrorSanitizer.INSTANCE, SoftAssertionErrorSanitizer.INSTANCE);
 
 	public static Throwable sanitize(final Throwable t) {
+		return sanitize(t, MessageTransformer.IDENTITY);
+	}
+
+	public static Throwable sanitize(final Throwable t, MessageTransformer messageTransformer) {
 		if (t == null)
 			return null;
 		return SanitizationUtils.sanitizeWithinScopeOf(t, () -> {
 			if (UnexpectedExceptionError.class.equals(t.getClass()))
 				return t;
 			var firstPossibleSan = SANITIZERS.stream().filter(s -> s.canSanitize(t)).findFirst();
-			if (firstPossibleSan.isPresent())
-				return firstPossibleSan.get().sanitize(t);
-			return UnexpectedExceptionError.wrap(t);
+			return firstPossibleSan.orElse(ArbitraryThrowableSanitizer.INSTANCE).sanitize(t, messageTransformer);
 		});
 	}
 }

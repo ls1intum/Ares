@@ -51,7 +51,7 @@ public class ExceptionFailureUser {
 		}
 
 		@Override
-		public String toString() {
+		public String getMessage() {
 			throw new IllegalStateException("Faulty");
 		}
 	}
