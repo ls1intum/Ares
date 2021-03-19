@@ -11,15 +11,15 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import junit.framework.ComparisonCompactor;
+import junit.framework.ComparisonFailure;
+
 import org.junit.experimental.theories.internal.ParameterizedAssertionError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.internal.sanitization.ThrowableInfo.ProperyKey;
 import de.tum.in.test.api.util.LruCache;
-
-import junit.framework.ComparisonCompactor;
-import junit.framework.ComparisonFailure;
 
 enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
