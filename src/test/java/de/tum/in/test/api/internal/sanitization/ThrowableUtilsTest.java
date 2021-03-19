@@ -41,8 +41,11 @@ class ThrowableUtilsTest {
 			typeEntry(Method.class, ReflectionSupport.findMethod(String.class, "length").orElseThrow()) //
 	);
 
-	private static final Set<String> FALSE_POSITIVES = Set.of("junit.framework.AssertionFailedError",
-			"java.util.IllformedLocaleException");
+	private static final Set<String> FALSE_POSITIVES = Set.of( //
+			"junit.framework.AssertionFailedError", // deviation for null message is not an issue
+			"java.util.IllformedLocaleException", // we don't need the index attribute itself
+			"java.awt.HeadlessException" // CI systems don't like this, but the constructor works
+	);
 
 	private static final Set<Class<?>> SAFE_PROPERTY_TYPES = Set.of(Throwable.class, Throwable[].class);
 
@@ -61,7 +64,7 @@ class ThrowableUtilsTest {
 			return !validate(type, preferredConstructor);
 		}).sorted(Comparator.comparing(Object::toString)).collect(Collectors.toList());
 		assertThat(duplicationFailures)
-				.as("the detault Throwable duplication works for all SAFE_TYPE classes that are not specially handeled")
+				.as("the default Throwable duplication works for all SAFE_TYPE classes that are not specially handeled")
 				.isEmpty();
 	}
 
