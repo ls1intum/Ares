@@ -36,8 +36,8 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 				description = start.substring(1, start.length() - 2);
 		}
 		/*
-		 * note that this will only affect the description, not the whole message (this
-		 * is not possible)
+		 * Note that this will only affect the description, not the whole message (this
+		 * is not possible).
 		 */
 		info.setMessage(description);
 		description = messageTransformer.apply(info);
