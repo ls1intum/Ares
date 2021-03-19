@@ -18,7 +18,7 @@ import org.junit.experimental.theories.internal.ParameterizedAssertionError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.tum.in.test.api.internal.sanitization.ThrowableInfo.ProperyKey;
+import de.tum.in.test.api.internal.sanitization.ThrowableInfo.PropertyKey;
 import de.tum.in.test.api.util.LruCache;
 
 enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
@@ -104,8 +104,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class HttpRetryExceptionCreator implements ThrowableCreator {
 
-		private static final ProperyKey<Integer> RESPONSE_CODE = new ProperyKey<>(int.class, "responseCode");
-		private static final ProperyKey<String> LOCATION = new ProperyKey<>(String.class, "location");
+		private static final PropertyKey<Integer> RESPONSE_CODE = new PropertyKey<>(int.class, "responseCode");
+		private static final PropertyKey<String> LOCATION = new PropertyKey<>(String.class, "location");
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -118,8 +118,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class DateTimeParseExceptionCreator implements ThrowableCreator {
 
-		private static final ProperyKey<String> PARSED_STRING = new ProperyKey<>(String.class, "parsedString");
-		private static final ProperyKey<Integer> ERROR_INDEX = new ProperyKey<>(int.class, "errorIndex");
+		private static final PropertyKey<String> PARSED_STRING = new PropertyKey<>(String.class, "parsedString");
+		private static final PropertyKey<Integer> ERROR_INDEX = new PropertyKey<>(int.class, "errorIndex");
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -139,8 +139,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class MissingResourceExceptionCreator implements ThrowableCreator {
 
-		private static final ProperyKey<String> CLASS_NAME = new ProperyKey<>(String.class, "className");
-		private static final ProperyKey<String> KEY = new ProperyKey<>(String.class, "key");
+		private static final PropertyKey<String> CLASS_NAME = new PropertyKey<>(String.class, "className");
+		private static final PropertyKey<String> KEY = new PropertyKey<>(String.class, "key");
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -155,8 +155,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 		private static final int MAX_CONTEXT_LENGTH = 20;
 
-		private static final ProperyKey<String> EXPECTED = new ProperyKey<>(String.class, "expected");
-		private static final ProperyKey<String> ACTUAL = new ProperyKey<>(String.class, "actual");
+		private static final PropertyKey<String> EXPECTED = new PropertyKey<>(String.class, "expected");
+		private static final PropertyKey<String> ACTUAL = new PropertyKey<>(String.class, "actual");
 
 		@Override
 		public Throwable create(ThrowableInfo info) {

@@ -150,11 +150,11 @@ public final class ThrowableInfo {
 		return properties;
 	}
 
-	public <T> T getProperty(ProperyKey<T> key) {
+	public <T> T getProperty(PropertyKey<T> key) {
 		return key.cast(additionalProperties.get(key.name()));
 	}
 
-	public <T> void setProperty(ProperyKey<T> key, T newValue) {
+	public <T> void setProperty(PropertyKey<T> key, T newValue) {
 		additionalProperties.put(key.name(), key.cast(newValue));
 	}
 
@@ -183,19 +183,19 @@ public final class ThrowableInfo {
 		return ThrowableInfo.of(source.getClass(), message, cause, stackTrace, suppressed, Map.of());
 	}
 
-	public static class ProperyKey<T> {
+	public static class PropertyKey<T> {
 
 		private final Class<T> type;
 		private final String name;
 		private final UnaryOperator<T> sanitizer;
 
-		public ProperyKey(Class<T> type, String name, UnaryOperator<T> sanitizer) {
+		public PropertyKey(Class<T> type, String name, UnaryOperator<T> sanitizer) {
 			this.type = Objects.requireNonNull(type);
 			this.name = Objects.requireNonNull(name);
 			this.sanitizer = Objects.requireNonNull(sanitizer);
 		}
 
-		public ProperyKey(Class<T> type, String name) {
+		public PropertyKey(Class<T> type, String name) {
 			this(type, name, UnaryOperator.identity());
 		}
 
