@@ -20,6 +20,7 @@ import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.opentest4j.AssertionFailedError;
 
+import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
@@ -46,7 +47,7 @@ public final class TimeoutUtils {
 		var timeout = findTimeout(context);
 		if (timeout.isEmpty())
 			return execution.get();
-		return executeWithTimeout(timeout.get(), () -> rethrowThrowableSafe(execution));
+		return executeWithTimeout(timeout.get(), () -> rethrowThrowableSafe(execution), context);
 	}
 
 	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception {
@@ -63,7 +64,8 @@ public final class TimeoutUtils {
 		}
 	}
 
-	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action) throws Throwable {
+	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action, TestContext context)
+			throws Throwable {
 		ArtemisSecurityManager.revokeThreadWhitelisting();
 		ExecutorService executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
 		try {
@@ -75,10 +77,17 @@ public final class TimeoutUtils {
 				throw ex.getCause().getCause();
 			throw ex.getCause();
 		} catch (@SuppressWarnings("unused") TimeoutException ex) {
-			throw new AssertionFailedError("execution timed out after " + formatDuration(timeout));
+			throw generateTimeoutFailure(timeout, context);
 		} finally {
 			executorService.shutdownNow();
 		}
+	}
+
+	private static AssertionFailedError generateTimeoutFailure(Duration timeout, TestContext context) {
+		var failure = new AssertionFailedError("execution timed out after " + formatDuration(timeout));
+		if (TestContextUtils.findAnnotationIn(context, PrivilegedExceptionsOnly.class).isPresent())
+			throw new PrivilegedException(failure);
+		return failure;
 	}
 
 	private static String formatDuration(Duration duration) {

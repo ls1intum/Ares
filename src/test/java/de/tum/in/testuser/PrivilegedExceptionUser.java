@@ -59,4 +59,10 @@ public class PrivilegedExceptionUser {
 			throw new NullPointerException("xyz");
 		});
 	}
+
+	@PrivilegedExceptionsOnly("ABC")
+	@PublicTest
+	void privilegedTimeout() throws InterruptedException {
+		Thread.sleep(1000);
+	}
 }

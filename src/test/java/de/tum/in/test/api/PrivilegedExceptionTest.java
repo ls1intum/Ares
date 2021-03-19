@@ -20,6 +20,7 @@ class PrivilegedExceptionTest {
 	private final String nonprivilegedExceptionTry = "nonprivilegedExceptionTry";
 	private final String privilegedExceptionFail = "privilegedExceptionFail";
 	private final String privilegedExceptionNormal = "privilegedExceptionNormal";
+	private final String privilegedTimeout = "privilegedTimeout";
 
 	@TestTest
 	void test_nonprivilegedExceptionExtern() {
@@ -47,5 +48,11 @@ class PrivilegedExceptionTest {
 	void test_privilegedExceptionNormal() {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(privilegedExceptionNormal, NullPointerException.class, "xyz"));
+	}
+
+	@TestTest
+	void test_privilegedTimeout() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(privilegedTimeout, AssertionError.class, "execution timed out after 300 ms"));
 	}
 }
