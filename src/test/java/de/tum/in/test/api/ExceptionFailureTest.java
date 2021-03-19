@@ -48,7 +48,7 @@ class ExceptionFailureTest {
 								message(m -> m.contains("Multiple Failures (2 failures)") //
 										&& m.contains("-- failure 1 --A") //
 										&& m.contains("-- failure 2 --B")),
-								new Condition<>(t -> t.getSuppressed().length == 0, "no suppressed exceptions"))));
+								new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"))));
 	}
 
 	@TestTest
@@ -124,7 +124,10 @@ class ExceptionFailureTest {
 	@TestTest
 	void test_softAssertion() {
 		tests.assertThatEvents().haveExactly(1,
-				event(test(softAssertion), finishedWithFailure(instanceOf(SoftAssertionError.class),
-						message(m -> m.contains("The following 2 assertions failed:\n1) A\n2) B")))));
+				event(test(softAssertion),
+						finishedWithFailure(instanceOf(SoftAssertionError.class),
+								message(m -> m.contains("The following 2 assertions failed:") //
+										&& m.contains("1) A") //
+										&& m.contains("2) B")))));
 	}
 }

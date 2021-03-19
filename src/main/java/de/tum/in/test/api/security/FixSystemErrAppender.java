@@ -13,7 +13,6 @@ import de.tum.in.test.api.io.IOTester;
  */
 public class FixSystemErrAppender<E> extends OutputStreamAppender<E> {
 	public FixSystemErrAppender() {
-		super();
 		setOutputStream(SecurityConstants.SYSTEM_ERR);
 	}
 }

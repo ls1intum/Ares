@@ -1,36 +1,11 @@
 package de.tum.in.test.api.internal.sanitization;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.util.Optional;
 import java.util.Set;
 
 enum ExceptionInInitializerErrorSanitizer implements SpecificThrowableSanitizer {
 	INSTANCE;
 
-	private static final String EXCEPTION_NAME = "exception";
-
 	private final Set<Class<? extends Throwable>> types = Set.of(ExceptionInInitializerError.class);
-
-	/**
-	 * Since Java 12 the exception member has been removed, so it is possibly not
-	 * present and cannot be sanitized.
-	 */
-	private static final Optional<VarHandle> EXCEPTION;
-
-	static {
-		VarHandle exceptionHandle;
-		try {
-			var lookup = MethodHandles.privateLookupIn(ExceptionInInitializerError.class, MethodHandles.lookup());
-			exceptionHandle = lookup.findVarHandle(ExceptionInInitializerError.class, EXCEPTION_NAME, Throwable.class);
-		} catch (@SuppressWarnings("unused") NoSuchFieldException e) {
-			// expected for some Java versions
-			exceptionHandle = null;
-		} catch (SecurityException | IllegalAccessException e) {
-			throw new ExceptionInInitializerError(e);
-		}
-		EXCEPTION = Optional.ofNullable(exceptionHandle);
-	}
 
 	@Override
 	public boolean canSanitize(Throwable t) {
@@ -38,12 +13,29 @@ enum ExceptionInInitializerErrorSanitizer implements SpecificThrowableSanitizer 
 	}
 
 	@Override
-	public Throwable sanitize(Throwable t) {
-		if (EXCEPTION.isPresent()) {
-			Throwable ex = (Throwable) EXCEPTION.get().getVolatile(t);
-			EXCEPTION.get().setVolatile(t, ThrowableSanitizer.sanitize(ex));
-		}
-		SimpleThrowableSanitizer.INSTANCE.sanitize(t);
-		return t;
+	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
+		ExceptionInInitializerError eiie = (ExceptionInInitializerError) t;
+		Throwable exception = eiie.getException();
+		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(t);
+		info.setCause(exception);
+		info.sanitize();
+		String newMessage = messageTransformer.apply(info);
+		ExceptionInInitializerError newEiie;
+		/*
+		 * Prioritize the message and add cause as suppressed if present. Normally both
+		 * are mutually exclusive, but our messageTransformer might generate a message
+		 * even if there was none before. Because we don't want wo loose the cause, we
+		 * add it as suppressed. This, however, will be automatically done by
+		 * SanitizationUtils.copyThrowableInfoSafe a cause is present and its call to
+		 * initCause fails
+		 */
+		if (newMessage != null && !newMessage.isEmpty())
+			newEiie = new ExceptionInInitializerError(newMessage);
+		else if (exception != null)
+			newEiie = new ExceptionInInitializerError(info.getCause());
+		else
+			newEiie = new ExceptionInInitializerError();
+		SanitizationUtils.copyThrowableInfoSafe(info, newEiie);
+		return newEiie;
 	}
 }
