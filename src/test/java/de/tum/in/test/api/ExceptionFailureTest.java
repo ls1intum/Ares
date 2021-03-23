@@ -11,6 +11,7 @@ import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.MultipleFailuresError;
 
 import de.tum.in.test.api.util.UnexpectedExceptionError;
+import de.tum.in.test.testutilities.CustomConditions;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -32,6 +33,8 @@ class ExceptionFailureTest {
 	private final String multipleFailures = "multipleFailures";
 	private final String nullPointer = "nullPointer";
 	private final String softAssertion = "softAssertion";
+	private final String throwExceptionInInitializerError = "throwExceptionInInitializerError";
+	private final String throwNullPointerException = "throwNullPointerException";
 
 	@TestTest
 	void test_assertionFailed() {
@@ -129,5 +132,19 @@ class ExceptionFailureTest {
 								message(m -> m.contains("The following 2 assertions failed:") //
 										&& m.contains("1) A") //
 										&& m.contains("2) B")))));
+	}
+
+	@TestTest
+	void test_throwExceptionInInitializerError() {
+		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwExceptionInInitializerError,
+				ExceptionInInitializerError.class,
+				"abc\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwExceptionInInitializerError(ExceptionFailurePenguin.java:14) ///"));
+	}
+
+	@TestTest
+	void test_throwNullPointerException() {
+		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwNullPointerException,
+				NullPointerException.class,
+				"xyz\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwNullPointerException(ExceptionFailurePenguin.java:10) ///"));
 	}
 }

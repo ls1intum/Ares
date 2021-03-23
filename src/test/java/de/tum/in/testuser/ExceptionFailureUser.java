@@ -18,11 +18,13 @@ import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.CustomException;
+import de.tum.in.testuser.subject.ExceptionFailurePenguin;
 
 @AllowThreads(maxActiveCount = 100)
 @TestMethodOrder(MethodName.class)
-//@UseLocale("en")
+@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
@@ -120,5 +122,15 @@ public class ExceptionFailureUser {
 	@PublicTest
 	void softAssertion() {
 		throw new SoftAssertionError(List.of("A", "B"));
+	}
+
+	@PublicTest
+	void throwExceptionInInitializerError() {
+		ExceptionFailurePenguin.throwExceptionInInitializerError();
+	}
+
+	@PublicTest
+	void throwNullPointerException() {
+		ExceptionFailurePenguin.throwNullPointerException();
 	}
 }
