@@ -68,6 +68,7 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 		// this is OK because we are only dealing with safe types here
 		ThrowableInfo info = ThrowableInfo.of(type, ThrowableUtils.retrievePropertyValues(t));
 		info.sanitize(ThrowableUtils.PROPERTY_SANITIZER);
+		info.setMessage(messageTransformer.apply(info));
 		var throwableCreator = cachedThrowableCreators.computeIfAbsent(type, this::findThrowableCreator);
 		try {
 			Throwable newInstance = throwableCreator.create(info);

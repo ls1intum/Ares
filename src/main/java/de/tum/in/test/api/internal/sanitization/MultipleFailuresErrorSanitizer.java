@@ -30,7 +30,7 @@ enum MultipleFailuresErrorSanitizer implements SpecificThrowableSanitizer {
 		 * So we just pass the message constructed be the old object, as the new object
 		 * will in absence of failures only return the heading.
 		 */
-		MultipleFailuresError newMfe = createNewInstance(mfe, info.getMessage(), List.of());
+		MultipleFailuresError newMfe = createNewInstance(mfe, messageTransformer.apply(info), List.of());
 		SanitizationUtils.copyThrowableInfoSafe(info, newMfe);
 		// Retain failure information in the suppressed Throwables
 		for (Throwable failure : failures)
