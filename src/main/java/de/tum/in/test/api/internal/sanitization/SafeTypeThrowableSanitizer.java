@@ -66,7 +66,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
 		Class<? extends Throwable> type = t.getClass();
 		// this is OK because we are only dealing with safe types here
-		ThrowableInfo info = ThrowableInfo.of(type, ThrowableUtils.retrievePropertyValues(t));
+		ThrowableInfo info = ThrowableInfo.of(type, ThrowableUtils.retrievePropertyValues(t,
+				ThrowableUtils.getRelevantPropertiesWithMethods(type, ThrowableUtils.IGNORE_PROPERTIES)));
 		info.sanitize(ThrowableUtils.PROPERTY_SANITIZER);
 		info.setMessage(messageTransformer.apply(info));
 		var throwableCreator = cachedThrowableCreators.computeIfAbsent(type, this::findThrowableCreator);

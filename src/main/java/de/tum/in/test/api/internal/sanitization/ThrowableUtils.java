@@ -106,6 +106,10 @@ final class ThrowableUtils {
 				.reversed();
 	}
 
+	static Set<Entry<String, Method>> getPropertiesWithMethods(Class<?> type) {
+		return getRelevantPropertiesWithMethods(type, Set.of());
+	}
+
 	static Set<Entry<String, Method>> getRelevantPropertiesWithMethods(Class<?> type, Set<String> namesToIgnore) {
 		return Stream.of(type.getMethods()).map(method -> {
 			var propertyName = extractProperty(method);
@@ -115,22 +119,11 @@ final class ThrowableUtils {
 		}).filter(Objects::nonNull).collect(Collectors.toUnmodifiableSet());
 	}
 
-	static Map<String, Object> retrievePropertyValues(Object instance) {
-		return retrievePropertyValues(instance, getPropertiesWithMethods(instance.getClass()));
-	}
-
 	static Map<String, Object> retrievePropertyValues(Object instance, Set<Entry<String, Method>> properties) {
 		return properties.stream()
 				.collect(Collectors.groupingBy(Map.Entry::getKey,
 						Collectors.mapping(property -> ReflectionSupport.invokeMethod(property.getValue(), instance),
 								Collectors.reducing(null, (a, b) -> a != null ? a : b))));
-	}
-
-	static Set<Entry<String, Method>> getPropertiesWithMethods(Class<?> type) {
-		return Stream.of(type.getMethods()).map(method -> {
-			var propertyName = extractProperty(method);
-			return propertyName == null ? null : Map.entry(propertyName, method);
-		}).filter(Objects::nonNull).collect(Collectors.toUnmodifiableSet());
 	}
 
 	static Map<Class<?>, List<Object>> getValuesByPropertyType(Stream<Entry<String, Method>> propertiesWithMethods,
