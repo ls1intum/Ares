@@ -32,7 +32,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  * <p>
  * The access to <code>java.lang</code> is always allowed and by default, all
  * packages can be used, apart from java.lang.reflect, and internal packages of
- * AJTS.
+ * Ares.
  * <p>
  * <b>This annotation will be overpowered any {@link WhitelistPackage}
  * annotations.</b>

@@ -1,8 +1,8 @@
-# AJTS Security Policy
+# Ares Security Policy
 
 ## Supported Versions
 
-Currently, the only supported AJTS version is whatever the current one is (as shown in the [README](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/README.md)).
+Currently, the only supported Ares version is whatever the current one is (as shown in the [README](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/README.md)).
 See the [Wiki](https://github.com/MaisiKoleni/artemis-java-test-sandbox/wiki) for the changes and how to adjust your tests to them.
 
 ## Reporting a Vulnerability
@@ -12,7 +12,7 @@ simply report it as a bug and [use the bug report template for that](https://git
 
 If what you discovered could be used maliciously or is in another way an actual security vulnerability, please do not make the issue public, but follow these steps:
 - similar to a bug report, collect information how it can be reproduced
-- state the system and the versions that are used, especially your AJTS-Version.
+- state the system and the versions that are used, especially your Ares-Version.
 - provide additional information and context, if possible
 - write that in an email to c.femers@tum.de (if you wish to use PGP, the fingerprint for the email address is `80703280C4ACE4256AABFF825E2C13E54FFC3F2A`)
 
