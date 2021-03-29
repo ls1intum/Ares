@@ -1,9 +1,10 @@
-# Artemis Java Test Sandbox
+# Ares
+### *The Artemis Java Test Sandbox*
 ![Java CI](https://github.com/ls1intum/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
-Artemis Java Test Sandbox *(abbr. AJTS)* is a JUnit 5 extension for easy and secure Java testing
+Ares, also known as Artemis Java Test Sandbox *(abbr. AJTS)*, is a JUnit 5 extension for easy and secure Java testing
 on the interactive learning platform [Artemis](https://github.com/ls1intum/Artemis).
 
 Its main features are
@@ -30,9 +31,9 @@ Its main features are
 
 ## Installation
 
-*Note: AJTS requires at least Java 11.*
+*Note: Ares requires at least Java 11.*
 
-AJTS is provided as Maven dependency. To use AJTS in the test environment of a Maven project, include
+Ares is provided as Maven dependency. To use Ares in the test environment of a Maven project, include
 
 ```xml
 <dependency>
@@ -45,19 +46,19 @@ AJTS is provided as Maven dependency. To use AJTS in the test environment of a M
 
 in the `dependencies` section.
 
-You can now remove dependencies to JUnit 5, AssertJ and Hamcrest if present because AJTS already includes them.
+You can now remove dependencies to JUnit 5, AssertJ and Hamcrest if present because Ares already includes them.
 If you want to use jqwik (>= 1.2.4) or JUnit 4 (JUnit 5 vintage), simply include them in the dependencies section.
 
 
 ## Basic Usage
 
-*AJTS provides a high level of security which comes at the cost of usability.
-Several steps need to be taken in order to make tests work properly, and it might require some time to understand what AJTS does.
-Please study at least this complete basic usage guide before using AJTS in production.*
+*Ares provides a high level of security which comes at the cost of usability.
+Several steps need to be taken in order to make tests work properly, and it might require some time to understand what Ares does.
+Please study at least this complete basic usage guide before using Ares in production.*
 
 #### Table of Contents
 - [Setup](#setup)
-- [Integrating AJTS](#integrating-ajts)
+- [Integrating Ares](#integrating-ares)
 - [What about Security?](#what-about-security)
 - [Further Important Options](#further-important-options)
    - [Path Access and Class Loading](#path-access-and-class-loading)
@@ -137,9 +138,9 @@ Such errors can be explained, but that takes a lot of time, especially if it hap
 
 It is also a security problem again, students could try to read the `.java` files containing the test classes.
 
-### Integrating AJTS
+### Integrating Ares
 
-Therefore, we will use AJTS to secure the tests and avoid unintelligible feedback. The most basic way to do this is by using the `@Public` and `@Hidden` annotations:
+Therefore, we will use Ares to secure the tests and avoid unintelligible feedback. The most basic way to do this is by using the `@Public` and `@Hidden` annotations:
 
 ```Java
 import static org.junit.jupiter.api.Assertions.*;
@@ -169,7 +170,7 @@ public class PenguinTest {
 The code above won't work just like that, if you try to run it as is, you will get the following reported by JUnit:<br>
 `java.lang.annotation.AnnotationFormatError: cannot find a deadline for hidden test testPenguinHidden()`
 
-AJTS needs to know what the deadline is. We tell AJTS with another annotation:
+Ares needs to know what the deadline is. We tell Ares with another annotation:
 ```Java
 // Format must be ISO_LOCAL_DATE(T| )ISO_LOCAL_TIME( ZONE_ID)?
 @Deadline("2020-06-09 03:14 Europe/Berlin")
@@ -177,13 +178,13 @@ public class PenguinTest {
     // ...
 }
 ```
-That annotation (like most of the AJTS annotations) can also be placed on the test method (and nested classes), if multiple are present, the one that is closest to the test case is used.
+That annotation (like most of the Ares annotations) can also be placed on the test method (and nested classes), if multiple are present, the one that is closest to the test case is used.
 
 Now, it already works! Try to play around with the deadline in the annotation. If the given `LocalDateTime` lies in the past, the test case is executed and - together with the student code presented earlier - passes.
 If the deadline hasn't passed, the test case won't pass either. It fails with
 `org.opentest4j.AssertionFailedError: hidden tests will be executed after the deadline.` and the test was not executed, as the deadline is always checked before any hidden test case is executed.
 
-You might have noticed that we specify the time zone as well. Although the annotation parser permits leaving it unspecified, this bears the risk of (not) executing the tests at the correct time if the build agents time zone is different from the one on your machine or what you would expect it to be. If you run tests where the time zone is/was not set, AJTS will warn your about that in the logs.
+You might have noticed that we specify the time zone as well. Although the annotation parser permits leaving it unspecified, this bears the risk of (not) executing the tests at the correct time if the build agents time zone is different from the one on your machine or what you would expect it to be. If you run tests where the time zone is/was not set, Ares will warn your about that in the logs.
 
 ### What about Security?
 
@@ -195,15 +196,15 @@ public String getName() {
     return name;
 }
 ```
-You will now with AJTS get the following error message:
+You will now with Ares get the following error message:
 
 ```
 java.lang.SecurityException: do not use System.exit(int)
 /// potential problem location: Penguin.getName(Penguin.java:12) ///
 ```
 
-As you might be able to see, AJTS threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`.
-This is the line from the stack trace which AJTS thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code.
+As you might be able to see, Ares threw a SecurityException. But it also added `/// potential problem location: Penguin.getName(Penguin.java:12) ///`.
+This is the line from the stack trace which Ares thinks is most relevant for the student, essentially, it searches for the uppermost stack frame that is located in the students code.
 Student code is basically everything that is not whitelisted.
 
 But what is whitelisted?
@@ -212,7 +213,7 @@ But what is whitelisted?
   Therefore, **never use such package names for student assignments!**
 - Classes whitelisted using `@WhitelistClass`
 
-AJTS also grants permissions that are requested by certain actions (`System.exit`, File IO, Networking, Threads, ...) based on whitelisted stack frames. **AJTS granting a permission requires all stack frames to be whitelisted.**
+Ares also grants permissions that are requested by certain actions (`System.exit`, File IO, Networking, Threads, ...) based on whitelisted stack frames. **Ares granting a permission requires all stack frames to be whitelisted.**
 
 Another test:<br>
 Adding one of the following lines to `testPenguinPublic()` itself and it will still pass using the correct student code:
@@ -230,8 +231,8 @@ By the way, adding `@WhitelistClass(Penguin.class)` to the test class or method 
 
 ### Further Important Options
 
-Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with AJTS, as this was just a very basic example with a single class and not much testing.
-Without further knowledge, you might not get AJTS to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
+Are we done now? With the most fundamental parts yes, but there is a bit more you need to know about testing with Ares, as this was just a very basic example with a single class and not much testing.
+Without further knowledge, you might not get Ares to work and consequently get rather annoyed or even enraged. To prevent that, please read on.
 
 #### Path Access and Class Loading
 You can use `@WhitelistPath` and `@BlacklistPath` to control access to paths. By default, no access is granted, and so you need to use `@WhitelistPath` to give student code the permission to read and write files explicitly.
@@ -246,7 +247,7 @@ You can recognize that in the standard error output:
 ```
 This usually means the class loader could not load the class. The parentheses show, that the problem is the missing whitelisting. **Therefore, all test setups should have some whitelisting.**
 
-A number of examples how you can whitelist paths in AJTS:
+A number of examples how you can whitelist paths in Ares:
 - `@WhitelistPath("")` will grant read access to the paths in the directory of execution, which is usually where the `pom.xml` is.
 - `@WhitelistPath("pom.xml")` will allow students to read the `pom.xml`.
 - `@WhitelistPath("..")` will allow read access to the level above the maven project. In Eclipse, that is the level of your workspace.
@@ -294,21 +295,21 @@ There are three different ways how the timeouts can work:
    7. Should that fail, report a special SecurityException that not all threads could be stopped.
       (see the standard error output for a detailed report then) *If that happens, no more tests can be properly executed because the security cannot be guaranteed and the test cases cannot be executed "in isolation". All following tests will fail.*
 
-**Rule 1: When testing with AJTS, always use `@StrictTimeout` for timeouts, the others will not work reliably especially in conjunction with the AJTS security.**
+**Rule 1: When testing with Ares, always use `@StrictTimeout` for timeouts, the others will not work reliably especially in conjunction with the Ares security.**
 
 **Rule 2: When writing tests for Artemis, always use `@StrictTimeout`.** There is no reason to omit the timeout, since you do not know the code students will write. (And they will write code spawning millions of threads in endless loops which in turn will do the same recursively.)
 
 #### Showing Standard Output
 
-By default, AJTS will record standard and error output of each test internally and not print it to the console. The recorded output can then be obtained and tested, see [`IOTester`](#testing-console-interaction)
+By default, Ares will record standard and error output of each test internally and not print it to the console. The recorded output can then be obtained and tested, see [`IOTester`](#testing-console-interaction)
 The reason for this is on the one hand to keep the console and logs short and clean and on the other hand prevent students from accidentally messing up the logs with millions of lines.
-AJTS also has a hard limit on the total number of printed chars around 10 million.
+Ares also has a hard limit on the total number of printed chars around 10 million.
 
-To mirror the output recorded by AJTS to the console, use the `@MirrorOutput` annotation on the test class or method.
+To mirror the output recorded by Ares to the console, use the `@MirrorOutput` annotation on the test class or method.
 
 #### Testing the Exercise before Release
 
-Hidden tests will be executed by AJTS only after the deadline. This poses the problem, how the exercise creators should work on the tasks, tests and the sample solution. One possible solution would be to use an alternative deadline annotation or change the deadline temporarily.
+Hidden tests will be executed by Ares only after the deadline. This poses the problem, how the exercise creators should work on the tasks, tests and the sample solution. One possible solution would be to use an alternative deadline annotation or change the deadline temporarily.
 The problem is that it is quite likely one might forget to change it back again, and protecting the hidden tests would fail.
 
 Use `@ActivateHiddenBefore` just like `@Deadline` to state the LocalDateTime before which hidden tests should be executed. This Date should of course be before the release of the exercise on Artemis.
@@ -320,10 +321,10 @@ If you use the annotation on different levels (e.g. class and method) without st
 
 #### Threads and Concurrency
 
-By default, AJTS will not allow non-whitelisted code to use Threads at all. That includes thread pools, but excludes the common pool and its users, like parallel streams. To allow the use of Threads, use the annotation `@AllowThreads`.
+By default, Ares will not allow non-whitelisted code to use Threads at all. That includes thread pools, but excludes the common pool and its users, like parallel streams. To allow the use of Threads, use the annotation `@AllowThreads`.
 The number of active threads is also limited, the default value of that is 1000, but can be changed in the annotation. Please keep in mind that this limit should not be larger than 1000 to prevent performance and timeout chaos.
 
-New threads are for security reasons not directly whitelisted by AJTS and will not be allowed to do anything security critical.
+New threads are for security reasons not directly whitelisted by Ares and will not be allowed to do anything security critical.
 If you trust a thread (at least its entry point), you can explicitly request the thread to be whitelisted using `ArtemisSecurityManager.requestThreadWhitelisting(Thread)`.
 The thread calling the method and its stack must be whitelisted, of course.
 
@@ -339,17 +340,10 @@ In progress, see also `@AllowLocalPort`.
 
 #### Older Versions
 
-For versions prior to `1.0.0`, this repository block had to be added to the `pom.xml`:
-```xml
-<repositories>
-    <repository>
-        <id>ajts</id>
-        <name>AJTS Maven Packages</name>
-        <url>https://gitlab.com/ajts-mvn/repo/raw/master/</url>
-    </repository>
-</repositories>
-```
-**Using older AJTS versions is highly discouraged, remove these repository declarations and update to the newest AJTS version
+For versions prior to `1.0.0`, a repository block had to be added to `<repositories>` section of the `pom.xml`
+that referenced the Maven repository URL `https://gitlab.com/ajts-mvn/repo/raw/master/`.
+
+**Using older Ares versions is highly discouraged, remove these repository declarations and update to the newest Ares version
 if they appear in your projects.**
 
 #### GitHub Packages
@@ -359,8 +353,8 @@ packages. Therefore, you will need to authenticate to GitHub if you use
 ```xml
 <repositories>
     <repository>
-        <id>ajts</id>
-        <name>AJTS Maven Packages</name>
+        <id>ares</id>
+        <name>Ares Maven Packages</name>
         <url>https://maven.pkg.github.com/ls1intum/artemis-java-test-sandbox</url>
     </repository>
 </repositories>
@@ -368,4 +362,4 @@ packages. Therefore, you will need to authenticate to GitHub if you use
 
 ## License
 
-AJTS was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE).
+Ares was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE).

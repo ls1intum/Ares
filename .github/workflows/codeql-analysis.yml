@@ -45,9 +45,9 @@ jobs:
       uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
-        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        key: ares-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ajts-maven-
+          ares-maven-
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)

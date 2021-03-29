@@ -14,7 +14,7 @@ final class ThrowableSets {
 	/**
 	 * Classes in this set must satisfy that ...
 	 * <ul>
-	 * <li>they are known and trusted at compile time of AJTS <b>and</b></li>
+	 * <li>they are known and trusted at compile time of Ares <b>and</b></li>
 	 * <li>they have no more fields than Throwable itself <b>or</b></li>
 	 * <li>all their fields are (recursively) final and immutable classes, all of
 	 * which are known and trusted at compile time <b>or</b></li>

@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve AJTS
+about: Create a report to help us improve Ares
 title: ''
 labels: ''
 assignees: ''
@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Desktop (please complete the following information):**
  - OS:
  - IDE: [or other development environment]
- - AJTS-Version: [maybe Artemis version as well]
+ - Ares-Version: [maybe Artemis version as well]
 
 **Additional context**
 Add any other context about the problem here.

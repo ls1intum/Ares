@@ -28,9 +28,9 @@ jobs:
       uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
-        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        key: ares-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ajts-maven-
+          ares-maven-
     - name: Test with Maven and JDK ${{ matrix.java }}
       run: mvn -B clean test
   code-style:
@@ -46,9 +46,9 @@ jobs:
       uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
-        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        key: ares-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ajts-maven-
+          ares-maven-
     - name: Check code style with Maven
       run: mvn -B spotless:check
   sonar-scanner:
@@ -68,9 +68,9 @@ jobs:
       uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
-        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        key: ares-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ajts-maven-
+          ares-maven-
     - name: Run SonarScanner for SonarCloud
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,9 +90,9 @@ jobs:
       uses: actions/cache@v2.1.4
       with:
         path: ~/.m2/repository
-        key: ajts-maven-${{ hashFiles('**/pom.xml') }}
+        key: ares-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ajts-maven-
+          ares-maven-
     - name: Build and Deploy with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

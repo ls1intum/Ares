@@ -5,8 +5,8 @@
 	<groupId>de.tum.in.ase</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
 	<version>1.5.3-SNAPSHOT</version>
-	<name>Artemis Java Test Sandbox</name>
-	<description>JUnit 5 Extension API for secure Artemis Java Testing</description>
+	<name>Ares</name>
+	<description>The Artemis Java Test Sandbox. A JUnit 5 Extension for secure Artemis Java Testing.</description>
 	<url>https://github.com/ls1intum/artemis-java-test-sandbox</url>
 	<inceptionYear>2019</inceptionYear>
 	<licenses>

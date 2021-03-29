@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for AJTS
+about: Suggest an idea for Ares
 title: ''
 labels: ''
 assignees: ''
@@ -19,5 +19,5 @@ A clear and concise description of any alternative solutions or features you've 
 **Additional context**
 Add any other context or screenshots about the feature request here.
 
-**AJTS-Version you are using**
-E.g. 0.4.2
+**Ares-Version you are using**
+E.g. 1.5.2
