@@ -1,4 +1,5 @@
-# Ares (Artemis Java Test Sandbox)
+# Ares
+### *The Artemis Java Test Sandbox*
 ![Java CI](https://github.com/ls1intum/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org)
