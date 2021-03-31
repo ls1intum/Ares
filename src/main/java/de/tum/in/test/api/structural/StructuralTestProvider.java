@@ -8,11 +8,9 @@ import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,7 +110,7 @@ public abstract class StructuralTestProvider {
 			fail(classNameScanMessage);
 		}
 		try {
-			return Class.forName(expectedClassStructure.getQualifiedClassName());
+			return Class.forName(expectedClassStructure.getQualifiedClassName(), false, StructuralTestProvider.class.getClassLoader());
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
 			// Note: this error happens when the ClassNameScanner finds the correct file,
 			// e.g. 'Course.java', but the class 'Course' was not yet created correctly in
@@ -152,18 +150,51 @@ public abstract class StructuralTestProvider {
 		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0) {
 			return true;
 		}
+
 		/*
-		 * If the number of the modifiers does not match, then the modifiers per se do
-		 * not match either.
+		 * Otherwise check if all expected necessary modifiers are contained in the array of the
+		 * observed ones and if any forbidden modifiers were used.
 		 */
-		if (observedModifiers.length != expectedModifiers.length()) {
-			return false;
+		Set<ModifierSpecification> modifierSpecifications = new HashSet<>();
+		for(int i = 0; i < expectedModifiers.length(); i++) {
+			modifierSpecifications.add(ModifierSpecification.getModifierForJSONString(expectedModifiers.getString(i)));
 		}
-		/*
-		 * Otherwise check if all expected modifiers are contained in the array of the
-		 * observed ones. If at least one isn't, then the modifiers don't match.
-		 */
-		return Arrays.asList(observedModifiers).containsAll(expectedModifiers.toList());
+		Set<String> observedModifiersSet = Set.of(observedModifiers);
+		Set<String> allowedModifiers = modifierSpecifications.stream().map(ModifierSpecification::getModifier).collect(Collectors.toSet());
+		boolean hasAllNecessaryModifiers = modifierSpecifications.stream().filter(ModifierSpecification::isRequired)
+				.map(ModifierSpecification::getModifier).allMatch(observedModifiersSet::contains);
+		boolean hasForbiddenModifier = observedModifiersSet.stream().anyMatch(modifier -> !allowedModifiers.contains(modifier));
+
+		return hasAllNecessaryModifiers && !hasForbiddenModifier;
+	}
+
+	private static final class ModifierSpecification {
+		private final String modifier;
+		private final boolean optional;
+
+		private ModifierSpecification(String modifier, boolean optional) {
+			this.modifier = modifier;
+			this.optional = optional;
+		}
+
+		String getModifier() {
+			return modifier;
+		}
+
+		boolean isRequired() {
+			return !optional;
+		}
+
+		static ModifierSpecification getModifierForJSONString(String jsonString) {
+			String[] sections = jsonString.split(":", -1);
+			if(sections.length == 1) {
+				return new ModifierSpecification(jsonString, false);
+			} else if(sections[0].equals("optional")) {
+				return new ModifierSpecification(sections[1].trim(), true);
+			} else {
+				throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'");
+			}
+		}
 	}
 
 	protected static boolean checkAnnotations(Annotation[] observedAnnotations, JSONArray expectedAnnotations) {

@@ -21,6 +21,7 @@ class StructuralTest {
 	private final String testAttributesSomeClass = "testAttributes()/dynamic-test:#2";
 	private final String testAttributesSomeEnum = "testAttributes()/dynamic-test:#3";
 	private final String testAttributesSomeAbstractClass = "testAttributes()/dynamic-test:#4";
+	private final String testAttributesSomeFailingClass = "testAttributes()/dynamic-test:#5";
 	private final String testClassDoesNotExist = "testClasses()/dynamic-test:#1";
 	private final String testClassSomeInterface = "testClasses()/dynamic-test:#2";
 	private final String testClassMisspelledClas = "testClasses()/dynamic-test:#3";
@@ -35,6 +36,8 @@ class StructuralTest {
 	private final String testMethodsSomeClass = "testMethods()/dynamic-test:#2";
 	private final String testMethodsSomeEnum = "testMethods()/dynamic-test:#3";
 	private final String testMethodsSomeAbstractClass = "testMethods()/dynamic-test:#4";
+
+
 
 	@TestTest
 	void test_testAttributesSomeInterface() {
@@ -61,6 +64,14 @@ class StructuralTest {
 						"The modifier(s) (access type, abstract, etc.) of the expected attribute 'someInt' "
 								+ "of the class 'SomeAbstractClass' are not implemented as expected."));
 	}
+
+	@TestTest
+	void test_testAttributesSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testAttributesSomeFailingClass, IllegalArgumentException.class,
+						"Invalid entry for modifier: 'penguin: final'"));
+	}
+
 
 	@TestTest
 	void test_testClassDoesNotExist() {
