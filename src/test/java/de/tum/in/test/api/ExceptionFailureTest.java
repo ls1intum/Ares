@@ -1,5 +1,6 @@
 package de.tum.in.test.api;
 
+import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
@@ -8,6 +9,7 @@ import org.assertj.core.api.SoftAssertionError;
 import org.assertj.core.error.AssertJMultipleFailuresError;
 import org.assertj.core.error.MultipleAssertionsError;
 import org.junit.platform.testkit.engine.Events;
+import org.opentest4j.AssertionFailedError;
 import org.opentest4j.MultipleFailuresError;
 
 import de.tum.in.test.api.util.UnexpectedExceptionError;
@@ -23,8 +25,9 @@ class ExceptionFailureTest {
 	@UserTestResults
 	private static Events tests;
 
-	private final String assertionFailed = "assertionFailed";
 	private final String assertJMultipleFailures = "assertJMultipleFailures";
+	private final String assertionFailOnly = "assertionFailOnly";
+	private final String assertionFailed = "assertionFailed";
 	private final String customException = "customException";
 	private final String exceptionInInitializer = "exceptionInInitializer";
 	private final String faultyGetCauseException = "faultyGetCauseException";
@@ -37,13 +40,6 @@ class ExceptionFailureTest {
 	private final String throwNullPointerException = "throwNullPointerException";
 
 	@TestTest
-	void test_assertionFailed() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(assertionFailed), finishedWithFailure(instanceOf(AssertionError.class),
-						message(m -> m.contains("expected: <1> but was: <2>")))));
-	}
-
-	@TestTest
 	void test_assertJMultipleFailures() {
 		tests.assertThatEvents().haveExactly(1,
 				event(test(assertJMultipleFailures),
@@ -52,6 +48,23 @@ class ExceptionFailureTest {
 										&& m.contains("-- failure 1 --A") //
 										&& m.contains("-- failure 2 --B")),
 								new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"))));
+	}
+
+	@TestTest
+	void test_assertionFailOnly() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(assertionFailOnly, AssertionFailedError.class, "This test failed. Penguin."));
+	}
+
+	@TestTest
+	void test_assertionFailed() {
+		tests.assertThatEvents().haveExactly(1,
+				event(test(assertionFailed), finishedWithFailure(instanceOf(AssertionFailedError.class),
+						message("expected: <1> but was: <2>"), new Condition<>(t -> {
+							var afe = (AssertionFailedError) t;
+							return afe.getActual().getStringRepresentation().equals("2")
+									&& afe.getExpected().getStringRepresentation().equals("1");
+						}, "expected and actual are correct"))));
 	}
 
 	@TestTest

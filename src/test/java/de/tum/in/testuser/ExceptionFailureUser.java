@@ -66,17 +66,22 @@ public class ExceptionFailureUser {
 	}
 
 	@PublicTest
-	void assertionFailed() throws Exception {
-		assertEquals(1, 2);
-	}
-
-	@PublicTest
 	void assertJMultipleFailures() {
 		assertThat("ABC").satisfiesAnyOf(s -> {
 			fail("A");
 		}, s -> {
 			fail("B");
 		});
+	}
+
+	@PublicTest
+	void assertionFailOnly() throws Exception {
+		org.junit.jupiter.api.Assertions.fail("This test failed. Penguin.");
+	}
+
+	@PublicTest
+	void assertionFailed() throws Exception {
+		assertEquals(1, 2);
 	}
 
 	@PublicTest
