@@ -29,6 +29,7 @@ class StructuralTest {
 	private final String testClassSomeEnum = "testClasses()/dynamic-test:#5";
 	private final String testClassSomeAbstractClass = "testClasses()/dynamic-test:#6";
 	private final String testClassMisspelledclass = "testClasses()/dynamic-test:#7";
+	private final String testClassSomeFailingClass = "testClasses()/dynamic-test:#8";
 	private final String testConstructorsSomeClass = "testConstructors()/dynamic-test:#1";
 	private final String testConstructorsSomeEnum = "testConstructors()/dynamic-test:#2";
 	private final String testConstructorsSomeAbstractClass = "testConstructors()/dynamic-test:#3";
@@ -112,6 +113,12 @@ class StructuralTest {
 				"The exercise expects a class with the name Misspelledclass. "
 						+ "We found that you implemented a class MisspelledClass, which deviates from the expectation. "
 						+ "Check for wrong upper case / lower case lettering."));
+	}
+
+	@TestTest
+	void test_testClassSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassSomeFailingClass, AssertionFailedError.class,
+				"The modifier(s) (access type, abstract, etc.) of SomeFailingClass are not implemented as expected."));
 	}
 
 	@TestTest
