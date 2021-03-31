@@ -24,8 +24,13 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 		ValueWrapper actual = afe.getActual();
 		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(t).sanitize();
 		String newMessage = messageTransformer.apply(info);
-		AssertionFailedError newAfe = new AssertionFailedError(newMessage, sanitizeValue(expected),
-				sanitizeValue(actual));
+		AssertionFailedError newAfe;
+		// If both expected and actual are null, this cannot arise from assertEquals,
+		// and thus afe was constructed only by providing a message (and cause)
+		if (expected == null && actual == null)
+			newAfe = new AssertionFailedError(newMessage);
+		else
+			newAfe = new AssertionFailedError(newMessage, sanitizeValue(expected), sanitizeValue(actual));
 		SanitizationUtils.copyThrowableInfoSafe(info, newAfe);
 		return newAfe;
 	}
