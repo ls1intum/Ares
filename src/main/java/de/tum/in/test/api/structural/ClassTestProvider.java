@@ -112,12 +112,13 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 				&& !Modifier.isInterface(observedClass.getModifiers())) {
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
 		}
-		if(expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
+		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
 			JSONArray expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
 			boolean modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "),
 					expectedModifiers);
-			if(!modifiersAreCorrect) {
-				fail("The modifier(s) (access type, abstract, etc.) of " + expectedClassName + NOT_IMPLEMENTED_AS_EXPECTED);
+			if (!modifiersAreCorrect) {
+				fail("The modifier(s) (access type, abstract, etc.) of " + expectedClassName
+						+ NOT_IMPLEMENTED_AS_EXPECTED);
 			}
 		}
 	}

@@ -37,8 +37,6 @@ class StructuralTest {
 	private final String testMethodsSomeEnum = "testMethods()/dynamic-test:#3";
 	private final String testMethodsSomeAbstractClass = "testMethods()/dynamic-test:#4";
 
-
-
 	@TestTest
 	void test_testAttributesSomeInterface() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testAttributesSomeInterface, AssertionFailedError.class,
@@ -67,11 +65,9 @@ class StructuralTest {
 
 	@TestTest
 	void test_testAttributesSomeFailingClass() {
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(testAttributesSomeFailingClass, IllegalArgumentException.class,
-						"Invalid entry for modifier: 'penguin: final'"));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testAttributesSomeFailingClass,
+				IllegalArgumentException.class, "Invalid entry for modifier: 'penguin: final'"));
 	}
-
 
 	@TestTest
 	void test_testClassDoesNotExist() {

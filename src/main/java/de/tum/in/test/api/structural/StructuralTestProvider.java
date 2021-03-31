@@ -8,7 +8,12 @@ import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -36,7 +41,7 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * their access modifiers, annotations and types and the declared enum values of
  * an enum</li>
  * </ol>
- * 
+ *
  * All these elements are tests based on the test.json that specifies the
  * structural oracle, i.e. how the solution has to look like in terms of
  * structural elements. Note: the file test.json can be automatically generated
@@ -52,7 +57,7 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * JUnit) If no attributes and no enums should be tested for correctness, remove
  * {@link AttributeTestProvider}, otherwise one test will fail (limitation of
  * JUnit)
- * 
+ *
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
@@ -110,7 +115,8 @@ public abstract class StructuralTestProvider {
 			fail(classNameScanMessage);
 		}
 		try {
-			return Class.forName(expectedClassStructure.getQualifiedClassName(), false, StructuralTestProvider.class.getClassLoader());
+			return Class.forName(expectedClassStructure.getQualifiedClassName(), false,
+					StructuralTestProvider.class.getClassLoader());
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
 			// Note: this error happens when the ClassNameScanner finds the correct file,
 			// e.g. 'Course.java', but the class 'Course' was not yet created correctly in
@@ -123,7 +129,7 @@ public abstract class StructuralTestProvider {
 
 	/**
 	 * get the expected elements or an empty JSON array
-	 * 
+	 *
 	 * @param element         the class, attribute, method or constructor JSON
 	 *                        object element
 	 * @param jsonPropertyKey the key used in JSON
@@ -152,28 +158,31 @@ public abstract class StructuralTestProvider {
 		}
 
 		/*
-		 * Otherwise check if all expected necessary modifiers are contained in the array of the
-		 * observed ones and if any forbidden modifiers were used.
+		 * Otherwise check if all expected necessary modifiers are contained in the
+		 * array of the observed ones and if any forbidden modifiers were used.
 		 */
 		Set<ModifierSpecification> modifierSpecifications = new HashSet<>();
-		for(int i = 0; i < expectedModifiers.length(); i++) {
-			modifierSpecifications.add(ModifierSpecification.getModifierForJSONString(expectedModifiers.getString(i)));
+		for (int i = 0; i < expectedModifiers.length(); i++) {
+			modifierSpecifications.add(ModifierSpecification.getModifierForJsonString(expectedModifiers.getString(i)));
 		}
 		Set<String> observedModifiersSet = Set.of(observedModifiers);
-		Set<String> allowedModifiers = modifierSpecifications.stream().map(ModifierSpecification::getModifier).collect(Collectors.toSet());
+		Set<String> allowedModifiers = modifierSpecifications.stream().map(ModifierSpecification::getModifier)
+				.collect(Collectors.toSet());
 		boolean hasAllNecessaryModifiers = modifierSpecifications.stream().filter(ModifierSpecification::isRequired)
 				.map(ModifierSpecification::getModifier).allMatch(observedModifiersSet::contains);
-		boolean hasForbiddenModifier = observedModifiersSet.stream().anyMatch(modifier -> !allowedModifiers.contains(modifier));
+		boolean hasForbiddenModifier = observedModifiersSet.stream()
+				.anyMatch(modifier -> !allowedModifiers.contains(modifier));
 
 		return hasAllNecessaryModifiers && !hasForbiddenModifier;
 	}
 
 	private static final class ModifierSpecification {
+
 		private final String modifier;
 		private final boolean optional;
 
 		private ModifierSpecification(String modifier, boolean optional) {
-			this.modifier = modifier;
+			this.modifier = Objects.requireNonNull(modifier);
 			this.optional = optional;
 		}
 
@@ -185,11 +194,11 @@ public abstract class StructuralTestProvider {
 			return !optional;
 		}
 
-		static ModifierSpecification getModifierForJSONString(String jsonString) {
+		static ModifierSpecification getModifierForJsonString(String jsonString) {
 			String[] sections = jsonString.split(":", -1);
-			if(sections.length == 1) {
+			if (sections.length == 1) {
 				return new ModifierSpecification(jsonString, false);
-			} else if(sections[0].equals("optional")) {
+			} else if (sections[0].equals("optional")) {
 				return new ModifierSpecification(sections[1].trim(), true);
 			} else {
 				throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'");
