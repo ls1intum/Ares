@@ -11,6 +11,7 @@ public class SomeClass implements SomeInterface {
 	private String someAttribute;
 	private Integer anotherAttribute;
 	private List<Function<? super String, Integer>> doSomethingOperations;
+	private final int someFinalAttribute = SOME_CONSTANT;
 
 	public SomeClass() {
 	}

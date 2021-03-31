@@ -73,12 +73,16 @@
     "type" : "int"
   }, {
     "name" : "someAttribute",
-    "modifiers" : [ "private" ],
+    "modifiers" : [ "private" , "optional: final"],
     "type" : "String"
   }, {
     "name" : "doSomethingOperations",
     "modifiers" : [ "private" ],
     "type" : "List<Function<? super String, Integer>>"
+  }, {
+    "name" : "someFinalAttribute",
+    "modifiers" : [ "private" , "optional: final"],
+    "type" : "int"
   } ]
 }, {
   "class" : {
@@ -100,7 +104,8 @@
   "class" : {
     "name" : "SomeAbstractClass",
     "package" : "de.tum.in.testuser.subject.structural",
-    "isAbstract" : true
+    "isAbstract" : true,
+    "modifiers" : ["public", "abstract"]
   },
   "methods" : [ {
     "name" : "doNothing",
@@ -122,4 +127,15 @@
     "package" : "de.tum.in.testuser.subject.structural",
     "isInterface" : true
   }
+}, {
+  "class" : {
+    "name" : "SomeFailingClass",
+    "package" : "de.tum.in.testuser.subject.structural",
+    "modifiers" : [ "public", "final" ]
+  },
+  "attributes" : [ {
+    "name" : "SOME_CONSTANT",
+    "modifiers" : [ "penguin: final" ],
+    "type" : "int"
+  } ]
 } ]

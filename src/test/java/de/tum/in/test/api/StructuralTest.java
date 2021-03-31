@@ -21,6 +21,7 @@ class StructuralTest {
 	private final String testAttributesSomeClass = "testAttributes()/dynamic-test:#2";
 	private final String testAttributesSomeEnum = "testAttributes()/dynamic-test:#3";
 	private final String testAttributesSomeAbstractClass = "testAttributes()/dynamic-test:#4";
+	private final String testAttributesSomeFailingClass = "testAttributes()/dynamic-test:#5";
 	private final String testClassDoesNotExist = "testClasses()/dynamic-test:#1";
 	private final String testClassSomeInterface = "testClasses()/dynamic-test:#2";
 	private final String testClassMisspelledClas = "testClasses()/dynamic-test:#3";
@@ -28,6 +29,7 @@ class StructuralTest {
 	private final String testClassSomeEnum = "testClasses()/dynamic-test:#5";
 	private final String testClassSomeAbstractClass = "testClasses()/dynamic-test:#6";
 	private final String testClassMisspelledclass = "testClasses()/dynamic-test:#7";
+	private final String testClassSomeFailingClass = "testClasses()/dynamic-test:#8";
 	private final String testConstructorsSomeClass = "testConstructors()/dynamic-test:#1";
 	private final String testConstructorsSomeEnum = "testConstructors()/dynamic-test:#2";
 	private final String testConstructorsSomeAbstractClass = "testConstructors()/dynamic-test:#3";
@@ -60,6 +62,12 @@ class StructuralTest {
 				testFailedWith(testAttributesSomeAbstractClass, AssertionFailedError.class,
 						"The modifier(s) (access type, abstract, etc.) of the expected attribute 'someInt' "
 								+ "of the class 'SomeAbstractClass' are not implemented as expected."));
+	}
+
+	@TestTest
+	void test_testAttributesSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testAttributesSomeFailingClass,
+				IllegalArgumentException.class, "Invalid entry for modifier: 'penguin: final'"));
 	}
 
 	@TestTest
@@ -105,6 +113,12 @@ class StructuralTest {
 				"The exercise expects a class with the name Misspelledclass. "
 						+ "We found that you implemented a class MisspelledClass, which deviates from the expectation. "
 						+ "Check for wrong upper case / lower case lettering."));
+	}
+
+	@TestTest
+	void test_testClassSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassSomeFailingClass, AssertionFailedError.class,
+				"The modifier(s) (access type, abstract, etc.) of SomeFailingClass are not implemented as expected."));
 	}
 
 	@TestTest
