@@ -21,7 +21,7 @@ enum AssertionFailedErrorSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
 		AssertionFailedError afe = (AssertionFailedError) t;
 		ValueWrapper expected = afe.getExpected();
-		ValueWrapper actual = afe.getExpected();
+		ValueWrapper actual = afe.getActual();
 		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(t).sanitize();
 		String newMessage = messageTransformer.apply(info);
 		AssertionFailedError newAfe = new AssertionFailedError(newMessage, sanitizeValue(expected),
