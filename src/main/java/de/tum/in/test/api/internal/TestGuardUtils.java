@@ -43,7 +43,7 @@ public final class TestGuardUtils {
 	 */
 	private static final String ZONE_ID_START_PATTERN = "[-+A-Za-z].*";
 	private static final Pattern DURATION_PATTERN = Pattern
-			.compile("(?:(?<d>\\d+)d)?\\s*(?:\\b(?<h>\\d+)h)?\\s*(?:\\b(?<m>\\d+)m)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+			.compile("(?:(?<d>\\d++)d)?\\s*+(?:\\b(?<h>\\d++)h)?\\s*+(?:\\b(?<m>\\d++)m)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
 	private TestGuardUtils() {
 
@@ -157,7 +157,7 @@ public final class TestGuardUtils {
 	/**
 	 * Splits the deadline string into the local time part and the time zone part if
 	 * present
-	 * 
+	 *
 	 * @param deadlineString the deadline string of format ISO-LOCAL-DATE(T|
 	 *                       )ISO-LOCAL-TIME( ZONE-ID)?
 	 * @return always a string array of length two, the first part is always the
