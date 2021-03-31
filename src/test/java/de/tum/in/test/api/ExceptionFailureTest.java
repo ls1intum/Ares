@@ -1,6 +1,5 @@
 package de.tum.in.test.api;
 
-import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
@@ -53,7 +52,11 @@ class ExceptionFailureTest {
 	@TestTest
 	void test_assertionFailOnly() {
 		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(assertionFailOnly, AssertionFailedError.class, "This test failed. Penguin."));
+				event(test(assertionFailOnly), finishedWithFailure(instanceOf(AssertionFailedError.class),
+						message("This test failed. Penguin."), new Condition<>(t -> {
+							var afe = (AssertionFailedError) t;
+							return afe.getActual() == null && afe.getExpected() == null;
+						}, "expected and actual are both null"))));
 	}
 
 	@TestTest
