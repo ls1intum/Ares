@@ -1,5 +1,7 @@
 package de.tum.in.test.api.jqwik;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.lang.annotation.AnnotationFormatError;
 import java.util.Locale;
 
@@ -28,7 +30,7 @@ public class JqwikLocaleExtension implements AroundContainerHook {
 		if (annot.isEmpty())
 			return;
 		if (oldLocale != null)
-			throw new AnnotationFormatError("Locale extension already active,");
+			throw new AnnotationFormatError(localized("jqwik.duplicate_locale_extension_failure")); //$NON-NLS-1$
 		oldLocale = Locale.getDefault();
 		var newLocale = new Locale(annot.get().value());
 		Locale.setDefault(newLocale);

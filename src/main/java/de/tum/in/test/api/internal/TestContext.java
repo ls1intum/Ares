@@ -30,8 +30,7 @@ public abstract class TestContext {
 
 	@Override
 	public String toString() {
-		return String.format("TestContext [testMethod()=%s, displayName()=%s, findTestType()=%s]", testMethod(),
+		return String.format("TestContext [testMethod()=%s, displayName()=%s, findTestType()=%s]", testMethod(), //$NON-NLS-1$
 				displayName(), findTestType());
 	}
-
 }

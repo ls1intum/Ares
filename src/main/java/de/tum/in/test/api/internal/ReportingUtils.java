@@ -1,5 +1,7 @@
 package de.tum.in.test.api.internal;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -10,14 +12,12 @@ import org.slf4j.LoggerFactory;
 import de.tum.in.test.api.internal.sanitization.MessageTransformer;
 import de.tum.in.test.api.internal.sanitization.ThrowableInfo;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;
-import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 /**
  * For handling and post processing Exceptions and Errors.
  *
  * @author Christian Femers
- *
  */
 public final class ReportingUtils {
 
@@ -29,7 +29,6 @@ public final class ReportingUtils {
 	}
 
 	private ReportingUtils() {
-
 	}
 
 	public static <T> T doProceedAndPostProcess(Invocation<T> invocation, TestContext context) throws Throwable {
@@ -58,11 +57,11 @@ public final class ReportingUtils {
 	}
 
 	private static Throwable trySanitizeThrowable(Throwable t, MessageTransformer messageTransformer) {
-		String name = "unknown";
+		var name = "unknown"; //$NON-NLS-1$
 		try {
 			name = t.getClass().getName();
 			return ThrowableSanitizer.sanitize(t, messageTransformer);
-		} catch (Throwable sanitizationError) {
+		} catch (Throwable sanitizationError) { //NOSONAR
 			return handleSanitizationFailure(name, sanitizationError);
 		}
 	}
@@ -74,18 +73,18 @@ public final class ReportingUtils {
 	}
 
 	private static Throwable handleSanitizationFailure(String name, Throwable error) {
-		String info = BlacklistedInvoker.invokeOrElse(error::toString, () -> error.getClass().toString());
-		LOG.error("Sanitization failed for {} with error {}", name, info);
-		return new SecurityException(name + " thrown, but cannot be displayed: " + info + "");
+		var info = BlacklistedInvoker.invokeOrElse(error::toString, () -> error.getClass().toString());
+		LOG.error("Sanitization failed for {} with error {}", name, info); //$NON-NLS-1$
+		return new SecurityException(formatLocalized("sanitization.sanitization_failure", name, info)); //$NON-NLS-1$
 	}
 
 	private static void addStackframeInfoToMessage(ThrowableInfo info) {
 		StackTraceElement[] stackTrace = info.getStackTrace();
 		var first = ArtemisSecurityManager.firstNonWhitelisted(stackTrace);
 		if (first.isPresent()) {
-			String call = first.get().toString();
-			info.setMessage(Objects.toString(info.getMessage(), "") + "\n"
-					+ Messages.formatLocalized("reporting.problem_location_hint", call));
+			var call = first.get().toString();
+			info.setMessage(Objects.toString(info.getMessage(), "") + "\n" //$NON-NLS-1$ //$NON-NLS-2$
+					+ formatLocalized("reporting.problem_location_hint", call)); //$NON-NLS-1$
 		}
 	}
 }

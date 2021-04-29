@@ -55,15 +55,15 @@ public enum PathType {
 	GLOB {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			GlobNormalizationResult normalizedGlob = GlobNormalizationResult.normalizeGlobPattern(s);
-			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + normalizedGlob.getNormalizedGlobPattern());
-			return p -> pm.matches(relativizeSafe(p, normalizedGlob.getRelativeOffset()));
+			var normalizedGlob = GlobNormalizationResult.normalizeGlobPattern(s);
+			var pathMatcher = DEFAULT_FS.getPathMatcher(GLOB_PREFIX + normalizedGlob.getNormalizedGlobPattern());
+			return p -> pathMatcher.matches(relativizeSafe(p, normalizedGlob.getRelativeOffset()));
 		}
 
 		@Override
 		public boolean isPatternRecursive(String pathPattern) {
 			// this is definitely safe
-			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**");
+			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	},
 	/**
@@ -74,8 +74,8 @@ public enum PathType {
 	REGEX {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
-			return p -> pm.matches(relativizeSafe(p, NO_OFFSET));
+			var pathMatcher = DEFAULT_FS.getPathMatcher(REGEX_PREFIX + s);
+			return p -> pathMatcher.matches(relativizeSafe(p, NO_OFFSET));
 		}
 
 		@Override
@@ -92,14 +92,14 @@ public enum PathType {
 	GLOB_ABSOLUTE {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			PathMatcher pm = DEFAULT_FS.getPathMatcher("glob:" + s);
-			return p -> pm.matches(p.normalize());
+			var pathMatcher = DEFAULT_FS.getPathMatcher(GLOB_PREFIX + s);
+			return p -> pathMatcher.matches(p.normalize());
 		}
 
 		@Override
 		public boolean isPatternRecursive(String pathPattern) {
 			// this is definitely safe
-			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**");
+			return pathPattern.endsWith("**") && !pathPattern.endsWith("\\**"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	},
 	/**
@@ -110,8 +110,8 @@ public enum PathType {
 	REGEX_ABSOLUTE {
 		@Override
 		public PathMatcher convertToPathMatcher(String s) {
-			PathMatcher pm = DEFAULT_FS.getPathMatcher("regex:" + s);
-			return p -> pm.matches(p.normalize());
+			var pathMatcher = DEFAULT_FS.getPathMatcher(REGEX_PREFIX + s);
+			return p -> pathMatcher.matches(p.normalize());
 		}
 
 		@Override
@@ -120,6 +120,9 @@ public enum PathType {
 			return false;
 		}
 	};
+
+	private static final String GLOB_PREFIX = "glob:"; //$NON-NLS-1$
+	private static final String REGEX_PREFIX = "regex:"; //$NON-NLS-1$
 
 	/**
 	 * @param s the format/pattern
@@ -141,7 +144,7 @@ public enum PathType {
 	public abstract boolean isPatternRecursive(String pathPattern);
 
 	static final FileSystem DEFAULT_FS = FileSystems.getDefault();
-	static final Path CURRENT_PATH = Path.of("").toAbsolutePath();
+	static final Path CURRENT_PATH = Path.of("").toAbsolutePath(); //$NON-NLS-1$
 	static final List<Path> CURRENT_PATH_HIERARCHY = Stream.iterate(CURRENT_PATH, Path::getParent)
 			.takeWhile(Objects::nonNull).collect(Collectors.toUnmodifiableList());
 
@@ -150,19 +153,19 @@ public enum PathType {
 	private static final Pattern GLOB_DOUBLE_DOT_ELIMINATION;
 
 	static {
-		String sepPat = "/".equals(File.separator) ? "/" : "[/\\\\]";
-		String nonSepPat = "/".equals(File.separator) ? "(?!\\.\\./)[^/]+" : "(?!\\.\\.[/\\\\])(?:[^/\\\\])+";
+		String sepPat = "/".equals(File.separator) ? "/" : "[/\\\\]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String nonSepPat = "/".equals(File.separator) ? "(?!\\.\\./)[^/]+" : "(?!\\.\\.[/\\\\])(?:[^/\\\\])+"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		GLOB_SINGLE_DOT_ELIMINATION = Pattern
-				.compile(String.format("^(?:\\.(?:%1$s|$))+|(?:%1$s\\.)(?=%1$s|$)|%1$s$", sepPat));
+				.compile(String.format("^(?:\\.(?:%1$s|$))+|(?:%1$s\\.)(?=%1$s|$)|%1$s$", sepPat)); //$NON-NLS-1$
 		GLOB_DOUBLE_DOT_ELIMINATION = Pattern
-				.compile(String.format("^%2$s%1$s\\.\\.(?:%1$s|$)|%1$s%2$s%1$s\\.\\.(?=%1$s|$)", sepPat, nonSepPat));
+				.compile(String.format("^%2$s%1$s\\.\\.(?:%1$s|$)|%1$s%2$s%1$s\\.\\.(?=%1$s|$)", sepPat, nonSepPat)); //$NON-NLS-1$
 	}
 
 	private static Path relativizeSafe(Path any, int offset) {
-		Path p = any.normalize().toAbsolutePath();
-		if (!Objects.equals(p.getRoot(), CURRENT_PATH.getRoot()))
-			return p;
-		return CURRENT_PATH_HIERARCHY.get(offset).relativize(p).normalize();
+		var path = any.normalize().toAbsolutePath();
+		if (!Objects.equals(path.getRoot(), CURRENT_PATH.getRoot()))
+			return path;
+		return CURRENT_PATH_HIERARCHY.get(offset).relativize(path).normalize();
 	}
 
 	static final class GlobNormalizationResult {
@@ -175,21 +178,21 @@ public enum PathType {
 
 		private GlobNormalizationResult(String globPattern) {
 			String cleaned;
-			cleaned = GLOB_SINGLE_DOT_ELIMINATION.matcher(globPattern).replaceAll("");
+			cleaned = GLOB_SINGLE_DOT_ELIMINATION.matcher(globPattern).replaceAll(""); //$NON-NLS-1$
 			Matcher m;
 			while ((m = GLOB_DOUBLE_DOT_ELIMINATION.matcher(cleaned)).find()) {
-				cleaned = m.replaceAll("");
+				cleaned = m.replaceAll(""); //$NON-NLS-1$
 			}
-			int offset = 0;
-			while (cleaned.startsWith("..")) {
+			var offset = 0;
+			while (cleaned.startsWith("..")) { //$NON-NLS-1$
 				if (cleaned.length() == 2)
-					cleaned = "";
+					cleaned = ""; //$NON-NLS-1$
 				else
 					cleaned = cleaned.substring(3);
 				offset++;
 			}
 			if (offset >= CURRENT_PATH_HIERARCHY.size())
-				throw new IllegalArgumentException("relative glob pattern for current path requires offset " + offset);
+				throw new IllegalArgumentException("relative glob pattern for current path requires offset " + offset); //$NON-NLS-1$
 			this.relativeOffset = offset;
 			this.normalizedGlobPattern = cleaned;
 		}

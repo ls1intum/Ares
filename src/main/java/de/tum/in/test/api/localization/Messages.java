@@ -20,7 +20,6 @@ public final class Messages {
 	private static Map<Locale, ResourceBundle> resourceBundleCache = Collections.synchronizedMap(new LruCache<>(100));
 
 	private Messages() {
-
 	}
 
 	public static String localized(String key) {

@@ -1,5 +1,7 @@
 package de.tum.in.test.api.io;
 
+import static de.tum.in.test.api.localization.Messages.*;
+
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -8,7 +10,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,13 +36,14 @@ public final class OutputTester implements LineAcceptor {
 
 	private static final int MAX_SPACES = 16;
 	private static final int RANDOM_BOUND = MAX_SPACES * MAX_SPACES;
-	private static final char[] SPACES = " ".repeat(MAX_SPACES).toCharArray();
+	private static final char[] SPACES = " ".repeat(MAX_SPACES).toCharArray(); //$NON-NLS-1$
 	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-	private static final Pattern EXPECTED_LINE_PATTERN = Pattern.compile("`" // line start
-			+ "\\(\\?x\\)" // comments enabled
-			+ "#([0-9A-F]{8})\\R" // the line number
-			+ ".+`" // actual line content and end of line
-			+ "(?=[^`]*(?:\\R|$))" // lookahead for not quoted text and then line break or end of the string
+	private static final Pattern EXPECTED_LINE_PATTERN = Pattern.compile("`" // line start //$NON-NLS-1$
+			+ "\\(\\?x\\)" // comments enabled //$NON-NLS-1$
+			+ "#([0-9A-F]{8})\\R" // the line number //$NON-NLS-1$
+			+ ".+`" // actual line content and end of line //$NON-NLS-1$
+			+ "(?=[^`]*(?:\\R|$))" // lookahead for not quoted text and then line break or end of the //$NON-NLS-1$
+									// string
 	);
 
 	private final List<Line> actualOutput = new ArrayList<>();
@@ -68,12 +70,12 @@ public final class OutputTester implements LineAcceptor {
 			currentLine = (DynamicLine) getCurrentLine().get();
 		}
 		// add lines
-		int lastPos = 0;
-		boolean lastWasCarriageReturn = false;
-		for (int i = 0; i < output.length(); i++) {
-			char c = output.charAt(i);
-			if (c == '\r' || c == '\n') {
-				if (c == '\n' && lastWasCarriageReturn) {
+		var lastPos = 0;
+		var lastWasCarriageReturn = false;
+		for (var i = 0; i < output.length(); i++) {
+			var character = output.charAt(i);
+			if (character == '\r' || character == '\n') {
+				if (character == '\n' && lastWasCarriageReturn) {
 					lastPos++;
 				} else {
 					currentLine.append(output.subSequence(lastPos, i));
@@ -82,7 +84,7 @@ public final class OutputTester implements LineAcceptor {
 					addNewLine(currentLine);
 					lastPos = i + 1;
 				}
-				lastWasCarriageReturn = c == '\r';
+				lastWasCarriageReturn = character == '\r';
 			} else if (lastWasCarriageReturn) {
 				lastWasCarriageReturn = false;
 			}
@@ -208,13 +210,13 @@ public final class OutputTester implements LineAcceptor {
 		var lines = Stream.of(expectedLines).flatMap(String::lines).collect(Collectors.toList());
 		var lineCount = lines.size();
 		var expectedLinePatterns = new ArrayList<String>();
-		for (int i = 0; i < lineCount; i++) {
+		for (var i = 0; i < lineCount; i++) {
 			String line = lines.get(i);
 			// use StringBuilder as we have potentially many operations on the same string
-			StringBuilder newLine = new StringBuilder(line);
+			var newLine = new StringBuilder(line);
 			// remember what the user wants this line to be
 			boolean isRegEx = isRegExLine(line);
-			boolean isFastForward = !isRegEx && line.startsWith(">>") && line.endsWith(">>");
+			boolean isFastForward = !isRegEx && line.startsWith(">>") && line.endsWith(">>"); //$NON-NLS-1$ //$NON-NLS-2$
 			// remove escapes and our own special notation
 			if (startsWithEscape(line)) {
 				// remove char used for escape
@@ -230,11 +232,11 @@ public final class OutputTester implements LineAcceptor {
 					newLine.replace(0, newLine.length(), Pattern.quote(newLine.toString()));
 				}
 				// insert random comment to avoid equality comparison working
-				newLine.insert(0, String.format("(?x)#%08X%n", i));
+				newLine.insert(0, String.format("(?x)#%08X%n", i)); //$NON-NLS-1$
 				newLine.append('#').append(randomString);
 			} else {
 				// add a random number of spaces both to the front and back
-				int spacesRandom = ThreadLocalRandom.current().nextInt(RANDOM_BOUND);
+				var spacesRandom = ThreadLocalRandom.current().nextInt(RANDOM_BOUND);
 				int front = spacesRandom % MAX_SPACES;
 				int back = spacesRandom / MAX_SPACES;
 				newLine.insert(2, SPACES, 0, front);
@@ -249,23 +251,23 @@ public final class OutputTester implements LineAcceptor {
 		} catch (AssertionFailedError afe) {
 			throw tryCleanUpAssertionFailedError(lines, afe);
 		} catch (@SuppressWarnings("unused") NoSuchElementException nsee) {
-			throw new AssertionFailedError("The output does not contain enough lines for the test to work, only "
-					+ linesAsString.size() + " lines found.");
+			throw new AssertionFailedError(
+					formatLocalized("output_tester.line_matching_not_enough_lines", linesAsString.size())); //$NON-NLS-1$
 		}
 	}
 
 	private static AssertionFailedError tryCleanUpAssertionFailedError(List<String> lines, AssertionFailedError afe) {
-		String failureMessage = afe.getMessage();
-		Matcher matcher = EXPECTED_LINE_PATTERN.matcher(failureMessage);
+		var failureMessage = afe.getMessage();
+		var matcher = EXPECTED_LINE_PATTERN.matcher(failureMessage);
 		if (matcher.find()) {
-			int lineNumber = Integer.parseInt(matcher.group(1), 16);
-			String expectedLine = lines.get(lineNumber);
-			StringBuilder cleanExpectedLine = new StringBuilder(expectedLine);
+			var lineNumber = Integer.parseInt(matcher.group(1), 16);
+			var expectedLine = lines.get(lineNumber);
+			var cleanExpectedLine = new StringBuilder(expectedLine);
 			if (startsWithEscape(expectedLine))
 				cleanExpectedLine.append('`').setCharAt(0, '`');
 			else if (isRegExLine(expectedLine))
 				cleanExpectedLine.delete(0, 2).delete(cleanExpectedLine.length() - 2, cleanExpectedLine.length())
-						.insert(0, "matches regular expression: `").append('`');
+						.insert(0, " `").insert(0, localized("output_tester.line_matching_regex_mismatch")).append('`'); //$NON-NLS-1$ //$NON-NLS-2$
 			else
 				cleanExpectedLine.insert(0, '`').append('`');
 			String newFailureMessage = matcher.replaceFirst(cleanExpectedLine.toString());
@@ -289,11 +291,11 @@ public final class OutputTester implements LineAcceptor {
 	}
 
 	private static boolean startsWithEscape(String line) {
-		return line.startsWith("\\||") || line.startsWith("\\>>");
+		return line.startsWith("\\||") || line.startsWith("\\>>"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static boolean isRegExLine(String expectedLine) {
-		return expectedLine.startsWith("||") && expectedLine.endsWith("||");
+		return expectedLine.startsWith("||") && expectedLine.endsWith("||"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private List<Line> processLines(OutputTestOptions... outputOptions) {

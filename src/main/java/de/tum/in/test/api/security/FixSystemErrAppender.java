@@ -9,6 +9,7 @@ import de.tum.in.test.api.io.IOTester;
  * System.err, which is not what we want because it collides with the
  * {@link IOTester}
  *
+ * @param <E> the type of the events that the appender handles
  * @author Christian Femers
  */
 public class FixSystemErrAppender<E> extends OutputStreamAppender<E> {

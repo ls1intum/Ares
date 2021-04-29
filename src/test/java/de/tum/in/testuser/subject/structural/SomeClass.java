@@ -49,7 +49,7 @@ public class SomeClass implements SomeInterface {
 
 	@Override
 	public int doSomethingElse(int someInt) {
-		return Math.max(SOME_CONSTANT, someInt);
+		return Math.max(someFinalAttribute, someInt);
 	}
 
 	public void throwException() {

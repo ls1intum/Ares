@@ -41,7 +41,7 @@ public class DynamicField<T> implements Checkable {
 			var of = findField(owner.toClass());
 			if (of.isPresent()) {
 				field = of.get();
-				field.setAccessible(true);
+				field.setAccessible(true); //NOSONAR
 			} else
 				fail("Feld " + name + " konnte nicht gefunden werden");
 		}

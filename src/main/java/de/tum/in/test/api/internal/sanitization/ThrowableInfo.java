@@ -115,7 +115,7 @@ public final class ThrowableInfo {
 		cause = ThrowableSanitizer.sanitize(cause);
 		// defensive copy
 		suppressed = suppressed.clone();
-		for (int i = 0; i < suppressed.length; i++)
+		for (var i = 0; i < suppressed.length; i++)
 			suppressed[i] = ThrowableSanitizer.sanitize(suppressed[i]);
 		sanitized = additionalProperties.isEmpty();
 		return this;
@@ -214,7 +214,7 @@ public final class ThrowableInfo {
 		@SuppressWarnings("unchecked")
 		final T cast(Object value) {
 			if (value == null && type.isPrimitive())
-				throw new NullPointerException("cannot cast null to primitive: " + type);
+				throw new NullPointerException("cannot cast null to primitive: " + type); //$NON-NLS-1$
 			if (byte.class.equals(type))
 				return (T) Byte.class.cast(value);
 			if (short.class.equals(type))

@@ -20,13 +20,13 @@ import org.junit.platform.commons.support.ReflectionSupport;
 
 final class ThrowableUtils {
 
-	static final String MESSAGE = "message";
-	static final String CAUSE = "cause";
-	static final String STACK_TRACE = "stackTrace";
-	static final String SUPPRESSED = "suppressed";
+	static final String MESSAGE = "message"; //$NON-NLS-1$
+	static final String CAUSE = "cause"; //$NON-NLS-1$
+	static final String STACK_TRACE = "stackTrace"; //$NON-NLS-1$
+	static final String SUPPRESSED = "suppressed"; //$NON-NLS-1$
 
-	static final Set<String> IGNORE_PROPERTIES = Set.of("class", "toString", "hashCode", "fillInStackTrace",
-			"localizedMessage");
+	static final Set<String> IGNORE_PROPERTIES = Set.of("class", "toString", "hashCode", "fillInStackTrace", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			"localizedMessage"); //$NON-NLS-1$
 
 	static final Set<String> THROWABLE_PROPERTIES = Stream
 			.concat(IGNORE_PROPERTIES.stream(), Stream.of(MESSAGE, STACK_TRACE, CAUSE, SUPPRESSED))
@@ -54,7 +54,6 @@ final class ThrowableUtils {
 			});
 
 	private ThrowableUtils() {
-
 	}
 
 	static ThrowableCreator getThrowableCreatorFor(Class<? extends Throwable> type) {
@@ -100,7 +99,7 @@ final class ThrowableUtils {
 				.mapToLong(e -> propertyTypeCount.getOrDefault(e.getKey(), 0L) - e.getValue()).min().orElse(0) >= 0;
 	}
 
-	static Comparator<Constructor<?>> getConstructorPreferenceOrder() {
+	static Comparator<Constructor<?>> getConstructorPreferenceOrder() { //NOSONAR
 		return Comparator.<Constructor<?>>comparingInt(Constructor::getParameterCount)
 				.thenComparingLong(x -> Stream.of(x.getParameterTypes()).filter(String.class::equals).count())
 				.reversed();
@@ -140,8 +139,8 @@ final class ThrowableUtils {
 		if (void.class.equals(method.getReturnType()))
 			return null;
 		String name = method.getName();
-		if (name.startsWith("get") && name.length() > 3 && Character.isUpperCase(name.charAt(3))) {
-			StringBuilder propertyName = new StringBuilder(name);
+		if (name.startsWith("get") && name.length() > 3 && Character.isUpperCase(name.charAt(3))) { //$NON-NLS-1$
+			var propertyName = new StringBuilder(name);
 			propertyName.delete(0, 3);
 			propertyName.setCharAt(0, Character.toLowerCase(propertyName.charAt(0)));
 			name = propertyName.toString();

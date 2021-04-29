@@ -31,7 +31,7 @@ public final class ArtemisSecurityConfiguration {
 	private final Set<PackageRule> whitelistedPackages;
 	private final Set<PackageRule> trustedPackages;
 
-	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath,
+	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, //NOSONAR
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,
@@ -131,10 +131,10 @@ public final class ArtemisSecurityConfiguration {
 
 	@Override
 	public String toString() {
-		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s,"
-				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s,"
-				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s,"
-				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s]", whitelistedClassNames,
+		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s," //$NON-NLS-1$
+				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s," //$NON-NLS-1$
+				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s," //$NON-NLS-1$
+				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s]", whitelistedClassNames, //$NON-NLS-1$
 				executionPath, testClass, testMethod, whitelistedPaths, blacklistedPaths, allowedLocalPorts,
 				allowLocalPortsAbove, excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages,
 				trustedPackages);
@@ -142,7 +142,7 @@ public final class ArtemisSecurityConfiguration {
 
 	public String shortDesc() {
 		return String.format(
-				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s, trustedPackages=%s]",
+				"ASC-Impl [testMethod=%s, executionPath=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s, trustedPackages=%s]", //$NON-NLS-1$
 				testMethod, executionPath, whitelistedPaths, blacklistedPaths, allowedLocalPorts, trustedPackages);
 	}
 }

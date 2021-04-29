@@ -55,7 +55,7 @@ final class SanitizationUtils {
 			return sanitizationAction.executeSanitization();
 		} catch (SanitizationException sanitizationException) {
 			throw sanitizationException;
-		} catch (Throwable t) {
+		} catch (Throwable t) { //NOSONAR
 			throw new SanitizationException(scope, t);
 		}
 	}

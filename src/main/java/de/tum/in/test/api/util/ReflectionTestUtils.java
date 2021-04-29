@@ -40,7 +40,6 @@ public final class ReflectionTestUtils {
 	private static final String THE_CONSTRUCTOR_WITH = " the constructor with ";
 
 	private ReflectionTestUtils() {
-
 	}
 
 	/**
@@ -52,9 +51,8 @@ public final class ReflectionTestUtils {
 	 */
 	public static Class<?> getClazz(String qualifiedClassName) {
 		// The simple class name is the last part of the qualified class name.
-		String[] qualifiedClassNameSegments = qualifiedClassName.split("\\.");
-		String className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
-
+		var qualifiedClassNameSegments = qualifiedClassName.split("\\.");
+		var className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
 		try {
 			return Class.forName(qualifiedClassName);
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
@@ -103,10 +101,9 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Class<?> clazz, Object... constructorArgs) {
-		String failMessage = "Could not instantiate the class " + clazz.getSimpleName() + BECAUSE;
-		Class<?>[] constructorArgTypes = getParameterTypes(
-				failMessage + " a fitting constructor could not be found because", constructorArgs);
-
+		var failMessage = "Could not instantiate the class " + clazz.getSimpleName() + BECAUSE;
+		var constructorArgTypes = getParameterTypes(failMessage + " a fitting constructor could not be found because",
+				constructorArgs);
 		try {
 			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
 			return newInstance(constructor, constructorArgs);
@@ -129,9 +126,8 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
-		String failMessage = "Could not instantiate the class " + constructor.getDeclaringClass().getSimpleName()
+		var failMessage = "Could not instantiate the class " + constructor.getDeclaringClass().getSimpleName()
 				+ BECAUSE;
-
 		try {
 			return constructor.newInstance(constructorArgs);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
@@ -170,9 +166,8 @@ public final class ReflectionTestUtils {
 	public static Object valueForAttribute(Object object, String attributeName) {
 		requireNonNull(object,
 				"Could not retrieve the value of attribute '" + attributeName + "' because the object was null.");
-		String failMessage = "Could not retrieve the attribute '" + attributeName + "' from the class "
+		var failMessage = "Could not retrieve the attribute '" + attributeName + "' from the class "
 				+ object.getClass().getSimpleName() + BECAUSE;
-
 		try {
 			return object.getClass().getDeclaredField(attributeName).get(object);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
@@ -209,15 +204,13 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
-		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
+		var failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;
-
 		if (parameterTypes == null || parameterTypes.length == 0) {
 			failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' from the class "
 					+ declaringClass.getSimpleName() + BECAUSE;
 		}
-
 		try {
 			return declaringClass.getMethod(methodName, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
@@ -243,9 +236,9 @@ public final class ReflectionTestUtils {
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, String methodName, Object... params) {
-		String failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
-		Class<?>[] parameterTypes = getParameterTypes(failMessage, params);
-		Method method = getMethod(object, methodName, parameterTypes);
+		var failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
+		var parameterTypes = getParameterTypes(failMessage, params);
+		var method = getMethod(object, methodName, parameterTypes);
 		return invokeMethod(object, method, params);
 	}
 
@@ -261,7 +254,7 @@ public final class ReflectionTestUtils {
 	 */
 	public static Object invokeMethod(Object object, Method method, Object... params) {
 		// NOTE: object can be null, if method is static
-		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
+		var failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
 			return invokeMethodRethrowing(object, method, params);
@@ -285,7 +278,7 @@ public final class ReflectionTestUtils {
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		// NOTE: object can be null, if method is static
-		String failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
+		var failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
 				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
 			return method.invoke(object, params);
@@ -316,14 +309,12 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
-		String failMessage = "Could not find the constructor with the parameters: "
+		var failMessage = "Could not find the constructor with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;
-
 		if (parameterTypes == null || parameterTypes.length == 0) {
 			failMessage = "Could not find the constructor from the " + declaringClass.getSimpleName() + BECAUSE;
 		}
-
 		try {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
@@ -353,7 +344,7 @@ public final class ReflectionTestUtils {
 	 * @return The string representation of the parameter types.
 	 */
 	private static String getParameterTypesAsString(Class<?>... parameterTypes) {
-		StringJoiner joiner = new StringJoiner(", ", "[ ", " ]");
+		var joiner = new StringJoiner(", ", "[ ", " ]");
 		joiner.setEmptyValue("none");
 		Arrays.stream(parameterTypes).map(type -> requireNonNull(type, "One of the supplied types was null."))
 				.map(Class::getSimpleName).forEach(joiner::add);

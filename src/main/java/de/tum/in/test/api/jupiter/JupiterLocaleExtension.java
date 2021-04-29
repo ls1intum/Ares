@@ -16,7 +16,7 @@ import de.tum.in.test.api.localization.UseLocale;
 @API(status = Status.INTERNAL)
 public class JupiterLocaleExtension implements BeforeAllCallback, AfterAllCallback {
 
-	private static final String OLD_LOCALE_KEY = "old-locale";
+	private static final String OLD_LOCALE_KEY = "old-locale"; //$NON-NLS-1$
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception {

@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -111,13 +109,11 @@ public class ClassNameScanner {
 	 * This method computes the scan result of the submission for the expected class
 	 * name. It first checks if the class is in the project at all. If that's the
 	 * case, it then checks if that class is properly placed or not and generates
-	 * feedback accordingly.
-	 *
-	 * Otherwise the method loops over the observed classes and checks if any of the
-	 * observed classes is actually the expected one but with the wrong case or
-	 * types in the name. It again checks in each case if the class is misplaced or
-	 * not and delivers the feedback. Finally, in none of these holds, the class is
-	 * simply declared as not found.
+	 * feedback accordingly. Otherwise the method loops over the observed classes
+	 * and checks if any of the observed classes is actually the expected one but
+	 * with the wrong case or types in the name. It again checks in each case if the
+	 * class is misplaced or not and delivers the feedback. Finally, in none of
+	 * these holds, the class is simply declared as not found.
 	 *
 	 * @return An instance of ScanResult containing the result type and the feedback
 	 *         message.
@@ -189,7 +185,6 @@ public class ClassNameScanner {
 	private ScanResult createScanResult(ScanResultType scanResultType, String foundObservedClassName,
 			String foundObservedPackageName) {
 		String scanResultMessage;
-
 		switch (scanResultType) {
 		case CORRECT_NAME_CORRECT_PLACE:
 			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + " and is in the correct package.";
@@ -256,22 +251,22 @@ public class ClassNameScanner {
 	 */
 	private void findObservedClassesInProject() {
 		try {
-			File pomFile = new File(pomXmlPath);
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			var pomFile = new File(pomXmlPath);
+			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			// make sure to avoid loading external files which would not be compliant
 			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Document pomXmlDocument = documentBuilder.parse(pomFile);
+			var documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			var pomXmlDocument = documentBuilder.parse(pomFile);
 
 			NodeList buildNodes = pomXmlDocument.getElementsByTagName("build");
-			for (int i = 0; i < buildNodes.getLength(); i++) {
-				Node buildNode = buildNodes.item(i);
+			for (var i = 0; i < buildNodes.getLength(); i++) {
+				var buildNode = buildNodes.item(i);
 				if (buildNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element buildNodeElement = (Element) buildNode;
-					String sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory")
-							.item(0).getTextContent();
-					String assignmentFolderName = sourceDirectoryPropertyValue
+					var buildNodeElement = (Element) buildNode;
+					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0)
+							.getTextContent();
+					var assignmentFolderName = sourceDirectoryPropertyValue
 							.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
 					walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
 				}
@@ -294,21 +289,18 @@ public class ClassNameScanner {
 	 */
 	private void walkProjectFileStructure(String assignmentFolderName, File node,
 			Map<String, List<String>> foundClasses) {
-
 		// Example:
 		// * assignmentFolderName: assignment/src
 		// * fileName: assignment/src/de/tum/in/ase/eist/BubbleSort.java
 		// Required Package Name: de.tum.in.ase.eist
-
-		String fileName = node.getName();
-
+		var fileName = node.getName();
 		// support Java and Kotlin files
 		if (fileName.endsWith(".java") || fileName.endsWith(".kt")) {
-			String[] fileNameComponents = fileName.split("\\.");
-			String fileExtension = fileNameComponents[fileNameComponents.length - 1];
+			var fileNameComponents = fileName.split("\\.");
+			var fileExtension = fileNameComponents[fileNameComponents.length - 1];
 
-			String className = fileNameComponents[fileNameComponents.length - 2];
-			String packageName = node.getPath().substring(0, node.getPath().indexOf("." + fileExtension));
+			var className = fileNameComponents[fileNameComponents.length - 2];
+			var packageName = node.getPath().substring(0, node.getPath().indexOf("." + fileExtension));
 			packageName = packageName.substring(
 					packageName.indexOf(assignmentFolderName) + assignmentFolderName.length() + 1,
 					packageName.lastIndexOf(File.separator + className));
@@ -317,16 +309,13 @@ public class ClassNameScanner {
 			if (packageName.charAt(0) == '.') {
 				packageName = packageName.substring(1);
 			}
-
 			if (foundClasses.containsKey(className)) {
 				foundClasses.get(className).add(packageName);
 			} else {
 				foundClasses.put(className, Collections.singletonList(packageName));
 			}
 		}
-
 		// TODO: we should also support inner classes here
-
 		if (node.isDirectory()) {
 			String[] subNodes = node.list();
 			if (subNodes != null && subNodes.length > 0) {

@@ -12,12 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 
 /**
- *
  * This test evaluates if the specified methods in the structure oracle are
  * correctly implemented with the expected name, return type, parameter types,
  * visibility modifiers and annotations, based on its definition in the
@@ -40,21 +38,18 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	 */
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
-
 		if (structureOracleJSON == null) {
 			fail("The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!");
 		}
-
-		for (int i = 0; i < structureOracleJSON.length(); i++) {
-			JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
-
+		for (var i = 0; i < structureOracleJSON.length(); i++) {
+			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			// Only test the classes that have methods defined in the structure oracle.
 			if (expectedClassJSON.has(JSON_PROPERTY_CLASS) && expectedClassJSON.has(JSON_PROPERTY_METHODS)) {
-				JSONObject expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
-				String expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
-				String expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
-				ExpectedClassStructure expectedClassStructure = new ExpectedClassStructure(expectedClassName,
-						expectedPackageName, expectedClassJSON);
+				var expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
+				var expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
+				var expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
+				var expectedClassStructure = new ExpectedClassStructure(expectedClassName, expectedPackageName,
+						expectedClassJSON);
 				tests.add(dynamicTest("testMethods[" + expectedClassName + "]",
 						() -> testMethods(expectedClassStructure)));
 			}
@@ -77,16 +72,15 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	 * @param expectedClassStructure The class structure that we expect to find and
 	 *                               test against.
 	 */
-	public void testMethods(ExpectedClassStructure expectedClassStructure) {
-		String expectedClassName = expectedClassStructure.getExpectedClassName();
-		Class<?> observedClass = findClassForTestType(expectedClassStructure, "method");
+	public static void testMethods(ExpectedClassStructure expectedClassStructure) {
+		var expectedClassName = expectedClassStructure.getExpectedClassName();
+		var observedClass = findClassForTestType(expectedClassStructure, "method");
 		if (observedClass == null) {
 			fail(THE_CLASS + expectedClassName + " was not found for method test");
 			return;
 		}
-
 		if (expectedClassStructure.hasProperty(JSON_PROPERTY_METHODS)) {
-			JSONArray methodsJSON = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_METHODS);
+			var methodsJSON = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_METHODS);
 			checkMethods(expectedClassName, observedClass, methodsJSON);
 		}
 	}
@@ -104,21 +98,17 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	 *                          parameter types, return type and the visibility
 	 *                          modifiers of each method.
 	 */
-	protected void checkMethods(String expectedClassName, Class<?> observedClass, JSONArray expectedMethods) {
-		for (int i = 0; i < expectedMethods.length(); i++) {
-			JSONObject expectedMethod = expectedMethods.getJSONObject(i);
-			String expectedName = expectedMethod.getString(JSON_PROPERTY_NAME);
-			JSONArray expectedParameters = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_PARAMETERS);
-			JSONArray expectedModifiers = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_MODIFIERS);
-			JSONArray expectedAnnotations = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_ANNOTATIONS);
-			String expectedReturnType = expectedMethod.getString(JSON_PROPERTY_RETURN_TYPE);
-
-			MethodChecks checks = new MethodChecks();
-
+	protected static void checkMethods(String expectedClassName, Class<?> observedClass, JSONArray expectedMethods) {
+		for (var i = 0; i < expectedMethods.length(); i++) {
+			var expectedMethod = expectedMethods.getJSONObject(i);
+			var expectedName = expectedMethod.getString(JSON_PROPERTY_NAME);
+			var expectedParameters = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_PARAMETERS);
+			var expectedModifiers = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_MODIFIERS);
+			var expectedAnnotations = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_ANNOTATIONS);
+			var expectedReturnType = expectedMethod.getString(JSON_PROPERTY_RETURN_TYPE);
+			var checks = new MethodChecks();
 			for (Method observedMethod : observedClass.getDeclaredMethods()) {
-
 				// TODO: check if overloading is supported properly
-
 				if (expectedName.equals(observedMethod.getName())) {
 					checks.name = true;
 					checks.parameters = checkParameters(observedMethod.getParameterTypes(), expectedParameters);
@@ -139,17 +129,15 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 				 * case)
 				 */
 			}
-
 			checkMethodCorrectness(expectedClassName, expectedName, expectedParameters, checks);
 		}
 	}
 
 	private static void checkMethodCorrectness(String expectedClassName, String expectedName,
 			JSONArray expectedParameters, MethodChecks methodChecks) {
-		String expectedMethodInformation = "the expected method '" + expectedName + "' of the class '"
-				+ expectedClassName + "' with " + ((expectedParameters.length() == 0) ? "no parameters"
+		var expectedMethodInformation = "the expected method '" + expectedName + "' of the class '" + expectedClassName
+				+ "' with " + ((expectedParameters.length() == 0) ? "no parameters"
 						: "the parameters: " + expectedParameters.toString());
-
 		if (!methodChecks.name) {
 			fail(expectedMethodInformation + " was not found or is named wrongly.");
 		}

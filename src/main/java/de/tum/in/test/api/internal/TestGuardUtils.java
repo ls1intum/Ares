@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apiguardian.api.API;
@@ -30,7 +29,6 @@ import de.tum.in.test.api.ExtendedDeadline;
  * This class handles public/hidden tests and deadline evaluation.
  *
  * @author Christian Femers
- *
  */
 @API(status = Status.INTERNAL)
 public final class TestGuardUtils {
@@ -41,12 +39,11 @@ public final class TestGuardUtils {
 	 * According to {@link ZoneId#of(String)}, all ZoneIds have to start like that,
 	 * the ones in {@link ZoneId#SHORT_IDS} do as well.
 	 */
-	private static final String ZONE_ID_START_PATTERN = "[-+A-Za-z].*";
+	private static final String ZONE_ID_START_PATTERN = "[-+A-Za-z].*"; //$NON-NLS-1$
 	private static final Pattern DURATION_PATTERN = Pattern
 			.compile("(?:(?<d>\\d++)d)?\\s*+(?:\\b(?<h>\\d++)h)?\\s*+(?:\\b(?<m>\\d++)m)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
 	private TestGuardUtils() {
-
 	}
 
 	public static void checkForHidden(TestContext context) {
@@ -56,8 +53,8 @@ public final class TestGuardUtils {
 				throw new AnnotationFormatError(
 						formatLocalized("test_guard.test_cannot_be_public_and_hidden", context.displayName())); //$NON-NLS-1$
 
-			ZonedDateTime now = ZonedDateTime.now();
-			ZonedDateTime finalDeadline = extractDeadline(context);
+			var now = ZonedDateTime.now();
+			var finalDeadline = extractDeadline(context);
 			// check if now is after the deadline including extensions
 			if (now.isAfter(finalDeadline))
 				return;
@@ -137,12 +134,12 @@ public final class TestGuardUtils {
 			var parts = splitIntoDateTimeAndZone(deadlineString);
 			var dateTimeString = parts[0];
 			var zoneString = parts[1];
-			LocalDateTime dateTime = LocalDateTime.parse(dateTimeString.replace(' ', 'T'));
+			var dateTime = LocalDateTime.parse(dateTimeString.replace(' ', 'T'));
 			ZoneId zone;
 			if (zoneString == null) {
 				zone = ZoneId.systemDefault();
-				LOG.warn("No time zone found for deadline \"{}\", using system default \"{}\" now. "
-						+ "Please consider setting a time zone in case the build agents have a different time zone set.",
+				LOG.warn("No time zone found for deadline \"{}\", using system default \"{}\" now. " //$NON-NLS-1$
+						+ "Please consider setting a time zone in case the build agents have a different time zone set.", //$NON-NLS-1$
 						deadlineString, zone);
 			} else {
 				zone = ZoneId.of(zoneString, ZoneId.SHORT_IDS);
@@ -170,7 +167,7 @@ public final class TestGuardUtils {
 		if (firstSpace == -1)
 			return new String[] { deadlineString, null };
 		int lastSpace = deadlineString.lastIndexOf(' ');
-		String potentialZoneIdString = deadlineString.substring(lastSpace + 1);
+		var potentialZoneIdString = deadlineString.substring(lastSpace + 1);
 		// either it has two spaces and thereby three parts (YYYY-MM-DD hh:mm ZONE) or
 		// the last part matches a ZoneId start
 		if (firstSpace != lastSpace || potentialZoneIdString.matches(ZONE_ID_START_PATTERN))
@@ -187,14 +184,14 @@ public final class TestGuardUtils {
 	 */
 	@API(status = Status.INTERNAL)
 	public static Duration parseDuration(String durationString) {
-		Matcher matcher = DURATION_PATTERN.matcher(durationString);
+		var matcher = DURATION_PATTERN.matcher(durationString);
 		if (!matcher.matches())
 			throw new AnnotationFormatError(
 					formatLocalized("test_guard.invalid_extended_deadline_format", durationString)); //$NON-NLS-1$
-		Integer d = Optional.ofNullable(matcher.group("d")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
-		Integer h = Optional.ofNullable(matcher.group("h")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
-		Integer m = Optional.ofNullable(matcher.group("m")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
-		Duration duration = Duration.ofDays(d).plusHours(h).plusMinutes(m);
+		int d = Optional.ofNullable(matcher.group("d")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
+		int h = Optional.ofNullable(matcher.group("h")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
+		int m = Optional.ofNullable(matcher.group("m")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
+		var duration = Duration.ofDays(d).plusHours(h).plusMinutes(m);
 		if (duration.isZero() || duration.isNegative())
 			throw new AnnotationFormatError(
 					formatLocalized("test_guard.extended_deadline_zero_or_negative", durationString)); //$NON-NLS-1$

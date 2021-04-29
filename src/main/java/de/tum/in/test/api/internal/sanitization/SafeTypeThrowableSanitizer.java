@@ -27,27 +27,27 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 	private static final Logger LOG = LoggerFactory.getLogger(SafeTypeThrowableSanitizer.class);
 
 	static final Set<String> NON_DUPLICATABLE_SAFE_TYPES = Set.of( //
-			"java.io.OptionalDataException", //
-			"java.util.IllegalFormatException", //
-			"net.jqwik.api.configurators.ArbitraryConfigurationException", //
-			"net.jqwik.api.lifecycle.CannotFindStoreException", //
-			"net.jqwik.api.lifecycle.CannotResolveParameterException", //
-			"net.jqwik.engine.execution.pipeline.DuplicateExecutionTaskException", //
-			"net.jqwik.engine.execution.pipeline.PredecessorNotSubmittedException", //
-			"net.jqwik.engine.properties.arbitraries.NotAFunctionalTypeException", //
-			"org.junit.Test$None", //
-			"org.junit.internal.ArrayComparisonFailure", //
-			"org.junit.runner.FilterFactory$FilterNotCreatedException" //
+			"java.io.OptionalDataException", //$NON-NLS-1$
+			"java.util.IllegalFormatException", //$NON-NLS-1$
+			"net.jqwik.api.configurators.ArbitraryConfigurationException", //$NON-NLS-1$
+			"net.jqwik.api.lifecycle.CannotFindStoreException", //$NON-NLS-1$
+			"net.jqwik.api.lifecycle.CannotResolveParameterException", //$NON-NLS-1$
+			"net.jqwik.engine.execution.pipeline.DuplicateExecutionTaskException", //$NON-NLS-1$
+			"net.jqwik.engine.execution.pipeline.PredecessorNotSubmittedException", //$NON-NLS-1$
+			"net.jqwik.engine.properties.arbitraries.NotAFunctionalTypeException", //$NON-NLS-1$
+			"org.junit.Test$None", //$NON-NLS-1$
+			"org.junit.internal.ArrayComparisonFailure", //$NON-NLS-1$
+			"org.junit.runner.FilterFactory$FilterNotCreatedException" //$NON-NLS-1$
 	);
 
 	static final Map<String, ThrowableCreator> SPECIFIC_CREATORS = Map.ofEntries( //
-			entry("java.net.HttpRetryException", new HttpRetryExceptionCreator()), //
-			entry("java.time.format.DateTimeParseException", new DateTimeParseExceptionCreator()), //
-			entry("java.util.IllformedLocaleException", new IllformedLocaleExceptionCreator()), //
-			entry("java.util.MissingResourceException", new MissingResourceExceptionCreator()), //
-			entry("junit.framework.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //
-			entry("org.junit.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //
-			entry("org.junit.experimental.theories.internal.ParameterizedAssertionError",
+			entry("java.net.HttpRetryException", new HttpRetryExceptionCreator()), //$NON-NLS-1$
+			entry("java.time.format.DateTimeParseException", new DateTimeParseExceptionCreator()), //$NON-NLS-1$
+			entry("java.util.IllformedLocaleException", new IllformedLocaleExceptionCreator()), //$NON-NLS-1$
+			entry("java.util.MissingResourceException", new MissingResourceExceptionCreator()), //$NON-NLS-1$
+			entry("junit.framework.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //$NON-NLS-1$
+			entry("org.junit.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //$NON-NLS-1$
+			entry("org.junit.experimental.theories.internal.ParameterizedAssertionError", //$NON-NLS-1$
 					new ThrowableCreatorWrapper(ParameterizedAssertionErrorCreator::new)) //
 	);
 
@@ -66,17 +66,17 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
 		Class<? extends Throwable> type = t.getClass();
 		// this is OK because we are only dealing with safe types here
-		ThrowableInfo info = ThrowableInfo.of(type, ThrowableUtils.retrievePropertyValues(t,
+		var info = ThrowableInfo.of(type, ThrowableUtils.retrievePropertyValues(t,
 				ThrowableUtils.getRelevantPropertiesWithMethods(type, ThrowableUtils.IGNORE_PROPERTIES)));
 		info.sanitize(ThrowableUtils.PROPERTY_SANITIZER);
 		info.setMessage(messageTransformer.apply(info));
 		var throwableCreator = cachedThrowableCreators.computeIfAbsent(type, this::findThrowableCreator);
 		try {
-			Throwable newInstance = throwableCreator.create(info);
+			var newInstance = throwableCreator.create(info);
 			SanitizationUtils.copyThrowableInfoSafe(info, newInstance);
 			return newInstance;
 		} catch (RuntimeException e) {
-			LOG.warn("Failed to sanitize an exception of type {}.", type, e);
+			LOG.warn("Failed to sanitize an exception of type {}.", type, e); //$NON-NLS-1$
 			return ArbitraryThrowableSanitizer.INSTANCE.sanitize(t, messageTransformer);
 		}
 	}
@@ -106,8 +106,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class HttpRetryExceptionCreator implements ThrowableCreator {
 
-		private static final PropertyKey<Integer> RESPONSE_CODE = new PropertyKey<>(int.class, "responseCode");
-		private static final PropertyKey<String> LOCATION = new PropertyKey<>(String.class, "location");
+		private static final PropertyKey<Integer> RESPONSE_CODE = new PropertyKey<>(int.class, "responseCode"); //$NON-NLS-1$
+		private static final PropertyKey<String> LOCATION = new PropertyKey<>(String.class, "location"); //$NON-NLS-1$
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -120,8 +120,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class DateTimeParseExceptionCreator implements ThrowableCreator {
 
-		private static final PropertyKey<String> PARSED_STRING = new PropertyKey<>(String.class, "parsedString");
-		private static final PropertyKey<Integer> ERROR_INDEX = new PropertyKey<>(int.class, "errorIndex");
+		private static final PropertyKey<String> PARSED_STRING = new PropertyKey<>(String.class, "parsedString"); //$NON-NLS-1$
+		private static final PropertyKey<Integer> ERROR_INDEX = new PropertyKey<>(int.class, "errorIndex"); //$NON-NLS-1$
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -141,8 +141,8 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 	private static class MissingResourceExceptionCreator implements ThrowableCreator {
 
-		private static final PropertyKey<String> CLASS_NAME = new PropertyKey<>(String.class, "className");
-		private static final PropertyKey<String> KEY = new PropertyKey<>(String.class, "key");
+		private static final PropertyKey<String> CLASS_NAME = new PropertyKey<>(String.class, "className"); //$NON-NLS-1$
+		private static final PropertyKey<String> KEY = new PropertyKey<>(String.class, "key"); //$NON-NLS-1$
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
@@ -157,18 +157,18 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 
 		private static final int MAX_CONTEXT_LENGTH = 20;
 
-		private static final PropertyKey<String> EXPECTED = new PropertyKey<>(String.class, "expected");
-		private static final PropertyKey<String> ACTUAL = new PropertyKey<>(String.class, "actual");
+		private static final PropertyKey<String> EXPECTED = new PropertyKey<>(String.class, "expected"); //$NON-NLS-1$
+		private static final PropertyKey<String> ACTUAL = new PropertyKey<>(String.class, "actual"); //$NON-NLS-1$
 
 		@Override
 		public Throwable create(ThrowableInfo info) {
 			var message = info.getMessage();
 			var expected = info.getProperty(EXPECTED);
 			var actual = info.getProperty(ACTUAL);
-			String withoutMessage = new ComparisonCompactor(MAX_CONTEXT_LENGTH, expected, actual).compact("");
+			String withoutMessage = new ComparisonCompactor(MAX_CONTEXT_LENGTH, expected, actual).compact(""); //$NON-NLS-1$
 			var start = SanitizationUtils.removeSuffixMatching(message, withoutMessage);
 			if (start == null)
-				message = "";
+				message = ""; //$NON-NLS-1$
 			else
 				message = start.trim();
 			if (ComparisonFailure.class.isAssignableFrom(info.getType()))
@@ -186,9 +186,9 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 			var methodName = message;
 			var params = new Object[0];
 			try {
-				var parts = message.substring(0, message.length() - 1).split("\\(", 2);
+				var parts = message.substring(0, message.length() - 1).split("\\(", 2); //$NON-NLS-1$
 				methodName = parts[0];
-				params = parts[1].split(",");
+				params = parts[1].split(","); //$NON-NLS-1$
 			} catch (@SuppressWarnings("unused") RuntimeException e) {
 				// ignore
 			}

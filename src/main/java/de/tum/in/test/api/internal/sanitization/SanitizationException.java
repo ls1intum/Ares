@@ -1,5 +1,7 @@
 package de.tum.in.test.api.internal.sanitization;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
+
 import java.util.Objects;
 
 import org.apiguardian.api.API;
@@ -17,8 +19,8 @@ class SanitizationException extends RuntimeException {
 
 	public SanitizationException(Class<?> originClass, Throwable cause) {
 		super(generateMessage(originClass, cause));
-		this.originClass = Objects.requireNonNull(originClass, "sanitization failure origin class must not be null");
-		unsafeCause = Objects.requireNonNull(cause, "sanitization failure cause must not be null");
+		this.originClass = Objects.requireNonNull(originClass, "sanitization failure origin class must not be null"); //$NON-NLS-1$
+		unsafeCause = Objects.requireNonNull(cause, "sanitization failure cause must not be null"); //$NON-NLS-1$
 	}
 
 	public Class<?> getOriginClass() {
@@ -30,12 +32,8 @@ class SanitizationException extends RuntimeException {
 	}
 
 	private static String generateMessage(Class<?> originClass, Throwable cause) {
-		StringBuilder message = new StringBuilder();
-		message.append(originClass.toString());
-		message.append(" threw an exception when retrieving information about it. (");
-		message.append(BlacklistedInvoker.invoke(cause::toString));
-		message.append(")");
-		return message.toString();
+		return formatLocalized("sanitization.sanitization_exception_message", originClass.toString(), //$NON-NLS-1$
+				BlacklistedInvoker.invoke(cause::toString));
 	}
 
 	@Override

@@ -16,7 +16,7 @@ enum ExceptionInInitializerErrorSanitizer implements SpecificThrowableSanitizer 
 	public Throwable sanitize(Throwable t, MessageTransformer messageTransformer) {
 		ExceptionInInitializerError eiie = (ExceptionInInitializerError) t;
 		Throwable exception = eiie.getException();
-		ThrowableInfo info = ThrowableInfo.getEssentialInfosSafeFrom(t);
+		var info = ThrowableInfo.getEssentialInfosSafeFrom(t);
 		info.setCause(exception);
 		info.sanitize();
 		String newMessage = messageTransformer.apply(info);

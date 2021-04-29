@@ -29,11 +29,11 @@ final class ThrowableSets {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ThrowableSets.class);
 
-	private static final String JUNIT4_CHECK_CLASS = "junit.framework.AssertionFailedError";
-	private static final String JUNIT5_CHECK_CLASS = "org.junit.platform.commons.JUnitException";
-	private static final String JQWIK_CHECK_CLASS = "net.jqwik.api.JqwikException";
-	private static final String ASSERTJ_CHECK_CLASS = "org.assertj.core.api.Assertions";
-	private static final String OPENTEST4J_CHECK_CLASS = "org.opentest4j.AssertionFailedError";
+	private static final String JUNIT4_CHECK_CLASS = "junit.framework.AssertionFailedError"; //$NON-NLS-1$
+	private static final String JUNIT5_CHECK_CLASS = "org.junit.platform.commons.JUnitException"; //$NON-NLS-1$
+	private static final String JQWIK_CHECK_CLASS = "net.jqwik.api.JqwikException"; //$NON-NLS-1$
+	private static final String ASSERTJ_CHECK_CLASS = "org.assertj.core.api.Assertions"; //$NON-NLS-1$
+	private static final String OPENTEST4J_CHECK_CLASS = "org.opentest4j.AssertionFailedError"; //$NON-NLS-1$
 
 	static {
 		HashSet<Class<? extends Throwable>> join = new HashSet<>(Java.SAFE_TYPES);
@@ -62,7 +62,7 @@ final class ThrowableSets {
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
 			return false;
 		} catch (Exception e) {
-			LOG.error("Loading class " + className + "failed", e);
+			LOG.error("Loading class " + className + "failed", e); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		}
 	}

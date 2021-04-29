@@ -65,7 +65,7 @@ public final class PathRule {
 
 	@Override
 	public String toString() {
-		return String.format("PathRule[\"%s\" (%s) in %s; level %s]", pathPattern, pathType, ruleType, actionLevel);
+		return String.format("PathRule[\"%s\" (%s) in %s; level %s]", pathPattern, pathType, ruleType, actionLevel); //$NON-NLS-1$
 	}
 
 	@Override

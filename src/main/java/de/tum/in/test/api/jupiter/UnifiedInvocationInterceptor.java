@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
  * corresponding default method.
  *
  * @author Christian Femers
- *
  */
 public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 
@@ -79,7 +78,7 @@ public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 	/**
 	 * Called for all invocation types unless the default method of this interface
 	 * is explicitly overridden.
-	 * 
+	 *
 	 * @param <T>               the result type of the invocation, often just
 	 *                          {@link Void}
 	 * @param invocation        the invocation that is being intercepted; never null
@@ -88,8 +87,10 @@ public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 	 *                          intercepted; never null; but may be empty for
 	 *                          {@link DynamicTest}s
 	 * @return the result of the invocation; potentially null
+	 * @throws Throwable the invocation can potentially throw any throwable when it
+	 *                   is executed
 	 * @author Christian Femers
 	 */
 	<T> T interceptGenericInvocation(Invocation<T> invocation, ExtensionContext extensionContext,
-			Optional<ReflectiveInvocationContext<?>> invocationContext) throws Throwable;
+			Optional<ReflectiveInvocationContext<?>> invocationContext) throws Throwable; //NOSONAR
 }

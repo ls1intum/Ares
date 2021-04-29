@@ -31,11 +31,9 @@ import org.apiguardian.api.API.Status;
  * {@link Collections#unmodifiableList(List)} should always be preferred.
  *
  * @author Christian Femers
- *
  * @see List#of(Object...)
  * @see List#copyOf(Collection)
  * @see Collections#unmodifiableList(List)
- *
  * @param <E> Type of the elements in the List.
  */
 @API(status = Status.INTERNAL)
@@ -97,13 +95,13 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 	@Override
 	public boolean add(E e) {
-		onModification.accept("add(E)", e);
+		onModification.accept("add(E)", e); //$NON-NLS-1$
 		return false;
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		onModification.accept("remove(Object)", o);
+		onModification.accept("remove(Object)", o); //$NON-NLS-1$
 		return false;
 	}
 
@@ -114,31 +112,31 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-		onModification.accept("addAll(Collection<? extends E>)", c);
+		onModification.accept("addAll(Collection<? extends E>)", c); //$NON-NLS-1$
 		return false;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		onModification.accept("addAll(int, Collection<? extends E>)", c);
+		onModification.accept("addAll(int, Collection<? extends E>)", c); //$NON-NLS-1$
 		return false;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		onModification.accept("removeAll(Collection<?>)", c);
+		onModification.accept("removeAll(Collection<?>)", c); //$NON-NLS-1$
 		return false;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		onModification.accept("retainAll(Collection<?>)", c);
+		onModification.accept("retainAll(Collection<?>)", c); //$NON-NLS-1$
 		return false;
 	}
 
 	@Override
 	public void clear() {
-		onModification.accept("clear()", null);
+		onModification.accept("clear()", null); //$NON-NLS-1$
 	}
 
 	@Override
@@ -148,18 +146,18 @@ public final class IgnorantUnmodifiableList<E> extends AbstractList<E> implement
 
 	@Override
 	public E set(int index, E element) {
-		onModification.accept("set(int, E)", element);
+		onModification.accept("set(int, E)", element); //$NON-NLS-1$
 		return null;
 	}
 
 	@Override
 	public void add(int index, E element) {
-		onModification.accept("add(int, E)", element);
+		onModification.accept("add(int, E)", element); //$NON-NLS-1$
 	}
 
 	@Override
 	public E remove(int index) {
-		onModification.accept("remove(int)", index);
+		onModification.accept("remove(int)", index); //$NON-NLS-1$
 		return null;
 	}
 

@@ -118,7 +118,7 @@ public class DynamicClass<T> implements Checkable {
 		return new DynamicClass<>(Objects.requireNonNull(clazz, "class must not be null"));
 	}
 
-	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) {
+	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { //NOSONAR
 		if (classOrStringOrDynamicClass == null)
 			throw new IllegalArgumentException("Internal Test Error, toDynamic supplied with null");
 		if (classOrStringOrDynamicClass instanceof String) {
@@ -132,17 +132,17 @@ public class DynamicClass<T> implements Checkable {
 				"Internal Test Error, toDynamic supplied with " + classOrStringOrDynamicClass.getClass());
 	}
 
-	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) {
-		DynamicClass<?>[] dynamicClasses = new DynamicClass[classesOrStringsOrDynamicClasses.length];
-		for (int i = 0; i < dynamicClasses.length; i++) {
+	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) { //NOSONAR
+		var dynamicClasses = new DynamicClass[classesOrStringsOrDynamicClasses.length];
+		for (var i = 0; i < dynamicClasses.length; i++) {
 			dynamicClasses[i] = toDynamic(classesOrStringsOrDynamicClasses[i]);
 		}
 		return dynamicClasses;
 	}
 
 	public static Class<?>[] resolveAll(DynamicClass<?>[] dynamicClasses) {
-		Class<?>[] classes = new Class<?>[dynamicClasses.length];
-		for (int i = 0; i < classes.length; i++) {
+		var classes = new Class<?>[dynamicClasses.length];
+		for (var i = 0; i < classes.length; i++) {
 			final int x = i;
 			classes[x] = Objects.requireNonNull(dynamicClasses[i].toClass(),
 					() -> dynamicClasses[x] + " could not be resolved");
@@ -170,7 +170,7 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public int checkForPublicOrProtectedMethods(List<DynamicMethod<?>> exceptions) {
-		int checked = 0;
+		var checked = 0;
 		Set<String> publicMethods = Set.of(DynamicMethod.signatureOfAll(exceptions));
 		Set<String> objectMethods = Set.of(DynamicMethod.signatureOfAll(Object.class.getMethods()));
 		for (Method m : toClass().getDeclaredMethods()) {
@@ -179,26 +179,23 @@ public class DynamicClass<T> implements Checkable {
 				continue;
 			if (Modifier.isPublic(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if ("main(java.lang.String[])".endsWith(sig))
-					continue;
-				if (publicMethods.contains(sig))
-					continue;
-				if (objectMethods.contains(sig))
-					continue;
-				fail("Methode " + sig + " ist public, sollte sie aber nicht");
+				if (!"main(java.lang.String[])".endsWith(sig) && !publicMethods.contains(sig)
+						&& !objectMethods.contains(sig)) {
+					fail("Methode " + sig + " ist public, sollte sie aber nicht");
+				}
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if (objectMethods.contains(sig))
-					continue;
-				fail("Methode " + sig + " ist protected, sollte sie aber nicht");
+				if (!objectMethods.contains(sig)) {
+					fail("Methode " + sig + " ist protected, sollte sie aber nicht");
+				}
 			}
 		}
 		return checked;
 	}
 
 	public int checkForNonPrivateFields() {
-		int checked = 0;
+		var checked = 0;
 		for (Field f : toClass().getDeclaredFields()) {
 			if (f.isSynthetic())
 				continue;
@@ -209,7 +206,7 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public int checkForNonFinalFields() {
-		int checked = 0;
+		var checked = 0;
 		for (Field f : toClass().getDeclaredFields()) {
 			if (f.isSynthetic())
 				continue;

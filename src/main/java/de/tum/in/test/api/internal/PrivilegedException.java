@@ -1,5 +1,7 @@
 package de.tum.in.test.api.internal;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
@@ -13,8 +15,8 @@ public final class PrivilegedException extends RuntimeException {
 	private final Throwable priviledgedThrowable;
 
 	public PrivilegedException(Throwable priviledgedThrowable) {
-		super("priviledged " + priviledgedThrowable.getClass(), null, false, false);
-		ArtemisSecurityManager.checkCurrentStack(() -> "caller cannot throw priviledged");
+		super("priviledged " + priviledgedThrowable.getClass(), null, false, false); //$NON-NLS-1$
+		ArtemisSecurityManager.checkCurrentStack(() -> localized("security.privileged_throw_not_allowed")); //$NON-NLS-1$
 		this.priviledgedThrowable = priviledgedThrowable;
 	}
 

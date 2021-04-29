@@ -4,15 +4,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -43,9 +40,9 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 		if (structureOracleJSON == null) {
 			fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
 		}
-		for (int i = 0; i < structureOracleJSON.length(); i++) {
-			JSONObject expectedClassJSON = structureOracleJSON.getJSONObject(i);
-			JSONObject expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
+		for (var i = 0; i < structureOracleJSON.length(); i++) {
+			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
+			var expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
 			/*
 			 * Only test the classes that have additional properties (except name and
 			 * package) defined in the structure oracle.
@@ -53,10 +50,10 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			if (expectedClassPropertiesJSON.has(JSON_PROPERTY_NAME)
 					&& expectedClassPropertiesJSON.has(JSON_PROPERTY_PACKAGE)
 					&& hasAdditionalProperties(expectedClassPropertiesJSON)) {
-				String expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
-				String expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
-				ExpectedClassStructure expectedClassStructure = new ExpectedClassStructure(expectedClassName,
-						expectedPackageName, expectedClassJSON);
+				var expectedClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_NAME);
+				var expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
+				var expectedClassStructure = new ExpectedClassStructure(expectedClassName, expectedPackageName,
+						expectedClassJSON);
 				tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure)));
 			}
 		}
@@ -85,14 +82,14 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	 * @param expectedClassStructure The class structure that we expect to find and
 	 *                               test against.
 	 */
-	protected void testClass(ExpectedClassStructure expectedClassStructure) {
-		String expectedClassName = expectedClassStructure.getExpectedClassName();
-		Class<?> observedClass = findClassForTestType(expectedClassStructure, "class");
+	protected static void testClass(ExpectedClassStructure expectedClassStructure) {
+		var expectedClassName = expectedClassStructure.getExpectedClassName();
+		var observedClass = findClassForTestType(expectedClassStructure, "class");
 		if (observedClass == null) {
 			fail(THE_CLASS + expectedClassName + " was not found for class test");
 			return;
 		}
-		JSONObject expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
+		var expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
 		checkBasicClassProperties(expectedClassName, observedClass, expectedClassPropertiesJSON);
 		checkSuperclass(expectedClassName, observedClass, expectedClassPropertiesJSON);
 		checkInterfaces(expectedClassName, observedClass, expectedClassPropertiesJSON);
@@ -113,8 +110,8 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
 		}
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
-			JSONArray expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
-			boolean modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "),
+			var expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
+			var modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "),
 					expectedModifiers);
 			if (!modifiersAreCorrect) {
 				fail("The modifier(s) (access type, abstract, etc.) of " + expectedClassName
@@ -133,11 +130,10 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 		// Filter out the enums, since there is a separate test for them
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
 				&& !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
-			String expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
-
+			var expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
 			if (!checkExpectedType(observedClass.getSuperclass(), observedClass.getGenericSuperclass(),
 					expectedSuperClassName)) {
-				String failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
+				var failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
 						+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
 				fail(failMessage);
 			}
@@ -147,15 +143,15 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	private static void checkInterfaces(String expectedClassName, Class<?> observedClass,
 			JSONObject expectedClassPropertiesJSON) {
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_INTERFACES)) {
-			JSONArray expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
-			Class<?>[] observedInterfaces = observedClass.getInterfaces();
-			Type[] observedGenericInterfaceTypes = observedClass.getGenericInterfaces();
-			for (int i = 0; i < expectedInterfaces.length(); i++) {
-				String expectedInterface = expectedInterfaces.getString(i);
-				boolean implementsInterface = false;
-				for (int j = 0; j < observedInterfaces.length; j++) {
-					Class<?> observedInterface = observedInterfaces[j];
-					Type observedGenericInterfaceType = observedGenericInterfaceTypes[j];
+			var expectedInterfaces = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_INTERFACES);
+			var observedInterfaces = observedClass.getInterfaces();
+			var observedGenericInterfaceTypes = observedClass.getGenericInterfaces();
+			for (var i = 0; i < expectedInterfaces.length(); i++) {
+				var expectedInterface = expectedInterfaces.getString(i);
+				var implementsInterface = false;
+				for (var j = 0; j < observedInterfaces.length; j++) {
+					var observedInterface = observedInterfaces[j];
+					var observedGenericInterfaceType = observedGenericInterfaceTypes[j];
 					if (checkExpectedType(observedInterface, observedGenericInterfaceType, expectedInterface)) {
 						implementsInterface = true;
 						break;
@@ -172,9 +168,9 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	private static void checkAnnotations(String expectedClassName, Class<?> observedClass,
 			JSONObject expectedClassPropertiesJSON) {
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_ANNOTATIONS)) {
-			JSONArray expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
-			Annotation[] observedAnnotations = observedClass.getAnnotations();
-			boolean annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
+			var expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
+			var observedAnnotations = observedClass.getAnnotations();
+			var annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
 			if (!annotationsAreRight) {
 				fail("The annotation(s) of the class '" + expectedClassName + "' are not implemented as expected.");
 			}

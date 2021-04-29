@@ -1,6 +1,7 @@
 package de.tum.in.test.api.internal;
 
 import static de.tum.in.test.api.internal.BlacklistedInvoker.invokeChecked;
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
@@ -34,7 +34,6 @@ public final class TimeoutUtils {
 	}
 
 	private TimeoutUtils() {
-
 	}
 
 	public static Optional<Duration> findTimeout(TestContext context) {
@@ -50,7 +49,7 @@ public final class TimeoutUtils {
 		return executeWithTimeout(timeout.get(), () -> rethrowThrowableSafe(execution), context);
 	}
 
-	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception {
+	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception { //NOSONAR
 		try {
 			return execution.get();
 		} catch (Exception | Error e) {
@@ -65,9 +64,9 @@ public final class TimeoutUtils {
 	}
 
 	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action, TestContext context)
-			throws Throwable {
+			throws Throwable { //NOSONAR
 		ArtemisSecurityManager.revokeThreadWhitelisting();
-		ExecutorService executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
+		var executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
 		try {
 			Future<T> future = executorService.submit(action);
 			return invokeChecked(() -> future.get(timeout.toMillis(), TimeUnit.MILLISECONDS));
@@ -84,7 +83,7 @@ public final class TimeoutUtils {
 	}
 
 	private static AssertionFailedError generateTimeoutFailure(Duration timeout, TestContext context) {
-		var failure = new AssertionFailedError("execution timed out after " + formatDuration(timeout));
+		var failure = new AssertionFailedError(formatLocalized("timeout.failure_message", formatDuration(timeout))); //$NON-NLS-1$
 		if (TestContextUtils.findAnnotationIn(context, PrivilegedExceptionsOnly.class).isPresent())
 			throw new PrivilegedException(failure);
 		return failure;
@@ -93,18 +92,18 @@ public final class TimeoutUtils {
 	private static String formatDuration(Duration duration) {
 		List<String> parts = new ArrayList<>();
 		long h = duration.toHours();
-		long m = duration.toMinutesPart();
-		long s = duration.toSecondsPart();
-		long ms = duration.toMillisPart();
+		int m = duration.toMinutesPart();
+		int s = duration.toSecondsPart();
+		int ms = duration.toMillisPart();
 		if (h != 0)
-			parts.add(h + " h");
+			parts.add(h + " h"); //$NON-NLS-1$
 		if (m != 0)
-			parts.add(m + " min");
+			parts.add(m + " min"); //$NON-NLS-1$
 		if (s != 0)
-			parts.add(s + " s");
+			parts.add(s + " s"); //$NON-NLS-1$
 		if (ms != 0)
-			parts.add(ms + " ms");
-		return String.join(" ", parts);
+			parts.add(ms + " ms"); //$NON-NLS-1$
+		return String.join(" ", parts); //$NON-NLS-1$
 	}
 
 	private static class WhitelistedThreadFactory implements ThreadFactory {
@@ -112,11 +111,11 @@ public final class TimeoutUtils {
 
 		@Override
 		public Thread newThread(Runnable r) {
-			Thread t = new Thread(r, "ajts-to-" + TIMEOUT_THREAD_ID.getAndIncrement());
-			if (t.getPriority() != Thread.NORM_PRIORITY)
-				t.setPriority(Thread.NORM_PRIORITY);
-			ArtemisSecurityManager.requestThreadWhitelisting(t);
-			return t;
+			var thread = new Thread(r, "ajts-to-" + TIMEOUT_THREAD_ID.getAndIncrement()); //$NON-NLS-1$
+			if (thread.getPriority() != Thread.NORM_PRIORITY)
+				thread.setPriority(Thread.NORM_PRIORITY);
+			ArtemisSecurityManager.requestThreadWhitelisting(thread);
+			return thread;
 		}
 	}
 }

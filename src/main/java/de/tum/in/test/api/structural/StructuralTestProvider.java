@@ -41,7 +41,6 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * their access modifiers, annotations and types and the declared enum values of
  * an enum</li>
  * </ol>
- *
  * All these elements are tests based on the test.json that specifies the
  * structural oracle, i.e. how the solution has to look like in terms of
  * structural elements. Note: the file test.json can be automatically generated
@@ -106,10 +105,10 @@ public abstract class StructuralTestProvider {
 	 * @return The current class that undergoes the tests.
 	 */
 	protected static Class<?> findClassForTestType(ExpectedClassStructure expectedClassStructure, String typeOfTest) {
-		ClassNameScanner classNameScanner = new ClassNameScanner(expectedClassStructure.getExpectedClassName(),
+		var classNameScanner = new ClassNameScanner(expectedClassStructure.getExpectedClassName(),
 				expectedClassStructure.getExpectedPackageName());
-		ScanResultType scanResultEnum = classNameScanner.getScanResult().getResult();
-		String classNameScanMessage = classNameScanner.getScanResult().getMessage();
+		var scanResultEnum = classNameScanner.getScanResult().getResult();
+		var classNameScanMessage = classNameScanner.getScanResult().getMessage();
 		// please note: inner classes are not supported
 		if (!scanResultEnum.equals(ScanResultType.CORRECT_NAME_CORRECT_PLACE)) {
 			fail(classNameScanMessage);
@@ -156,13 +155,12 @@ public abstract class StructuralTestProvider {
 		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0) {
 			return true;
 		}
-
 		/*
 		 * Otherwise check if all expected necessary modifiers are contained in the
 		 * array of the observed ones and if any forbidden modifiers were used.
 		 */
 		Set<ModifierSpecification> modifierSpecifications = new HashSet<>();
-		for (int i = 0; i < expectedModifiers.length(); i++) {
+		for (var i = 0; i < expectedModifiers.length(); i++) {
 			modifierSpecifications.add(ModifierSpecification.getModifierForJsonString(expectedModifiers.getString(i)));
 		}
 		Set<String> observedModifiersSet = Set.of(observedModifiers);
@@ -227,8 +225,8 @@ public abstract class StructuralTestProvider {
 		 * observed ones. If at least one isn't, then the modifiers don't match.
 		 */
 		for (Object expectedAnnotation : expectedAnnotations) {
-			boolean expectedAnnotationFound = false;
-			String expectedAnnotationAsString = (String) expectedAnnotation;
+			var expectedAnnotationFound = false;
+			var expectedAnnotationAsString = (String) expectedAnnotation;
 			for (Annotation observedAnnotation : observedAnnotations) {
 				if (checkExpectedType(observedAnnotation.annotationType(), observedAnnotation.annotationType(),
 						expectedAnnotationAsString)) {
@@ -272,14 +270,14 @@ public abstract class StructuralTestProvider {
 		 * occurrences of a certain parameter type is enough, since the parameter order
 		 * is not relevant to us.
 		 */
-		String[] expectedParameterTypeNames = new String[expectedParameters.length()];
-		for (int i = 0; i < expectedParameters.length(); i++) {
+		var expectedParameterTypeNames = new String[expectedParameters.length()];
+		for (var i = 0; i < expectedParameters.length(); i++) {
 			expectedParameterTypeNames[i] = expectedParameters.getString(i);
 		}
 		Map<String, Integer> expectedParametersHashtable = createParametersHashMap(expectedParameterTypeNames);
 
-		String[] observedParameterTypeNames = new String[observedParameters.length];
-		for (int i = 0; i < observedParameters.length; i++) {
+		var observedParameterTypeNames = new String[observedParameters.length];
+		for (var i = 0; i < observedParameters.length; i++) {
 			// TODO: Canonical names should be supported as well.
 			observedParameterTypeNames[i] = observedParameters[i].getSimpleName();
 		}
@@ -299,7 +297,7 @@ public abstract class StructuralTestProvider {
 	 * @return True if the names match, false if not.
 	 */
 	protected static boolean checkExpectedType(Class<?> actualClass, Type actualGenericType, String expectedTypeName) {
-		boolean expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
+		var expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
 		String actualName;
 		if (expectedTypeIsGeneric) {
 			actualName = actualGenericType.getTypeName();
@@ -309,7 +307,7 @@ public abstract class StructuralTestProvider {
 				actualName = actualClass.getName();
 			}
 		}
-		String actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
+		var actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
 		/*
 		 * If the given expected name contains a '.' it can be assumed that it
 		 * represents a full canonical name. If it does not, we can assume it represents
@@ -335,7 +333,7 @@ public abstract class StructuralTestProvider {
 			if (!parametersHashTable.containsKey(parameterTypeName)) {
 				parametersHashTable.put(parameterTypeName, 1);
 			} else {
-				Integer currentParameterCount = parametersHashTable.get(parameterTypeName);
+				var currentParameterCount = parametersHashTable.get(parameterTypeName);
 				parametersHashTable.replace(parameterTypeName, currentParameterCount, currentParameterCount + 1);
 			}
 		}
@@ -353,10 +351,9 @@ public abstract class StructuralTestProvider {
 		if (structureOracleFileUrl == null) {
 			return null;
 		}
-		StringBuilder result = new StringBuilder();
-		try (BufferedReader bufferedReader = new BufferedReader(
-				new InputStreamReader(structureOracleFileUrl.openStream()))) {
-			char[] buffer = new char[8192];
+		var result = new StringBuilder();
+		try (var bufferedReader = new BufferedReader(new InputStreamReader(structureOracleFileUrl.openStream()))) {
+			var buffer = new char[8192];
 			int length;
 			while ((length = bufferedReader.read(buffer, 0, buffer.length)) != -1) {
 				result.append(buffer, 0, length);

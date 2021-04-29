@@ -27,8 +27,8 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 		List<AssertionError> errors = invoke(() -> List.copyOf(mae.getErrors())).stream()
 				.map(ThrowableSanitizer::sanitize).map(AssertionError.class::cast)
 				.collect(Collectors.toUnmodifiableList());
-		String description = "";
-		if (info.getMessage().startsWith("[")) {
+		var description = ""; //$NON-NLS-1$
+		if (info.getMessage().startsWith("[")) { //$NON-NLS-1$
 			// has a description, that we now have to get somehow
 			String messageWithoutDecscription = invoke(() -> new MultipleAssertionsError(mae.getErrors()).getMessage());
 			String start = SanitizationUtils.removeSuffixMatching(info.getMessage(), messageWithoutDecscription);
@@ -41,7 +41,7 @@ enum MultipleAssertionsErrorSanitizer implements SpecificThrowableSanitizer {
 		 */
 		info.setMessage(description);
 		description = messageTransformer.apply(info);
-		MultipleAssertionsError newMae = new MultipleAssertionsError(new TextDescription(description), errors);
+		var newMae = new MultipleAssertionsError(new TextDescription(description), errors);
 		SanitizationUtils.copyThrowableInfoSafe(info, newMae);
 		return newMae;
 	}

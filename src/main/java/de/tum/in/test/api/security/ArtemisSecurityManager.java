@@ -62,6 +62,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
+	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -110,7 +111,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private synchronized String generateAccessToken() {
-		String tokenString = UUID.randomUUID().toString();
+		var tokenString = UUID.randomUUID().toString();
 		accessToken = hash(tokenString);
 		return tokenString;
 	}
@@ -196,7 +197,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			if (isConnectionAllowed("localhost", port))
+			if (isConnectionAllowed(LOCALHOST, port))
 				return;
 			throw new SecurityException(formatLocalized("security.error_network_listen", port)); //$NON-NLS-1$
 		} finally {
@@ -243,7 +244,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			if (isMainThreadAndInactive()) {
-				LOG.trace("Allowing main thread to create a ClassLoader inbetween tests");
+				LOG.trace("Allowing main thread to create a ClassLoader inbetween tests"); //$NON-NLS-1$
 				return;
 			}
 			checkForNonWhitelistedStackFrames(() -> localized("security.error_classloader")); //$NON-NLS-1$
@@ -254,21 +255,21 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkAccess(Thread t) {
-		ThreadGroup tg = t.getThreadGroup();
+		var threadGroup = t.getThreadGroup();
 		try {
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(t);
 			// Thread terminated
-			if (tg == null)
+			if (threadGroup == null)
 				return;
 			if (isMainThreadAndInactive()) {
 				if (LOG.isTraceEnabled()) {
-					LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString));
+					LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString)); //$NON-NLS-1$
 				}
 				return;
 			}
-			if (!testThreadGroup.parentOf(tg))
+			if (!testThreadGroup.parentOf(threadGroup))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
@@ -283,7 +284,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			super.checkAccess(g);
 			if (isMainThreadAndInactive()) {
 				if (LOG.isTraceEnabled()) {
-					LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests",
+					LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests", //$NON-NLS-1$
 							externGet(g::toString));
 				}
 				return;
@@ -312,9 +313,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	@Override
 	public void checkPermission(Permission perm) {
-		String permName = perm.getName();
-		String permActions = perm.getActions();
-		String permString = String.valueOf(perm);
+		var permName = perm.getName();
+		var permActions = perm.getActions();
+		var permString = String.valueOf(perm);
 		try {
 			if (enterPublicInterface())
 				return;
@@ -328,7 +329,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			var blacklist = List.of("manageProcess", "shutdownHooks", "createSecurityManager"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (blacklist.contains(permName))
 				throw new SecurityException(localized("security.error_blacklist") + permString); //$NON-NLS-1$
-			if ("setIO".equals(permName) && !isMainThreadAndInactive()) // $NON-NLS-1$
+			if ("setIO".equals(permName) && !isMainThreadAndInactive()) //$NON-NLS-1$
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed
 			if ("setSecurityManager".equals(permName) && !isPartlyDisabled) //$NON-NLS-1$
@@ -353,42 +354,42 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				throw new SecurityException(localized("security.error_modify_auth") + permString); //$NON-NLS-1$
 			if (perm instanceof FilePermission)
 				checkPathAccess(permName, PathActionLevel.getLevelOf(permActions));
-			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName))
-				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString);
+			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName)) //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
 	}
 
 	private void checkPathAccess(String path, PathActionLevel pathActionLevel) {
-		boolean whitelisted = false;
-		boolean blacklisted = false;
+		var whitelisted = false;
+		var blacklisted = false;
 		try {
 			if ("<<ALL FILES>>".equals(path)) { //$NON-NLS-1$
 				blacklisted = true;
 			} else {
 				String commonPath = getFilePermissionsCommonPath(path);
 				if (commonPath == null) {
-					Path pa = Path.of(path).toAbsolutePath();
-					blacklisted = isPathBlacklisted(pa, pathActionLevel);
-					whitelisted = isPathWhitelisted(pa, pathActionLevel);
+					var absolutePath = Path.of(path).toAbsolutePath();
+					blacklisted = isPathBlacklisted(absolutePath, pathActionLevel);
+					whitelisted = isPathWhitelisted(absolutePath, pathActionLevel);
 				} else {
-					Path pa = Path.of(commonPath).toAbsolutePath();
+					var absolutePath = Path.of(commonPath).toAbsolutePath();
 					blacklisted = !configuration.blacklistedPaths().isEmpty();
 					whitelisted = !blacklisted && configuration.whitelistedPaths().orElse(Set.of()).stream()
-							.anyMatch(pm -> pm.matchesRecursivelyWithLevel(pa, pathActionLevel));
+							.anyMatch(pm -> pm.matchesRecursivelyWithLevel(absolutePath, pathActionLevel));
 				}
 			}
 			if (!blacklisted && whitelisted)
 				return;
 		} catch (Exception e) {
-			LOG.warn("Error in checkPathAccess", e);
+			LOG.warn("Error in checkPathAccess", e); //$NON-NLS-1$
 		}
 		if (isMainThreadAndInactive() && pathActionLevel.isBelowOrEqual(PathActionLevel.READLINK)) {
-			LOG.trace("Allowing read access for main thread inbetween tests"); // appears very often
+			LOG.trace("Allowing read access for main thread inbetween tests"); // appears very often //$NON-NLS-1$
 			return;
 		}
-		String message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", path, blacklisted, whitelisted); //$NON-NLS-1$
+		var message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", path, blacklisted, whitelisted); //$NON-NLS-1$
 		checkForNonWhitelistedStackFrames(() -> {
 			LOG.warn(message);
 			return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
@@ -426,9 +427,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				 * this is a very expensive operation, can we do better? (no)
 				 */
 				checkForNonWhitelistedStackFrames(() -> {
-					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg),
+					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg), //$NON-NLS-1$
 							isPackageWhitelisted(pkg));
-					return formatLocalized("security.error_disallowed_package", pkg); // $NON-NLS-1$
+					return formatLocalized("security.error_disallowed_package", pkg); //$NON-NLS-1$
 				}, stackFrame -> true);
 			}
 		} finally {
@@ -530,7 +531,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private static boolean isLocalHost(String host) {
 		try {
-			InetAddress address = InetAddress.getByName(host);
+			var address = InetAddress.getByName(host);
 			return address.isLoopbackAddress() || address.isAnyLocalAddress();
 		} catch (@SuppressWarnings("unused") UnknownHostException e) {
 			return false;
@@ -562,7 +563,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		int originalCount = testThreadGroup.activeCount();
 		if (originalCount == 0)
 			return new Thread[0]; // everything ok
-		Thread[] threads = new Thread[originalCount];
+		var threads = new Thread[originalCount];
 		testThreadGroup.enumerate(threads);
 		// try gentle shutdown; without that, runs on CI might fail because of previous.
 		for (Thread thread : threads) {
@@ -579,10 +580,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (testThreadGroup.activeCount() == 0)
 			return new Thread[0];
 		// try forceful shutdown
-		SecurityException exception = new SecurityException(
+		var securityException = new SecurityException(
 				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(threads))); //$NON-NLS-1$
 		int alive = threads.length;
-		TRIES: for (int i = 0; i < 50 && alive > 0; i++) {
+		TRIES: for (var i = 0; i < 50 && alive > 0; i++) {
 			alive = 0;
 			for (Thread thread : threads) {
 				if (thread == null || !thread.isAlive())
@@ -597,8 +598,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				try {
 					thread.join(20 / originalCount + 1L);
 				} catch (InterruptedException e) {
-					LOG.warn("Error in checkThreadGroup 1", e);
-					exception.addSuppressed(e);
+					LOG.warn("Error in checkThreadGroup 1", e); //$NON-NLS-1$
+					securityException.addSuppressed(e);
 					Thread.currentThread().interrupt();
 					break TRIES;
 				}
@@ -610,32 +611,33 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			try {
 				thread.join(100 / originalCount + 1L);
 			} catch (InterruptedException e) {
-				LOG.warn("Error in checkThreadGroup 2", e);
-				exception.addSuppressed(e);
+				LOG.warn("Error in checkThreadGroup 2", e); //$NON-NLS-1$
+				securityException.addSuppressed(e);
 				Thread.currentThread().interrupt();
 				break;
 			}
 			if (thread.getState() != State.TERMINATED)
-				LOG.error("THREAD STOP ERROR: Thread {} is still in state {}", thread, thread.getState()); //$NON-NLS-1$ //$NON-NLS-2$
+				LOG.error("THREAD STOP ERROR: Thread {} is still in state {}", thread, thread.getState()); //$NON-NLS-1$
 		}
 		if (testThreadGroup.activeCount() > 0)
-			throw exception;
+			throw securityException;
 		return threads;
 	}
 
 	private void checkCommonThreadPool() {
-		ForkJoinPool common = ForkJoinPool.commonPool();
-		if (common.isQuiescent())
+		var commonPool = ForkJoinPool.commonPool();
+		if (commonPool.isQuiescent())
 			return;
-		LOG.debug("Common pool is active: {} with number {} workers", !common.isQuiescent(), //$NON-NLS-1$
-				common.getActiveThreadCount());
-		ThreadGroup root = getRootThreadGroup();
-		ThreadGroup[] tgs = new ThreadGroup[root.activeGroupCount() + 5];
-		root.enumerate(tgs, true);
-		ThreadGroup commong = Stream.of(tgs).filter(tg -> "InnocuousForkJoinWorkerThreadGroup".equals(tg.getName())) //$NON-NLS-1$
+		LOG.debug("Common pool is active: {} with number {} workers", !commonPool.isQuiescent(), //$NON-NLS-1$
+				commonPool.getActiveThreadCount());
+		var rootThreadGroup = getRootThreadGroup(); //NOSONAR
+		var allThreadGroups = new ThreadGroup[rootThreadGroup.activeGroupCount() + 5];
+		rootThreadGroup.enumerate(allThreadGroups, true);
+		ThreadGroup commong = Stream.of(allThreadGroups)
+				.filter(tg -> "InnocuousForkJoinWorkerThreadGroup".equals(tg.getName())) //$NON-NLS-1$
 				.findFirst().orElseThrow(IllegalStateException::new); // was created indirectly in the static
 																		// initializer
-		Thread[] threads = new Thread[commong.activeCount() + 5];
+		var threads = new Thread[commong.activeCount() + 5];
 		commong.enumerate(threads);
 		LOG.info("Try interrupt common pool"); //$NON-NLS-1$
 		for (Thread thread : threads) {
@@ -648,9 +650,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
-		if (common.isQuiescent())
+		if (commonPool.isQuiescent())
 			return;
-		LOG.warn("There are still {} common pool workers active", common.getActiveThreadCount()); //$NON-NLS-1$
+		LOG.warn("There are still {} common pool workers active", commonPool.getActiveThreadCount()); //$NON-NLS-1$
 	}
 
 	private void checkThreadCreation() {
@@ -658,8 +660,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
 			return;
 		}
-		int current = testThreadGroup.activeCount();
-		int max = configuration.allowedThreadCount().getAsInt();
+		var current = testThreadGroup.activeCount();
+		var max = configuration.allowedThreadCount().getAsInt();
 		if (max < current)
 			checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_thread_maxExceeded", current, max)); //$NON-NLS-1$
 	}
@@ -668,9 +670,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	 * Similar to the way in {@link ForkJoinWorkerThread} in the JDK
 	 */
 	private ThreadGroup getRootThreadGroup() {
-		ThreadGroup group = testThreadGroup;
-		for (ThreadGroup p; (p = group.getParent()) != null;)
-			group = p;
+		var group = testThreadGroup; //NOSONAR
+		for (ThreadGroup nextParent; (nextParent = group.getParent()) != null;)
+			group = nextParent;
 		return group;
 	}
 
@@ -679,17 +681,17 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean isCurrentThreadWhitelisted() {
-		Thread current = Thread.currentThread();
-		String name = externGet(current::getName);
+		var currentThread = Thread.currentThread();
+		var name = externGet(currentThread::getName);
 		/*
 		 * NOTE: the order is very important here!
 		 */
 		var blacklist = Set.of("Finalizer", "InnocuousThread", "ForkJoinPool.commonPool"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (blacklist.stream().anyMatch(name::startsWith))
 			return false;
-		if (!testThreadGroup.parentOf(current.getThreadGroup()))
+		if (!testThreadGroup.parentOf(currentThread.getThreadGroup()))
 			return true;
-		return whitelistedThreads.stream().anyMatch(t -> t.equals(current));
+		return whitelistedThreads.stream().anyMatch(t -> t.equals(currentThread));
 	}
 
 	private void whitelistThread(Thread t) {
@@ -727,7 +729,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			INSTANCE.lastUninstallFailed = false;
 		}
 		if (LOG.isInfoEnabled())
-			LOG.info("Request install with {}", configuration.shortDesc()); //$NON-NLS-1$ //$NON-NLS-2$
+			LOG.info("Request install with {}", configuration.shortDesc()); //$NON-NLS-1$
 		String token = INSTANCE.generateAccessToken();
 		INSTANCE.blockThreadCreation = false;
 		INSTANCE.configuration = Objects.requireNonNull(configuration);
@@ -741,7 +743,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	public static synchronized void uninstall(String accessToken) {
 		if (!isInstalled())
 			throw new IllegalStateException(localized("security.not_installed")); //$NON-NLS-1$
-		Thread[] active = new Thread[0];
+		var activeThreads = new Thread[0];
 		int oldPrio = Thread.currentThread().getPriority();
 		try {
 			INSTANCE.checkAccess(accessToken);
@@ -751,25 +753,25 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			LOG.info("Request uninstall"); //$NON-NLS-1$
 			// try to clean up and try to run finalize() of test objects
-			System.gc();
-			System.runFinalization();
+			System.gc(); //NOSONAR
+			System.runFinalization(); //NOSONAR
 			// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
-			active = INSTANCE.checkThreadGroup();
+			activeThreads = INSTANCE.checkThreadGroup();
 			INSTANCE.checkCommonThreadPool();
 			INSTANCE.unwhitelistThreads();
 			INSTANCE.blockThreadCreation = false;
 			INSTANCE.lastUninstallFailed = false;
 			INSTANCE.isActive = false;
-		} catch (Throwable t) {
+		} catch (Throwable t) { //NOSONAR
 			INSTANCE.lastUninstallFailed = true;
 			LOG.error("UNINSTALL FAILED", t); //$NON-NLS-1$
 			throw t;
 		} finally {
 			Thread.currentThread().setPriority(oldPrio);
 		}
-		if (active.length > 0)
+		if (activeThreads.length > 0)
 			throw new IllegalStateException(
-					formatLocalized("security.error_threads_still_active", Arrays.toString(active))); //$NON-NLS-1$
+					formatLocalized("security.error_threads_still_active", Arrays.toString(activeThreads))); //$NON-NLS-1$
 	}
 
 	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {

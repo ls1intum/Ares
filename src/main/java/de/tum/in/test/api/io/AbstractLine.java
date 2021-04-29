@@ -41,9 +41,9 @@ public abstract class AbstractLine implements Line {
 	}
 
 	static boolean containsLineBreaks(CharSequence text) {
-		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
-			if (c == '\r' || c == '\n')
+		for (var i = 0; i < text.length(); i++) {
+			var character = text.charAt(i);
+			if (character == '\r' || character == '\n')
 				return true;
 		}
 		return false;

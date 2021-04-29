@@ -41,7 +41,7 @@ public final class PackageRule {
 
 	@Override
 	public String toString() {
-		return String.format("PackageRule[\"%s\" in %s]", packagePattern, ruleType);
+		return String.format("PackageRule[\"%s\" in %s]", packagePattern, ruleType); //$NON-NLS-1$
 	}
 
 	@Override
@@ -60,11 +60,11 @@ public final class PackageRule {
 	}
 
 	private static Pattern convertPackagePatternToRegex(String packagePattern) {
-		String[] parts = Pattern.quote(packagePattern).split("\\*\\*", -1);
-		for (int i = 0; i < parts.length; i++) {
-			parts[i] = parts[i].replace("*", "\\E[^.]*\\Q");
+		String[] parts = Pattern.quote(packagePattern).split("\\*\\*", -1); //$NON-NLS-1$
+		for (var i = 0; i < parts.length; i++) {
+			parts[i] = parts[i].replace("*", "\\E[^.]*\\Q"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return Pattern.compile(String.join("\\E.*\\Q", parts), Pattern.DOTALL);
+		return Pattern.compile(String.join("\\E.*\\Q", parts), Pattern.DOTALL); //$NON-NLS-1$
 	}
 
 	public static Stream<PackageRule> allOf(WhitelistPackage whitelistedPackage) {

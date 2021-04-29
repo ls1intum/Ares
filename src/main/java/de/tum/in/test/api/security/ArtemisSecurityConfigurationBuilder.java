@@ -1,5 +1,7 @@
 package de.tum.in.test.api.security;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -46,7 +48,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
-		executionPath = Path.of("");
+		executionPath = Path.of(""); //$NON-NLS-1$
 		return this;
 	}
 
@@ -140,25 +142,25 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	private void validate() {
 		if (allowedThreadCount.orElse(0) < 0)
-			throw new ConfigurationException("Allowed thread count must be non-negative");
+			throw new ConfigurationException(localized("configuration_invalid_negative_threads")); //$NON-NLS-1$
 		if (!Collections.disjoint(allowedLocalPorts, excludedLocalPorts))
-			throw new ConfigurationException("Allowed and excluded local ports must not intersect");
+			throw new ConfigurationException(localized("configuration_invalid_port_rule_intersection")); //$NON-NLS-1$
 		allowedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
 		excludedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
 		allowLocalPortsAbove.ifPresent(value -> {
 			validatePortRange(value);
 			if (allowedLocalPorts.stream().anyMatch(allowed -> allowed > value))
-				throw new ConfigurationException("Allowed local port values must not be greater than allowPortsAbove");
+				throw new ConfigurationException(localized("configuration_invalid_port_allowed_in_rage")); //$NON-NLS-1$
 			if (excludedLocalPorts.stream().anyMatch(exclusion -> exclusion <= value))
-				throw new ConfigurationException("Local ports exclusion values must be greater than allowPortsAbove");
+				throw new ConfigurationException(localized("configuration_invalid_port_exclude_outside_rage")); //$NON-NLS-1$
 		});
 	}
 
 	private static void validatePortRange(int value) {
 		if (value < AllowLocalPort.MINIMUM)
-			throw new ConfigurationException("Allow local port: port number must not be negative");
+			throw new ConfigurationException(localized("configuration_invalid_port_negative")); //$NON-NLS-1$
 		if (value > AllowLocalPort.MAXIMUM)
-			throw new ConfigurationException("Allow local port: port number must not exceed MAXIMUM");
+			throw new ConfigurationException(localized("configuration_invalid_port_over_max")); //$NON-NLS-1$
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {

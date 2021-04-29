@@ -21,7 +21,7 @@ public class DelayedFilter<T> implements Predicate<T> {
 	public DelayedFilter(int delay, Predicate<T> original, boolean startValue) {
 		this.original = Objects.requireNonNull(original);
 		if (delay <= 0)
-			throw new IllegalArgumentException("invalid delay: " + delay);
+			throw new IllegalArgumentException("invalid delay: " + delay); //$NON-NLS-1$
 		this.delay = delay;
 		this.buffer = new boolean[delay];
 		this.lastValue = startValue;
