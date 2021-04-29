@@ -31,9 +31,8 @@ public class JupiterLocaleExtension implements BeforeAllCallback, AfterAllCallba
 	@Override
 	public void afterAll(ExtensionContext context) throws Exception {
 		var oldLocale = getStore(context).remove(OLD_LOCALE_KEY, Locale.class);
-		if (oldLocale != null) {
+		if (oldLocale != null)
 			Locale.setDefault(oldLocale);
-		}
 	}
 
 	private Store getStore(ExtensionContext context) {

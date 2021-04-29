@@ -102,7 +102,7 @@ public class ClassNameScanner {
 	}
 
 	public ScanResult getScanResult() {
-		return this.scanResult;
+		return scanResult;
 	}
 
 	/**
@@ -140,18 +140,16 @@ public class ClassNameScanner {
 			/*
 			 * 1) check whether the class might have the wrong case
 			 */
-			if (foundObservedClassName.equalsIgnoreCase(expectedClassName)) {
+			if (foundObservedClassName.equalsIgnoreCase(expectedClassName))
 				return createScanResult(foundObservedClassName, foundObservedPackageNames, classPresentMultiple,
 						classCorrectlyPlaced, WRONG_CASE_MULTIPLE, WRONG_CASE_CORRECT_PLACE, WRONG_CASE_MISPLACED);
-			}
 			/*
 			 * 2) check whether there are similar classes (e.g. the student has a small typo
 			 * in the class name)
 			 */
-			if (isMisspelledWithHighProbability(this.expectedClassName, foundObservedClassName)) {
+			if (isMisspelledWithHighProbability(expectedClassName, foundObservedClassName))
 				return createScanResult(foundObservedClassName, foundObservedPackageNames, classPresentMultiple,
 						classCorrectlyPlaced, TYPOS_MULTIPLE, TYPOS_CORRECT_PLACE, TYPOS_MISPLACED);
-			}
 		}
 		return createScanResult(ScanResultType.NOTFOUND, expectedClassName, null);
 	}
@@ -160,11 +158,10 @@ public class ClassNameScanner {
 			boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
 			ScanResultType correctPlace, ScanResultType misplaced) {
 		ScanResultType scanResultType;
-		if (classPresentMultiple) {
+		if (classPresentMultiple)
 			scanResultType = multipleTimes;
-		} else {
+		else
 			scanResultType = classCorrectlyPlaced ? correctPlace : misplaced;
-		}
 		return createScanResult(scanResultType, foundObservedClassName, foundObservedPackageName);
 	}
 
@@ -174,11 +171,10 @@ public class ClassNameScanner {
 		boolean classIsCorrectlyPlaced = !classIsPresentMultipleTimes
 				&& (observedPackageNames.contains(expectedPackageName));
 
-		if (classIsPresentMultipleTimes) {
+		if (classIsPresentMultipleTimes)
 			scanResultType = CORRECT_NAME_MULTIPLE;
-		} else {
+		else
 			scanResultType = classIsCorrectlyPlaced ? CORRECT_NAME_CORRECT_PLACE : CORRECT_NAME_MISPLACED;
-		}
 		return scanResultType;
 	}
 
@@ -306,23 +302,19 @@ public class ClassNameScanner {
 					packageName.lastIndexOf(File.separator + className));
 			packageName = packageName.replace(File.separatorChar, '.');
 
-			if (packageName.charAt(0) == '.') {
+			if (packageName.charAt(0) == '.')
 				packageName = packageName.substring(1);
-			}
-			if (foundClasses.containsKey(className)) {
+			if (foundClasses.containsKey(className))
 				foundClasses.get(className).add(packageName);
-			} else {
+			else
 				foundClasses.put(className, Collections.singletonList(packageName));
-			}
 		}
 		// TODO: we should also support inner classes here
 		if (node.isDirectory()) {
 			String[] subNodes = node.list();
-			if (subNodes != null && subNodes.length > 0) {
-				for (String currentSubNode : subNodes) {
+			if (subNodes != null && subNodes.length > 0)
+				for (String currentSubNode : subNodes)
 					walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundClasses);
-				}
-			}
 		}
 	}
 

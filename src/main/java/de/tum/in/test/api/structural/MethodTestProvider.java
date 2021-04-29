@@ -38,9 +38,8 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	 */
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
-		if (structureOracleJSON == null) {
+		if (structureOracleJSON == null)
 			fail("The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!");
-		}
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			// Only test the classes that have methods defined in the structure oracle.
@@ -54,9 +53,8 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 						() -> testMethods(expectedClassStructure)));
 			}
 		}
-		if (tests.isEmpty()) {
+		if (tests.isEmpty())
 			fail("No tests for methods available in the structural oracle (test.json). Either provide attributes information or delete MethodTest.java!");
-		}
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -120,9 +118,8 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 
 					// If all are correct, then we found the desired method and we can break the
 					// loop
-					if (checks.hasPassedAll()) {
+					if (checks.hasPassedAll())
 						break;
-					}
 				}
 				/*
 				 * TODO: we should also take wrong case and typos into account (i.e. the else
@@ -138,22 +135,17 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 		var expectedMethodInformation = "the expected method '" + expectedName + "' of the class '" + expectedClassName
 				+ "' with " + ((expectedParameters.length() == 0) ? "no parameters"
 						: "the parameters: " + expectedParameters.toString());
-		if (!methodChecks.name) {
+		if (!methodChecks.name)
 			fail(expectedMethodInformation + " was not found or is named wrongly.");
-		}
-		if (!methodChecks.parameters) {
+		if (!methodChecks.parameters)
 			fail("The parameters of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!methodChecks.modifiers) {
+		if (!methodChecks.modifiers)
 			fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation
 					+ NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!methodChecks.annotations) {
+		if (!methodChecks.annotations)
 			fail("The annotation(s) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!methodChecks.returnType) {
+		if (!methodChecks.returnType)
 			fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");
-		}
 	}
 
 	private static class MethodChecks {

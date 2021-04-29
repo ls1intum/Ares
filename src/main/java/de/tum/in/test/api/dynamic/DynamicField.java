@@ -99,8 +99,7 @@ public class DynamicField<T> implements Checkable {
 	public void check(Check... checks) {
 		int modifiers = toField().getModifiers();
 		String desc = "Feld " + this;
-		for (Check check : checks) {
+		for (Check check : checks)
 			check.checkModifiers(modifiers, desc);
-		}
 	}
 }

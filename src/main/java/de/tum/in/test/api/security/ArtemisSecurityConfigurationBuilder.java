@@ -119,12 +119,12 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPackageBlacklist(Collection<PackageRule> packageBlacklist) {
-		this.blacklistedPackages = Set.copyOf(packageBlacklist);
+		blacklistedPackages = Set.copyOf(packageBlacklist);
 		return this;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPackageWhitelist(Collection<PackageRule> packageWhitelist) {
-		this.whitelistedPackages = Set.copyOf(packageWhitelist);
+		whitelistedPackages = Set.copyOf(packageWhitelist);
 		return this;
 	}
 

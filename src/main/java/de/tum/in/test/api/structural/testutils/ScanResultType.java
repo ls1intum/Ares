@@ -3,7 +3,7 @@ package de.tum.in.test.api.structural.testutils;
 /**
  * Specifies the type of a {@link ScanResult}. This allows to differentiate
  * between correct, mistyped or not found classes.
- * 
+ *
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */

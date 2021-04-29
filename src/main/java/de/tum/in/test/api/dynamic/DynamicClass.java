@@ -65,15 +65,15 @@ public class DynamicClass<T> implements Checkable {
 	public boolean isClass(Object classOrStringOrDynamicClass) {
 		if (classOrStringOrDynamicClass == null)
 			throw new IllegalArgumentException("Internal Test Error, isClass supplied with null");
-		if (classOrStringOrDynamicClass instanceof String) {
+		if (classOrStringOrDynamicClass instanceof String)
 			return name.equals(classOrStringOrDynamicClass);
-		} else if (classOrStringOrDynamicClass instanceof Class<?>) {
+		if (classOrStringOrDynamicClass instanceof Class<?>) {
 			if (clazz != null)
 				return clazz.equals(classOrStringOrDynamicClass);
 			return name.equals(((Class<?>) classOrStringOrDynamicClass).getCanonicalName());
-		} else if (classOrStringOrDynamicClass instanceof DynamicClass) {
-			return name.equals(((DynamicClass<?>) classOrStringOrDynamicClass).name);
 		}
+		if (classOrStringOrDynamicClass instanceof DynamicClass)
+			return name.equals(((DynamicClass<?>) classOrStringOrDynamicClass).name);
 		throw new IllegalArgumentException(
 				"Internal Test Error, isClass supplied with " + classOrStringOrDynamicClass.getClass());
 	}
@@ -121,22 +121,20 @@ public class DynamicClass<T> implements Checkable {
 	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { // NOSONAR
 		if (classOrStringOrDynamicClass == null)
 			throw new IllegalArgumentException("Internal Test Error, toDynamic supplied with null");
-		if (classOrStringOrDynamicClass instanceof String) {
+		if (classOrStringOrDynamicClass instanceof String)
 			return new DynamicClass<>((String) classOrStringOrDynamicClass);
-		} else if (classOrStringOrDynamicClass instanceof Class<?>) {
+		if (classOrStringOrDynamicClass instanceof Class<?>)
 			return toDynamic((Class<?>) classOrStringOrDynamicClass);
-		} else if (classOrStringOrDynamicClass instanceof DynamicClass) {
+		if (classOrStringOrDynamicClass instanceof DynamicClass)
 			return (DynamicClass<?>) classOrStringOrDynamicClass;
-		}
 		throw new IllegalArgumentException(
 				"Internal Test Error, toDynamic supplied with " + classOrStringOrDynamicClass.getClass());
 	}
 
 	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) { // NOSONAR
 		var dynamicClasses = new DynamicClass[classesOrStringsOrDynamicClasses.length];
-		for (var i = 0; i < dynamicClasses.length; i++) {
+		for (var i = 0; i < dynamicClasses.length; i++)
 			dynamicClasses[i] = toDynamic(classesOrStringsOrDynamicClasses[i]);
-		}
 		return dynamicClasses;
 	}
 
@@ -160,9 +158,8 @@ public class DynamicClass<T> implements Checkable {
 		toClass();
 		int modifiers = toClass().getModifiers();
 		String desc = "Klasse/Interface " + this;
-		for (Check check : checks) {
+		for (Check check : checks)
 			check.checkModifiers(modifiers, desc);
-		}
 	}
 
 	public int checkForPublicOrProtectedMethods(DynamicMethod<?>... exceptions) {
@@ -180,15 +177,13 @@ public class DynamicClass<T> implements Checkable {
 			if (Modifier.isPublic(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
 				if (!"main(java.lang.String[])".endsWith(sig) && !publicMethods.contains(sig)
-						&& !objectMethods.contains(sig)) {
+						&& !objectMethods.contains(sig))
 					fail("Methode " + sig + " ist public, sollte sie aber nicht");
-				}
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if (!objectMethods.contains(sig)) {
+				if (!objectMethods.contains(sig))
 					fail("Methode " + sig + " ist protected, sollte sie aber nicht");
-				}
 			}
 		}
 		return checked;

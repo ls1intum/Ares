@@ -14,10 +14,9 @@ public enum OutputTestOptions {
 	static final OutputTestOptions[] NONE = {};
 
 	boolean isIn(OutputTestOptions[] outputOptions) {
-		for (OutputTestOptions outputOption : outputOptions) {
+		for (OutputTestOptions outputOption : outputOptions)
 			if (this == outputOption)
 				return true;
-		}
 		return false;
 	}
 }

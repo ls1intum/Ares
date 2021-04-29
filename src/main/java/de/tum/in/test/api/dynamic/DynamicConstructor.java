@@ -77,8 +77,7 @@ public class DynamicConstructor<T> implements Checkable {
 		toConstructor();
 		int modifiers = toConstructor().getModifiers();
 		String desc = "Konstruktor " + this;
-		for (Check check : checks) {
+		for (Check check : checks)
 			check.checkModifiers(modifiers, desc);
-		}
 	}
 }

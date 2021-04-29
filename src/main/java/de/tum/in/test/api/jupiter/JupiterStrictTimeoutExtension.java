@@ -22,7 +22,7 @@ import de.tum.in.test.api.StrictTimeout;
  * test methods or classes that are not marked {@link Public} or {@link Hidden}
  * to use {@link StrictTimeout}. <b>Doing otherwise will break the tests
  * completely because the extension will get registered and executed twice!</b>
- * 
+ *
  * @author Christian Femers
  */
 @API(status = Status.MAINTAINED)

@@ -207,10 +207,9 @@ public final class ReflectionTestUtils {
 		var failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;
-		if (parameterTypes == null || parameterTypes.length == 0) {
+		if (parameterTypes == null || parameterTypes.length == 0)
 			failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' from the class "
 					+ declaringClass.getSimpleName() + BECAUSE;
-		}
 		try {
 			return declaringClass.getMethod(methodName, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
@@ -312,9 +311,8 @@ public final class ReflectionTestUtils {
 		var failMessage = "Could not find the constructor with the parameters: "
 				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
 				+ BECAUSE;
-		if (parameterTypes == null || parameterTypes.length == 0) {
+		if (parameterTypes == null || parameterTypes.length == 0)
 			failMessage = "Could not find the constructor from the " + declaringClass.getSimpleName() + BECAUSE;
-		}
 		try {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {

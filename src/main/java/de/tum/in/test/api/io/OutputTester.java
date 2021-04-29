@@ -228,9 +228,8 @@ public final class OutputTester implements LineAcceptor {
 			// fast-forward needs to stay the same or JUnit LineMatcher won't recognize it
 			if (!isFastForward) {
 				// don't quote lines that were marked as regular expressions by the user
-				if (!isRegEx) {
+				if (!isRegEx)
 					newLine.replace(0, newLine.length(), Pattern.quote(newLine.toString()));
-				}
 				// insert random comment to avoid equality comparison working
 				newLine.insert(0, String.format("(?x)#%08X%n", i)); //$NON-NLS-1$
 				newLine.append('#').append(randomString);

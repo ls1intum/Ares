@@ -31,12 +31,12 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * <b>past this date</b>.
  * <p>
  * The format has to be
- * 
+ *
  * <pre>
  * {@linkplain DateTimeFormatter#ISO_LOCAL_DATE ISO_LOCAL_DATE}(T| ){@linkplain DateTimeFormatter#ISO_LOCAL_TIME ISO_LOCAL_TIME}( {@link ZoneId
  * ZONE_ID})?
  * </pre>
- * 
+ *
  * While the {@link ZoneId} can be left out, this is highly discouraged because
  * build agents might not have the same/correct time zone set. <br>
  * So this can be e.g.

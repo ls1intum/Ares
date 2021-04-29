@@ -25,14 +25,14 @@ import org.junit.jupiter.api.Assertions;
  * {@link TestUtils#privilegedFail(String)} instead of
  * {@link Assertions#fail(String)} or by using
  * {@link TestUtils#privilegedThrow(Runnable)} like <blockquote>
- * 
+ *
  * <pre>
  * int x = ...
  * TestUtils.privilegedThrow(() {@literal ->} {
  *     assertEquals(42, x, "Wrong value for x");
  * });
  * </pre>
- * 
+ *
  * </blockquote>
  * <p>
  * <b>Important:</b> If you use the variant shown above, make sure to put as
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Assertions;
  * <p>
  * Keep in mind that the privileged throw can only be used by whitelisted
  * callers, of course.
- * 
+ *
  * @see TestUtils#privilegedFail(String)
  * @see TestUtils#privilegedThrow(Runnable)
  * @see TestUtils#privilegedThrow(java.util.concurrent.Callable)
@@ -59,7 +59,7 @@ public @interface PrivilegedExceptionsOnly {
 	 * context.
 	 * <p>
 	 * The default message is <code>Test failed.</code>
-	 * 
+	 *
 	 * @return the string used as message for all non-privileged failures
 	 * @author Christian Femers
 	 */

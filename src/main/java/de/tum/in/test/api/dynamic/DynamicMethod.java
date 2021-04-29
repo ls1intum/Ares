@@ -152,8 +152,7 @@ public class DynamicMethod<T> implements Checkable {
 	public void check(Check... checks) {
 		int modifiers = toMethod().getModifiers();
 		String desc = "Methode " + this;
-		for (Check check : checks) {
+		for (Check check : checks)
 			check.checkModifiers(modifiers, desc);
-		}
 	}
 }

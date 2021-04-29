@@ -37,9 +37,8 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	 */
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
-		if (structureOracleJSON == null) {
+		if (structureOracleJSON == null)
 			fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
-		}
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			var expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
@@ -57,9 +56,8 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 				tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure)));
 			}
 		}
-		if (tests.isEmpty()) {
+		if (tests.isEmpty())
 			fail("No tests for classes available in the structural oracle (test.json). Either provide attributes information or delete ClassTest.java!");
-		}
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -99,24 +97,20 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	private static void checkBasicClassProperties(String expectedClassName, Class<?> observedClass,
 			JSONObject expectedClassPropertiesJSON) {
 		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract")
-				&& !Modifier.isAbstract(observedClass.getModifiers())) {
+				&& !Modifier.isAbstract(observedClass.getModifiers()))
 			fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
-		}
-		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) {
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum())
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
-		}
 		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface")
-				&& !Modifier.isInterface(observedClass.getModifiers())) {
+				&& !Modifier.isInterface(observedClass.getModifiers()))
 			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
-		}
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
 			var expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
 			var modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "),
 					expectedModifiers);
-			if (!modifiersAreCorrect) {
+			if (!modifiersAreCorrect)
 				fail("The modifier(s) (access type, abstract, etc.) of " + expectedClassName
 						+ NOT_IMPLEMENTED_AS_EXPECTED);
-			}
 		}
 	}
 
@@ -129,7 +123,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			JSONObject expectedClassPropertiesJSON) {
 		// Filter out the enums, since there is a separate test for them
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
-				&& !expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS).equals("Enum")) {
+				&& !"Enum".equals(expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS))) {
 			var expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
 			if (!checkExpectedType(observedClass.getSuperclass(), observedClass.getGenericSuperclass(),
 					expectedSuperClassName)) {
@@ -157,10 +151,9 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 						break;
 					}
 				}
-				if (!implementsInterface) {
+				if (!implementsInterface)
 					fail(THE_CLASS + "'" + expectedClassName + "' does not implement the interface '"
 							+ expectedInterface + "' as expected." + " Implement the interface and its methods.");
-				}
 			}
 		}
 	}
@@ -171,9 +164,8 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			var expectedAnnotations = expectedClassPropertiesJSON.getJSONArray(JSON_PROPERTY_ANNOTATIONS);
 			var observedAnnotations = observedClass.getAnnotations();
 			var annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
-			if (!annotationsAreRight) {
+			if (!annotationsAreRight)
 				fail("The annotation(s) of the class '" + expectedClassName + "' are not implemented as expected.");
-			}
 		}
 	}
 }

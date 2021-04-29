@@ -88,12 +88,10 @@ final class TestOutStream extends OutputStream {
 	}
 
 	private void checkCharCount(int newChars) throws IOException {
-		if (closed) {
+		if (closed)
 			throw new IOException(localized("output_tester.output_closed")); //$NON-NLS-1$
-		}
 		charCount += newChars;
-		if (charCount > maxChars) {
+		if (charCount > maxChars)
 			throw new SecurityException(formatLocalized("output_tester.output_maxExceeded", charCount)); //$NON-NLS-1$
-		}
 	}
 }

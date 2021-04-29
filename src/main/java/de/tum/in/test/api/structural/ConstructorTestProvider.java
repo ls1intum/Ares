@@ -37,9 +37,8 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 	 */
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
-		if (structureOracleJSON == null) {
+		if (structureOracleJSON == null)
 			fail("The ConstructorTest can only run if the structural oracle (test.json) is present. If you do not provide it, delete ConstructorTest.java!");
-		}
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 
@@ -54,9 +53,8 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 						() -> testConstructors(expectedClassStructure)));
 			}
 		}
-		if (tests.isEmpty()) {
+		if (tests.isEmpty())
 			fail("No tests for constructors available in the structural oracle (test.json). Either provide constructor information or delete ConstructorTest.java!");
-		}
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -120,9 +118,8 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 				annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
 
 				// If both are correct, then we found our constructor and we can break the loop
-				if (parametersAreRight && modifiersAreRight && annotationsAreRight) {
+				if (parametersAreRight && modifiersAreRight && annotationsAreRight)
 					break;
-				}
 			}
 			checkConstructorCorrectness(expectedClassName, expectedParameters, parametersAreRight, modifiersAreRight,
 					annotationsAreRight);
@@ -135,14 +132,11 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 				+ "' with " + ((expectedParameters.length() == 0) ? "no parameters"
 						: "the parameters: " + expectedParameters.toString());
 
-		if (!parametersAreCorrect) {
+		if (!parametersAreCorrect)
 			fail("The parameters of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!modifiersAreCorrect) {
+		if (!modifiersAreCorrect)
 			fail("The access modifiers of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!annotationsAreCorrect) {
+		if (!annotationsAreCorrect)
 			fail("The annotation(s) of " + expectedConstructorInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
 	}
 }

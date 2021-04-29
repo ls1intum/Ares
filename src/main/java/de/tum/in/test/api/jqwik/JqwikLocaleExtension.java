@@ -38,8 +38,7 @@ public class JqwikLocaleExtension implements AroundContainerHook {
 
 	@Override
 	public void afterContainer(ContainerLifecycleContext context) {
-		if (oldLocale != null) {
+		if (oldLocale != null)
 			Locale.setDefault(oldLocale);
-		}
 	}
 }

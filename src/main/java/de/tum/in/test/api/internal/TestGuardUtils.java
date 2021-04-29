@@ -63,10 +63,9 @@ public final class TestGuardUtils {
 			if (activationBefore.map(now::isBefore).orElse(false))
 				return;
 			fail(localized("test_guard.hidden_test_before_deadline_message")); //$NON-NLS-1$
-		} else {
-			if (hasAnnotation(context, Deadline.class) || hasAnnotation(context, ExtendedDeadline.class))
-				throw new AnnotationFormatError(
-						formatLocalized("test_guard.public_test_cannot_have_deadline", context.displayName())); //$NON-NLS-1$
+		} else if (hasAnnotation(context, Deadline.class) || hasAnnotation(context, ExtendedDeadline.class)) {
+			throw new AnnotationFormatError(
+					formatLocalized("test_guard.public_test_cannot_have_deadline", context.displayName())); //$NON-NLS-1$
 		}
 	}
 

@@ -59,7 +59,7 @@ public @interface AllowLocalPort {
 	 * use here.
 	 * <p>
 	 * Empty by default. Must not contain ports in {@link #exclude()}.
-	 * 
+	 *
 	 * @return the port numbers for which all local port connections should be
 	 *         allowed.
 	 */
@@ -75,7 +75,7 @@ public @interface AllowLocalPort {
 	 * <p>
 	 * See other constants in {@link AllowLocalPort} for some possible values, e.g.
 	 * {@link #IANA_REGISTERED_LOWER_BORDER}.
-	 * 
+	 *
 	 * @return the port number above which all local port connections should be
 	 *         allowed in addition to {@link #value()}.
 	 */
@@ -85,7 +85,7 @@ public @interface AllowLocalPort {
 	 * Exclusions from the rules above, those will never be allowed.
 	 * <p>
 	 * Empty by default. Must not contain ports in {@link #value()}.
-	 * 
+	 *
 	 * @return the port numbers in {@link #allowPortsAbove()} which should
 	 *         explicitly not be allowed.
 	 */

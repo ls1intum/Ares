@@ -37,9 +37,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	 */
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
-		if (structureOracleJSON == null) {
+		if (structureOracleJSON == null)
 			fail("The AttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete AttributeTest.java!");
-		}
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			// Only test the classes that have attributes defined in the oracle.
@@ -54,9 +53,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 						() -> testAttributes(expectedClassStructure)));
 			}
 		}
-		if (tests.isEmpty()) {
+		if (tests.isEmpty())
 			fail("No tests for attributes available in the structural oracle (test.json). Either provide attributes information or delete AttributeTest.java!");
-		}
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -126,9 +124,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 							expectedModifiers);
 					annotationsAreCorrect = checkAnnotations(observedAttribute.getAnnotations(), expectedAnnotations);
 					// If all are correct, then we found our attribute and we can break the loop
-					if (typeIsCorrect && modifiersAreCorrect && annotationsAreCorrect) {
+					if (typeIsCorrect && modifiersAreCorrect && annotationsAreCorrect)
 						break;
-					}
 				}
 				// TODO: we should also take wrong case and typos into account (the else case)
 			}
@@ -141,19 +138,15 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 			boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName, String expectedClassName) {
 		var expectedAttributeInformation = "the expected attribute '" + expectedName + "' of the class '"
 				+ expectedClassName + "'";
-		if (!nameIsCorrect) {
+		if (!nameIsCorrect)
 			fail("The name of " + expectedAttributeInformation + " is not implemented as expected.");
-		}
-		if (!typeIsCorrect) {
+		if (!typeIsCorrect)
 			fail("The type of " + expectedAttributeInformation + " is not implemented as expected.");
-		}
-		if (!modifiersAreCorrect) {
+		if (!modifiersAreCorrect)
 			fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation
 					+ NOT_IMPLEMENTED_AS_EXPECTED);
-		}
-		if (!annotationsAreCorrect) {
+		if (!annotationsAreCorrect)
 			fail("The annotation(s) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
-		}
 	}
 
 	/**
@@ -190,10 +183,9 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 					break;
 				}
 			}
-			if (!enumValueExists) {
+			if (!enumValueExists)
 				fail(THE_CLASS + "'" + expectedClassName + "' does not include the enum value: " + expectedEnumValue
 						+ ". Make sure to implement it as expected.");
-			}
 		}
 	}
 }

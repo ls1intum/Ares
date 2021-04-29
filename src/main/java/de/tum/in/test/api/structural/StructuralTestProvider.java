@@ -110,9 +110,8 @@ public abstract class StructuralTestProvider {
 		var scanResultEnum = classNameScanner.getScanResult().getResult();
 		var classNameScanMessage = classNameScanner.getScanResult().getMessage();
 		// please note: inner classes are not supported
-		if (!scanResultEnum.equals(ScanResultType.CORRECT_NAME_CORRECT_PLACE)) {
+		if (!ScanResultType.CORRECT_NAME_CORRECT_PLACE.equals(scanResultEnum))
 			fail(classNameScanMessage);
-		}
 		try {
 			return Class.forName(expectedClassStructure.getQualifiedClassName(), false,
 					StructuralTestProvider.class.getClassLoader());
@@ -152,17 +151,15 @@ public abstract class StructuralTestProvider {
 		 * match. A note: for technical reasons, we get in case of no observed
 		 * modifiers, a string array with an empty string.
 		 */
-		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0) {
+		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0)
 			return true;
-		}
 		/*
 		 * Otherwise check if all expected necessary modifiers are contained in the
 		 * array of the observed ones and if any forbidden modifiers were used.
 		 */
 		Set<ModifierSpecification> modifierSpecifications = new HashSet<>();
-		for (var i = 0; i < expectedModifiers.length(); i++) {
+		for (var i = 0; i < expectedModifiers.length(); i++)
 			modifierSpecifications.add(ModifierSpecification.getModifierForJsonString(expectedModifiers.getString(i)));
-		}
 		Set<String> observedModifiersSet = Set.of(observedModifiers);
 		Set<String> allowedModifiers = modifierSpecifications.stream().map(ModifierSpecification::getModifier)
 				.collect(Collectors.toSet());
@@ -194,13 +191,11 @@ public abstract class StructuralTestProvider {
 
 		static ModifierSpecification getModifierForJsonString(String jsonString) {
 			String[] sections = jsonString.split(":", -1);
-			if (sections.length == 1) {
+			if (sections.length == 1)
 				return new ModifierSpecification(jsonString, false);
-			} else if (sections[0].equals("optional")) {
+			if ("optional".equals(sections[0]))
 				return new ModifierSpecification(sections[1].trim(), true);
-			} else {
-				throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'");
-			}
+			throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'");
 		}
 	}
 
@@ -210,16 +205,14 @@ public abstract class StructuralTestProvider {
 		 * match. A note: for technical reasons, we get in case of no observed
 		 * annotations, a string array with an empty string.
 		 */
-		if (observedAnnotations.length == 0 && expectedAnnotations.length() == 0) {
+		if (observedAnnotations.length == 0 && expectedAnnotations.length() == 0)
 			return true;
-		}
 		/*
 		 * If the number of the annotations does not match, then the annotations per se
 		 * do not match either.
 		 */
-		if (observedAnnotations.length != expectedAnnotations.length()) {
+		if (observedAnnotations.length != expectedAnnotations.length())
 			return false;
-		}
 		/*
 		 * Otherwise check if each expected annotation is contained in the array of the
 		 * observed ones. If at least one isn't, then the modifiers don't match.
@@ -227,16 +220,14 @@ public abstract class StructuralTestProvider {
 		for (Object expectedAnnotation : expectedAnnotations) {
 			var expectedAnnotationFound = false;
 			var expectedAnnotationAsString = (String) expectedAnnotation;
-			for (Annotation observedAnnotation : observedAnnotations) {
+			for (Annotation observedAnnotation : observedAnnotations)
 				if (checkExpectedType(observedAnnotation.annotationType(), observedAnnotation.annotationType(),
 						expectedAnnotationAsString)) {
 					expectedAnnotationFound = true;
 					break;
 				}
-			}
-			if (!expectedAnnotationFound) {
+			if (!expectedAnnotationFound)
 				return false;
-			}
 		}
 		return true;
 	}
@@ -255,32 +246,28 @@ public abstract class StructuralTestProvider {
 		 * If both the observed and expected elements have no parameters, then they
 		 * match.
 		 */
-		if (observedParameters.length == 0 && expectedParameters.length() == 0) {
+		if (observedParameters.length == 0 && expectedParameters.length() == 0)
 			return true;
-		}
 		/*
 		 * If the number of parameters do not match, then the parameters cannot match
 		 * either.
 		 */
-		if (observedParameters.length != expectedParameters.length()) {
+		if (observedParameters.length != expectedParameters.length())
 			return false;
-		}
 		/*
 		 * Create hash tables to store how often a parameter type occurs. Checking the
 		 * occurrences of a certain parameter type is enough, since the parameter order
 		 * is not relevant to us.
 		 */
 		var expectedParameterTypeNames = new String[expectedParameters.length()];
-		for (var i = 0; i < expectedParameters.length(); i++) {
+		for (var i = 0; i < expectedParameters.length(); i++)
 			expectedParameterTypeNames[i] = expectedParameters.getString(i);
-		}
 		Map<String, Integer> expectedParametersHashtable = createParametersHashMap(expectedParameterTypeNames);
 
 		var observedParameterTypeNames = new String[observedParameters.length];
-		for (var i = 0; i < observedParameters.length; i++) {
+		for (var i = 0; i < observedParameters.length; i++)
 			// TODO: Canonical names should be supported as well.
 			observedParameterTypeNames[i] = observedParameters[i].getSimpleName();
-		}
 		Map<String, Integer> observedParametersHashtable = createParametersHashMap(observedParameterTypeNames);
 
 		return expectedParametersHashtable.equals(observedParametersHashtable);
@@ -303,9 +290,8 @@ public abstract class StructuralTestProvider {
 			actualName = actualGenericType.getTypeName();
 		} else {
 			actualName = actualClass.getCanonicalName();
-			if (actualName == null) {
+			if (actualName == null)
 				actualName = actualClass.getName();
-			}
 		}
 		var actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
 		/*
@@ -313,9 +299,8 @@ public abstract class StructuralTestProvider {
 		 * represents a full canonical name. If it does not, we can assume it represents
 		 * a simple name.
 		 */
-		if (expectedTypeName.contains(".")) {
+		if (expectedTypeName.contains("."))
 			return expectedTypeName.equals(actualName);
-		}
 		return expectedTypeName.equals(actualSimpleName);
 	}
 
@@ -348,16 +333,14 @@ public abstract class StructuralTestProvider {
 	 * @return The JSONArray representation of the structure oracle.
 	 */
 	protected static JSONArray retrieveStructureOracleJSON(URL structureOracleFileUrl) {
-		if (structureOracleFileUrl == null) {
+		if (structureOracleFileUrl == null)
 			return null;
-		}
 		var result = new StringBuilder();
 		try (var bufferedReader = new BufferedReader(new InputStreamReader(structureOracleFileUrl.openStream()))) {
 			var buffer = new char[8192];
 			int length;
-			while ((length = bufferedReader.read(buffer, 0, buffer.length)) != -1) {
+			while ((length = bufferedReader.read(buffer, 0, buffer.length)) != -1)
 				result.append(buffer, 0, length);
-			}
 		} catch (IOException e) {
 			LOG.error("Could not open stream from URL: {}", structureOracleFileUrl, e);
 		}

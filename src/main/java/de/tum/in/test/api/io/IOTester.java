@@ -101,7 +101,7 @@ public final class IOTester {
 
 	/**
 	 * Returns all standard output as lines
-	 * 
+	 *
 	 * @return a list of all standard output lines
 	 * @deprecated See {@link OutputTester#getOutput()}, use
 	 *             <code>out().getLines()</code> instead. (With
@@ -115,7 +115,7 @@ public final class IOTester {
 
 	/**
 	 * Returns all error output as lines
-	 * 
+	 *
 	 * @return a list of all error output lines
 	 * @deprecated See {@link OutputTester#getOutput()} use
 	 *             <code>err().getLines()</code> instead. (With
@@ -129,7 +129,7 @@ public final class IOTester {
 
 	/**
 	 * Returns all standard output as single string.
-	 * 
+	 *
 	 * @return all standard output lines as single string.
 	 * @deprecated See {@link OutputTester#getOutput()}, use
 	 *             <code>out().getOutputAsString()</code> instead. (With
@@ -143,7 +143,7 @@ public final class IOTester {
 
 	/**
 	 * Returns all error output as single string.
-	 * 
+	 *
 	 * @return all error output lines as single string.
 	 * @deprecated See {@link OutputTester#getOutput()}, use
 	 *             <code>err().getOutputAsString()</code> instead. (With
@@ -171,7 +171,7 @@ public final class IOTester {
 	 * Testing counterpart to {@link System#in}.
 	 * <p>
 	 * Returns the input tester.
-	 * 
+	 *
 	 * @return the {@link InputTester} for {@link System#in}
 	 */
 	public InputTester in() {
@@ -182,7 +182,7 @@ public final class IOTester {
 	 * Testing counterpart to {@link System#out}.
 	 * <p>
 	 * Returns the standard output tester.
-	 * 
+	 *
 	 * @return the {@link OutputTester} for {@link System#out}
 	 */
 	public OutputTester out() {
@@ -193,7 +193,7 @@ public final class IOTester {
 	 * Testing counterpart to {@link System#err}.
 	 * <p>
 	 * Returns the error output tester.
-	 * 
+	 *
 	 * @return the {@link OutputTester} for {@link System#err}
 	 */
 	public OutputTester err() {
@@ -221,7 +221,7 @@ public final class IOTester {
 
 	private static void checkEncoding() {
 		Charset cs = Charset.defaultCharset();
-		if (!cs.name().equals("UTF-8")) { //$NON-NLS-1$
+		if (!"UTF-8".equals(cs.name())) { //$NON-NLS-1$
 			String message = formatLocalized("io_tester.default_not_utf8", cs); //$NON-NLS-1$
 			System.err.println(message); // this is more noticeable in maven build log
 			throw new IllegalStateException(message);

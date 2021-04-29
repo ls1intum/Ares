@@ -180,9 +180,8 @@ public enum PathType {
 			String cleaned;
 			cleaned = GLOB_SINGLE_DOT_ELIMINATION.matcher(globPattern).replaceAll(""); //$NON-NLS-1$
 			Matcher m;
-			while ((m = GLOB_DOUBLE_DOT_ELIMINATION.matcher(cleaned)).find()) {
+			while ((m = GLOB_DOUBLE_DOT_ELIMINATION.matcher(cleaned)).find())
 				cleaned = m.replaceAll(""); //$NON-NLS-1$
-			}
 			var offset = 0;
 			while (cleaned.startsWith("..")) { //$NON-NLS-1$
 				if (cleaned.length() == 2)
