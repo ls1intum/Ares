@@ -23,11 +23,11 @@ import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.SecurityPenguin;
 
 @Public
+@UseLocale("en")
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @AllowThreads(maxActiveCount = 100)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
-@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")

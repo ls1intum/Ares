@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.PathAccessPenguin;
 import de.tum.in.testuser.subject.TrustedPackagePenguin;
 import de.tum.in.testuser.subject.WhitelistedClassPenguin;
 
 @Public
+@UseLocale("en")
 @AddTrustedPackage("**subject.TrustedPackageP*")
 @WhitelistClass(WhitelistedClassPenguin.class)
 public class TrustedClassesUser {

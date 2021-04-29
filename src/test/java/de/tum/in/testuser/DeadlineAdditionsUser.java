@@ -5,7 +5,9 @@ import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 
+@UseLocale("en")
 @Deadline("2000-01-01 00:00")
 public class DeadlineAdditionsUser {
 

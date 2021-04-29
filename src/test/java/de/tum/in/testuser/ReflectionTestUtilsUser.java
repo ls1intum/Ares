@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.structural.SomeClass;
 
 @Public
+@UseLocale("en")
 @StrictTimeout(10)
 @WhitelistPath("")
 public class ReflectionTestUtilsUser {

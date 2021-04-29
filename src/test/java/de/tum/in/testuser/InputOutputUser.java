@@ -21,8 +21,10 @@ import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.io.OutputTestOptions;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.InputOutputPenguin;
 
+@UseLocale("en")
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
@@ -120,7 +122,7 @@ public class InputOutputUser {
 					">> 12 >>", //
 					"ABCDEF");
 		}).isInstanceOf(AssertionFailedError.class).hasMessageContainingAll(
-				"The output does not contain enough lines for the test to work, only 11 lines found.");
+				"the output does not contain enough lines for the test to work, only 11 lines found.");
 	}
 
 	@PublicTest

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.localization.UseLocale;
 
+@UseLocale("en")
 public class ValidationUser {
 
 	@AllowLocalPort(value = { 21, 80 }, allowPortsAbove = 21, exclude = { 21, 22 })

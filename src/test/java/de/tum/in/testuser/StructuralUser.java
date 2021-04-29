@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestFactory;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.structural.AttributeTestProvider;
 import de.tum.in.test.api.structural.ClassTestProvider;
 import de.tum.in.test.api.structural.ConstructorTestProvider;
@@ -17,6 +18,7 @@ import de.tum.in.test.api.structural.MethodTestProvider;
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 
 @Public
+@UseLocale("en")
 @StrictTimeout(10)
 @WhitelistPath("")
 public class StructuralUser {

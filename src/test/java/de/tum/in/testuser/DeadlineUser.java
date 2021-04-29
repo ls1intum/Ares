@@ -6,7 +6,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.jupiter.HiddenTest;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 
+@UseLocale("en")
 @Deadline("2200-01-01 16:00")
 @TestMethodOrder(MethodName.class)
 public class DeadlineUser {

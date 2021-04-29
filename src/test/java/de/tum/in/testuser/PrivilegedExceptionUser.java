@@ -16,8 +16,10 @@ import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.PrivilegedExceptionPenguin;
 
+@UseLocale("en")
 @PrivilegedExceptionsOnly("ABC")
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)

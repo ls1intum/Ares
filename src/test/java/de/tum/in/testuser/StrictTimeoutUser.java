@@ -9,7 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
+import de.tum.in.test.api.localization.UseLocale;
 
+@UseLocale("en")
 @ExtendWith(JupiterStrictTimeoutExtension.class)
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)

@@ -22,9 +22,9 @@ import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.CustomException;
 import de.tum.in.testuser.subject.ExceptionFailurePenguin;
 
+@UseLocale("en")
 @AllowThreads(maxActiveCount = 100)
 @TestMethodOrder(MethodName.class)
-@UseLocale("en")
 @WhitelistPath(value = "target/**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")

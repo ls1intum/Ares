@@ -153,13 +153,13 @@ class ExceptionFailureTest {
 	void test_throwExceptionInInitializerError() {
 		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwExceptionInInitializerError,
 				ExceptionInInitializerError.class,
-				"abc\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwExceptionInInitializerError(ExceptionFailurePenguin.java:14) ///"));
+				"abc\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwExceptionInInitializerError(ExceptionFailurePenguin.java:13) ///"));
 	}
 
 	@TestTest
 	void test_throwNullPointerException() {
 		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwNullPointerException,
 				NullPointerException.class,
-				"xyz\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwNullPointerException(ExceptionFailurePenguin.java:10) ///"));
+				"xyz\n" + "/// potential problem location: de.tum.in.testuser.subject.ExceptionFailurePenguin.throwNullPointerException(ExceptionFailurePenguin.java:9) ///"));
 	}
 }
