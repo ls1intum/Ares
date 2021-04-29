@@ -24,9 +24,7 @@ import org.junit.jupiter.api.Assertions;
  * not filtered. This can be archived by using
  * {@link TestUtils#privilegedFail(String)} instead of
  * {@link Assertions#fail(String)} or by using
- * {@link TestUtils#privilegedThrow(Runnable)} like
- * 
- * <blockquote>
+ * {@link TestUtils#privilegedThrow(Runnable)} like <blockquote>
  * 
  * <pre>
  * int x = ...
@@ -47,7 +45,6 @@ import org.junit.jupiter.api.Assertions;
  * @see TestUtils#privilegedFail(String)
  * @see TestUtils#privilegedThrow(Runnable)
  * @see TestUtils#privilegedThrow(java.util.concurrent.Callable)
- *
  * @author Christian Femers
  * @since 0.5.2
  * @version 1.0.1

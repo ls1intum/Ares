@@ -52,7 +52,6 @@ final class ThrowableSets {
 	}
 
 	private ThrowableSets() {
-
 	}
 
 	private static boolean classCanBeFound(String className) {
@@ -74,7 +73,6 @@ final class ThrowableSets {
 	static final class Own {
 
 		private Own() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(ConfigurationException.class);
@@ -83,7 +81,6 @@ final class ThrowableSets {
 	static final class Java {
 
 		private Java() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(java.awt.AWTError.class,
@@ -215,7 +212,6 @@ final class ThrowableSets {
 	static final class JUnit4 {
 
 		private JUnit4() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(junit.framework.AssertionFailedError.class,
@@ -235,7 +231,6 @@ final class ThrowableSets {
 	static final class JUnit5 {
 
 		private JUnit5() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(
@@ -250,7 +245,6 @@ final class ThrowableSets {
 	static final class Jqwik {
 
 		private Jqwik() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(
@@ -268,7 +262,6 @@ final class ThrowableSets {
 	static final class AssertJ {
 
 		private AssertJ() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(
@@ -279,7 +272,6 @@ final class ThrowableSets {
 	static final class OpenTest4J {
 
 		private OpenTest4J() {
-
 		}
 
 		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(

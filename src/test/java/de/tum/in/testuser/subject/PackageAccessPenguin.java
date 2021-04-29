@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 public final class PackageAccessPenguin {
 
 	private PackageAccessPenguin() {
-
 	}
 
 	public static void useArrayList() {

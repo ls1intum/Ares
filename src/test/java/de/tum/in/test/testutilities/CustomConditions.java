@@ -19,7 +19,6 @@ import org.junit.platform.testkit.engine.EventConditions;
 public final class CustomConditions {
 
 	private CustomConditions() {
-
 	}
 
 	public static Condition<? super List<? extends Event>> deltaTimeIs(long millies, double accuracy) {

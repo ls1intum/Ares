@@ -10,7 +10,6 @@ import java.util.concurrent.Callable;
 public final class NetworkPenguin {
 
 	private NetworkPenguin() {
-
 	}
 
 	public static void tryStartServer(int port, String expectLine) throws Exception {

@@ -92,5 +92,5 @@ public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 	 * @author Christian Femers
 	 */
 	<T> T interceptGenericInvocation(Invocation<T> invocation, ExtensionContext extensionContext,
-			Optional<ReflectiveInvocationContext<?>> invocationContext) throws Throwable; //NOSONAR
+			Optional<ReflectiveInvocationContext<?>> invocationContext) throws Throwable; // NOSONAR
 }

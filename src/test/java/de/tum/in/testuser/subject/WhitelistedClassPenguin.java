@@ -7,7 +7,6 @@ import java.nio.file.Path;
 public final class WhitelistedClassPenguin {
 
 	private WhitelistedClassPenguin() {
-
 	}
 
 	public static void accessPath(Path p) throws IOException {

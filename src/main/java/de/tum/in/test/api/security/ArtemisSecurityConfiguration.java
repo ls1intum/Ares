@@ -31,7 +31,7 @@ public final class ArtemisSecurityConfiguration {
 	private final Set<PackageRule> whitelistedPackages;
 	private final Set<PackageRule> trustedPackages;
 
-	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, //NOSONAR
+	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, // NOSONAR
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,

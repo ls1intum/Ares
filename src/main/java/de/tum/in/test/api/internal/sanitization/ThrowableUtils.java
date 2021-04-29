@@ -99,7 +99,7 @@ final class ThrowableUtils {
 				.mapToLong(e -> propertyTypeCount.getOrDefault(e.getKey(), 0L) - e.getValue()).min().orElse(0) >= 0;
 	}
 
-	static Comparator<Constructor<?>> getConstructorPreferenceOrder() { //NOSONAR
+	static Comparator<Constructor<?>> getConstructorPreferenceOrder() { // NOSONAR
 		return Comparator.<Constructor<?>>comparingInt(Constructor::getParameterCount)
 				.thenComparingLong(x -> Stream.of(x.getParameterTypes()).filter(String.class::equals).count())
 				.reversed();

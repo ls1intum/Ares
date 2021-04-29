@@ -49,7 +49,7 @@ public final class TimeoutUtils {
 		return executeWithTimeout(timeout.get(), () -> rethrowThrowableSafe(execution), context);
 	}
 
-	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception { //NOSONAR
+	private static <T> T rethrowThrowableSafe(ThrowingSupplier<T> execution) throws Exception { // NOSONAR
 		try {
 			return execution.get();
 		} catch (Exception | Error e) {
@@ -64,7 +64,7 @@ public final class TimeoutUtils {
 	}
 
 	private static <T> T executeWithTimeout(Duration timeout, Callable<T> action, TestContext context)
-			throws Throwable { //NOSONAR
+			throws Throwable { // NOSONAR
 		ArtemisSecurityManager.revokeThreadWhitelisting();
 		var executorService = Executors.newSingleThreadExecutor(new WhitelistedThreadFactory());
 		try {

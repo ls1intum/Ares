@@ -26,7 +26,6 @@ public class MiniJava {
 	 * Reads a {@link String} from the console, and prompts the user by printing the
 	 * given <code>text</code> with a line break to the console.
 	 * <p>
-	 *
 	 * <i>Liest einen {@link String} von der Konsole ein, und fordert den oder die
 	 * Benutzerin durch die Ausgabe des übergebenen <code>text</code>es zur Eingabe
 	 * auf (mit Zeilenumbruch).</i>

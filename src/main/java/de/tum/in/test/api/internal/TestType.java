@@ -15,7 +15,6 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * @see Public
  * @see HiddenTest
  * @see PublicTest
- *
  * @author Christian Femers
  * @since 0.2.0
  * @version 1.0.0

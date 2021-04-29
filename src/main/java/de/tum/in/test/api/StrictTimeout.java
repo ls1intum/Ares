@@ -51,5 +51,4 @@ public @interface StrictTimeout {
 	 * @see TimeUnit
 	 */
 	TimeUnit unit() default TimeUnit.SECONDS;
-
 }

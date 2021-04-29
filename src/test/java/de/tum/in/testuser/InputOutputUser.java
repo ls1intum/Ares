@@ -125,7 +125,6 @@ public class InputOutputUser {
 
 	@PublicTest
 	void testPenguin1(IOTester tester) {
-
 		InputOutputPenguin.writeTwoLines();
 
 		List<Line> lines = tester.out().getLines();
@@ -139,7 +138,6 @@ public class InputOutputUser {
 
 	@PublicTest
 	void testPenguin2(IOTester tester) {
-
 		InputOutputPenguin.writeTwoLines();
 
 		List<Line> lines = tester.out().getLines();
@@ -150,7 +148,6 @@ public class InputOutputUser {
 
 	@PublicTest
 	void testPolarBear(IOTester tester) {
-
 		InputOutputPenguin.writeTwoLines();
 
 		List<Line> lines = tester.out().getLines();

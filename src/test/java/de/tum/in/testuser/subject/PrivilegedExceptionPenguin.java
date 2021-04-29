@@ -5,7 +5,6 @@ import de.tum.in.test.api.TestUtils;
 public final class PrivilegedExceptionPenguin {
 
 	private PrivilegedExceptionPenguin() {
-
 	}
 
 	public static void throwNullPointerException() {

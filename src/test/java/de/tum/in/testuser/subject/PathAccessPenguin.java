@@ -8,7 +8,6 @@ import java.nio.file.Path;
 public final class PathAccessPenguin {
 
 	private PathAccessPenguin() {
-
 	}
 
 	public static void accessPath(Path p) throws IOException {

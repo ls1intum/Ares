@@ -29,7 +29,6 @@ import de.tum.in.test.api.util.RuleType;
 public final class ConfigurationUtils {
 
 	private ConfigurationUtils() {
-
 	}
 
 	public static ArtemisSecurityConfiguration generateConfiguration(TestContext context) {

@@ -23,7 +23,6 @@ import org.junit.platform.commons.support.AnnotationSupport;
 public final class TestContextUtils {
 
 	private TestContextUtils() {
-
 	}
 
 	/**
@@ -42,9 +41,7 @@ public final class TestContextUtils {
 	 * @param annotation the annotation to look for
 	 * @return the first occurrence of <code>A</code> in the described order as
 	 *         Optional, never null
-	 *
 	 * @see AnnotationSupport#findAnnotation(AnnotatedElement, Class)
-	 *
 	 * @author Christian Femers
 	 */
 	public static <A extends Annotation> Optional<A> findAnnotationIn(TestContext context, Class<A> annotation) {
@@ -68,9 +65,7 @@ public final class TestContextUtils {
 	 * @param annotation the annotation to look for
 	 * @return all occurrences of <code>A</code> in the described order as Stream,
 	 *         never null
-	 *
 	 * @see AnnotationSupport#findRepeatableAnnotations(AnnotatedElement, Class)
-	 *
 	 * @author Christian Femers
 	 */
 	public static <A extends Annotation> Stream<A> findRepeatableAnnotationsIn(TestContext context,

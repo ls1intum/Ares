@@ -5,7 +5,6 @@ import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
 final class SanitizationUtils {
 
 	private SanitizationUtils() {
-
 	}
 
 	static void copyThrowableInfoSafe(Throwable from, Throwable to) {
@@ -55,7 +54,7 @@ final class SanitizationUtils {
 			return sanitizationAction.executeSanitization();
 		} catch (SanitizationException sanitizationException) {
 			throw sanitizationException;
-		} catch (Throwable t) { //NOSONAR
+		} catch (Throwable t) { // NOSONAR
 			throw new SanitizationException(scope, t);
 		}
 	}

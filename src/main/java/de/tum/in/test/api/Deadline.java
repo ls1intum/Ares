@@ -40,7 +40,6 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * While the {@link ZoneId} can be left out, this is highly discouraged because
  * build agents might not have the same/correct time zone set. <br>
  * So this can be e.g.
- *
  * <ul>
  * <li><code>2019-09-09 06:00 Europe/Berlin</code></li>
  * <li><code>2019-09-09T06:00 UTC</code></li>

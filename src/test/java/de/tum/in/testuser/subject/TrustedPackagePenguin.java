@@ -7,7 +7,6 @@ import java.nio.file.Path;
 public final class TrustedPackagePenguin {
 
 	private TrustedPackagePenguin() {
-
 	}
 
 	public static void accessPath(Path p) throws IOException {

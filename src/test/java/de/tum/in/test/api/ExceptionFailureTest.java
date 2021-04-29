@@ -112,7 +112,6 @@ class ExceptionFailureTest {
 			return "X".equals(error.getMessage()) //
 					&& error.getCause() instanceof UnexpectedExceptionError //
 					&& error.getCause().getMessage().contains("ABC");
-
 		}, "has one correctly sanitized AssertionError");
 		tests.assertThatEvents().haveExactly(1,
 				event(test(multipleAssertions),

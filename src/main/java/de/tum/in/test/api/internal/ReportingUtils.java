@@ -61,7 +61,7 @@ public final class ReportingUtils {
 		try {
 			name = t.getClass().getName();
 			return ThrowableSanitizer.sanitize(t, messageTransformer);
-		} catch (Throwable sanitizationError) { //NOSONAR
+		} catch (Throwable sanitizationError) { // NOSONAR
 			return handleSanitizationFailure(name, sanitizationError);
 		}
 	}

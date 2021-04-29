@@ -16,7 +16,6 @@ import org.apache.xyz.MaliciousExceptionB;
 public final class SecurityPenguin {
 
 	private SecurityPenguin() {
-
 	}
 
 	public static void useReflection() {

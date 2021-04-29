@@ -630,7 +630,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return;
 		LOG.debug("Common pool is active: {} with number {} workers", !commonPool.isQuiescent(), //$NON-NLS-1$
 				commonPool.getActiveThreadCount());
-		var rootThreadGroup = getRootThreadGroup(); //NOSONAR
+		var rootThreadGroup = getRootThreadGroup(); // NOSONAR
 		var allThreadGroups = new ThreadGroup[rootThreadGroup.activeGroupCount() + 5];
 		rootThreadGroup.enumerate(allThreadGroups, true);
 		ThreadGroup commong = Stream.of(allThreadGroups)
@@ -670,7 +670,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	 * Similar to the way in {@link ForkJoinWorkerThread} in the JDK
 	 */
 	private ThreadGroup getRootThreadGroup() {
-		var group = testThreadGroup; //NOSONAR
+		var group = testThreadGroup; // NOSONAR
 		for (ThreadGroup nextParent; (nextParent = group.getParent()) != null;)
 			group = nextParent;
 		return group;
@@ -753,8 +753,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			LOG.info("Request uninstall"); //$NON-NLS-1$
 			// try to clean up and try to run finalize() of test objects
-			System.gc(); //NOSONAR
-			System.runFinalization(); //NOSONAR
+			System.gc(); // NOSONAR
+			System.runFinalization(); // NOSONAR
 			// cannot be used in conjunction with classic JUnit timeout, use @StrictTimeout
 			activeThreads = INSTANCE.checkThreadGroup();
 			INSTANCE.checkCommonThreadPool();
@@ -762,7 +762,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			INSTANCE.blockThreadCreation = false;
 			INSTANCE.lastUninstallFailed = false;
 			INSTANCE.isActive = false;
-		} catch (Throwable t) { //NOSONAR
+		} catch (Throwable t) { // NOSONAR
 			INSTANCE.lastUninstallFailed = true;
 			LOG.error("UNINSTALL FAILED", t); //$NON-NLS-1$
 			throw t;

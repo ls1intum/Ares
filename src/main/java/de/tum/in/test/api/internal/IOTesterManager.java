@@ -33,5 +33,4 @@ public final class IOTesterManager {
 	public IOTester getIOTester() {
 		return ioTester;
 	}
-
 }

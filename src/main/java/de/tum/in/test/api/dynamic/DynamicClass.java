@@ -118,7 +118,7 @@ public class DynamicClass<T> implements Checkable {
 		return new DynamicClass<>(Objects.requireNonNull(clazz, "class must not be null"));
 	}
 
-	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { //NOSONAR
+	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { // NOSONAR
 		if (classOrStringOrDynamicClass == null)
 			throw new IllegalArgumentException("Internal Test Error, toDynamic supplied with null");
 		if (classOrStringOrDynamicClass instanceof String) {
@@ -132,7 +132,7 @@ public class DynamicClass<T> implements Checkable {
 				"Internal Test Error, toDynamic supplied with " + classOrStringOrDynamicClass.getClass());
 	}
 
-	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) { //NOSONAR
+	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) { // NOSONAR
 		var dynamicClasses = new DynamicClass[classesOrStringsOrDynamicClasses.length];
 		for (var i = 0; i < dynamicClasses.length; i++) {
 			dynamicClasses[i] = toDynamic(classesOrStringsOrDynamicClasses[i]);

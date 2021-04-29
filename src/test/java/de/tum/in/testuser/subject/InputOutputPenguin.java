@@ -3,7 +3,6 @@ package de.tum.in.testuser.subject;
 public final class InputOutputPenguin extends MiniJava {
 
 	private InputOutputPenguin() {
-
 	}
 
 	public static void writeTwoLines() {

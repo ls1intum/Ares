@@ -13,7 +13,6 @@ import org.apiguardian.api.API.Status;
  * @author Christian Femers
  * @since 1.3.4
  * @version 1.0.0
- *
  * @param <K> the type of the cache keys
  * @param <V> the type of the cache values
  */
