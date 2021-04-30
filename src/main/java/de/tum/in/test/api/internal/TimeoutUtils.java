@@ -17,7 +17,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.function.ThrowingSupplier;
-import org.junit.platform.commons.support.AnnotationSupport;
 import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.api.PrivilegedExceptionsOnly;
@@ -37,9 +36,8 @@ public final class TimeoutUtils {
 	}
 
 	public static Optional<Duration> findTimeout(TestContext context) {
-		var methodLevel = AnnotationSupport.findAnnotation(context.testMethod(), StrictTimeout.class);
-		var classLevel = AnnotationSupport.findAnnotation(context.testClass(), StrictTimeout.class);
-		return methodLevel.or(() -> classLevel).map(st -> Duration.of(st.value(), st.unit().toChronoUnit()));
+		var strictTimeout = TestContextUtils.findAnnotationIn(context, StrictTimeout.class);
+		return strictTimeout.map(st -> Duration.of(st.value(), st.unit().toChronoUnit()));
 	}
 
 	public static <T> T performTimeoutExecution(ThrowingSupplier<T> execution, TestContext context) throws Throwable {
