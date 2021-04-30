@@ -18,6 +18,10 @@ public final class SecurityPenguin {
 	private SecurityPenguin() {
 	}
 
+	public static void definePackage() {
+		System.getSecurityManager().checkPackageDefinition("java.util");
+	}
+
 	public static void useReflection() {
 		try {
 			Class.forName("de.tum.in.test.api.io.IOTester").getDeclaredFields()[0].setAccessible(true);

@@ -53,6 +53,11 @@ public class SecurityUser {
 	}
 
 	@Test
+	void testDefinePackage() {
+		SecurityPenguin.definePackage();
+	}
+
+	@Test
 	void testEvilPermission() {
 		assertFalse(SecurityPenguin.tryEvilPermission());
 	}
@@ -70,6 +75,12 @@ public class SecurityUser {
 	@PublicTest
 	void testMaliciousExceptionB() {
 		assertFalse(SecurityPenguin.maliciousExceptionB());
+	}
+
+	@PublicTest
+	@SuppressWarnings("unused")
+	void testNewSecurityManager() {
+		new SecurityManager();
 	}
 
 	@PublicTest

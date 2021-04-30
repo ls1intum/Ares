@@ -7,17 +7,20 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
+@API(status = Status.INTERNAL)
 public final class ArtemisSecurityConfigurationBuilder {
 	private Optional<Class<?>> testClass;
 	private Optional<Method> testMethod;
@@ -47,11 +50,6 @@ public final class ArtemisSecurityConfigurationBuilder {
 		trustedPackages = Set.of();
 	}
 
-	public ArtemisSecurityConfigurationBuilder withCurrentPath() {
-		executionPath = Path.of(""); //$NON-NLS-1$
-		return this;
-	}
-
 	public ArtemisSecurityConfigurationBuilder withPath(Path executionPath) {
 		this.executionPath = Objects.requireNonNull(executionPath);
 		return this;
@@ -62,24 +60,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathWhitelist(
-			Optional<? extends Collection<PathRule>> whitelistedPaths) {
-		whitelistedPaths.ifPresentOrElse(this::withPathWhitelist, () -> this.whitelistedPaths = null);
-		return this;
-	}
-
 	public ArtemisSecurityConfigurationBuilder withPathBlacklist(Collection<PathRule> blacklistedPaths) {
 		this.blacklistedPaths = Set.copyOf(blacklistedPaths);
-		return this;
-	}
-
-	public ArtemisSecurityConfigurationBuilder withTestClass(Class<?> testClass) {
-		this.testClass = Optional.of(testClass);
-		return this;
-	}
-
-	public ArtemisSecurityConfigurationBuilder withTestMethod(Method testMethod) {
-		this.testMethod = Optional.of(testMethod);
 		return this;
 	}
 
@@ -107,10 +89,6 @@ public final class ArtemisSecurityConfigurationBuilder {
 		testClass = context.testClass();
 		testMethod = context.testMethod();
 		return this;
-	}
-
-	public ArtemisSecurityConfigurationBuilder addWhitelistedClassNames(String... classNames) {
-		return addWhitelistedClassNames(List.of(classNames));
 	}
 
 	public ArtemisSecurityConfigurationBuilder addWhitelistedClassNames(Collection<String> classNames) {

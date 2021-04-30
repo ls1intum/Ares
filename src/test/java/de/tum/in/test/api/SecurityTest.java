@@ -21,10 +21,12 @@ class SecurityTest {
 	private final String doSystemExit = "doSystemExit";
 	private final String longOutputJUnit4 = "longOutputJUnit4";
 	private final String longOutputJUnit5 = "longOutputJUnit5";
+	private final String testDefinePackage = "testDefinePackage";
 	private final String testEvilPermission = "testEvilPermission";
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testMaliciousExceptionA = "testMaliciousExceptionA";
 	private final String testMaliciousExceptionB = "testMaliciousExceptionB";
+	private final String testNewSecurityManager = "testNewSecurityManager";
 	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String trySetSystemOut = "trySetSystemOut";
 	private final String useReflectionNormal = "useReflectionNormal";
@@ -48,6 +50,11 @@ class SecurityTest {
 	}
 
 	@TestTest
+	void test_testDefinePackage() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testDefinePackage, SecurityException.class));
+	}
+
+	@TestTest
 	void test_testEvilPermission() {
 		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfullyRep()));
 	}
@@ -65,6 +72,11 @@ class SecurityTest {
 	@TestTest
 	void test_testMaliciousExceptionB() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testMaliciousExceptionB, SecurityException.class));
+	}
+
+	@TestTest
+	void test_testNewSecurityManager() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewSecurityManager, SecurityException.class));
 	}
 
 	@TestTest

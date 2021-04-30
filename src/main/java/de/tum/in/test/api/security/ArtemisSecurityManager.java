@@ -31,7 +31,6 @@ import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -89,9 +88,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			System.exit(1);
 		}
 	}
-
-	private static final BiConsumer<String, Object> ON_SUPPRESSED_MOD = (method, object) -> LOG
-			.warn("addSuppressed, {} called with {}", method, object == null ? "null" : object.getClass()); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
@@ -263,12 +259,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			// Thread terminated
 			if (threadGroup == null)
 				return;
-			if (isMainThreadAndInactive()) {
-				if (LOG.isTraceEnabled()) {
-					LOG.trace("Allowing Thread access to {} for main thread inbetween tests", externGet(t::toString)); //$NON-NLS-1$
-				}
+			if (isMainThreadAndInactive())
 				return;
-			}
 			if (!testThreadGroup.parentOf(threadGroup))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
 		} finally {
@@ -282,13 +274,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(g);
-			if (isMainThreadAndInactive()) {
-				if (LOG.isTraceEnabled()) {
-					LOG.trace("Allowing ThreadGroup access to {} for main thread inbetween tests", //$NON-NLS-1$
-							externGet(g::toString));
-				}
+			if (isMainThreadAndInactive())
 				return;
-			}
 			if (!testThreadGroup.parentOf(g))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_threadgroup_access")); //$NON-NLS-1$
 			checkThreadCreation();
@@ -711,10 +698,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		whitelistedThreads.removeIf(thread -> !thread.isAlive());
 	}
 
-	static boolean isStaticWhitelisted(String name) {
-		return SecurityConstants.STACK_WHITELIST.stream().anyMatch(name::startsWith);
-	}
-
 	public static synchronized boolean isInstalled() {
 		return System.getSecurityManager() instanceof ArtemisSecurityManager;
 	}
@@ -789,12 +772,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private static String hash(String s) {
-		if (s == null)
-			return ""; //$NON-NLS-1$
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));
-	}
-
-	public static BiConsumer<String, Object> getOnSuppressedModification() {
-		return ON_SUPPRESSED_MOD;
 	}
 }

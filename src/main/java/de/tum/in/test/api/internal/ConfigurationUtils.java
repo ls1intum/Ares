@@ -1,6 +1,7 @@
 package de.tum.in.test.api.internal;
 
 import java.lang.StackWalker.StackFrame;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public final class ConfigurationUtils {
 	public static ArtemisSecurityConfiguration generateConfiguration(TestContext context) {
 		var config = ArtemisSecurityConfigurationBuilder.create();
 		config.configureFromContext(context);
-		config.withCurrentPath();
+		config.withPath(Path.of("")); //$NON-NLS-1$
 		config.addWhitelistedClassNames(generateClassWhiteList(context));
 		config.withPathWhitelist(generatePathWhiteList(context));
 		config.withPathBlacklist(generatePathBlackList(context));
