@@ -74,7 +74,7 @@ class DynamicsTest {
 	@TestTest
 	void test_class_searchPublicOrProtectedMethods() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(class_searchPublicOrProtectedMethods,
-				AssertionFailedError.class, "Methode throwException() ist public, sollte sie aber nicht"));
+				AssertionFailedError.class, "Methode doSomething(java.lang.String) ist public, sollte sie aber nicht"));
 	}
 
 	@TestTest

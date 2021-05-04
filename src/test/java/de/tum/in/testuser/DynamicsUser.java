@@ -71,17 +71,29 @@ public class DynamicsUser {
 
 	@Test
 	void class_searchNonFinalFields() {
+		int checked = DynamicClass.toDynamic(DynamicsUser.class).checkForNonFinalFields();
+		assertThat(checked).isEqualTo(12);
+
 		SomeClass.checkForNonFinalFields();
 	}
 
 	@Test
 	void class_searchNonPrivateFields() {
+		int checked = DynamicClass.toDynamic(DynamicsUser.class).checkForNonPrivateFields();
+		assertThat(checked).isEqualTo(12);
+
 		SomeClass.checkForNonPrivateFields();
 	}
 
 	@Test
 	void class_searchPublicOrProtectedMethods() {
-		SomeClass.checkForPublicOrProtectedMethods();
+		int checked = DynamicClass.toDynamic(SUBJECT_PACKAGE + ".SomeAbstractClass").checkForPublicOrProtectedMethods();
+		assertThat(checked).isOne();
+
+		SomeClass.checkForPublicOrProtectedMethods(SomeClass_getSomeAttribute, SomeClass_doSomethingElse,
+				SomeClass_throwException, SomeClass.method(Integer.class, "getAnotherAttribute"),
+				SomeClass.method(void.class, "setSomeAttribute", String.class),
+				SomeClass.method(Class.class, "initializeFailingClass"));
 	}
 
 	@Test
