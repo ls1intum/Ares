@@ -42,8 +42,7 @@ public class DynamicMethod<T> implements Checkable {
 				m = owner.toClass().getDeclaredMethod(name, DynamicClass.resolveAll(parameters));
 				m.trySetAccessible();
 				if (!returnType.toClass().isAssignableFrom(m.getReturnType()))
-					fail("Methode " + name + " mit Parametern " + descParams(parameters) + " gibt nicht " + returnType
-							+ " zurück");
+					fail("Methode " + this + " gibt nicht " + returnType + " zurück");
 			} catch (NoSuchMethodException e) {
 				fail("Keine Methode " + returnType + " " + this + " gefunden.", e);
 			}
@@ -73,15 +72,14 @@ public class DynamicMethod<T> implements Checkable {
 		} catch (IllegalAccessException e) {
 			fail("Methode " + this + " konnte nicht aufgerufen werden, Zugriff auf die Methode nicht möglich", e);
 		} catch (IllegalArgumentException e) {
-			fail("Methode " + this + " konnte Parametertypen " + descArgs(params) + " für Objekt " + o
-					+ " nicht entgegennehmen", e);
+			fail("Methode " + this + " konnte Parametertypen " + descArgs(params) + " für Objekt der Klasse "
+					+ o.getClass().getCanonicalName() + " nicht entgegennehmen", e);
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof RuntimeException)
 				throw (RuntimeException) e.getTargetException();
 			throw UnexpectedExceptionError.wrap(e.getTargetException());
 		} catch (ClassCastException e) {
-			fail("Rückgabe von " + name + " mit Parametern " + descParams(this.parameters) + " der Klasse " + owner
-					+ " kann nicht nach " + returnType + "gecastet werden", e);
+			fail("Rückgabe von " + this + " kann nicht nach " + returnType + "gecastet werden", e);
 		}
 		return null; // unreachable
 	}
