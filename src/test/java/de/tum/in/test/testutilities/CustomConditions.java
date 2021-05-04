@@ -52,7 +52,7 @@ public final class CustomConditions {
 	}
 
 	public static Condition<Throwable> messageLocalized() {
-		return new Condition<>(where(Throwable::getMessage, m -> !m.startsWith("!") || !m.endsWith("!")),
+		return new Condition<>(where(Throwable::getMessage, m -> m == null || !m.startsWith("!") || !m.endsWith("!")),
 				"message is correctly localized");
 	}
 }
