@@ -92,24 +92,6 @@ public class DynamicMethod<T> implements Checkable {
 		return invokeOn(null, params);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <R> R invokeOnCast(Object o, Object... params) {
-		try {
-			return (R) invokeOn(o, params);
-		} catch (ClassCastException e) {
-			throw new ClassCastException("Return type cast error in " + toString() + ": " + e.getMessage());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public <R> R invokeStaticCast(Object... params) {
-		try {
-			return (R) invokeStatic(params);
-		} catch (ClassCastException e) {
-			throw new ClassCastException("Return type cast error in " + toString() + ": " + e.getMessage());
-		}
-	}
-
 	@Override
 	public String toString() {
 		return owner.toString() + "." + signature();
