@@ -49,7 +49,7 @@ public class DynamicConstructor<T> implements Checkable {
 		return true;
 	}
 
-	public Object newInstance(Object... params) {
+	public T newInstance(Object... params) {
 		try {
 			return toConstructor().newInstance(params);
 		} catch (InstantiationException e) {
