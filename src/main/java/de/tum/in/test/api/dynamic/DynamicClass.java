@@ -1,6 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -194,7 +194,8 @@ public class DynamicClass<T> implements Checkable {
 		for (Field f : toClass().getDeclaredFields()) {
 			if (f.isSynthetic())
 				continue;
-			assertTrue(Modifier.isPrivate(f.getModifiers()), "Attribut " + f + " muss private sein.");
+			if (!Modifier.isPrivate(f.getModifiers()))
+				fail("Attribut " + f + " muss private sein.");
 			checked++;
 		}
 		return checked;
@@ -205,7 +206,8 @@ public class DynamicClass<T> implements Checkable {
 		for (Field f : toClass().getDeclaredFields()) {
 			if (f.isSynthetic())
 				continue;
-			assertTrue(Modifier.isFinal(f.getModifiers()), "Attribut " + f + " muss final sein.");
+			if (!Modifier.isFinal(f.getModifiers()))
+				fail("Attribut " + f + " muss final sein.");
 			checked++;
 		}
 		return checked;
