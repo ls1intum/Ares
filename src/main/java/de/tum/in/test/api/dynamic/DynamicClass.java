@@ -64,7 +64,7 @@ public class DynamicClass<T> implements Checkable {
 
 	public boolean isClass(Object classOrStringOrDynamicClass) {
 		if (classOrStringOrDynamicClass == null)
-			throw new IllegalArgumentException("Internal Test Error, isClass supplied with null");
+			throw new NullPointerException("Internal Test Error, isClass supplied with null");
 		if (classOrStringOrDynamicClass instanceof String)
 			return name.equals(classOrStringOrDynamicClass);
 		if (classOrStringOrDynamicClass instanceof Class<?>) {
@@ -120,7 +120,7 @@ public class DynamicClass<T> implements Checkable {
 
 	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { // NOSONAR
 		if (classOrStringOrDynamicClass == null)
-			throw new IllegalArgumentException("Internal Test Error, toDynamic supplied with null");
+			throw new NullPointerException("Internal Test Error, toDynamic supplied with null");
 		if (classOrStringOrDynamicClass instanceof String)
 			return new DynamicClass<>((String) classOrStringOrDynamicClass);
 		if (classOrStringOrDynamicClass instanceof Class<?>)
