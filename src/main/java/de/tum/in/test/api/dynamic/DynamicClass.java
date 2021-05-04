@@ -50,6 +50,7 @@ public class DynamicClass<T> implements Checkable {
 		return clazz;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean exists() {
 		if (clazz == null) {

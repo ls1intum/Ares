@@ -50,6 +50,7 @@ public class DynamicMethod<T> implements Checkable {
 		return m;
 	}
 
+	@Override
 	public boolean exists() {
 		if (m == null) {
 			try {

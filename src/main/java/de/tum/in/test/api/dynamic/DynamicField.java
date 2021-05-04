@@ -49,6 +49,20 @@ public class DynamicField<T> implements Checkable {
 		return field;
 	}
 
+	@Override
+	public boolean exists() {
+		if (field == null) {
+			var of = findField(owner.toClass());
+			if (of.isPresent()) {
+				field = of.get();
+				field.trySetAccessible();
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public T getOf(Object o) {
 		try {
 			return type.cast(toField().get(o));
