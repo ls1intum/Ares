@@ -140,7 +140,7 @@ public class DynamicMethod<T> implements Checkable {
 	}
 
 	public static String descArgs(Object... args) {
-		return Arrays.stream(args).map(x -> x == null ? null : args.getClass().getCanonicalName())
+		return Arrays.stream(args).map(x -> x == null ? null : x.getClass().getCanonicalName())
 				.collect(Collectors.joining(", ", "(", ")"));
 	}
 
