@@ -172,7 +172,6 @@ public class DynamicClass<T> implements Checkable {
 		Set<String> publicMethods = Set.of(DynamicMethod.signatureOfAll(exceptions));
 		Set<String> objectMethods = Set.of(DynamicMethod.signatureOfAll(Object.class.getMethods()));
 		for (Method m : toClass().getDeclaredMethods()) {
-			checked++;
 			if (m.isSynthetic() || m.isBridge())
 				continue;
 			if (Modifier.isPublic(m.getModifiers())) {
@@ -186,6 +185,7 @@ public class DynamicClass<T> implements Checkable {
 				if (!objectMethods.contains(sig))
 					fail("Methode " + sig + " ist protected, sollte sie aber nicht");
 			}
+			checked++;
 		}
 		return checked;
 	}
