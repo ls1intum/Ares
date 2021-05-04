@@ -48,10 +48,9 @@ public class DynamicField<T> implements Checkable {
 		return field;
 	}
 
-	@SuppressWarnings("unchecked")
 	public T getOf(Object o) {
 		try {
-			return (T) toField().get(o);
+			return type.cast(toField().get(o));
 		} catch (IllegalAccessException e) {
 			fail("Feld " + name + " der Klasse " + owner
 					+ " konnte nicht aufgerufen werden, Zugriff auf das Feld nicht möglich", e);
