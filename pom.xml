@@ -7,13 +7,13 @@
 	<version>1.5.5-SNAPSHOT</version>
 	<name>Ares</name>
 	<description>The Artemis Java Test Sandbox. A JUnit 5 Extension for secure Artemis Java Testing.</description>
-	<url>https://github.com/ls1intum/artemis-java-test-sandbox</url>
+	<url>https://github.com/ls1intum/Ares</url>
 	<inceptionYear>2019</inceptionYear>
 	<licenses>
 		<license>
 			<name>MIT</name>
 			<url>https://opensource.org/licenses/MIT</url>
-			<comments>See https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE</comments>
+			<comments>See https://github.com/ls1intum/Ares/blob/master/LICENSE</comments>
 		</license>
 	</licenses>
 	<developers>
@@ -26,9 +26,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/ls1intum/artemis-java-test-sandbox</url>
-		<connection>scm:git:https://github.com/ls1intum/artemis-java-test-sandbox.git</connection>
-		<developerConnection>scm:git:https://github.com/ls1intum/artemis-java-test-sandbox.git</developerConnection>
+		<url>https://github.com/ls1intum/Ares</url>
+		<connection>scm:git:https://github.com/ls1intum/Ares.git</connection>
+		<developerConnection>scm:git:https://github.com/ls1intum/Ares.git</developerConnection>
 	</scm>
 
 	<properties>
@@ -271,7 +271,7 @@
 				<repository>
 					<id>github</id>
 					<name>GitHub LS1TUM Apache Maven Packages</name>
-					<url>https://maven.pkg.github.com/ls1intum/artemis-java-test-sandbox</url>
+					<url>https://maven.pkg.github.com/ls1intum/Ares</url>
 				</repository>
 				<!-- GitHub cannot handle snapshots correctly now, so we do nothing -->
 				<snapshotRepository>

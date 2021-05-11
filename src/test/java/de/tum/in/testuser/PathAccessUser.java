@@ -45,7 +45,7 @@ public class PathAccessUser {
 		PathAccessPenguin.accessPath(Path.of("pom.xml"));
 	}
 
-	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@WhitelistPath(value = "../*r*e*s**", type = PathType.GLOB)
 	@PublicTest
 	void accessPathRelativeGlobA() throws IOException {
 		PathAccessPenguin.accessPath(Path.of("pom.xml").toAbsolutePath());
@@ -57,13 +57,13 @@ public class PathAccessUser {
 		PathAccessPenguin.accessPath(Path.of("pom.xml").toAbsolutePath());
 	}
 
-	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@WhitelistPath(value = "../*r*e*s**", type = PathType.GLOB)
 	@PublicTest
 	void accessPathRelativeGlobDirectChildrenAllowed() {
 		PathAccessPenguin.askForFilePermission("src/*");
 	}
 
-	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@WhitelistPath(value = "../*r*e*s**", type = PathType.GLOB)
 	@BlacklistPath(value = "abc")
 	@PublicTest
 	void accessPathRelativeGlobDirectChildrenBlacklist() {
@@ -75,13 +75,13 @@ public class PathAccessUser {
 		PathAccessPenguin.askForFilePermission("*");
 	}
 
-	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@WhitelistPath(value = "../*r*e*s**", type = PathType.GLOB)
 	@PublicTest
 	void accessPathRelativeGlobRecursiveAllowed() {
 		PathAccessPenguin.askForFilePermission("-");
 	}
 
-	@WhitelistPath(value = "../artemis-java-test-sandbox**", type = PathType.GLOB)
+	@WhitelistPath(value = "../*r*e*s**", type = PathType.GLOB)
 	@BlacklistPath(value = "abc")
 	@PublicTest
 	void accessPathRelativeGlobRecursiveBlacklist() {

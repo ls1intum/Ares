@@ -1,6 +1,6 @@
 # Ares
 ### *The Artemis Java Test Sandbox*
-![Java CI](https://github.com/ls1intum/artemis-java-test-sandbox/workflows/Java%20CI/badge.svg?branch=master)
+![Java CI](https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox)](https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
@@ -355,11 +355,11 @@ packages. Therefore, you will need to authenticate to GitHub if you use
     <repository>
         <id>ares</id>
         <name>Ares Maven Packages</name>
-        <url>https://maven.pkg.github.com/ls1intum/artemis-java-test-sandbox</url>
+        <url>https://maven.pkg.github.com/ls1intum/Ares</url>
     </repository>
 </repositories>
 ```
 
 ## License
 
-Ares was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/ls1intum/artemis-java-test-sandbox/blob/master/LICENSE).
+Ares was created by Christian Femers and is licensed under the [MIT License, see `LICENSE.md`](https://github.com/ls1intum/Ares/blob/master/LICENSE).

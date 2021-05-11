@@ -4,4 +4,5 @@
 !/.settings/org.eclipse.*
 !/.settings/eclipse*rules*
 /artemis-java-test-sandbox.iml
+/Ares.iml
 /.idea
