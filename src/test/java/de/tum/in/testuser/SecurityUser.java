@@ -84,6 +84,11 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	void tryManageProcess() {
+		SecurityPenguin.tryManageProcess();
+	}
+
+	@PublicTest
 	void trySetSecurityManager() {
 		SecurityPenguin.trySetSecurityManagerNull();
 	}
@@ -118,5 +123,12 @@ public class SecurityUser {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@PublicTest
+	void weUseShutdownHooks() {
+		Thread t = new Thread("xyz");
+		Runtime.getRuntime().addShutdownHook(t);
+		Runtime.getRuntime().removeShutdownHook(t);
 	}
 }

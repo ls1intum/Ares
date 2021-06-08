@@ -27,12 +27,14 @@ class SecurityTest {
 	private final String testMaliciousExceptionA = "testMaliciousExceptionA";
 	private final String testMaliciousExceptionB = "testMaliciousExceptionB";
 	private final String testNewSecurityManager = "testNewSecurityManager";
+	private final String tryManageProcess = "tryManageProcess";
 	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String trySetSystemOut = "trySetSystemOut";
 	private final String useReflectionNormal = "useReflectionNormal";
 	private final String useReflectionPrivileged = "useReflectionPrivileged";
 	private final String useReflectionTrick = "useReflectionTrick";
 	private final String weUseReflection = "weUseReflection";
+	private final String weUseShutdownHooks = "weUseShutdownHooks";
 
 	@TestTest
 	void test_doSystemExit() {
@@ -80,6 +82,11 @@ class SecurityTest {
 	}
 
 	@TestTest
+	void test_tryManageProcess() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(tryManageProcess, SecurityException.class));
+	}
+
+	@TestTest
 	void test_trySetSecurityManager() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(trySetSecurityManager, SecurityException.class));
 	}
@@ -107,5 +114,10 @@ class SecurityTest {
 	@TestTest
 	void test_weUseReflection() {
 		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_weUseShutdownHooks() {
+		tests.assertThatEvents().haveExactly(1, event(test(weUseShutdownHooks), finishedSuccessfullyRep()));
 	}
 }

@@ -315,7 +315,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			var blacklist = List.of("manageProcess", "shutdownHooks", "createSecurityManager"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (blacklist.contains(permName))
-				throw new SecurityException(localized("security.error_blacklist") + permString); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			if ("setIO".equals(permName) && !isMainThreadAndInactive()) //$NON-NLS-1$
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed

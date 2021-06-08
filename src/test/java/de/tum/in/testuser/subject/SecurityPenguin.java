@@ -119,6 +119,10 @@ public final class SecurityPenguin {
 		return ab.get();
 	}
 
+	public static void tryManageProcess() {
+		ProcessHandle.current().destroy();
+	}
+
 	public static void trySetSecurityManagerNull() {
 		System.setSecurityManager(null);
 	}
