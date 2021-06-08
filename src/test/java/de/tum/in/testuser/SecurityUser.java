@@ -78,9 +78,8 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	@SuppressWarnings("unused")
 	void testNewSecurityManager() {
-		new SecurityManager();
+		SecurityPenguin.newSecurityManager();
 	}
 
 	@PublicTest

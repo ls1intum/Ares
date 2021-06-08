@@ -65,6 +65,11 @@ public final class SecurityPenguin {
 		return ab.get();
 	}
 
+	@SuppressWarnings("unused")
+	public static void newSecurityManager() {
+		new SecurityManager();
+	}
+
 	@SuppressWarnings("resource")
 	public static String tryExecuteGit() {
 		try {
