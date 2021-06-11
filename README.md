@@ -211,7 +211,7 @@ But what is whitelisted?
 - The test class itself (in case of nested classes, the outermost class is whitelisted) and therefore, *all* its nested classes and methods, too.
 - A predefined set of packages, like everything that starts with `java.`, `sun.`, `com.sun.`, `org.junit`, `org.apache.`, ...<br>
   Therefore, **never use such package names for student assignments!**
-- Classes whitelisted using `@WhitelistClass`
+- Single classes whitelisted using `@WhitelistClass` and all classes matching `@AddTrustedPackage`
 
 Ares also grants permissions that are requested by certain actions (`System.exit`, File IO, Networking, Threads, ...) based on whitelisted stack frames. **Ares granting a permission requires all stack frames to be whitelisted.**
 
@@ -262,7 +262,7 @@ That was not everything but already quite a lot. Take a look at the Javadoc of t
 ```Java
 @WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // for manual assessment and development
 @WhitelistPath("target") // mainly for Artemis
-@BlacklistPath("target/test-classes") // prevent access to test-related classes and resources
+@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 ```
 Add a `@BlacklistPath` for other important classes, like your reference implementations of the solution to test against should you use that approach.
 
@@ -270,6 +270,8 @@ Add a `@BlacklistPath` for other important classes, like your reference implemen
 happen in a directory named after the build plan, which is in upper case and therefore,
 begins with `COURSE1920XYZ`. Make sure that you do not build multiple student solutions
 in the same directory on the same machine using the git clone (lower case) approach. Otherwise, adjust the whitelisting to your needs.*
+
+As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
 #### Timeouts
 
