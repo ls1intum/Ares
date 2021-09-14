@@ -262,7 +262,7 @@ That was not everything but already quite a lot. Take a look at the Javadoc of t
 ```Java
 @WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // for manual assessment and development
 @WhitelistPath("target") // mainly for Artemis
-@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
+@BlacklistPath("target/test-classes") // prevent access to test-related classes and resources
 ```
 Add a `@BlacklistPath` for other important classes, like your reference implementations of the solution to test against should you use that approach.
 
@@ -270,8 +270,6 @@ Add a `@BlacklistPath` for other important classes, like your reference implemen
 happen in a directory named after the build plan, which is in upper case and therefore,
 begins with `COURSE1920XYZ`. Make sure that you do not build multiple student solutions
 in the same directory on the same machine using the git clone (lower case) approach. Otherwise, adjust the whitelisting to your needs.*
-
-As a side note: should you require that test classes written by students are themselves tested, call your classes `...TestTest` and then use `@BlacklistPath(value = "**TestTest*.{java,class}", type = PathType.GLOB)`.
 
 #### Timeouts
 
