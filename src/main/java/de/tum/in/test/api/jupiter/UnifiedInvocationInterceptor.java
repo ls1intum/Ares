@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.extension.DynamicTestInvocationContext;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
@@ -59,7 +60,8 @@ public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 	}
 
 	@Override
-	default void interceptDynamicTest(Invocation<Void> invocation, ExtensionContext extensionContext) throws Throwable {
+	default void interceptDynamicTest(Invocation<Void> invocation, DynamicTestInvocationContext invocationContext,
+			ExtensionContext extensionContext) throws Throwable {
 		interceptGenericInvocation(invocation, extensionContext, Optional.empty());
 	}
 
