@@ -1,13 +1,12 @@
 package de.tum.in.test.api.io;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -249,9 +248,6 @@ public final class OutputTester implements LineAcceptor {
 			org.junit.jupiter.api.Assertions.assertLinesMatch(expectedLinePatterns, linesAsString, message);
 		} catch (AssertionFailedError afe) {
 			throw tryCleanUpAssertionFailedError(lines, afe);
-		} catch (@SuppressWarnings("unused") NoSuchElementException nsee) {
-			throw new AssertionFailedError(
-					formatLocalized("output_tester.line_matching_not_enough_lines", linesAsString.size())); //$NON-NLS-1$
 		}
 	}
 
