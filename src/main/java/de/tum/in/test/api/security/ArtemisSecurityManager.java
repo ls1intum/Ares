@@ -57,9 +57,9 @@ import de.tum.in.test.api.util.DelayedFilter;
 public final class ArtemisSecurityManager extends SecurityManager {
 
 	private static final int MAX_PORT = AllowLocalPort.MAXIMUM;
+	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
 	private static final SecurityManager ORIGINAL = System.getSecurityManager();
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
-	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityManager.class);
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
 	private static final MessageDigest SHA256;
@@ -79,6 +79,12 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.isPartlyDisabled = true;
 		System.setSecurityManager(ORIGINAL);
 		INSTANCE.isPartlyDisabled = false;
+		// We explain the deprecated security manager warning in case JDK 17 is used
+		if (Runtime.version().feature() == 17) {
+			SecurityConstants.SYSTEM_ERR
+					.format("NOTICE: The warning above is expected and the issue is already known.%n" //$NON-NLS-1$
+							+ "        Visit https://github.com/ls1intum/Ares/discussions/113 for more details.%n"); //$NON-NLS-1$
+		}
 		/*
 		 * Check for main Thread
 		 */
