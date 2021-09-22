@@ -122,7 +122,7 @@ public class InputOutputUser {
 					">> 12 >>", //
 					"ABCDEF");
 		}).isInstanceOf(AssertionFailedError.class).hasMessageContainingAll(
-				"the output does not contain enough lines for the test to work, only 11 lines found.");
+				"This should not pass ==> fast-forward(12) error: not enough actual lines remaining (11)");
 	}
 
 	@PublicTest
