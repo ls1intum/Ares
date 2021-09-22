@@ -14,6 +14,12 @@ import de.tum.in.test.api.io.IOTester;
  */
 public class FixSystemErrAppender<E> extends OutputStreamAppender<E> {
 	public FixSystemErrAppender() {
+		setName("Ares Console Appender"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void start() {
 		setOutputStream(SecurityConstants.SYSTEM_ERR);
+		super.start();
 	}
 }
