@@ -4,7 +4,7 @@ import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -297,17 +297,22 @@ public class ClassNameScanner {
 
 			var className = fileNameComponents[fileNameComponents.length - 2];
 			var packageName = node.getPath().substring(0, node.getPath().indexOf("." + fileExtension));
-			packageName = packageName.substring(
-					packageName.indexOf(assignmentFolderName) + assignmentFolderName.length() + 1,
-					packageName.lastIndexOf(File.separator + className));
-			packageName = packageName.replace(File.separatorChar, '.');
+			int packageStartIndex = packageName.indexOf(assignmentFolderName) + assignmentFolderName.length() + 1;
+			int packageEndIndex = packageName.lastIndexOf(File.separator + className);
 
-			if (packageName.charAt(0) == '.')
-				packageName = packageName.substring(1);
+			if (packageStartIndex + 1 < packageEndIndex) {
+				packageName = packageName.substring(packageStartIndex, packageEndIndex).replace(File.separatorChar,
+						'.');
+				if (packageName.charAt(0) == '.')
+					packageName = packageName.substring(1);
+			} else {
+				packageName = ""; // Default package
+			}
+
 			if (foundClasses.containsKey(className))
 				foundClasses.get(className).add(packageName);
 			else
-				foundClasses.put(className, Collections.singletonList(packageName));
+				foundClasses.put(className, new ArrayList<>(List.of(packageName)));
 		}
 		// TODO: we should also support inner classes here
 		if (node.isDirectory()) {
