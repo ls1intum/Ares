@@ -4,10 +4,13 @@ import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -293,21 +296,16 @@ public class ClassNameScanner {
 		// support Java and Kotlin files
 		if (fileName.endsWith(".java") || fileName.endsWith(".kt")) {
 			var fileNameComponents = fileName.split("\\.");
-			var fileExtension = fileNameComponents[fileNameComponents.length - 1];
-
 			var className = fileNameComponents[fileNameComponents.length - 2];
-			var packageName = node.getPath().substring(0, node.getPath().indexOf("." + fileExtension));
-			packageName = packageName.substring(
-					packageName.indexOf(assignmentFolderName) + assignmentFolderName.length() + 1,
-					packageName.lastIndexOf(File.separator + className));
-			packageName = packageName.replace(File.separatorChar, '.');
 
-			if (packageName.charAt(0) == '.')
-				packageName = packageName.substring(1);
+			Path packagePath = Path.of(assignmentFolderName).relativize(Path.of(node.getPath()).getParent());
+			var packageName = StreamSupport.stream(packagePath.spliterator(), false).map(Object::toString)
+					.collect(Collectors.joining("."));
+
 			if (foundClasses.containsKey(className))
 				foundClasses.get(className).add(packageName);
 			else
-				foundClasses.put(className, Collections.singletonList(packageName));
+				foundClasses.put(className, new ArrayList<>(List.of(packageName)));
 		}
 		// TODO: we should also support inner classes here
 		if (node.isDirectory()) {
@@ -327,7 +325,7 @@ public class ClassNameScanner {
 	}
 
 	static boolean isMisspelledWithHighProbability(String a, String b) {
-		/**
+		/*
 		 * This based on observations and experiments with
 		 * https://github.com/src-d/datasets/tree/master/Typos and collections of real
 		 * (not misspelled) classes.
@@ -340,7 +338,7 @@ public class ClassNameScanner {
 		int lengthDifferenceAbs = Math.abs(a.length() - b.length());
 		if (lengthDifferenceAbs > 2)
 			return false;
-		/**
+		/*
 		 * This is the case for most typos, simply one missing or added character or two
 		 * next to each other are swapped. (We only use this rule for strings with
 		 * length of at least two)
@@ -348,7 +346,7 @@ public class ClassNameScanner {
 		double distance = DAMERAU_LEVENSHTEIN.distance(a, b);
 		if (distance <= 1.0 && Math.max(a.length(), b.length()) > 2)
 			return true;
-		/**
+		/*
 		 * We accept everything with a distance below two as typo. At three and above,
 		 * misspelled identifiers can be easily recognized by a human or might not be
 		 * spelling errors.
