@@ -379,7 +379,7 @@ public abstract class StructuralTestProvider {
 		}
 
 		public String getQualifiedClassName() {
-			if (expectedPackageName != null && !expectedPackageName.isEmpty()) {
+			if (!expectedPackageName.isEmpty()) {
 				return expectedPackageName + "." + expectedClassName;
 			}
 			return expectedClassName;
