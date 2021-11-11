@@ -11,6 +11,7 @@ import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
 import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
+import net.jqwik.engine.execution.lifecycle.CurrentTestDescriptor;
 import net.jqwik.engine.facades.DomainContextFacadeImpl;
 
 import de.tum.in.test.api.StrictTimeout;
@@ -42,9 +43,10 @@ public class JqwikStrictTimeoutExtension implements AroundPropertyHook {
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
 		DomainContext domainContext = DomainContextFacadeImpl.getCurrentContext();
+		var desc = CurrentTestDescriptor.get();
 		return TimeoutUtils.performTimeoutExecution(() -> {
 			DomainContextFacadeImpl.setCurrentContext(domainContext);
-			return property.execute();
+			return CurrentTestDescriptor.runWithDescriptor(desc, property::execute);
 		}, JqwikContext.of(context));
 	}
 }
