@@ -2,9 +2,9 @@ package de.tum.in.testuser;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,7 @@ import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.localization.UseLocale;
@@ -28,7 +29,7 @@ import de.tum.in.testuser.subject.SecurityPenguin;
 @AllowThreads(maxActiveCount = 100)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
-@WhitelistPath(value = "target/**", type = PathType.GLOB)
+@WhitelistPath(value = "target/{classes,test-classes}/de/tum**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
 public class SecurityUser {
@@ -78,6 +79,11 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	void testNewClassLoader() throws IOException {
+		SecurityPenguin.newClassLoader();
+	}
+
+	@PublicTest
 	void testNewSecurityManager() {
 		SecurityPenguin.newSecurityManager();
 	}
@@ -98,6 +104,21 @@ public class SecurityUser {
 	}
 
 	@PublicTest
+	void useCommonPoolBadNormal() throws Throwable {
+		SecurityPenguin.useCommonPoolBadNormal();
+	}
+
+	@PublicTest
+	void useCommonPoolBadTrick() throws Throwable {
+		SecurityPenguin.useCommonPoolBadTrick();
+	}
+
+	@PublicTest
+	void useCommonPoolGood() throws Throwable {
+		SecurityPenguin.useCommonPoolGood();
+	}
+
+	@PublicTest
 	void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}
@@ -108,20 +129,13 @@ public class SecurityUser {
 	}
 
 	@PublicTest
-	void useReflectionTrick() {
+	void useReflectionTrick() throws Throwable {
 		SecurityPenguin.useReflection2();
-		Circumvention.thrown.ifPresent(e -> {
-			throw e;
-		});
 	}
 
 	@PublicTest
 	void weUseReflection() {
-		try {
-			Class.forName("de.tum.in.test.api.io.IOTester").getDeclaredFields()[0].setAccessible(true);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		IOTester.class.getDeclaredFields()[0].setAccessible(true);
 	}
 
 	@PublicTest
