@@ -62,6 +62,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
+	private static final Predicate<StackFrame> IGNORE_ACCESS_PRIVILEGED = stackframe -> true;
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -386,7 +387,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		checkForNonWhitelistedStackFrames(() -> {
 			LOG.warn(message);
 			return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
-		});
+		}, IGNORE_ACCESS_PRIVILEGED);
 	}
 
 	private static String getFilePermissionsCommonPath(String path) {
@@ -423,7 +424,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg), //$NON-NLS-1$
 							isPackageWhitelisted(pkg));
 					return formatLocalized("security.error_disallowed_package", pkg); //$NON-NLS-1$
-				}, stackFrame -> true);
+				}, IGNORE_ACCESS_PRIVILEGED);
 			}
 		} finally {
 			exitPublicInterface();
@@ -679,7 +680,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		/*
 		 * NOTE: the order is very important here!
 		 */
-		var blacklist = Set.of("Finalizer", "InnocuousThread", "ForkJoinPool.commonPool"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		// "ForkJoinPool.commonPool" is no longer blacklisted due to jqwik requirements
+		var blacklist = Set.of("Finalizer", "InnocuousThread"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (blacklist.stream().anyMatch(name::startsWith))
 			return false;
 		if (!testThreadGroup.parentOf(currentThread.getThreadGroup()))
