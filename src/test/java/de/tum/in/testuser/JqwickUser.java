@@ -112,7 +112,7 @@ public class JqwickUser {
 
 	@Public
 	@Example
-	@StrictTimeout(value = 200, unit = TimeUnit.MILLISECONDS)
+	@StrictTimeout(value = 500, unit = TimeUnit.MILLISECONDS)
 	void provokeTimeoutEndlessLoop(@ForAll @Positive int x) {
 		int y = 0;
 		while (x != 0 || y > 0)
