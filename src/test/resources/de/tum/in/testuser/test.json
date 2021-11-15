@@ -63,7 +63,13 @@
     "modifiers" : [ "public" ],
     "parameters" : [ "int" ],
     "returnType" : "int"
-  } ],
+  }, {
+      "name" : "doSomethingWithMoreParameters",
+      "modifiers" : [ "public" ],
+      "parameters" : [ "int", "double", "String" ],
+      "strictOrder" : true,
+      "returnType" : "int"
+  }],
   "constructors" : [ {
     "parameters" : [ "String" ]
   } ],
@@ -137,5 +143,15 @@
     "name" : "SOME_CONSTANT",
     "modifiers" : [ "penguin: final" ],
     "type" : "int"
-  } ]
+  } ], "methods" : [ {
+    "name" : "someMethodWithWrongParameterOrder",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "int", "double" ],
+    "strictOrder" : true,
+    "returnType" : "void"
+  } ], "constructors" : [ {
+    "modifiers" : [ "protected" ],
+    "parameters" : [ "int", "String" ],
+    "strictOrder" : true
+  } ],
 } ]
