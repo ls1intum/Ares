@@ -78,6 +78,7 @@ public abstract class StructuralTestProvider {
 	protected static final String JSON_PROPERTY_TYPE = "type";
 	protected static final String JSON_PROPERTY_RETURN_TYPE = "returnType";
 	protected static final String JSON_PROPERTY_ENUM_VALUES = "enumValues";
+	protected static final String JSON_PROPERTY_Strict_Order = "strictOrder";
 
 	protected static final String THE_CLASS = "The class ";
 	protected static final String THE_TYPE = "The type ";
@@ -135,6 +136,18 @@ public abstract class StructuralTestProvider {
 	 */
 	protected static JSONArray getExpectedJsonProperty(JSONObject element, String jsonPropertyKey) {
 		return element.has(jsonPropertyKey) ? element.getJSONArray(jsonPropertyKey) : new JSONArray();
+	}
+
+	/**
+	 * get the expected boolean value of the element or false
+	 *
+	 * @param element         the class, attribute, method or constructor JSON
+	 *                        object element
+	 * @param jsonPropertyKey the key used in JSON
+	 * @return a boolean as specified in the JSON or false if not present
+	 */
+	protected static boolean getExpectedJsonBooleanProperty(JSONObject element, String jsonPropertyKey) {
+		return element.has(jsonPropertyKey) ? element.getBoolean(jsonPropertyKey) : false;
 	}
 
 	/**
@@ -241,7 +254,8 @@ public abstract class StructuralTestProvider {
 	 * @param expectedParameters The expected parameter type names as a JSONArray.
 	 * @return True if they match, false otherwise.
 	 */
-	protected static boolean checkParameters(Class<?>[] observedParameters, JSONArray expectedParameters) {
+	protected static boolean checkParameters(Class<?>[] observedParameters, JSONArray expectedParameters,
+			boolean strictOrder) {
 		/*
 		 * If both the observed and expected elements have no parameters, then they
 		 * match.
@@ -254,20 +268,25 @@ public abstract class StructuralTestProvider {
 		 */
 		if (observedParameters.length != expectedParameters.length())
 			return false;
-		/*
-		 * Create hash tables to store how often a parameter type occurs. Checking the
-		 * occurrences of a certain parameter type is enough, since the parameter order
-		 * is not relevant to us.
-		 */
 		var expectedParameterTypeNames = new String[expectedParameters.length()];
 		for (var i = 0; i < expectedParameters.length(); i++)
 			expectedParameterTypeNames[i] = expectedParameters.getString(i);
-		Map<String, Integer> expectedParametersHashtable = createParametersHashMap(expectedParameterTypeNames);
 
 		var observedParameterTypeNames = new String[observedParameters.length];
 		for (var i = 0; i < observedParameters.length; i++)
 			// TODO: Canonical names should be supported as well.
 			observedParameterTypeNames[i] = observedParameters[i].getSimpleName();
+
+		if (strictOrder) {
+			return Arrays.equals(expectedParameterTypeNames, observedParameterTypeNames);
+		}
+
+		/*
+		 * Create hash tables to store how often a parameter type occurs. Checking the
+		 * occurrences of a certain parameter type is enough, since the parameter order
+		 * is not relevant to us.
+		 */
+		Map<String, Integer> expectedParametersHashtable = createParametersHashMap(expectedParameterTypeNames);
 		Map<String, Integer> observedParametersHashtable = createParametersHashMap(observedParameterTypeNames);
 
 		return expectedParametersHashtable.equals(observedParametersHashtable);
