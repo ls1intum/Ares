@@ -5,13 +5,13 @@ public class SomeFailingClass {
 	public static final int SOME_CONSTANT = calculateConstant();
 
 	public SomeFailingClass(String someString, int someInt) {
-
+		// Do nothing
 	}
 
 	public void someMethodWithWrongParameterOrder(double someDouble, int someInt) {
 		// Do nothing
 	}
-	
+
 	public static int calculateConstant() {
 		throw new RuntimeException();
 	}
