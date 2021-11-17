@@ -103,8 +103,7 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 			var expectedParameters = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_PARAMETERS);
 			var expectedModifiers = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_MODIFIERS);
 			var expectedAnnotations = getExpectedJsonProperty(expectedConstructor, JSON_PROPERTY_ANNOTATIONS);
-			var strictParameterOrder = getExpectedJsonBooleanProperty(expectedConstructor,
-					JSON_PROPERTY_STRICT_ORDER);
+			var strictParameterOrder = getExpectedJsonBooleanProperty(expectedConstructor, JSON_PROPERTY_STRICT_ORDER);
 
 			var parametersAreRight = false;
 			var modifiersAreRight = false;
