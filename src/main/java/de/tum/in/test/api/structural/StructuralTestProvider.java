@@ -78,7 +78,7 @@ public abstract class StructuralTestProvider {
 	protected static final String JSON_PROPERTY_TYPE = "type";
 	protected static final String JSON_PROPERTY_RETURN_TYPE = "returnType";
 	protected static final String JSON_PROPERTY_ENUM_VALUES = "enumValues";
-	protected static final String JSON_PROPERTY_Strict_Order = "strictOrder";
+	protected static final String JSON_PROPERTY_STRICT_ORDER = "strictOrder";
 
 	protected static final String THE_CLASS = "The class ";
 	protected static final String THE_TYPE = "The type ";
