@@ -65,7 +65,7 @@
     "returnType" : "int"
   }, {
     "name" : "doSomethingWithMoreParameters",
-    "modifiers" : [ "public" ],
+    "modifiers" : [ "private" ],
     "parameters" : [ "int", "double", "String" ],
     "strictOrder" : true,
     "returnType" : "int"
