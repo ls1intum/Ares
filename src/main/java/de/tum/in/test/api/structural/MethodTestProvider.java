@@ -104,12 +104,14 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 			var expectedModifiers = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_MODIFIERS);
 			var expectedAnnotations = getExpectedJsonProperty(expectedMethod, JSON_PROPERTY_ANNOTATIONS);
 			var expectedReturnType = expectedMethod.getString(JSON_PROPERTY_RETURN_TYPE);
+			var strictParameterOrder = getExpectedJsonBooleanProperty(expectedMethod, JSON_PROPERTY_STRICT_ORDER);
 			var checks = new MethodChecks();
 			for (Method observedMethod : observedClass.getDeclaredMethods()) {
 				// TODO: check if overloading is supported properly
 				if (expectedName.equals(observedMethod.getName())) {
 					checks.name = true;
-					checks.parameters = checkParameters(observedMethod.getParameterTypes(), expectedParameters);
+					checks.parameters = checkParameters(observedMethod.getParameterTypes(), expectedParameters,
+							strictParameterOrder);
 					checks.modifiers = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "),
 							expectedModifiers);
 					checks.annotations = checkAnnotations(observedMethod.getAnnotations(), expectedAnnotations);

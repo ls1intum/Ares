@@ -33,10 +33,12 @@ class StructuralTest {
 	private final String testConstructorsSomeClass = "testConstructors()/dynamic-test:#1";
 	private final String testConstructorsSomeEnum = "testConstructors()/dynamic-test:#2";
 	private final String testConstructorsSomeAbstractClass = "testConstructors()/dynamic-test:#3";
+	private final String testConstructorsSomeFailingClass = "testConstructors()/dynamic-test:#4";
 	private final String testMethodsSomeInterface = "testMethods()/dynamic-test:#1";
 	private final String testMethodsSomeClass = "testMethods()/dynamic-test:#2";
 	private final String testMethodsSomeEnum = "testMethods()/dynamic-test:#3";
 	private final String testMethodsSomeAbstractClass = "testMethods()/dynamic-test:#4";
+	private final String testMethodsSomeFailingClass = "testMethods()/dynamic-test:#5";
 
 	@TestTest
 	void test_testAttributesSomeInterface() {
@@ -140,6 +142,13 @@ class StructuralTest {
 	}
 
 	@TestTest
+	void test_testConstructorsSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testConstructorsSomeFailingClass,
+				AssertionFailedError.class,
+				"The parameters of the expected constructor of the class 'SomeFailingClass' with the parameters: [\"int\",\"String\"] are not implemented as expected."));
+	}
+
+	@TestTest
 	void test_testMethodsSomeInterface() {
 		tests.assertThatEvents().haveExactly(1,
 				event(testWithSegments(testMethodsSomeInterface), finishedSuccessfullyRep()));
@@ -161,5 +170,11 @@ class StructuralTest {
 	void test_testMethodsSomeAbstractClass() {
 		tests.assertThatEvents().haveExactly(1,
 				event(testWithSegments(testMethodsSomeAbstractClass), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_testMethodsSomeFailingClass() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testMethodsSomeFailingClass, AssertionFailedError.class,
+				"The parameters of the expected method 'someMethodWithWrongParameterOrder' of the class 'SomeFailingClass' with the parameters: [\"int\",\"double\"] are not implemented as expected."));
 	}
 }
