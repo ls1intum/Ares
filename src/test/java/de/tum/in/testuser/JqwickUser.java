@@ -43,7 +43,7 @@ import de.tum.in.test.api.localization.UseLocale;
  * target/classes/net/jqwik/engine/properties/shrinking/AbstractSampleShrinker.
  * class
  */
-@WhitelistPath("target/classes/net/jqwik")
+@WhitelistPath("target/test-classes/net/jqwik")
 /*
  * In extended trust scope, we might need to whitelist the JDK, because file
  * access is now more restricted, to have more control over security that got
