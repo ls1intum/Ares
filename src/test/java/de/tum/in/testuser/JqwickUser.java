@@ -49,7 +49,7 @@ import de.tum.in.test.api.localization.UseLocale;
  * access is now more restricted, to have more control over security that got
  * lost by using extended mode in the first place.
  */
-@WhitelistPath(value = "jdk-*/bin/**", type = PathType.GLOB)
+@WhitelistPath(value = "**/*jdk*/**/bin/**", type = PathType.GLOB_ABSOLUTE)
 /*
  * In extended trust scope, we should restrict classes that are loaded even
  * more, like here to a specific package to avoid loading student classes that
