@@ -387,10 +387,26 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return;
 		}
 		var message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", path, blacklisted, whitelisted); //$NON-NLS-1$
-		checkForNonWhitelistedStackFrames(() -> {
-			LOG.warn(message);
-			return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
-		}, IGNORE_ACCESS_PRIVILEGED);
+		if (configuration == null || configuration.threadTrustScope() == TrustScope.MINIMAL) {
+			/*
+			 * If the configuration is not present or minimal, we keep the old behavior, as
+			 * we can protect resources better if the thread whitelisting is restricted.
+			 */
+			checkForNonWhitelistedStackFrames(() -> {
+				LOG.warn(message);
+				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+			});
+		} else {
+			/*
+			 * this is stricter with IGNORE_ACCESS_PRIVILEGED because we can now regulate
+			 * wich paths are accessed in more detail (necessary to have a somewhat decent
+			 * and secure configuration
+			 */
+			checkForNonWhitelistedStackFrames(() -> {
+				LOG.warn(message);
+				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+			}, IGNORE_ACCESS_PRIVILEGED);
+		}
 	}
 
 	private static String getFilePermissionsCommonPath(String path) {
