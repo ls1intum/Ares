@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.PathActionLevel;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.util.DelayedFilter;
 
@@ -63,6 +64,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
 	private static final Predicate<StackFrame> IGNORE_ACCESS_PRIVILEGED = stackframe -> true;
+	private static final Set<String> THREAD_NAME_BLACKLIST = Set.of("ForkJoinPool.commonPool", "Finalizer", //$NON-NLS-1$ //$NON-NLS-2$
+			"InnocuousThread"); //$NON-NLS-1$
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -675,14 +678,15 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean isCurrentThreadWhitelisted() {
+		var trustScope = configuration != null ? configuration.threadTrustScope() : TrustScope.MINIMAL;
+		if (trustScope == TrustScope.ALL_THREADS)
+			return true;
 		var currentThread = Thread.currentThread();
 		var name = externGet(currentThread::getName);
 		/*
 		 * NOTE: the order is very important here!
 		 */
-		// "ForkJoinPool.commonPool" is no longer blacklisted due to jqwik requirements
-		var blacklist = Set.of("Finalizer", "InnocuousThread"); //$NON-NLS-1$ //$NON-NLS-2$
-		if (blacklist.stream().anyMatch(name::startsWith))
+		if (trustScope == TrustScope.MINIMAL && THREAD_NAME_BLACKLIST.stream().anyMatch(name::startsWith))
 			return false;
 		if (!testThreadGroup.parentOf(currentThread.getThreadGroup()))
 			return true;

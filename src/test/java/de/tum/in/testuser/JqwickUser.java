@@ -16,6 +16,8 @@ import net.jqwik.api.constraints.Positive;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.TrustedThreads;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jqwik.Hidden;
@@ -26,6 +28,7 @@ import de.tum.in.test.api.localization.UseLocale;
 @UseLocale("de")
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
+@TrustedThreads(TrustScope.EXTENDED)
 public class JqwickUser {
 
 	@Example
