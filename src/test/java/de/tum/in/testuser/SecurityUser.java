@@ -19,7 +19,6 @@ import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.SecurityPenguin;
 
@@ -68,77 +67,77 @@ public class SecurityUser {
 		SecurityPenguin.tryExecuteGit();
 	}
 
-	@PublicTest
+	@Test
 	void testMaliciousExceptionA() {
 		SecurityPenguin.maliciousExceptionA();
 	}
 
-	@PublicTest
+	@Test
 	void testMaliciousExceptionB() {
 		assertFalse(SecurityPenguin.maliciousExceptionB());
 	}
 
-	@PublicTest
+	@Test
 	void testNewClassLoader() throws IOException {
 		SecurityPenguin.newClassLoader();
 	}
 
-	@PublicTest
+	@Test
 	void testNewSecurityManager() {
 		SecurityPenguin.newSecurityManager();
 	}
 
-	@PublicTest
+	@Test
 	void tryManageProcess() {
 		SecurityPenguin.tryManageProcess();
 	}
 
-	@PublicTest
+	@Test
 	void trySetSecurityManager() {
 		SecurityPenguin.trySetSecurityManagerNull();
 	}
 
-	@PublicTest
+	@Test
 	void trySetSystemOut() {
 		SecurityPenguin.trySetSystemOut();
 	}
 
-	@PublicTest
+	@Test
 	void useCommonPoolBadNormal() throws Throwable {
 		SecurityPenguin.useCommonPoolBadNormal();
 	}
 
-	@PublicTest
+	@Test
 	void useCommonPoolBadTrick() throws Throwable {
 		SecurityPenguin.useCommonPoolBadTrick();
 	}
 
-	@PublicTest
+	@Test
 	void useCommonPoolGood() throws Throwable {
 		SecurityPenguin.useCommonPoolGood();
 	}
 
-	@PublicTest
+	@Test
 	void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}
 
-	@PublicTest
+	@Test
 	void useReflectionPrivileged() {
 		SecurityPenguin.useReflectionPrivileged();
 	}
 
-	@PublicTest
+	@Test
 	void useReflectionTrick() throws Throwable {
 		SecurityPenguin.useReflection2();
 	}
 
-	@PublicTest
+	@Test
 	void weUseReflection() {
 		IOTester.class.getDeclaredFields()[0].setAccessible(true);
 	}
 
-	@PublicTest
+	@Test
 	void weUseShutdownHooks() {
 		Thread t = new Thread("xyz");
 		Runtime.getRuntime().addShutdownHook(t);

@@ -1,6 +1,7 @@
 package de.tum.in.testuser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Path;
@@ -41,7 +42,7 @@ public class ThreadUser {
 		var res = ForkJoinPool.commonPool().submit(() -> "A").get();
 		assertEquals("A", res);
 		// submit long-running task
-		ForkJoinPool.commonPool().submit(() -> {
+		var task = ForkJoinPool.commonPool().submit(() -> {
 			try {
 				Thread.sleep(5_000);
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
@@ -53,8 +54,11 @@ public class ThreadUser {
 			Thread.sleep(100);
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
+			fail("waiting 100 ms was interrupted");
 		}
-		assertFalse(ForkJoinPool.commonPool().isQuiescent());
+		if (task.isDone())
+			fail("task is done" + task);
+		assertFalse(ForkJoinPool.commonPool().isQuiescent(), "common pool is quiescent but it shouldn't be");
 		// wait for task end
 		ForkJoinPool.commonPool().awaitQuiescence(5, TimeUnit.SECONDS);
 	}
