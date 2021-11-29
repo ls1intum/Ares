@@ -15,9 +15,11 @@ import net.jqwik.api.constraints.CharRange;
 import net.jqwik.api.constraints.Positive;
 
 import de.tum.in.test.api.Deadline;
+import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.TrustedThreads;
 import de.tum.in.test.api.TrustedThreads.TrustScope;
+import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.jqwik.Hidden;
@@ -28,7 +30,33 @@ import de.tum.in.test.api.localization.UseLocale;
 @UseLocale("de")
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
+/*
+ * This is needed because jqwik makes use of the common pool since version
+ * 1.3.5, and the test code run there might need to be whitelisted, which in
+ * turn requires the thread (here the common pool) to be whitelisted. This also
+ * causes the more complicated situation concerning the configuration below.
+ */
 @TrustedThreads(TrustScope.EXTENDED)
+/*
+ * For some reason, Java/jqwik tries to read and load classes from here
+ * (especially on the GitHub Actions build agents), like, e.g.
+ * target/classes/net/jqwik/engine/properties/shrinking/AbstractSampleShrinker.
+ * class
+ */
+@WhitelistPath("target/classes/net/jqwik")
+/*
+ * In extended trust scope, we might need to whitelist the JDK, because file
+ * access is now more restricted, to have more control over security that got
+ * lost by using extended mode in the first place.
+ */
+@WhitelistPath(value = "jdk-*/bin/**", type = PathType.GLOB)
+/*
+ * In extended trust scope, we should restrict classes that are loaded even
+ * more, like here to a specific package to avoid loading student classes that
+ * would reside in trusted packages. Note that test-classes is only needed here
+ * in the Ares repository, you should NOT do this for real exercises.
+ */
+@WhitelistPath(value = "target/{classes,test-classes}/de/tum**", type = PathType.GLOB)
 public class JqwickUser {
 
 	@Example
