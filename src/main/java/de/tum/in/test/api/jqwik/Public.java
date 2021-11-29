@@ -28,10 +28,13 @@ import de.tum.in.test.api.io.IOTester;
  * Can be used on class level in addition to method level. This will cause all
  * members of the class (e.g. test methods) to inherit this test case type,
  * unless they declare another one.
+ * <p>
+ * <b>Also see {@link de.tum.in.test.api.jqwik the package Javadoc} for the
+ * required Ares configuration to use jqwik properly.</b>
  *
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.1.0
+ * @version 1.1.1
  */
 @API(status = Status.MAINTAINED)
 @Documented
