@@ -247,8 +247,7 @@ final class ThrowableSets {
 		private Jqwik() {
 		}
 
-		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(
-				net.jqwik.api.CannotFindArbitraryException.class, net.jqwik.api.JqwikException.class,
+		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(net.jqwik.api.JqwikException.class,
 				net.jqwik.api.TooManyFilterMissesException.class,
 				net.jqwik.api.configurators.ArbitraryConfigurationException.class,
 				net.jqwik.api.lifecycle.CannotFindStoreException.class,
@@ -256,7 +255,9 @@ final class ThrowableSets {
 				net.jqwik.engine.execution.pipeline.DuplicateExecutionTaskException.class,
 				net.jqwik.engine.execution.pipeline.PredecessorNotSubmittedException.class,
 				net.jqwik.engine.properties.IncompatibleDataException.class,
-				net.jqwik.engine.properties.arbitraries.NotAFunctionalTypeException.class);
+				net.jqwik.engine.properties.arbitraries.NotAFunctionalTypeException.class,
+				net.jqwik.engine.properties.FailOnFixedSeedException.class,
+				net.jqwik.engine.execution.lifecycle.OutsideJqwikException.class);
 	}
 
 	static final class AssertJ {

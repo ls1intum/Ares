@@ -26,10 +26,14 @@ class SecurityTest {
 	private final String testExecuteGit = "testExecuteGit";
 	private final String testMaliciousExceptionA = "testMaliciousExceptionA";
 	private final String testMaliciousExceptionB = "testMaliciousExceptionB";
+	private final String testNewClassLoader = "testNewClassLoader";
 	private final String testNewSecurityManager = "testNewSecurityManager";
 	private final String tryManageProcess = "tryManageProcess";
 	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String trySetSystemOut = "trySetSystemOut";
+	private final String useCommonPoolBadNormal = "useCommonPoolBadNormal";
+	private final String useCommonPoolBadTrick = "useCommonPoolBadTrick";
+	private final String useCommonPoolGood = "useCommonPoolGood";
 	private final String useReflectionNormal = "useReflectionNormal";
 	private final String useReflectionPrivileged = "useReflectionPrivileged";
 	private final String useReflectionTrick = "useReflectionTrick";
@@ -77,6 +81,11 @@ class SecurityTest {
 	}
 
 	@TestTest
+	void test_testNewClassLoader() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewClassLoader, SecurityException.class));
+	}
+
+	@TestTest
 	void test_testNewSecurityManager() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewSecurityManager, SecurityException.class));
 	}
@@ -94,6 +103,21 @@ class SecurityTest {
 	@TestTest
 	void test_trySetSystemOut() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(trySetSystemOut, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useCommonPoolBadNormal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useCommonPoolBadNormal, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useCommonPoolBadTrick() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useCommonPoolBadTrick, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useCommonPoolGood() {
+		tests.assertThatEvents().haveExactly(1, event(test(useCommonPoolGood), finishedSuccessfullyRep()));
 	}
 
 	@TestTest

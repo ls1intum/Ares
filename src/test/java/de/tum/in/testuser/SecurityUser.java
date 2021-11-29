@@ -2,9 +2,9 @@ package de.tum.in.testuser;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.xyz.Circumvention;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.testuser.subject.SecurityPenguin;
 
@@ -28,7 +28,7 @@ import de.tum.in.testuser.subject.SecurityPenguin;
 @AllowThreads(maxActiveCount = 100)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
-@WhitelistPath(value = "target/**", type = PathType.GLOB)
+@WhitelistPath(value = "target/{classes,test-classes}/de/tum**", type = PathType.GLOB)
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
 public class SecurityUser {
@@ -67,64 +67,77 @@ public class SecurityUser {
 		SecurityPenguin.tryExecuteGit();
 	}
 
-	@PublicTest
+	@Test
 	void testMaliciousExceptionA() {
 		SecurityPenguin.maliciousExceptionA();
 	}
 
-	@PublicTest
+	@Test
 	void testMaliciousExceptionB() {
 		assertFalse(SecurityPenguin.maliciousExceptionB());
 	}
 
-	@PublicTest
+	@Test
+	void testNewClassLoader() throws IOException {
+		SecurityPenguin.newClassLoader();
+	}
+
+	@Test
 	void testNewSecurityManager() {
 		SecurityPenguin.newSecurityManager();
 	}
 
-	@PublicTest
+	@Test
 	void tryManageProcess() {
 		SecurityPenguin.tryManageProcess();
 	}
 
-	@PublicTest
+	@Test
 	void trySetSecurityManager() {
 		SecurityPenguin.trySetSecurityManagerNull();
 	}
 
-	@PublicTest
+	@Test
 	void trySetSystemOut() {
 		SecurityPenguin.trySetSystemOut();
 	}
 
-	@PublicTest
+	@Test
+	void useCommonPoolBadNormal() throws Throwable {
+		SecurityPenguin.useCommonPoolBadNormal();
+	}
+
+	@Test
+	void useCommonPoolBadTrick() throws Throwable {
+		SecurityPenguin.useCommonPoolBadTrick();
+	}
+
+	@Test
+	void useCommonPoolGood() throws Throwable {
+		SecurityPenguin.useCommonPoolGood();
+	}
+
+	@Test
 	void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}
 
-	@PublicTest
+	@Test
 	void useReflectionPrivileged() {
 		SecurityPenguin.useReflectionPrivileged();
 	}
 
-	@PublicTest
-	void useReflectionTrick() {
+	@Test
+	void useReflectionTrick() throws Throwable {
 		SecurityPenguin.useReflection2();
-		Circumvention.thrown.ifPresent(e -> {
-			throw e;
-		});
 	}
 
-	@PublicTest
+	@Test
 	void weUseReflection() {
-		try {
-			Class.forName("de.tum.in.test.api.io.IOTester").getDeclaredFields()[0].setAccessible(true);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		IOTester.class.getDeclaredFields()[0].setAccessible(true);
 	}
 
-	@PublicTest
+	@Test
 	void weUseShutdownHooks() {
 		Thread t = new Thread("xyz");
 		Runtime.getRuntime().addShutdownHook(t);

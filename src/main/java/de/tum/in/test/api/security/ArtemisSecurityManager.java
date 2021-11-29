@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.PathActionLevel;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.localization.Messages;
 import de.tum.in.test.api.util.DelayedFilter;
 
@@ -62,6 +63,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final ArtemisSecurityManager INSTANCE = new ArtemisSecurityManager();
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
+	private static final Predicate<StackFrame> IGNORE_ACCESS_PRIVILEGED = stackframe -> true;
+	private static final Set<String> THREAD_NAME_BLACKLIST = Set.of("ForkJoinPool.commonPool", "Finalizer", //$NON-NLS-1$ //$NON-NLS-2$
+			"InnocuousThread"); //$NON-NLS-1$
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -383,10 +387,26 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return;
 		}
 		var message = String.format("BAD PATH ACCESS: %s (BL:%s, WL:%s)", path, blacklisted, whitelisted); //$NON-NLS-1$
-		checkForNonWhitelistedStackFrames(() -> {
-			LOG.warn(message);
-			return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
-		});
+		if (configuration == null || configuration.threadTrustScope() == TrustScope.MINIMAL) {
+			/*
+			 * If the configuration is not present or minimal, we keep the old behavior, as
+			 * we can protect resources better if the thread whitelisting is restricted.
+			 */
+			checkForNonWhitelistedStackFrames(() -> {
+				LOG.warn(message);
+				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+			});
+		} else {
+			/*
+			 * this is stricter with IGNORE_ACCESS_PRIVILEGED because we can now regulate
+			 * wich paths are accessed in more detail (necessary to have a somewhat decent
+			 * and secure configuration
+			 */
+			checkForNonWhitelistedStackFrames(() -> {
+				LOG.warn(message);
+				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+			}, IGNORE_ACCESS_PRIVILEGED);
+		}
 	}
 
 	private static String getFilePermissionsCommonPath(String path) {
@@ -423,7 +443,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg), //$NON-NLS-1$
 							isPackageWhitelisted(pkg));
 					return formatLocalized("security.error_disallowed_package", pkg); //$NON-NLS-1$
-				}, stackFrame -> true);
+				}, IGNORE_ACCESS_PRIVILEGED);
 			}
 		} finally {
 			exitPublicInterface();
@@ -674,14 +694,16 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private boolean isCurrentThreadWhitelisted() {
+		var trustScope = configuration != null ? configuration.threadTrustScope() : TrustScope.MINIMAL;
+		if (trustScope == TrustScope.ALL_THREADS)
+			return true;
 		var currentThread = Thread.currentThread();
 		var name = externGet(currentThread::getName);
 		/*
 		 * NOTE: the order is very important here!
 		 */
-		var blacklist = Set.of("Finalizer", "InnocuousThread", "ForkJoinPool.commonPool"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		if (blacklist.stream().anyMatch(name::startsWith))
-			return false;
+		if (THREAD_NAME_BLACKLIST.stream().anyMatch(name::startsWith))
+			return trustScope != TrustScope.MINIMAL;
 		if (!testThreadGroup.parentOf(currentThread.getThreadGroup()))
 			return true;
 		return whitelistedThreads.stream().anyMatch(t -> t.equals(currentThread));
