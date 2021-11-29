@@ -181,6 +181,6 @@ class DynamicsTest {
 	@TestTest
 	void test_method_throwing() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(method_throwing, RuntimeException.class,
-				"\n/// Mögliche Problemstelle: de.tum.in.testuser.subject.structural.SomeClass.throwException(SomeClass.java:56) ///"));
+				"\n/// Mögliche Problemstelle: de.tum.in.testuser.subject.structural.SomeClass.throwException(SomeClass.java:60) ///"));
 	}
 }
