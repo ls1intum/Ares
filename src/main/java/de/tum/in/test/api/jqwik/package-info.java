@@ -14,6 +14,15 @@
  * problems may show up in form of exceptions (such as
  * {@link java.util.concurrent.ExecutionException}) being thrown that are not
  * expected.
+ * <p>
+ * It might also be the case that
+ * {@link de.tum.in.test.api.TrustedThreads.TrustScope#ALL_THREADS ALL_THREADS}
+ * is needed if the common pool parallelism is only one, because the common pool
+ * is not used in such a case. This can also be changed by the command line
+ * argument
+ * <code>-Djava.util.concurrent.ForkJoinPool.common.parallelism=2</code>, in
+ * which case {@link de.tum.in.test.api.TrustedThreads.TrustScope#EXTENDED
+ * EXTENDED} is sufficient again.
  *
  * @author Christian Femers
  */

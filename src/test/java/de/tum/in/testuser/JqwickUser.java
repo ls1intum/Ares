@@ -30,20 +30,15 @@ import de.tum.in.test.api.localization.UseLocale;
 @UseLocale("de")
 @SuppressWarnings("static-method")
 @Deadline("2200-01-01 16:00")
-/*
+/**
  * This is needed because jqwik makes use of the common pool since version
  * 1.3.5, and the test code run there might need to be whitelisted, which in
  * turn requires the thread (here the common pool) to be whitelisted. This also
  * causes the more complicated situation concerning the configuration below.
+ * <p>
+ * Also see {@link de.tum.in.test.api.jqwik} on why it is all threads here.
  */
-@TrustedThreads(TrustScope.EXTENDED)
-/*
- * For some reason, Java/jqwik tries to read and load classes from here
- * (especially on the GitHub Actions build agents), like, e.g.
- * target/classes/net/jqwik/engine/properties/shrinking/AbstractSampleShrinker.
- * class
- */
-@WhitelistPath("target/test-classes/net/jqwik")
+@TrustedThreads(TrustScope.ALL_THREADS)
 /*
  * In extended trust scope, we might need to whitelist the JDK, because file
  * access is now more restricted, to have more control over security that got
