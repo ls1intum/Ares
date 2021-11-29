@@ -18,6 +18,8 @@ import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PrivilegedExceptionsOnly;
+import de.tum.in.test.api.TrustedThreads;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
@@ -43,6 +45,7 @@ public final class ConfigurationUtils {
 		config.withPackageBlacklist(generatePackageBlackList(context));
 		config.withPackageWhitelist(generatePackageWhiteList(context));
 		config.withTrustedPackages(getTrustedPackages(context));
+		config.withThreadTrustScope(getThreadTrustScope(context));
 		configureAllowLocalPort(config, context);
 		return config.build();
 	}
@@ -113,5 +116,10 @@ public final class ConfigurationUtils {
 				.map(AddTrustedPackage::value)
 				.flatMap(packagePatterns -> PackageRule.from(RuleType.WHITELIST, packagePatterns))
 				.collect(Collectors.toSet());
+	}
+
+	private static TrustScope getThreadTrustScope(TestContext context) {
+		return TestContextUtils.findAnnotationIn(context, TrustedThreads.class).map(TrustedThreads::value)
+				.orElse(TrustScope.MINIMAL);
 	}
 }

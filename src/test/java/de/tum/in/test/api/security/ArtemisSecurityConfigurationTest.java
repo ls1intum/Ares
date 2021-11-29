@@ -18,6 +18,8 @@ import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPackage;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.PathActionLevel;
+import de.tum.in.test.api.TrustedThreads;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
@@ -83,6 +85,9 @@ class ArtemisSecurityConfigurationTest {
 		assertThat(configurationOneA.trustedPackages()).hasSize(1)
 				.allMatch(packageRule -> packageRule.getRuleType() == RuleType.WHITELIST //
 						&& TRUSTED_PACKAGE.equals(packageRule.getPackagePattern()));
+
+		assertThat(configurationOneA.threadTrustScope()).isEqualTo(TrustedThreads.TrustScope.MINIMAL);
+		assertThat(configurationTwo.threadTrustScope()).isEqualTo(TrustedThreads.TrustScope.EXTENDED);
 	}
 
 	@Test
@@ -122,6 +127,7 @@ class ArtemisSecurityConfigurationTest {
 			// nothing to do
 		}
 
+		@TrustedThreads(TrustScope.EXTENDED)
 		@AllowLocalPort(value = 271)
 		void testTwo() {
 			// nothing to do

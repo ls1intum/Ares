@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
@@ -30,12 +31,13 @@ public final class ArtemisSecurityConfiguration {
 	private final Set<PackageRule> blacklistedPackages;
 	private final Set<PackageRule> whitelistedPackages;
 	private final Set<PackageRule> trustedPackages;
+	private final TrustScope threadTrustScope;
 
 	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, // NOSONAR
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,
-			Set<PackageRule> whitelistedPackages, Set<PackageRule> trustedPackages) {
+			Set<PackageRule> whitelistedPackages, Set<PackageRule> trustedPackages, TrustScope threadTrustScope) {
 		this.testClass = Objects.requireNonNull(testClass);
 		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
@@ -49,6 +51,7 @@ public final class ArtemisSecurityConfiguration {
 		this.blacklistedPackages = Set.copyOf(blacklistedPackages);
 		this.whitelistedPackages = Set.copyOf(whitelistedPackages);
 		this.trustedPackages = Set.copyOf(trustedPackages);
+		this.threadTrustScope = threadTrustScope;
 	}
 
 	public Optional<Class<?>> testClass() {
@@ -103,6 +106,10 @@ public final class ArtemisSecurityConfiguration {
 		return trustedPackages;
 	}
 
+	public TrustScope threadTrustScope() {
+		return threadTrustScope;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -120,13 +127,14 @@ public final class ArtemisSecurityConfiguration {
 				&& Objects.equals(whitelistedPaths, other.whitelistedPaths)
 				&& Objects.equals(blacklistedPaths, other.blacklistedPaths)
 				&& Objects.equals(blacklistedPackages, other.blacklistedPackages)
-				&& Objects.equals(whitelistedPackages, other.whitelistedPackages);
+				&& Objects.equals(whitelistedPackages, other.whitelistedPackages)
+				&& Objects.equals(threadTrustScope, other.threadTrustScope);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(executionPath, testClass, testMethod, whitelistedClassNames, allowedThreadCount,
-				whitelistedPaths, blacklistedPaths, blacklistedPackages, whitelistedPackages);
+				whitelistedPaths, blacklistedPaths, blacklistedPackages, whitelistedPackages, threadTrustScope);
 	}
 
 	@Override
@@ -134,10 +142,10 @@ public final class ArtemisSecurityConfiguration {
 		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s," //$NON-NLS-1$
 				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s," //$NON-NLS-1$
 				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s," //$NON-NLS-1$
-				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s]", whitelistedClassNames, //$NON-NLS-1$
-				executionPath, testClass, testMethod, whitelistedPaths, blacklistedPaths, allowedLocalPorts,
-				allowLocalPortsAbove, excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages,
-				trustedPackages);
+				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s, threadTrustScope=%s]", //$NON-NLS-1$
+				whitelistedClassNames, executionPath, testClass, testMethod, whitelistedPaths, blacklistedPaths,
+				allowedLocalPorts, allowLocalPortsAbove, excludedLocalPorts, allowedThreadCount, blacklistedPackages,
+				whitelistedPackages, trustedPackages, threadTrustScope);
 	}
 
 	public String shortDesc() {

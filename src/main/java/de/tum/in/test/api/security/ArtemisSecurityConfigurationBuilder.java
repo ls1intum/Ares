@@ -16,6 +16,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.AllowLocalPort;
+import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
@@ -35,6 +36,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Set<Integer> excludedLocalPorts;
 	private OptionalInt allowedThreadCount;
 	private Set<PackageRule> trustedPackages;
+	private TrustScope threadTrustScope;
 
 	private ArtemisSecurityConfigurationBuilder() {
 		testClass = Optional.empty();
@@ -48,6 +50,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 		excludedLocalPorts = Set.of();
 		allowedThreadCount = OptionalInt.empty();
 		trustedPackages = Set.of();
+		threadTrustScope = TrustScope.MINIMAL;
 	}
 
 	public ArtemisSecurityConfigurationBuilder withPath(Path executionPath) {
@@ -86,8 +89,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
-		testClass = context.testClass();
-		testMethod = context.testMethod();
+		testClass = Objects.requireNonNull(context.testClass());
+		testMethod = Objects.requireNonNull(context.testMethod());
 		return this;
 	}
 
@@ -107,7 +110,12 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	public ArtemisSecurityConfigurationBuilder withTrustedPackages(Set<PackageRule> trustedPackages) {
-		this.trustedPackages = trustedPackages;
+		this.trustedPackages = Set.copyOf(trustedPackages);
+		return this;
+	}
+
+	public ArtemisSecurityConfigurationBuilder withThreadTrustScope(TrustScope threadTrustScope) {
+		this.threadTrustScope = Objects.requireNonNull(threadTrustScope);
 		return this;
 	}
 
@@ -115,7 +123,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 		validate();
 		return new ArtemisSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
 				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
-				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages, trustedPackages);
+				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages, trustedPackages,
+				threadTrustScope);
 	}
 
 	private void validate() {
