@@ -686,8 +686,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		/*
 		 * NOTE: the order is very important here!
 		 */
-		if (trustScope == TrustScope.MINIMAL && THREAD_NAME_BLACKLIST.stream().anyMatch(name::startsWith))
-			return false;
+		if (THREAD_NAME_BLACKLIST.stream().anyMatch(name::startsWith))
+			return trustScope != TrustScope.MINIMAL;
 		if (!testThreadGroup.parentOf(currentThread.getThreadGroup()))
 			return true;
 		return whitelistedThreads.stream().anyMatch(t -> t.equals(currentThread));
