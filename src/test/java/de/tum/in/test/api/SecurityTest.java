@@ -112,7 +112,7 @@ class SecurityTest {
 
 	@TestTest
 	void test_useCommonPoolBadTrick() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(useCommonPoolBadTrick, NoClassDefFoundError.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(useCommonPoolBadTrick, SecurityException.class));
 	}
 
 	@TestTest
