@@ -35,6 +35,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.net.ssl.SSLPermission;
@@ -83,6 +84,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		INSTANCE.isPartlyDisabled = true;
 		System.setSecurityManager(ORIGINAL);
 		INSTANCE.isPartlyDisabled = false;
+		// Create all common pool threads
+		IntStream.range(0, ForkJoinPool.getCommonPoolParallelism() * 10).parallel().sum();
 		// We explain the deprecated security manager warning in case JDK 17 is used
 		if (Runtime.version().feature() == 17) {
 			SecurityConstants.SYSTEM_ERR
