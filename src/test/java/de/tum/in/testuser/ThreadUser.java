@@ -43,11 +43,7 @@ public class ThreadUser {
 		assertEquals("A", res);
 		// submit long-running task
 		var task = ForkJoinPool.commonPool().submit(() -> {
-			try {
-				Thread.sleep(5_000);
-			} catch (@SuppressWarnings("unused") InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
+			ThreadPenguin.sleepInCurrentThread(5_000);
 		});
 		// check that the task is still running after 100 ms
 		try {

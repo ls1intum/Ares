@@ -1,11 +1,15 @@
 package de.tum.in.test.api;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
-import java.util.concurrent.ForkJoinPool;
+import java.lang.Thread.State;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
@@ -34,7 +38,19 @@ class ThreadTest {
 	void test_commonPoolInterruptable() {
 		tests.assertThatEvents().haveExactly(1,
 				testFailedWith(commonPoolInterruptable, AssertionError.class, "execution timed out after 300 ms"));
-		assertTrue(ForkJoinPool.commonPool().isQuiescent());
+
+		assertCommonPoolIdleAndIntact();
+	}
+
+	private static void assertCommonPoolIdleAndIntact() {
+		ThreadGroup root = TestUtils.getRootThreadGroup();
+		Thread[] allThreads = new Thread[root.activeCount() + 10];
+		TestUtils.getRootThreadGroup().enumerate(allThreads, true);
+		Map<String, State> commonPoolThreadStates = Stream.of(allThreads).filter(Objects::nonNull)
+				.peek(System.out::println).filter(t -> t.getName().contains("commonPool"))
+				.collect(Collectors.toMap(Thread::getName, Thread::getState));
+		assertThat(commonPoolThreadStates).doesNotContainValue(State.RUNNABLE);
+		assertThat(commonPoolThreadStates).doesNotContainValue(State.TERMINATED);
 	}
 
 	@Disabled("Currently unused because this is very inconsistent depending on the CI environment")

@@ -13,6 +13,14 @@ public final class ThreadPenguin extends Thread {
 		super("ThreadPenguin");
 	}
 
+	public static void sleepInCurrentThread(long millies) {
+		try {
+			Thread.sleep(millies);
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
 	public static void tryStartTwoThreads() {
 		Thread t1 = new Thread(() -> {
 			try {
