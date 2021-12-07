@@ -65,8 +65,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static final Pattern RECURSIVE_FILE_PERMISSION = Pattern.compile("[/\\\\][-*]$"); //$NON-NLS-1$
 	private static final String LOCALHOST = "localhost"; //$NON-NLS-1$
 	private static final Predicate<StackFrame> IGNORE_ACCESS_PRIVILEGED = stackframe -> true;
-	private static final Set<String> THREAD_NAME_BLACKLIST = Set.of("ForkJoinPool.commonPool", "Finalizer", //$NON-NLS-1$ //$NON-NLS-2$
-			"InnocuousThread"); //$NON-NLS-1$
+	private static final String COMMON_POOL_THREAD_NAME = "ForkJoinPool.commonPool"; //$NON-NLS-1$
+	private static final Set<String> THREAD_NAME_BLACKLIST = Set.of(COMMON_POOL_THREAD_NAME, "Finalizer", //$NON-NLS-1$
+			"InnocuousThread", "Common-Cleaner"); //$NON-NLS-1$ //$NON-NLS-2$
 	private static final MessageDigest SHA256;
 	static {
 		try {
@@ -647,18 +648,22 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		LOG.debug("Common pool is active: {} with number {} workers", !commonPool.isQuiescent(), //$NON-NLS-1$
 				commonPool.getActiveThreadCount());
 		var rootThreadGroup = getRootThreadGroup(); // NOSONAR
-		var allThreadGroups = new ThreadGroup[rootThreadGroup.activeGroupCount() + 5];
-		rootThreadGroup.enumerate(allThreadGroups, true);
-		ThreadGroup commong = Stream.of(allThreadGroups)
-				.filter(tg -> "InnocuousForkJoinWorkerThreadGroup".equals(tg.getName())) //$NON-NLS-1$
-				.findFirst().orElseThrow(IllegalStateException::new); // was created indirectly in the static
-																		// initializer
-		var threads = new Thread[commong.activeCount() + 5];
-		commong.enumerate(threads);
+		// have some buffer in case the count changes
+		// (does not need to be massive due to blockThreadCreation being true)
+		var allThreads = new Thread[rootThreadGroup.activeCount() + 32];
+		rootThreadGroup.enumerate(allThreads, true);
+		var threads = Stream.of(allThreads).filter(Objects::nonNull)
+				.filter(t -> t.getName().contains(COMMON_POOL_THREAD_NAME)).toArray(Thread[]::new);
+
 		LOG.info("Try interrupt common pool"); //$NON-NLS-1$
 		for (Thread thread : threads) {
-			if (thread != null && thread.isAlive()) { // $NON-NLS-1$
-				thread.interrupt();
+			if (thread.isAlive()) { // $NON-NLS-1$
+				// We look which workers might be executing student code
+				var notIdle = Stream.of(thread.getStackTrace()).anyMatch(this::isStackFrameNotWhitelisted);
+				if (notIdle) {
+					LOG.info("Interrupting non-whitelsited code executing common pool worker: {}", thread); //$NON-NLS-1$
+					thread.interrupt();
+				}
 			}
 		}
 		try {
