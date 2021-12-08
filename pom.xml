@@ -35,7 +35,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<junit-jupiter-version>5.8.1</junit-jupiter-version>
-		<junit-platform-version>1.8.1</junit-platform-version>
+		<junit-platform-version>1.8.2</junit-platform-version>
 		<jqwik-version>1.6.0</jqwik-version>
 		<spotless.version>2.17.6</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
