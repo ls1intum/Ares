@@ -39,7 +39,7 @@ Ares is provided as Maven dependency. To use Ares in the test environment of a M
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.7.4</version>
+    <version>1.7.5</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -84,7 +84,7 @@ Assume you have a Java 11 Maven project, and the inside of `pom.xml` looks like 
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.7.4</version>
+        <version>1.7.5</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
