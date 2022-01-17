@@ -13,7 +13,7 @@ import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public class DynamicClass<T> implements Checkable {
 
 	private static final Map<Class<?>, Class<?>> primitiveWrappers = Map.of(Boolean.TYPE, Boolean.class, Byte.TYPE,

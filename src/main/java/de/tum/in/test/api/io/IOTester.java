@@ -15,9 +15,9 @@ import org.apiguardian.api.API.Status;
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.1
+ * @version 1.0.2
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 public final class IOTester {
 
 	static final String LINE_SEPERATOR = "\n"; //$NON-NLS-1$

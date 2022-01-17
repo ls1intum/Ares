@@ -12,7 +12,7 @@ import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.util.UnexpectedExceptionError;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public class DynamicConstructor<T> implements Checkable {
 
 	private final DynamicClass<T> owner;

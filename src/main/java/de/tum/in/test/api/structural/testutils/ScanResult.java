@@ -1,5 +1,8 @@
 package de.tum.in.test.api.structural.testutils;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * A ScanResult the result object generated from the ClassNamesScanner. It
  * consists of an enum representing the type of the result and a string
@@ -8,6 +11,7 @@ package de.tum.in.test.api.structural.testutils;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
+@API(status = Status.MAINTAINED)
 public class ScanResult {
 
 	private final ScanResultType type;

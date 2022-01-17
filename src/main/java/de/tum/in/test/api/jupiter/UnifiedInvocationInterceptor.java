@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.extension.DynamicTestInvocationContext;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
  *
  * @author Christian Femers
  */
+@API(status = Status.MAINTAINED)
 public interface UnifiedInvocationInterceptor extends InvocationInterceptor {
 
 	@Override

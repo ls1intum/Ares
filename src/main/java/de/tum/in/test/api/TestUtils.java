@@ -11,7 +11,12 @@ import org.apiguardian.api.API.Status;
 import de.tum.in.test.api.internal.BlacklistedInvoker;
 import de.tum.in.test.api.internal.PrivilegedException;
 
-@API(status = Status.EXPERIMENTAL)
+/**
+ * Utilities for writing tests with Ares in the form of static methods.
+ *
+ * @author Christian Femers
+ */
+@API(status = Status.MAINTAINED)
 public final class TestUtils {
 
 	private TestUtils() {

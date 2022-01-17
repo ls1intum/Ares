@@ -16,9 +16,9 @@ import org.apiguardian.api.API.Status;
  * @see IOTester
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.1
+ * @version 1.0.2
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 public final class InputTester implements LineProvider {
 
 	private final List<Line> expectedInput = new ArrayList<>();

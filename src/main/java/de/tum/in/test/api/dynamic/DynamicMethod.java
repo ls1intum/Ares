@@ -15,7 +15,7 @@ import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.util.UnexpectedExceptionError;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public class DynamicMethod<T> implements Checkable {
 	private final DynamicClass<?> owner;
 	private final String name;

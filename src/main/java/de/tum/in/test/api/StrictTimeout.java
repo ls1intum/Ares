@@ -34,9 +34,9 @@ import de.tum.in.test.api.jupiter.Public;
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 2.0.0
+ * @version 2.1.0
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 @Inherited
 @Documented
 @Retention(RUNTIME)

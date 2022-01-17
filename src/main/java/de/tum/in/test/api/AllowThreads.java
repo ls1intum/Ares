@@ -8,6 +8,9 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 /**
  * Allows starting and modifying own Threads.
  *
@@ -15,6 +18,7 @@ import java.lang.annotation.Target;
  * @since 0.4.0
  * @version 1.0.0
  */
+@API(status = Status.STABLE)
 @Inherited
 @Documented
 @Retention(RUNTIME)

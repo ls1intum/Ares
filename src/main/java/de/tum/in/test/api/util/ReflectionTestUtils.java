@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.opentest4j.AssertionFailedError;
 
 /**
@@ -33,6 +35,7 @@ import org.opentest4j.AssertionFailedError;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
+@API(status = Status.STABLE)
 public final class ReflectionTestUtils {
 
 	private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";

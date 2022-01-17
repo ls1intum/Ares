@@ -20,9 +20,9 @@ import org.apiguardian.api.API.Status;
  * @see Path
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.1.0
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 @Inherited
 @Documented
 @Retention(RUNTIME)

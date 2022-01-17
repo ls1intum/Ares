@@ -33,9 +33,9 @@ import de.tum.in.test.api.io.IOTester;
  * @see Deadline
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.1.1
+ * @version 1.2.0
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 @Inherited
 @Documented
 @Retention(RUNTIME)

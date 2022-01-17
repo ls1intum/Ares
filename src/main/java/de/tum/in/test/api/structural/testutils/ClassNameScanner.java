@@ -16,6 +16,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -54,6 +56,7 @@ import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
+@API(status = Status.STABLE)
 public class ClassNameScanner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ClassNameScanner.class);

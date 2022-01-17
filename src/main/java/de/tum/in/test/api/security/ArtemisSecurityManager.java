@@ -41,6 +41,8 @@ import java.util.stream.Stream;
 import javax.net.ssl.SSLPermission;
 import javax.security.auth.AuthPermission;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +58,7 @@ import de.tum.in.test.api.util.DelayedFilter;
  *
  * @author Christian Femers
  */
+@API(status = Status.MAINTAINED)
 public final class ArtemisSecurityManager extends SecurityManager {
 
 	private static final int MAX_PORT = AllowLocalPort.MAXIMUM;

@@ -24,9 +24,9 @@ import org.apiguardian.api.API.Status;
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.0.1
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 public interface Line {
 
 	String text();

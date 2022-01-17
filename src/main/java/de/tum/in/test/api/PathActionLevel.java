@@ -1,5 +1,9 @@
 package de.tum.in.test.api;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
+@API(status = Status.STABLE)
 public enum PathActionLevel {
 	READ,
 	READLINK,

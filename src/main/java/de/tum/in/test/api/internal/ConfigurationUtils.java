@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.AllowThreads;
@@ -29,6 +32,7 @@ import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 import de.tum.in.test.api.util.RuleType;
 
+@API(status = Status.INTERNAL)
 public final class ConfigurationUtils {
 
 	private ConfigurationUtils() {

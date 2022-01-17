@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.INTERNAL)
 public class DelayedFilter<T> implements Predicate<T> {
 
 	private final Predicate<T> original;

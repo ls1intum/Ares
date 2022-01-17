@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public class DynamicField<T> implements Checkable {
 
 	private final DynamicClass<?> owner;

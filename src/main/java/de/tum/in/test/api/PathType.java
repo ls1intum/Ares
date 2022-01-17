@@ -13,8 +13,18 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.util.LruCache;
 
+/**
+ * Defines different path pattern matching notations which can be converted into
+ * {@link PathMatcher}s.
+ *
+ * @author Christian Femers
+ */
+@API(status = Status.STABLE)
 public enum PathType {
 	/**
 	 * Absolute path must match exactly; given path may be specified relative

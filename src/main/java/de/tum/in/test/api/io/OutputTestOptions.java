@@ -3,7 +3,12 @@ package de.tum.in.test.api.io;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-@API(status = Status.MAINTAINED)
+/**
+ * Output test options to be used with {@link OutputTester}
+ *
+ * @author Christian Femers
+ */
+@API(status = Status.STABLE)
 public enum OutputTestOptions {
 	/*
 	 * A last empty line is ignored by default. Add this option to include this line

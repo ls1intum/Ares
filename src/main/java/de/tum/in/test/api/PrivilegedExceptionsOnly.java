@@ -48,9 +48,9 @@ import org.junit.jupiter.api.Assertions;
  * @see TestUtils#privilegedThrow(java.util.concurrent.Callable)
  * @author Christian Femers
  * @since 0.5.2
- * @version 1.0.1
+ * @version 1.1.0
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.STABLE)
 @Inherited
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })

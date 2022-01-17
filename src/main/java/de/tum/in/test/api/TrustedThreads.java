@@ -54,7 +54,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  * {@link ArtemisSecurityManager#requestThreadWhitelisting(Thread)}.
  *
  * @since 1.7.3
- * @version 1.0.0
+ * @version 1.1.0
  * @author Christian Femers
  */
 @API(status = Status.MAINTAINED)

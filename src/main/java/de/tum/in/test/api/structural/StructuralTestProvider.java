@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -60,6 +62,7 @@ import de.tum.in.test.api.structural.testutils.ScanResultType;
  * @author Stephan Krusche (krusche@in.tum.de)
  * @version 5.0 (11.11.2020)
  */
+@API(status = Status.MAINTAINED)
 public abstract class StructuralTestProvider {
 
 	private static final Logger LOG = LoggerFactory.getLogger(StructuralTestProvider.class);

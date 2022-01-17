@@ -5,6 +5,8 @@ import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  *
  * @author Christian Femers
  */
+@API(status = Status.INTERNAL)
 public final class ReportingUtils {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReportingUtils.class);

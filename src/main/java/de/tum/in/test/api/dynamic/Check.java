@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 public enum Check {
 
 	STATIC {

@@ -1,8 +1,12 @@
 package de.tum.in.test.api.internal;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
+@API(status = Status.INTERNAL)
 public final class IOTesterManager {
 
 	static {

@@ -19,9 +19,9 @@ import org.apiguardian.api.API.Status;
  *
  * @author Christian Femers
  * @since 0.3.6
- * @version 1.0.0
+ * @version 1.1.0
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.STABLE)
 @Inherited
 @Documented
 @Retention(RUNTIME)

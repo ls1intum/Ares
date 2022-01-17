@@ -3,8 +3,12 @@ package de.tum.in.test.api.security;
 import java.io.PrintStream;
 import java.util.Set;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.internal.BlacklistedInvoker;
 
+@API(status = Status.INTERNAL)
 public final class SecurityConstants {
 
 	static final PrintStream SYSTEM_OUT = System.out;

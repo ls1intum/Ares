@@ -18,9 +18,9 @@ import org.apiguardian.api.API.Status;
  * @see BlacklistPackage
  * @author Christian Femers
  * @since 0.5.1
- * @version 1.0.0
+ * @version 1.1.0
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 @Inherited
 @Documented
 @Retention(RUNTIME)

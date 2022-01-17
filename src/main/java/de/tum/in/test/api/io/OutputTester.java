@@ -28,9 +28,9 @@ import org.opentest4j.ValueWrapper;
  * @see IOTester
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.1.0
+ * @version 1.1.1
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 public final class OutputTester implements LineAcceptor {
 
 	private static final int MAX_SPACES = 16;

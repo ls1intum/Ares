@@ -2,8 +2,12 @@ package de.tum.in.test.api.io;
 
 import java.util.Objects;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import de.tum.in.test.api.localization.Messages;
 
+@API(status = Status.MAINTAINED)
 public abstract class AbstractLine implements Line {
 
 	int lineNumber = -1;

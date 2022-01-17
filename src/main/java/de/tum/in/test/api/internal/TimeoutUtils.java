@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.opentest4j.AssertionFailedError;
 
@@ -23,6 +25,7 @@ import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
+@API(status = Status.INTERNAL)
 public final class TimeoutUtils {
 
 	static {

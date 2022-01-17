@@ -20,7 +20,7 @@ import de.tum.in.test.api.io.IOTester;
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.0.1
+ * @version 1.1.0
  */
 @API(status = Status.MAINTAINED)
 @Documented()

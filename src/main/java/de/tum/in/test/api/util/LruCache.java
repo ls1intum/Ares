@@ -16,7 +16,7 @@ import org.apiguardian.api.API.Status;
  * @param <K> the type of the cache keys
  * @param <V> the type of the cache values
  */
-@API(status = Status.MAINTAINED)
+@API(status = Status.STABLE)
 public class LruCache<K, V> extends LinkedHashMap<K, V> {
 
 	private static final long serialVersionUID = 1L;

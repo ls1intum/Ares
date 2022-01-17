@@ -34,9 +34,9 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  *
  * @author Christian Femers
  * @since 0.5.1
- * @version 1.1.1
+ * @version 1.2.0
  */
-@API(status = Status.EXPERIMENTAL)
+@API(status = Status.MAINTAINED)
 @Inherited
 @Documented
 @Retention(RUNTIME)
