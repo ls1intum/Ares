@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.xyz.Circumvention;
 import org.apache.xyz.FakeTrustedClass;
 import org.apache.xyz.MaliciousExceptionB;
+import org.apache.xyz.MaliciousInvocationTargetException;
 
 import de.tum.in.test.api.io.IOTester;
 
@@ -47,6 +48,10 @@ public final class SecurityPenguin {
 			// nothing
 		}
 		return ab.get();
+	}
+
+	public static void maliciousInvocationTargetException() throws Exception {
+		throw new MaliciousInvocationTargetException();
 	}
 
 	@SuppressWarnings("resource")

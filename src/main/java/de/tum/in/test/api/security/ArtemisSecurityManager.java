@@ -511,19 +511,20 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return !AccessController.class.getName().equals(stackFrame.getClassName());
 	}
 
-	private boolean isCallNotWhitelisted(String call) {
+	private boolean isCallNotWhitelisted(String className, String methodName) {
+		String call = className + "." + methodName; //$NON-NLS-1$
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-						&& (configuration == null || !(configuration.whitelistedClassNames().contains(call)
-								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(call)))));
+						&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
+								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
-		return isCallNotWhitelisted(sf.getClassName());
+		return isCallNotWhitelisted(sf.getClassName(), sf.getMethodName());
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackTraceElement ste) {
-		return isCallNotWhitelisted(ste.getClassName());
+		return isCallNotWhitelisted(ste.getClassName(), ste.getMethodName());
 	}
 
 	public static Optional<StackTraceElement> firstNonWhitelisted(StackTraceElement... elements) {

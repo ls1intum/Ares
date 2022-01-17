@@ -78,6 +78,11 @@ public class SecurityUser {
 	}
 
 	@Test
+	void testMaliciousInvocationTargetException() throws Exception {
+		SecurityPenguin.maliciousInvocationTargetException();
+	}
+
+	@Test
 	void testNewClassLoader() throws IOException {
 		SecurityPenguin.newClassLoader();
 	}
