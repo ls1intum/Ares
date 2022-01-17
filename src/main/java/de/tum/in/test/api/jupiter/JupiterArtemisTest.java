@@ -4,6 +4,7 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -19,6 +20,7 @@ import de.tum.in.test.api.internal.TestType;
  * @author Christian Femers
  */
 @API(status = Status.INTERNAL)
+@Inherited
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)

@@ -3,6 +3,7 @@ package de.tum.in.test.api;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -50,6 +51,7 @@ import org.junit.jupiter.api.Assertions;
  * @version 1.0.1
  */
 @API(status = Status.EXPERIMENTAL)
+@Inherited
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, ANNOTATION_TYPE })
 public @interface PrivilegedExceptionsOnly {

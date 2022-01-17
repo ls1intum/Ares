@@ -4,6 +4,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -57,6 +58,7 @@ import de.tum.in.test.api.security.ArtemisSecurityManager;
  * @author Christian Femers
  */
 @API(status = Status.MAINTAINED)
+@Inherited
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD, CONSTRUCTOR, ANNOTATION_TYPE })

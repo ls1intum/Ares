@@ -4,6 +4,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -22,6 +23,7 @@ import org.apiguardian.api.API.Status;
  * @version 1.0.0
  */
 @API(status = Status.MAINTAINED)
+@Inherited
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, TYPE, ANNOTATION_TYPE })

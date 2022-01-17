@@ -4,6 +4,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -35,6 +36,7 @@ import de.tum.in.test.api.io.IOTester;
  * @version 1.1.1
  */
 @API(status = Status.MAINTAINED)
+@Inherited
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, ANNOTATION_TYPE, TYPE })

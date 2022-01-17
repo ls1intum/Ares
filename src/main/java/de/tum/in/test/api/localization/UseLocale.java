@@ -4,6 +4,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import de.tum.in.test.api.jupiter.JupiterLocaleExtension;
  * @version 1.0.0
  */
 @Documented
+@Inherited
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
 @API(status = Status.EXPERIMENTAL)
