@@ -22,6 +22,7 @@ import org.apache.xyz.MaliciousExceptionB;
 import org.apache.xyz.MaliciousInvocationTargetException;
 
 import de.tum.in.test.api.io.IOTester;
+import de.tum.in.testuser.subject.structural.SomeClass;
 
 public final class SecurityPenguin {
 
@@ -182,6 +183,14 @@ public final class SecurityPenguin {
 		Circumvention.thrown.ifPresent(failure::set);
 		if (failure.get() != null)
 			throw failure.get();
+	}
+
+	public static void useReflectionPackagePrivateExecute() throws Throwable {
+		SomeClass.class.getDeclaredConstructor(String.class).newInstance("");
+	}
+
+	public static void useReflectionPackagePrivateSetAccessible() throws Throwable {
+		SomeClass.class.getDeclaredConstructor(String.class).trySetAccessible();
 	}
 
 	public static void useReflectionPrivileged() {

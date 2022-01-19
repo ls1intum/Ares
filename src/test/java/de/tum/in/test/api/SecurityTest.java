@@ -36,6 +36,8 @@ class SecurityTest {
 	private final String useCommonPoolBadTrick = "useCommonPoolBadTrick";
 	private final String useCommonPoolGood = "useCommonPoolGood";
 	private final String useReflectionNormal = "useReflectionNormal";
+	private final String useReflectionPackagePrivateExecute = "useReflectionPackagePrivateExecute";
+	private final String useReflectionPackagePrivateSetAccessible = "useReflectionPackagePrivateSetAccessible";
 	private final String useReflectionPrivileged = "useReflectionPrivileged";
 	private final String useReflectionTrick = "useReflectionTrick";
 	private final String weUseReflection = "weUseReflection";
@@ -130,6 +132,18 @@ class SecurityTest {
 	@TestTest
 	void test_useReflectionNormal() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(useReflectionNormal, SecurityException.class));
+	}
+
+	@TestTest
+	void test_useReflectionPackagePrivateExecute() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(useReflectionPackagePrivateExecute, IllegalAccessException.class));
+	}
+
+	@TestTest
+	void test_useReflectionPackagePrivateSetAccessible() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(useReflectionPackagePrivateSetAccessible, SecurityException.class));
 	}
 
 	@TestTest

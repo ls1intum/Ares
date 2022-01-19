@@ -123,6 +123,16 @@ public class SecurityUser {
 	}
 
 	@Test
+	void useReflectionPackagePrivateExecute() throws Throwable {
+		SecurityPenguin.useReflectionPackagePrivateExecute();
+	}
+
+	@Test
+	void useReflectionPackagePrivateSetAccessible() throws Throwable {
+		SecurityPenguin.useReflectionPackagePrivateSetAccessible();
+	}
+
+	@Test
 	void useReflectionNormal() {
 		SecurityPenguin.useReflection();
 	}
