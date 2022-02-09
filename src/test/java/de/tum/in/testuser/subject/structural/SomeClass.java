@@ -52,6 +52,7 @@ public class SomeClass implements SomeInterface {
 		return Math.max(someFinalAttribute, someInt);
 	}
 
+	@SuppressWarnings({ "static-method", "unused" })
 	private int doSomethingWithMoreParameters(int someInt, double someDouble, String someString) {
 		return (int) (someString.length() * someInt / someDouble);
 	}
