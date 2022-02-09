@@ -2,7 +2,7 @@
 :description: The Artemis Java Test Sandbox
 :keywords: java, testing, students, deadline, education, tum, test, feedback, sandbox, thread, exercise, teaching, junit, test-framework, ares, junit5, artemis, jqwik, ajts
 :author: Christian Femers
-:revnumber: 1.8.0
+:revnumber: 1.8.1-SNAPSHOT
 :revdate: 2022-02-09
 :revremark: Switched to AsciiDoc and added sections 2.3.1 and 2.4.8 to 2.4.9
 :showtitle:
