@@ -1,12 +1,16 @@
 package de.tum.in.test.api;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.testkit.engine.EventConditions.*;
+
+import java.nio.file.Path;
 
 import org.junit.ComparisonFailure;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
+import de.tum.in.test.api.security.ConfigurationException;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -29,6 +33,7 @@ class SecurityTest {
 	private final String testMaliciousInvocationTargetException = "testMaliciousInvocationTargetException";
 	private final String testNewClassLoader = "testNewClassLoader";
 	private final String testNewSecurityManager = "testNewSecurityManager";
+	private final String trustedPackageWithoutEnforcerRule = "trustedPackageWithoutEnforcerRule";
 	private final String tryManageProcess = "tryManageProcess";
 	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String trySetSystemOut = "trySetSystemOut";
@@ -97,6 +102,18 @@ class SecurityTest {
 	@TestTest
 	void test_testNewSecurityManager() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewSecurityManager, SecurityException.class));
+	}
+
+	@TestTest
+	void test_trustedPackageWithoutEnforcerRule() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(trustedPackageWithoutEnforcerRule,
+				ConfigurationException.class,
+				"Ares has detected that the build configuration is probably incomplete."
+						+ " The following file-must-not-exist rules seem to be missing:\n"
+						+ "    <file>${project.build.outputDirectory}/xyz/</file>\n"
+						+ "    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."));
+		// Make sure our link is actually valid
+		assertThat(Path.of("README.adoc")).content().contains("#what-you-need-to-do-outside-ares");
 	}
 
 	@TestTest

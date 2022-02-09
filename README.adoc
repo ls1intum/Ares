@@ -312,6 +312,7 @@ method will make the test run fine again because `Penguin` is now
 whitelisted and can therefore access all files without problems. *So
 never whitelist classes that students can edit.*
 
+[#what-you-need-to-do-outside-ares]
 ==== What you need to do outside Ares
 
 Sadly, due to the way classes are loaded and the class path works when

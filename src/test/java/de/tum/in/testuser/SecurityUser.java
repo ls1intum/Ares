@@ -10,6 +10,7 @@ import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.tum.in.test.api.AddTrustedPackage;
 import de.tum.in.test.api.AllowThreads;
 import de.tum.in.test.api.BlacklistPath;
 import de.tum.in.test.api.MirrorOutput;
@@ -90,6 +91,12 @@ public class SecurityUser {
 	@Test
 	void testNewSecurityManager() {
 		SecurityPenguin.newSecurityManager();
+	}
+
+	@Test
+	@AddTrustedPackage("xyz.**")
+	void trustedPackageWithoutEnforcerRule() {
+		// nothing
 	}
 
 	@Test
