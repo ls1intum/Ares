@@ -576,10 +576,10 @@ void testSquareCorrect(IOTester tester) { //<1>
     InputOutputPenguin.calculateSquare(); //<3>
 
     tester.err().assertThat().isEmpty(); //<4>
-    tester.out().assertThat().isEqualTo(""" //<5>
+    tester.out().assertThat().isEqualTo("""
                 Enter Number:
                 Answer:
-                25"""); //<6>
+                25"""); //<5>
 }
 ----
 <1> Declare `IOTester` as parameter.
@@ -588,9 +588,8 @@ void testSquareCorrect(IOTester tester) { //<1>
 <3> Call the student code to process the input and produce output.
 <4> Assert that nothing was printed to `System.err`.
 <5> Assert that the standard output (in this case excluding the final
-    line break) …
-<6> … is equal to the given text block (if you use text blocks, be
-    aware of their newline handling).
+    line break) is equal to the given text block (if you use text
+    blocks, be aware of their newline handling).
 
 Note that Ares normalizes the line breaks to `\n`, and
 link:src/main/java/de/tum/in/test/api/io/OutputTester.java[`OutputTester`]
