@@ -4,7 +4,7 @@
 :author: Christian Femers
 :revnumber: 1.8.0
 :revdate: 2022-02-09
-:revremark: Switched to AsciiDoc and added section 2.3.1
+:revremark: Switched to AsciiDoc and added sections 2.3.1 and 2.4.8 to 2.4.9
 :showtitle:
 :sectnums:
 :toc: preamble
@@ -68,7 +68,7 @@ environment of a Maven project, include
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.7.6</version>
+    <version>1.8.0</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -104,7 +104,7 @@ looks like this:
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.7.6</version>
+        <version>1.8.0</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
