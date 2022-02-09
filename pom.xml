@@ -187,18 +187,52 @@
 						<goals>
 							<goal>enforce</goal>
 						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.6,)</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>[11,)</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-student-code-in-trusted-packages</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireFilesDontExist>
+									<files>
+										<file>${project.build.outputDirectory}/ch/qos/logback/</file>
+										<file>${project.build.outputDirectory}/com/intellij/</file>
+										<file>${project.build.outputDirectory}/com/sun/</file>
+										<!-- We cannot fulfill this one because we are building those classes here
+										<file>${project.build.outputDirectory}/de/tum/in/test/api/</file> -->
+										<file>${project.build.outputDirectory}/java/</file>
+										<file>${project.build.outputDirectory}/javax/</file>
+										<file>${project.build.outputDirectory}/jdk/</file>
+										<file>${project.build.outputDirectory}/net/jqwik/</file>
+										<file>${project.build.outputDirectory}/org/apache/</file>
+										<file>${project.build.outputDirectory}/org/assertj/</file>
+										<file>${project.build.outputDirectory}/org/eclipse/</file>
+										<file>${project.build.outputDirectory}/org/jacoco/</file>
+										<file>${project.build.outputDirectory}/org/json/</file>
+										<file>${project.build.outputDirectory}/org/junit/</file>
+										<file>${project.build.outputDirectory}/org/opentest4j/</file>
+										<file>${project.build.outputDirectory}/sun/</file>
+										<!-- Required for de.tum.in.test.api.security.ArtemisSecurityConfigurationTest -->
+										<!-- <file>${project.build.outputDirectory}/abc/def/</file> -->
+									</files>
+								</requireFilesDontExist>
+							</rules>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<rules>
-						<requireMavenVersion>
-							<version>[3.6,)</version>
-						</requireMavenVersion>
-						<requireJavaVersion>
-							<version>[11,)</version>
-						</requireJavaVersion>
-					</rules>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.diffplug.spotless</groupId>

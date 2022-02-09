@@ -2,7 +2,9 @@ package de.tum.in.test.api.security;
 
 import static de.tum.in.test.api.localization.Messages.localized;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,9 +13,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.TrustedThreads.TrustScope;
@@ -23,6 +30,23 @@ import de.tum.in.test.api.util.PathRule;
 
 @API(status = Status.INTERNAL)
 public final class ArtemisSecurityConfigurationBuilder {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
+
+	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final boolean IS_MAVEN;
+	static {
+		// Check if we are in a maven environment and don't intend to ignore that fact
+		IS_MAVEN = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("maven"))) //$NON-NLS-1$
+				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
+				&& !Boolean.parseBoolean(System.getProperty("ares.maven.ignore")); //$NON-NLS-1$
+	}
+	/**
+	 * Cache for the content of the build file so that we don't need to read it each
+	 * time. It must not change during program execution, anyway.
+	 */
+	private static String buildConfigurationFileContent;
+
 	private Optional<Class<?>> testClass;
 	private Optional<Method> testMethod;
 	private Path executionPath;
@@ -141,6 +165,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 			if (excludedLocalPorts.stream().anyMatch(exclusion -> exclusion <= value))
 				throw new ConfigurationException(localized("security.configuration_invalid_port_exclude_outside_rage")); //$NON-NLS-1$
 		});
+		validateTrustedPackages(trustedPackages);
 	}
 
 	private static void validatePortRange(int value) {
@@ -148,6 +173,41 @@ public final class ArtemisSecurityConfigurationBuilder {
 			throw new ConfigurationException(localized("security.configuration_invalid_port_negative")); //$NON-NLS-1$
 		if (value > AllowLocalPort.MAXIMUM)
 			throw new ConfigurationException(localized("security.configuration_invalid_port_over_max")); //$NON-NLS-1$
+	}
+
+	private static void validateTrustedPackages(Set<PackageRule> trustedPackages) {
+		if (!IS_MAVEN)
+			return;
+		try {
+			if (buildConfigurationFileContent == null)
+				buildConfigurationFileContent = Files.readString(EXPECTED_MAVEN_POM_PATH);
+			var enforcerFileRules = Stream.concat(
+					// include all package prefixes that are statically whitelisted
+					SecurityConstants.STACK_WHITELIST.stream(),
+					// include the part before the first wildcard of all trusted packages
+					trustedPackages.stream().map(packageRule -> packageRule.getPackagePattern().split("\\*", 2)[0]) //$NON-NLS-1$
+							// Ignore rules starting with wildcards. We cannot enforce those.
+							.filter(Predicate.not(String::isEmpty)))
+					// Transform package name prefixes like com.example. to paths like /com/example/
+					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					// And finally wrap the paths info file rules for maven enforcer
+					.map(packagePath -> String.format("<file>${project.build.outputDirectory}%s</file>", packagePath)); //$NON-NLS-1$
+			// all must be contained in the build file, find the missing ones
+			var missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
+					.collect(Collectors.toList());
+			LOG.debug("Validated build configuration regarding trusted package rules, {} are missing.", missing.size()); //$NON-NLS-1$
+			// If nothing is missing, we're good. Otherwise tell the user what is missing
+			if (missing.isEmpty())
+				return;
+			throw new ConfigurationException("Ares has detected that the build configuration is probably incomplete." //$NON-NLS-1$
+					+ " The following file-must-not-exist rules seem to be missing:\n    " //$NON-NLS-1$
+					+ String.join("\n    ", missing) //$NON-NLS-1$
+					+ "\n    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."); //$NON-NLS-1$
+		} catch (IOException e) {
+			LOG.error("Ares cannot read pom.xml", e); //$NON-NLS-1$
+			throw new ConfigurationException("Ares cannot read pom.xml and validate the configuration." //$NON-NLS-1$
+					+ " Please make sure Path.of(\"pom.xml\") can be read or otherwise "); //$NON-NLS-1$
+		}
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {
