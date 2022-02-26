@@ -4,11 +4,14 @@ import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -99,6 +102,12 @@ public class ClassNameScanner {
 	private final ScanResult scanResult;
 
 	private static String pomXmlPath = "pom.xml";
+	private static String buildGradlePath = "build.gradle";
+
+	/**
+	 * Pattern for matching the assignment folder name for the build.gradle file of a Gradle project
+	 */
+	private static final Pattern gradleSourceDirPattern = Pattern.compile("def assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -161,8 +170,8 @@ public class ClassNameScanner {
 	}
 
 	private ScanResult createScanResult(String foundObservedClassName, String foundObservedPackageName,
-			boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
-			ScanResultType correctPlace, ScanResultType misplaced) {
+										boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
+										ScanResultType correctPlace, ScanResultType misplaced) {
 		ScanResultType scanResultType;
 		if (classPresentMultiple)
 			scanResultType = multipleTimes;
@@ -172,6 +181,7 @@ public class ClassNameScanner {
 	}
 
 	private ScanResultType getScanResultTypeClassFound(List<String> observedPackageNames) {
+		LOG.error("Multiple names: " + observedPackageNames);
 		ScanResultType scanResultType;
 		boolean classIsPresentMultipleTimes = observedPackageNames.size() > 1;
 		boolean classIsCorrectlyPlaced = !classIsPresentMultipleTimes
@@ -185,63 +195,63 @@ public class ClassNameScanner {
 	}
 
 	private ScanResult createScanResult(ScanResultType scanResultType, String foundObservedClassName,
-			String foundObservedPackageName) {
+										String foundObservedPackageName) {
 		String scanResultMessage;
 		switch (scanResultType) {
-		case CORRECT_NAME_CORRECT_PLACE:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + " and is in the correct package.";
-			break;
-		case CORRECT_NAME_MISPLACED:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + "," + " but the package it's in, "
-					+ foundObservedPackageName + ", deviates from the expectation."
-					+ "  Make sure it is placed in the correct package.";
-			break;
-		case CORRECT_NAME_MULTIPLE:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
-					+ " but it is located multiple times in the project and in the packages: "
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Make sure to place the class in the correct package and remove any superfluous ones.";
-			break;
-		case WRONG_CASE_CORRECT_PLACE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
-					+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering.";
-			break;
-		case WRONG_CASE_MISPLACED:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
-			break;
-		case WRONG_CASE_MULTIPLE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
-			break;
-		case TYPOS_CORRECT_PLACE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
-					+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION + " Check for typos in the class name.";
-			break;
-		case TYPOS_MISPLACED:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for typos in the class name and make sure you place it in the correct package.";
-			break;
-		case TYPOS_MULTIPLE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ observedClasses.get(foundObservedClassName).toString() + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
-			break;
-		case NOTFOUND:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". You did not implement the class in the exercise.";
-			break;
-		default:
-			scanResultMessage = "The class could not be scanned.";
-			break;
+			case CORRECT_NAME_CORRECT_PLACE:
+				scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + " and is in the correct package.";
+				break;
+			case CORRECT_NAME_MISPLACED:
+				scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + "," + " but the package it's in, "
+						+ foundObservedPackageName + ", deviates from the expectation."
+						+ "  Make sure it is placed in the correct package.";
+				break;
+			case CORRECT_NAME_MULTIPLE:
+				scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
+						+ " but it is located multiple times in the project and in the packages: "
+						+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
+						+ " Make sure to place the class in the correct package and remove any superfluous ones.";
+				break;
+			case WRONG_CASE_CORRECT_PLACE:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
+						+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION
+						+ " Check for wrong upper case / lower case lettering.";
+				break;
+			case WRONG_CASE_MISPLACED:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
+						+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
+						+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
+						+ " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
+				break;
+			case WRONG_CASE_MULTIPLE:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
+						+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
+						+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
+						+ " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
+				break;
+			case TYPOS_CORRECT_PLACE:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
+						+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION + " Check for typos in the class name.";
+				break;
+			case TYPOS_MISPLACED:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
+						+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
+						+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
+						+ " Check for typos in the class name and make sure you place it in the correct package.";
+				break;
+			case TYPOS_MULTIPLE:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
+						+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
+						+ observedClasses.get(foundObservedClassName).toString() + DEVIATES_FROM_THE_EXPECTATION
+						+ " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
+				break;
+			case NOTFOUND:
+				scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
+						+ ". You did not implement the class in the exercise.";
+				break;
+			default:
+				scanResultMessage = "The class could not be scanned.";
+				break;
 		}
 		return new ScanResult(scanResultType, scanResultMessage);
 	}
@@ -249,11 +259,43 @@ public class ClassNameScanner {
 	/**
 	 * This method retrieves the actual type names and their packages by walking the
 	 * project file structure. The root node (which is the assignment folder) is
-	 * defined in the pom.xml file of the project.
+	 * defined in the project build file (pom.xml or build.gradle) file of the project.
 	 */
 	private void findObservedClassesInProject() {
+		String assignmentFolderName;
+		if (isMavenProject()) {
+			assignmentFolderName = getAssignmentFolderNameForMavenProject();
+		} else if (isGradleProject()) {
+			assignmentFolderName = getAssignmentFolderNameForGradleProject();
+		} else {
+			LOG.error("Could not find any build file. Contact your instructor.");
+			return;
+		}
+
+		if (assignmentFolderName == null) {
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor.");
+			return;
+		}
+		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
+	}
+
+	private boolean isMavenProject() {
+		File projectFile = new File(pomXmlPath);
+		return projectFile.exists() && !projectFile.isDirectory();
+	}
+
+	private boolean isGradleProject() {
+		File projectFile = new File(buildGradlePath);
+		return projectFile.exists() && !projectFile.isDirectory();
+	}
+
+	/**
+	 * Retrieves the assignment folder name for a maven project from the pom.xml
+	 * @return the folder name of the maven project, relative to project root
+	 */
+	private String getAssignmentFolderNameForMavenProject() {
 		try {
-			var pomFile = new File(pomXmlPath);
+			File pomFile = new File(pomXmlPath);
 			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			// make sure to avoid loading external files which would not be compliant
 			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
@@ -268,14 +310,35 @@ public class ClassNameScanner {
 					var buildNodeElement = (Element) buildNode;
 					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0)
 							.getTextContent();
-					var assignmentFolderName = sourceDirectoryPropertyValue
+					return sourceDirectoryPropertyValue
 							.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
-					walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
 				}
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
 		}
+		return null;
+	}
+
+	/**
+	 * Retrieves the assignment folder name for a gradle project from the build.gradle
+	 * @return the folder name of the maven project, relative to project root
+	 */
+	private String getAssignmentFolderNameForGradleProject() {
+		try {
+			Path path = Path.of(buildGradlePath);
+			String fileContent = Files.readString(path);
+
+			Matcher matcher = gradleSourceDirPattern.matcher(fileContent);
+			if (matcher.find()) {
+				return matcher.group("dir");
+			}
+			return null;
+
+		} catch (IOException e) {
+			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
+		}
+		return null;
 	}
 
 	/**
@@ -290,7 +353,7 @@ public class ClassNameScanner {
 	 *                             get appended.
 	 */
 	private void walkProjectFileStructure(String assignmentFolderName, File node,
-			Map<String, List<String>> foundClasses) {
+										  Map<String, List<String>> foundClasses) {
 		// Example:
 		// * assignmentFolderName: assignment/src
 		// * fileName: assignment/src/de/tum/in/ase/eist/BubbleSort.java
@@ -324,6 +387,12 @@ public class ClassNameScanner {
 	}
 
 	public static void setPomXmlPath(String path) {
+		pomXmlPath = path;
+	}
+
+	public static String getBuildGradlePath() { return buildGradlePath; }
+
+	public static void setBuildGradlePath(String path) {
 		pomXmlPath = path;
 	}
 

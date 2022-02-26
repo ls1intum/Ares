@@ -3,6 +3,7 @@ package de.tum.in.test.api.security;
 import static de.tum.in.test.api.localization.Messages.*;
 
 import java.awt.AWTPermission;
+import java.io.File;
 import java.io.FilePermission;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
@@ -96,10 +97,12 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					.format("NOTICE: The warning above is expected and the issue is already known.%n" //$NON-NLS-1$
 							+ "        Visit https://github.com/ls1intum/Ares/discussions/113 for more details.%n"); //$NON-NLS-1$
 		}
+
 		/*
-		 * Check for main Thread
+		 * Check for main Thread. This does not work for Gradle because
+		 * the Gradle Test Executioner cannot be forced to run on the main thread.
 		 */
-		if (!Objects.equals("main", SecurityConstants.MAIN_THREAD.getName())) { //$NON-NLS-1$
+		if (isMavenProject() && !Objects.equals("main", SecurityConstants.MAIN_THREAD.getName())) { //$NON-NLS-1$
 			LOG.error("Expected ArtemisSecurityManager to be initialized in the main thread but was {}. Exiting...", //$NON-NLS-1$
 					SecurityConstants.MAIN_THREAD);
 			System.exit(1);
@@ -478,13 +481,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message,
-			Predicate<StackFrame> takeFromTopWhileFilter) {
+												   Predicate<StackFrame> takeFromTopWhileFilter) {
 		var nonWhitelisted = getNonWhitelistedStackFrames(takeFromTopWhileFilter);
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
 	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message,
-			List<StackFrame> nonWhitelisted) {
+																	List<StackFrame> nonWhitelisted) {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
@@ -518,8 +521,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String call = className + "." + methodName; //$NON-NLS-1$
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-						&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
-								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
+				&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
+				|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
@@ -568,7 +571,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return false;
 		return configuration.allowedLocalPorts().contains(port)
 				|| (configuration.allowLocalPortsAbove().orElse(MAX_PORT) < port
-						&& !configuration.excludedLocalPorts().contains(port));
+				&& !configuration.excludedLocalPorts().contains(port));
 	}
 
 	@Override
@@ -813,5 +816,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private static String hash(String s) {
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));
+	}
+
+	private static boolean isMavenProject() {
+		File pomXmlFile = new File("pom.xml");
+		return pomXmlFile.exists() && !pomXmlFile.isDirectory();
 	}
 }

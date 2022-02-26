@@ -227,6 +227,7 @@
 										<file>${project.build.outputDirectory}/sun/</file>
 										<!-- Required for de.tum.in.test.api.security.ArtemisSecurityConfigurationTest -->
 										<!-- <file>${project.build.outputDirectory}/abc/def/</file> -->
+										<file>${project.build.outputDirectory}/org/gradle/</file>
 									</files>
 								</requireFilesDontExist>
 							</rules>
