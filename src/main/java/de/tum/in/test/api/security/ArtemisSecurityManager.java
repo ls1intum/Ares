@@ -342,7 +342,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if ("setSecurityManager".equals(permName) && !isPartlyDisabled) //$NON-NLS-1$
 				throw new SecurityException(localized("security.error_security_manager")); //$NON-NLS-1$
 			if (perm instanceof SerializablePermission)
-				throw new SecurityException(localized("security.error_modify_serialization") + permString); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_serialization") + permString); //$NON-NLS-1$
 			if (perm instanceof AWTPermission)
 				throw new SecurityException(localized("security.error_awt") + permString); //$NON-NLS-1$
 			if (perm instanceof ManagementPermission)
