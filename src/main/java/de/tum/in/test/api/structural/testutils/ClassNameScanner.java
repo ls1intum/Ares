@@ -298,7 +298,7 @@ public class ClassNameScanner {
 	 */
 	private String getAssignmentFolderNameForMavenProject() {
 		try {
-			File pomFile = new File(pomXmlPath);
+			var pomFile = new File(pomXmlPath);
 			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			// make sure to avoid loading external files which would not be compliant
 			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
@@ -330,10 +330,10 @@ public class ClassNameScanner {
 	 */
 	private String getAssignmentFolderNameForGradleProject() {
 		try {
-			Path path = Path.of(buildGradlePath);
+			var path = Path.of(buildGradlePath);
 			String fileContent = Files.readString(path);
 
-			Matcher matcher = gradleSourceDirPattern.matcher(fileContent);
+			var matcher = gradleSourceDirPattern.matcher(fileContent);
 			if (matcher.find()) {
 				return matcher.group("dir");
 			}
