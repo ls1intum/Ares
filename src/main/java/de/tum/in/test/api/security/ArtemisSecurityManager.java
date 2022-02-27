@@ -99,8 +99,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 
 		/*
-		 * Check for main Thread. This does not work for Gradle because
-		 * the Gradle Test Executioner cannot be forced to run on the main thread.
+		 * Check for main Thread. This does not work for Gradle because the Gradle Test
+		 * Executioner cannot be forced to run on the main thread.
 		 */
 		if (isMavenProject() && !Objects.equals("main", SecurityConstants.MAIN_THREAD.getName())) { //$NON-NLS-1$
 			LOG.error("Expected ArtemisSecurityManager to be initialized in the main thread but was {}. Exiting...", //$NON-NLS-1$
@@ -481,13 +481,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	private void checkForNonWhitelistedStackFrames(Supplier<String> message,
-					Predicate<StackFrame> takeFromTopWhileFilter) {
+			Predicate<StackFrame> takeFromTopWhileFilter) {
 		var nonWhitelisted = getNonWhitelistedStackFrames(takeFromTopWhileFilter);
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
 	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message,
-					List<StackFrame> nonWhitelisted) {
+			List<StackFrame> nonWhitelisted) {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
@@ -521,8 +521,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String call = className + "." + methodName; //$NON-NLS-1$
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-								&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
-												|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
+						&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
+								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
@@ -571,7 +571,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return false;
 		return configuration.allowedLocalPorts().contains(port)
 				|| (configuration.allowLocalPortsAbove().orElse(MAX_PORT) < port
-								&& !configuration.excludedLocalPorts().contains(port));
+						&& !configuration.excludedLocalPorts().contains(port));
 	}
 
 	@Override

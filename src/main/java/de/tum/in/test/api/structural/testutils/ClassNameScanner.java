@@ -105,9 +105,11 @@ public class ClassNameScanner {
 	private static String buildGradlePath = "build.gradle";
 
 	/**
-	 * Pattern for matching the assignment folder name for the build.gradle file of a Gradle project
+	 * Pattern for matching the assignment folder name for the build.gradle file of
+	 * a Gradle project
 	 */
-	private static final Pattern gradleSourceDirPattern = Pattern.compile("def assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
+	private static final Pattern gradleSourceDirPattern = Pattern
+			.compile("def assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -170,8 +172,8 @@ public class ClassNameScanner {
 	}
 
 	private ScanResult createScanResult(String foundObservedClassName, String foundObservedPackageName,
-					boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
-					ScanResultType correctPlace, ScanResultType misplaced) {
+			boolean classPresentMultiple, boolean classCorrectlyPlaced, ScanResultType multipleTimes,
+			ScanResultType correctPlace, ScanResultType misplaced) {
 		ScanResultType scanResultType;
 		if (classPresentMultiple)
 			scanResultType = multipleTimes;
@@ -194,7 +196,7 @@ public class ClassNameScanner {
 	}
 
 	private ScanResult createScanResult(ScanResultType scanResultType, String foundObservedClassName,
-					String foundObservedPackageName) {
+			String foundObservedPackageName) {
 		String scanResultMessage;
 		switch (scanResultType) {
 		case CORRECT_NAME_CORRECT_PLACE:
@@ -258,7 +260,8 @@ public class ClassNameScanner {
 	/**
 	 * This method retrieves the actual type names and their packages by walking the
 	 * project file structure. The root node (which is the assignment folder) is
-	 * defined in the project build file (pom.xml or build.gradle) file of the project.
+	 * defined in the project build file (pom.xml or build.gradle) file of the
+	 * project.
 	 */
 	private void findObservedClassesInProject() {
 		String assignmentFolderName;
@@ -290,6 +293,7 @@ public class ClassNameScanner {
 
 	/**
 	 * Retrieves the assignment folder name for a maven project from the pom.xml
+	 * 
 	 * @return the folder name of the maven project, relative to project root
 	 */
 	private String getAssignmentFolderNameForMavenProject() {
@@ -309,8 +313,7 @@ public class ClassNameScanner {
 					var buildNodeElement = (Element) buildNode;
 					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0)
 							.getTextContent();
-					return sourceDirectoryPropertyValue
-							.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
+					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
 				}
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -320,7 +323,9 @@ public class ClassNameScanner {
 	}
 
 	/**
-	 * Retrieves the assignment folder name for a gradle project from the build.gradle
+	 * Retrieves the assignment folder name for a gradle project from the
+	 * build.gradle
+	 * 
 	 * @return the folder name of the maven project, relative to project root
 	 */
 	private String getAssignmentFolderNameForGradleProject() {
@@ -333,7 +338,6 @@ public class ClassNameScanner {
 				return matcher.group("dir");
 			}
 			return null;
-
 		} catch (IOException e) {
 			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
 		}
@@ -352,7 +356,7 @@ public class ClassNameScanner {
 	 *                             get appended.
 	 */
 	private void walkProjectFileStructure(String assignmentFolderName, File node,
-					Map<String, List<String>> foundClasses) {
+			Map<String, List<String>> foundClasses) {
 		// Example:
 		// * assignmentFolderName: assignment/src
 		// * fileName: assignment/src/de/tum/in/ase/eist/BubbleSort.java
@@ -389,7 +393,9 @@ public class ClassNameScanner {
 		pomXmlPath = path;
 	}
 
-	public static String getBuildGradlePath() { return buildGradlePath; }
+	public static String getBuildGradlePath() {
+		return buildGradlePath;
+	}
 
 	public static void setBuildGradlePath(String path) {
 		pomXmlPath = path;
