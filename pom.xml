@@ -228,7 +228,6 @@
 										<!-- Required for de.tum.in.test.api.security.ArtemisSecurityConfigurationTest -->
 										<!-- <file>${project.build.outputDirectory}/abc/def/</file> -->
 										<file>${project.build.outputDirectory}/org/gradle/</file>
-										<file>${project.build.outputDirectory}/com/teamscale/</file>
 									</files>
 								</requireFilesDontExist>
 							</rules>
