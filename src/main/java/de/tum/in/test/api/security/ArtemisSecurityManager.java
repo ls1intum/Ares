@@ -480,12 +480,14 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
-	private void checkForNonWhitelistedStackFrames(Supplier<String> message, Predicate<StackFrame> takeFromTopWhileFilter) {
+	private void checkForNonWhitelistedStackFrames(Supplier<String> message,
+					Predicate<StackFrame> takeFromTopWhileFilter) {
 		var nonWhitelisted = getNonWhitelistedStackFrames(takeFromTopWhileFilter);
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
-	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message, List<StackFrame> nonWhitelisted) {
+	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message,
+					List<StackFrame> nonWhitelisted) {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
