@@ -480,14 +480,12 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
-	private void checkForNonWhitelistedStackFrames(Supplier<String> message,
-												   Predicate<StackFrame> takeFromTopWhileFilter) {
+	private void checkForNonWhitelistedStackFrames(Supplier<String> message, Predicate<StackFrame> takeFromTopWhileFilter) {
 		var nonWhitelisted = getNonWhitelistedStackFrames(takeFromTopWhileFilter);
 		throwSecurityExceptionIfNonWhitelistedFound(message, nonWhitelisted);
 	}
 
-	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message,
-																	List<StackFrame> nonWhitelisted) {
+	private static void throwSecurityExceptionIfNonWhitelistedFound(Supplier<String> message, List<StackFrame> nonWhitelisted) {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
@@ -521,8 +519,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String call = className + "." + methodName; //$NON-NLS-1$
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-				&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
-				|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
+								&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
+												|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {
@@ -571,7 +569,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return false;
 		return configuration.allowedLocalPorts().contains(port)
 				|| (configuration.allowLocalPortsAbove().orElse(MAX_PORT) < port
-				&& !configuration.excludedLocalPorts().contains(port));
+								&& !configuration.excludedLocalPorts().contains(port));
 	}
 
 	@Override
