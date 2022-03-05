@@ -24,8 +24,7 @@ public final class SecurityConstants {
 			"org.junit.platform.commons.util.ReflectionUtils.getUnderlyingCause"); //$NON-NLS-1$
 
 	static final Set<String> PACKAGE_USE_BLACKLIST = Set.of(SECURITY_PACKAGE_NAME, "de.tum.in.test.api.internal", //$NON-NLS-1$
-			"jdk.internal", "sun.", "org.gradle", "com.teamscale", "retrofit2", "shadow.org", "com.squareup", //$NON-NLS-1$ //$NON-NLS-2$
-			"okio.Okio", "shadow.spark");
+			"jdk.internal", "sun.", "org.gradle");
 
 	private SecurityConstants() {
 	}
