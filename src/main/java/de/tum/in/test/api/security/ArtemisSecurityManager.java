@@ -338,7 +338,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			if ("setIO".equals(permName) && !isMainThreadAndInactive()) //$NON-NLS-1$
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
-			// this could be removed / reduced, if the specified part is needed (does not work for gradle)
+			// this could be removed / reduced, if the specified part is needed (does not
+			// work for gradle)
 			if ("setSecurityManager".equals(permName) && !isPartlyDisabled && !isGradleProject()) //$NON-NLS-1$
 				throw new SecurityException(localized("security.error_security_manager")); //$NON-NLS-1$
 			if (perm instanceof SerializablePermission)
@@ -362,7 +363,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (perm instanceof FilePermission)
 				checkPathAccess(permName, PathActionLevel.getLevelOf(permActions));
 			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName)) //$NON-NLS-1$
-				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString); //$NON-NLS-1$*/
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString); //$NON-NLS-1$ */
 		} finally {
 			exitPublicInterface();
 		}
