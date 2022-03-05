@@ -228,6 +228,14 @@
 										<!-- Required for de.tum.in.test.api.security.ArtemisSecurityConfigurationTest -->
 										<!-- <file>${project.build.outputDirectory}/abc/def/</file> -->
 										<file>${project.build.outputDirectory}/org/gradle/</file>
+										<!-- Required for the testwise coverage analysis -->
+										<file>${project.build.outputDirectory}/com/teamscale/</file>
+										<file>${project.build.outputDirectory}/okhttp3/</file>
+										<file>${project.build.outputDirectory}/retrofit2/</file>
+										<file>${project.build.outputDirectory}/shadow/org/</file>
+										<file>${project.build.outputDirectory}/com/squareup/</file>
+										<file>${project.build.outputDirectory}/okio/Okio/</file>
+										<file>${project.build.outputDirectory}/shadow/spark/</file>
 									</files>
 								</requireFilesDontExist>
 							</rules>
