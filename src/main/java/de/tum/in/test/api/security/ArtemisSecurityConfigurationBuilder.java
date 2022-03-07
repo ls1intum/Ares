@@ -6,14 +6,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,13 +30,28 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
 
 	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final Path EXPECTED_GRADLE_BUILD_PATH = Path
+			.of(System.getProperty("ares.gradle.build", "build.gradle"));
+	private static final String MAVEN_ENFORCER_FILE_ENTRY = "<file>${project.build.outputDirectory}%s</file>";
 	private static final boolean IS_MAVEN;
+	private static final boolean IS_GRADLE;
 	static {
 		// Check if we are in a maven environment and don't intend to ignore that fact
 		IS_MAVEN = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("maven"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
 				&& !Boolean.parseBoolean(System.getProperty("ares.maven.ignore")); //$NON-NLS-1$
+		IS_GRADLE = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("gradle"))) //$NON-NLS-1$
+				|| Files.exists(EXPECTED_GRADLE_BUILD_PATH))
+				&& !Boolean.parseBoolean(System.getProperty("ares.gradle.ignore")); //$NON-NLS-1$
 	}
+
+	/**
+	 * Pattern/String for verifying that certain files are forced to not exist
+	 */
+	private static final String GRADLE_ENFORCER_TASK = "assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not exist within the submission.";
+	private static final Pattern FILES_TO_NOT_EXIST_PATTERN = Pattern
+			.compile("def\\s+filesToNotExist\\s+=\\s+\\[\"(?<files>.+)\"\\]");
+
 	/**
 	 * Cache for the content of the build file so that we don't need to read it each
 	 * time. It must not change during program execution, anyway.
@@ -176,11 +187,18 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	private static void validateTrustedPackages(Set<PackageRule> trustedPackages) {
-		if (!IS_MAVEN)
+		String enforcerFileEntryFormat;
+		Path expectedProjectBuildFilePath;
+		if (IS_MAVEN) {
+			expectedProjectBuildFilePath = EXPECTED_MAVEN_POM_PATH;
+		} else if (IS_GRADLE) {
+			expectedProjectBuildFilePath = EXPECTED_GRADLE_BUILD_PATH;
+		} else {
 			return;
+		}
 		try {
 			if (buildConfigurationFileContent == null)
-				buildConfigurationFileContent = Files.readString(EXPECTED_MAVEN_POM_PATH);
+				buildConfigurationFileContent = Files.readString(expectedProjectBuildFilePath);
 			var enforcerFileRules = Stream.concat(
 					// include all package prefixes that are statically whitelisted
 					SecurityConstants.STACK_WHITELIST.stream(),
@@ -189,25 +207,53 @@ public final class ArtemisSecurityConfigurationBuilder {
 							// Ignore rules starting with wildcards. We cannot enforce those.
 							.filter(Predicate.not(String::isEmpty)))
 					// Transform package name prefixes like com.example. to paths like /com/example/
-					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					// And finally wrap the paths info file rules for maven enforcer
-					.map(packagePath -> String.format("<file>${project.build.outputDirectory}%s</file>", packagePath)); //$NON-NLS-1$
+					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+			// And finally wrap the paths info file rules (only for maven enforcer)
+
+			// .map(packagePath -> String.format(enforcerFileEntryFormat, packagePath));
 			// all must be contained in the build file, find the missing ones
-			var missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
-					.collect(Collectors.toList());
+			List<String> missing;
+			if (IS_MAVEN) {
+				enforcerFileRules = enforcerFileRules
+						.map(packagePath -> String.format(MAVEN_ENFORCER_FILE_ENTRY, packagePath));
+				missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
+						.collect(Collectors.toList());
+			} else {
+				if (!buildConfigurationFileContent.contains(GRADLE_ENFORCER_TASK))
+					throw new ConfigurationException(
+							generateEnforcingConfigurationException(" Make sure to not change the test task at all.")); //$NON-NLS-1$
+
+				Matcher fileNameMatcher = FILES_TO_NOT_EXIST_PATTERN.matcher(buildConfigurationFileContent);
+				if (fileNameMatcher.find()) {
+					List<String> filesToNotExist = Arrays.stream(fileNameMatcher.group("files").replaceAll("\"", "")
+							.replaceAll("'", "").replaceAll(" ", "").split(",")).collect(Collectors.toList());
+					missing = enforcerFileRules.filter(Predicate.not(filesToNotExist::contains)).sorted()
+							.collect(Collectors.toList());
+				} else {
+					throw new ConfigurationException(
+							generateEnforcingConfigurationException("The attribute \"filesToNotExist\" is missing.")); //$NON-NLS-1$
+				}
+			}
+
 			LOG.debug("Validated build configuration regarding trusted package rules, {} are missing.", missing.size()); //$NON-NLS-1$
 			// If nothing is missing, we're good. Otherwise tell the user what is missing
 			if (missing.isEmpty())
 				return;
-			throw new ConfigurationException("Ares has detected that the build configuration is probably incomplete." //$NON-NLS-1$
-					+ " The following file-must-not-exist rules seem to be missing:\n    " //$NON-NLS-1$
-					+ String.join("\n    ", missing) //$NON-NLS-1$
-					+ "\n    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."); //$NON-NLS-1$
+			throw new ConfigurationException(generateEnforcingConfigurationException(
+					" The following file-must-not-exist rules seem to be missing:\n    " //$NON-NLS-1$
+							+ String.join("\n    ", missing))); //$NON-NLS-1$
 		} catch (IOException e) {
 			LOG.error("Ares cannot read pom.xml", e); //$NON-NLS-1$
 			throw new ConfigurationException("Ares cannot read pom.xml and validate the configuration." //$NON-NLS-1$
 					+ " Please make sure Path.of(\"pom.xml\") can be read or otherwise "); //$NON-NLS-1$
 		}
+	}
+
+	private static String generateEnforcingConfigurationException(String message) {
+		return "Ares has detected that the build configuration is probably incomplete." //$NON-NLS-1$
+				+ message
+				+ "\n    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."; //$NON-NLS-1$
 	}
 
 	public static ArtemisSecurityConfigurationBuilder create() {
