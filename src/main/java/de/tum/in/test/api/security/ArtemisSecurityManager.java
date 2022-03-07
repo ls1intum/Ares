@@ -97,16 +97,6 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					.format("NOTICE: The warning above is expected and the issue is already known.%n" //$NON-NLS-1$
 							+ "        Visit https://github.com/ls1intum/Ares/discussions/113 for more details.%n"); //$NON-NLS-1$
 		}
-
-		/*
-		 * Check for main Thread. This does not work for Gradle because the Gradle Test
-		 * Executioner cannot be forced to run on the main thread.
-		 */
-		if (isMavenProject() && !Objects.equals("main", SecurityConstants.MAIN_THREAD.getName())) { //$NON-NLS-1$
-			LOG.error("Expected ArtemisSecurityManager to be initialized in the main thread but was {}. Exiting...", //$NON-NLS-1$
-					SecurityConstants.MAIN_THREAD);
-			System.exit(1);
-		}
 	}
 
 	private final ThreadGroup testThreadGroup = new ThreadGroup("Test-Threadgroup"); //$NON-NLS-1$
@@ -340,7 +330,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed (does not
 			// work for gradle)
-			if ("setSecurityManager".equals(permName) && !isPartlyDisabled && !isGradleProject()) //$NON-NLS-1$
+			if ("setSecurityManager".equals(permName) && !isPartlyDisabled) //$NON-NLS-1$
 				throw new SecurityException(localized("security.error_security_manager")); //$NON-NLS-1$
 			if (perm instanceof SerializablePermission)
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_serialization") + permString); //$NON-NLS-1$
@@ -363,7 +353,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (perm instanceof FilePermission)
 				checkPathAccess(permName, PathActionLevel.getLevelOf(permActions));
 			if (perm instanceof ReflectPermission || "accessDeclaredMembers".equals(permName)) //$NON-NLS-1$
-				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString); //$NON-NLS-1$ */
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_modify_security") + permString); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -817,15 +807,5 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private static String hash(String s) {
 		return Base64.getEncoder().encodeToString(SHA256.digest(s.getBytes(StandardCharsets.UTF_8)));
-	}
-
-	private static boolean isMavenProject() {
-		File pomXmlFile = new File("pom.xml");
-		return pomXmlFile.exists() && !pomXmlFile.isDirectory();
-	}
-
-	private static boolean isGradleProject() {
-		File buildGradleFile = new File("build.gradle");
-		return buildGradleFile.exists() && !buildGradleFile.isDirectory();
 	}
 }

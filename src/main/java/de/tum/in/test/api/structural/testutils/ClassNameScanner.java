@@ -259,8 +259,7 @@ public class ClassNameScanner {
 	/**
 	 * This method retrieves the actual type names and their packages by walking the
 	 * project file structure. The root node (which is the assignment folder) is
-	 * defined in the project build file (pom.xml or build.gradle) file of the
-	 * project.
+	 * defined in the project build file (pom.xml or build.gradle) of the project.
 	 */
 	private void findObservedClassesInProject() {
 		String assignmentFolderName;
@@ -325,7 +324,7 @@ public class ClassNameScanner {
 	 * Retrieves the assignment folder name for a gradle project from the
 	 * build.gradle
 	 * 
-	 * @return the folder name of the maven project, relative to project root
+	 * @return the folder name of the gradle project, relative to project root
 	 */
 	private String getAssignmentFolderNameForGradleProject() {
 		try {
@@ -338,7 +337,8 @@ public class ClassNameScanner {
 			}
 			return null;
 		} catch (IOException e) {
-			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
+			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.",
+					e);
 		}
 		return null;
 	}
@@ -397,7 +397,7 @@ public class ClassNameScanner {
 	}
 
 	public static void setBuildGradlePath(String path) {
-		pomXmlPath = path;
+		buildGradlePath = path;
 	}
 
 	static boolean isMisspelledWithHighProbability(String a, String b) {
