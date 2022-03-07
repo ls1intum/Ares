@@ -50,7 +50,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	 */
 	private static final String GRADLE_ENFORCER_TASK = "assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not exist within the submission.";
 	private static final Pattern FILES_TO_NOT_EXIST_PATTERN = Pattern
-			.compile("def\\s+filesToNotExist\\s+=\\s+\\[\"(?<files>.*)\"\\]");
+			.compile("def\\s+filesToNotExist\\s+=\\s+\\[\"(?<files>[\\s\\S]+)\"\\]");
 
 	/**
 	 * Cache for the content of the build file so that we don't need to read it each
@@ -226,8 +226,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 				Matcher fileNameMatcher = FILES_TO_NOT_EXIST_PATTERN.matcher(buildConfigurationFileContent);
 				if (fileNameMatcher.find()) {
-					List<String> filesToNotExist = Arrays.stream(fileNameMatcher.group("files").split(","))
-							.map(name -> name.replaceAll("\"", "").trim()).collect(Collectors.toList());
+					List<String> filesToNotExist = Arrays.stream(fileNameMatcher.group("files").replaceAll("\"", "")
+							.replaceAll("\n", "").replaceAll(" ", "").split(",")).collect(Collectors.toList());
 					missing = enforcerFileRules.filter(Predicate.not(filesToNotExist::contains)).sorted()
 							.collect(Collectors.toList());
 				} else {
