@@ -108,7 +108,7 @@ public class ClassNameScanner {
 	 * a Gradle project
 	 */
 	private static final Pattern gradleSourceDirPattern = Pattern
-			.compile("def assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
+			.compile("def\\s+assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
