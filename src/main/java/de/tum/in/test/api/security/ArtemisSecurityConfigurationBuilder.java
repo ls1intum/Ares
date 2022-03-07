@@ -34,7 +34,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
 
 	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
-	private static final Path EXPECT_GRADLE_BUILD_PATH = Path.of(System.getProperty("ares.gradle.build", "build.gradle"));
+	private static final Path EXPECT_GRADLE_BUILD_PATH = Path
+			.of(System.getProperty("ares.gradle.build", "build.gradle"));
 	private static final String MAVEN_ENFORCER_FILE_ENTRY = "<file>${project.build.outputDirectory}%s</file>";
 	private static final String GRADLE_ENFORCER_FILE_ENTRY = "r.file(\"{$project.buildDir}%s\")";
 	private static final boolean IS_MAVEN;
@@ -207,7 +208,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 					// Transform package name prefixes like com.example. to paths like /com/example/
 					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					// And finally wrap the paths info file rules for maven enforcer
-					.map(packagePath -> String.format(enforcerFileEntryFormat, packagePath)); //$NON-NLS-1$
+					.map(packagePath -> String.format(enforcerFileEntryFormat, packagePath)); // $NON-NLS-1$
 			// all must be contained in the build file, find the missing ones
 			var missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
 					.collect(Collectors.toList());

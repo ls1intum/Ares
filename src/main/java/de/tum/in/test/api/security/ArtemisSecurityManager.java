@@ -3,7 +3,6 @@ package de.tum.in.test.api.security;
 import static de.tum.in.test.api.localization.Messages.*;
 
 import java.awt.AWTPermission;
-import java.io.File;
 import java.io.FilePermission;
 import java.io.SerializablePermission;
 import java.lang.StackWalker.StackFrame;
