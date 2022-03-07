@@ -48,10 +48,12 @@ public final class ArtemisSecurityConfigurationBuilder {
 	/**
 	 * Pattern/String for verifying that certain files are forced to not exist
 	 */
-	private static final String GRADLE_ENFORCER_TASK = "test {\n" + "    doFirst {\n"
-			+ "        for (String fileName in filesToNotExist) {\n"
-			+ "            assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not be exist within the submission.\"\n"
-			+ "        }\n" + "    }";
+	private static final String GRADLE_ENFORCER_TASK = "test {\n" +
+			"    doFirst {\n" +
+			"        for (String fileName in filesToNotExist) {\n" +
+			"            assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not exist within the submission.\"\n" +
+			"        }\n" +
+			"    }";
 	private static final Pattern FILES_TO_NOT_EXIST_PATTERN = Pattern
 			.compile("def\\s+filesToNotExist\\s+=\\s+\\[\"(?<files>.*)\"\\]");
 
@@ -254,7 +256,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	private static String generateEnforcingConfigurationException(String message) {
-		return "Ares has detected that the build configuration is probably incomplete." //$NON-NLS-1$
+		return "Ares has detected that the build configuration is probably incomplete. " //$NON-NLS-1$
 				+ message
 				+ "\n    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."; //$NON-NLS-1$
 	}
