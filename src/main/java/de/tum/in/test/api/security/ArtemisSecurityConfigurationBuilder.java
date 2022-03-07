@@ -34,7 +34,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
 
 	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
-	private static final Path EXPECT_GRADLE_BUILD_PATH = Path
+	private static final Path EXPECTED_GRADLE_BUILD_PATH = Path
 			.of(System.getProperty("ares.gradle.build", "build.gradle"));
 	private static final String MAVEN_ENFORCER_FILE_ENTRY = "<file>${project.build.outputDirectory}%s</file>";
 	private static final String GRADLE_ENFORCER_FILE_ENTRY = "r.file(\"{$project.buildDir}%s\")";
@@ -46,7 +46,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
 				&& !Boolean.parseBoolean(System.getProperty("ares.maven.ignore")); //$NON-NLS-1$
 		IS_GRADLE = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("gradle"))) //$NON-NLS-1$
-				|| Files.exists(EXPECT_GRADLE_BUILD_PATH))
+				|| Files.exists(EXPECTED_GRADLE_BUILD_PATH))
 				&& !Boolean.parseBoolean(System.getProperty("ares.gradle.ignore")); //$NON-NLS-1$
 	}
 	/**
@@ -191,7 +191,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 			expectedProjectBuildFilePath = EXPECTED_MAVEN_POM_PATH;
 		} else if (IS_GRADLE) {
 			enforcerFileEntryFormat = GRADLE_ENFORCER_FILE_ENTRY;
-			expectedProjectBuildFilePath = EXPECT_GRADLE_BUILD_PATH;
+			expectedProjectBuildFilePath = EXPECTED_GRADLE_BUILD_PATH;
 		} else {
 			return;
 		}
@@ -208,7 +208,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 					// Transform package name prefixes like com.example. to paths like /com/example/
 					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					// And finally wrap the paths info file rules for maven enforcer
-					.map(packagePath -> String.format(enforcerFileEntryFormat, packagePath)); // $NON-NLS-1$
+					.map(packagePath -> String.format(enforcerFileEntryFormat, packagePath));
 			// all must be contained in the build file, find the missing ones
 			var missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
 					.collect(Collectors.toList());

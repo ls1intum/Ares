@@ -81,6 +81,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		// Allow to load resources
 		Messages.init();
 		/*
+		 * Check for main Thread
+		 */
+		if (SecurityConstants.MAIN_THREAD_GROUP == null) {
+			LOG.error("main thread group could not be found. Exiting..."); //$NON-NLS-1$
+			System.exit(1);
+		}
+		/*
 		 * Initialize common ForkJoinPool for parallel streams and alike
 		 */
 		System.setSecurityManager(INSTANCE);
@@ -146,9 +153,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	@Override
 	public void checkExit(int status) {
 		try {
+			ThreadGroup currentThreadGroup = Thread.currentThread().getThreadGroup();
 			if (enterPublicInterface())
 				return;
-			if (Thread.currentThread() == SecurityConstants.MAIN_THREAD && getNonWhitelistedStackFrames().isEmpty()) {
+			if (currentThreadGroup == SecurityConstants.MAIN_THREAD_GROUP && getNonWhitelistedStackFrames().isEmpty()) {
 				// always allow maven to exit
 				return;
 			}
@@ -248,7 +256,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			if (isMainThreadAndInactive()) {
+			if (isWorkerThreadAndInactive()) {
 				LOG.trace("Allowing main thread to create a ClassLoader inbetween tests"); //$NON-NLS-1$
 				return;
 			}
@@ -268,7 +276,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			// Thread terminated
 			if (threadGroup == null)
 				return;
-			if (isMainThreadAndInactive())
+			if (isWorkerThreadAndInactive())
 				return;
 			if (!testThreadGroup.parentOf(threadGroup))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_access")); //$NON-NLS-1$
@@ -283,7 +291,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			super.checkAccess(g);
-			if (isMainThreadAndInactive())
+			if (isWorkerThreadAndInactive())
 				return;
 			if (!testThreadGroup.parentOf(g))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_threadgroup_access")); //$NON-NLS-1$
@@ -325,7 +333,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			var blacklist = List.of("manageProcess", "shutdownHooks", "createSecurityManager"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (blacklist.contains(permName))
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
-			if ("setIO".equals(permName) && !isMainThreadAndInactive()) //$NON-NLS-1$
+			if ("setIO".equals(permName) && !isWorkerThreadAndInactive()) //$NON-NLS-1$
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_blacklist") + permString); //$NON-NLS-1$
 			// this could be removed / reduced, if the specified part is needed (does not
 			// work for gradle)
@@ -382,7 +390,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		} catch (Exception e) {
 			LOG.warn("Error in checkPathAccess", e); //$NON-NLS-1$
 		}
-		if (isMainThreadAndInactive() && pathActionLevel.isBelowOrEqual(PathActionLevel.READLINK)) {
+		if (isWorkerThreadAndInactive() && pathActionLevel.isBelowOrEqual(PathActionLevel.READLINK)) {
 			LOG.trace("Allowing read access for main thread inbetween tests"); // appears very often //$NON-NLS-1$
 			return;
 		}
@@ -435,7 +443,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			if (enterPublicInterface())
 				return;
 			super.checkPackageAccess(pkg);
-			if (!isMainThreadAndInactive() && isPackageAccessForbidden(pkg)) {
+			if (!isWorkerThreadAndInactive() && isPackageAccessForbidden(pkg)) {
 				/*
 				 * this is a very expensive operation, can we do better? (no)
 				 */
@@ -694,8 +702,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return group;
 	}
 
-	private boolean isMainThreadAndInactive() {
-		return !isActive && Thread.currentThread() == SecurityConstants.MAIN_THREAD;
+	private boolean isWorkerThreadAndInactive() {
+		return !isActive && Thread.currentThread() == SecurityConstants.WORKER_THREAD;
 	}
 
 	private boolean isCurrentThreadWhitelisted() {
