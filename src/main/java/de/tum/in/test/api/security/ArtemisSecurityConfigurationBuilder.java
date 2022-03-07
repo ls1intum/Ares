@@ -48,12 +48,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	/**
 	 * Pattern/String for verifying that certain files are forced to not exist
 	 */
-	private static final String GRADLE_ENFORCER_TASK = "test {\n" +
-			"    doFirst {\n" +
-			"        for (String fileName in filesToNotExist) {\n" +
-			"            assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not exist within the submission.\"\n" +
-			"        }\n" +
-			"    }";
+	private static final String GRADLE_ENFORCER_TASK = "assert !file(\"$studentOutputDir/$fileName\").exists(): \"$fileName must not exist within the submission.";
 	private static final Pattern FILES_TO_NOT_EXIST_PATTERN = Pattern
 			.compile("def\\s+filesToNotExist\\s+=\\s+\\[\"(?<files>.*)\"\\]");
 
