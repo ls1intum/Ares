@@ -222,7 +222,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 			} else {
 				if (!buildConfigurationFileContent.contains(GRADLE_ENFORCER_TASK))
 					throw new ConfigurationException(
-							generateEnforcingConfigurationException("Make sure to not change the test task at all.")); //$NON-NLS-1$
+							generateEnforcingConfigurationException(" Make sure to not change the test task at all.")); //$NON-NLS-1$
 
 				Matcher fileNameMatcher = FILES_TO_NOT_EXIST_PATTERN.matcher(buildConfigurationFileContent);
 				if (fileNameMatcher.find()) {
@@ -251,7 +251,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	private static String generateEnforcingConfigurationException(String message) {
-		return "Ares has detected that the build configuration is probably incomplete. " //$NON-NLS-1$
+		return "Ares has detected that the build configuration is probably incomplete." //$NON-NLS-1$
 				+ message
 				+ "\n    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."; //$NON-NLS-1$
 	}
