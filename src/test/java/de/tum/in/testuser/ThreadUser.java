@@ -31,7 +31,7 @@ import de.tum.in.testuser.subject.ThreadPenguin;
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
-@WhitelistPath(value = "target/**", type = PathType.GLOB)
+@WhitelistPath(value = "{target,build}/**", type = PathType.GLOB) // build for gradle tests
 @BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 @SuppressWarnings("static-method")
 public class ThreadUser {

@@ -97,9 +97,9 @@ public class PathAccessUser {
 	@WhitelistPath("")
 	@BlacklistPath(value = "**Test*.{java,class}", type = PathType.GLOB)
 	void accessPathTest() throws IOException {
-		if (!Files.exists(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class")))
+		if (!Files.exists(Path.of("src/test/java/de/tum/in/test/api/SecurityTest.java")))
 			fail("File not present");
-		PathAccessPenguin.accessPath(Path.of("target/test-classes/de/tum/in/test/api/SecurityTest.class"));
+		PathAccessPenguin.accessPath(Path.of("src/test/java/de/tum/in/test/api/SecurityTest.java"));
 	}
 
 	@PublicTest
