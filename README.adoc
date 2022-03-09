@@ -68,7 +68,7 @@ environment of a Maven project, include
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <version>1.8.0</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -78,7 +78,7 @@ in the `dependencies` section.
 For Gradle projects, include
 [source,groovy]
 ----
-implementation 'de.tum.in.ase:artemis-java-test-sandbox:1.8.1-SNAPSHOT'
+implementation 'de.tum.in.ase:artemis-java-test-sandbox:1.8.0'
 ----
 
 in the `dependencies` section.
@@ -380,6 +380,12 @@ Maven:
 
 Gradle:
 
+[IMPORTANT]
+====
+TODO
+====
+
+
 Make sure to exactly copy the following configuration:
 [source,groovy]
 ----
@@ -396,17 +402,17 @@ test {
 }
 ----
 <1> Important: you want to enforce the non-existence of classes after
-their generation but before testing.
+    their generation but before testing.
 <2> This is where all folders/packages go that we don't want to exist
-in student code. You will always find the most recent recommendation
-for Ares here. If you use additional third-party libraries that need
-to be configured using `@AddTrustedPackage`, you should add those
-packages here as well. Ares will check that all entries are present. +
-If you don't want Ares to do so, set the `ares.maven.ignore` or
-`ares.gradle.ignore` system property to `true`. In case you want Ares
-to look into a different file, you can set the `ares.maven.pom` or
-`ares.gradle.build` to a path other than the default `pom.xml` or
-`build.gradle`.
+    in student code. You will always find the most recent recommendation
+    for Ares here. If you use additional third-party libraries that need
+    to be configured using `@AddTrustedPackage`, you should add those
+    packages here as well. Ares will check that all entries are present. +
+    If you don't want Ares to do so, set the `ares.maven.ignore` or
+    `ares.gradle.ignore` system property to `true`. In case you want Ares
+    to look into a different file, you can set the `ares.maven.pom` or
+    `ares.gradle.build` to a path other than the default `pom.xml` or
+    `build.gradle`.
 
 === Further Important Options
 
