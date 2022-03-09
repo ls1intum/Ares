@@ -7,3 +7,5 @@
 /Ares.iml
 /.idea
 /.jqwik-database
+/build
+/.gradle

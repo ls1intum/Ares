@@ -4,11 +4,13 @@ import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -99,6 +101,14 @@ public class ClassNameScanner {
 	private final ScanResult scanResult;
 
 	private static String pomXmlPath = "pom.xml";
+	private static String buildGradlePath = "build.gradle";
+
+	/**
+	 * Pattern for matching the assignment folder name for the build.gradle file of
+	 * a Gradle project
+	 */
+	private static final Pattern gradleSourceDirPattern = Pattern
+			.compile("def\\s+assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -249,9 +259,42 @@ public class ClassNameScanner {
 	/**
 	 * This method retrieves the actual type names and their packages by walking the
 	 * project file structure. The root node (which is the assignment folder) is
-	 * defined in the pom.xml file of the project.
+	 * defined in the project build file (pom.xml or build.gradle) of the project.
 	 */
 	private void findObservedClassesInProject() {
+		String assignmentFolderName;
+		if (isMavenProject()) {
+			assignmentFolderName = getAssignmentFolderNameForMavenProject();
+		} else if (isGradleProject()) {
+			assignmentFolderName = getAssignmentFolderNameForGradleProject();
+		} else {
+			LOG.error("Could not find any build file. Contact your instructor.");
+			return;
+		}
+
+		if (assignmentFolderName == null) {
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor.");
+			return;
+		}
+		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
+	}
+
+	private boolean isMavenProject() {
+		File projectFile = new File(pomXmlPath);
+		return projectFile.exists() && !projectFile.isDirectory();
+	}
+
+	private boolean isGradleProject() {
+		File projectFile = new File(buildGradlePath);
+		return projectFile.exists() && !projectFile.isDirectory();
+	}
+
+	/**
+	 * Retrieves the assignment folder name for a maven project from the pom.xml
+	 * 
+	 * @return the folder name of the maven project, relative to project root
+	 */
+	private String getAssignmentFolderNameForMavenProject() {
 		try {
 			var pomFile = new File(pomXmlPath);
 			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -268,14 +311,36 @@ public class ClassNameScanner {
 					var buildNodeElement = (Element) buildNode;
 					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0)
 							.getTextContent();
-					var assignmentFolderName = sourceDirectoryPropertyValue
-							.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
-					walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
+					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
 				}
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
 		}
+		return null;
+	}
+
+	/**
+	 * Retrieves the assignment folder name for a gradle project from the
+	 * build.gradle
+	 * 
+	 * @return the folder name of the gradle project, relative to project root
+	 */
+	private String getAssignmentFolderNameForGradleProject() {
+		try {
+			var path = Path.of(buildGradlePath);
+			String fileContent = Files.readString(path);
+
+			var matcher = gradleSourceDirPattern.matcher(fileContent);
+			if (matcher.find()) {
+				return matcher.group("dir");
+			}
+			return null;
+		} catch (IOException e) {
+			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.",
+					e);
+		}
+		return null;
 	}
 
 	/**
@@ -325,6 +390,14 @@ public class ClassNameScanner {
 
 	public static void setPomXmlPath(String path) {
 		pomXmlPath = path;
+	}
+
+	public static String getBuildGradlePath() {
+		return buildGradlePath;
+	}
+
+	public static void setBuildGradlePath(String path) {
+		buildGradlePath = path;
 	}
 
 	static boolean isMisspelledWithHighProbability(String a, String b) {

@@ -34,12 +34,20 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
 
 	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final Path EXPECTED_GRADLE_BUILD_PATH = Path
+			.of(System.getProperty("ares.gradle.build", "build.gradle")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final String MAVEN_ENFORCER_FILE_ENTRY = "<file>${project.build.outputDirectory}%s</file>"; //$NON-NLS-1$
+	private static final String GRADLE_ENFORCER_FILE_ENTRY = "\"$studentOutputDir%s\""; //$NON-NLS-1$
 	private static final boolean IS_MAVEN;
+	private static final boolean IS_GRADLE;
 	static {
 		// Check if we are in a maven environment and don't intend to ignore that fact
 		IS_MAVEN = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("maven"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
 				&& !Boolean.parseBoolean(System.getProperty("ares.maven.ignore")); //$NON-NLS-1$
+		IS_GRADLE = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("gradle"))) //$NON-NLS-1$
+				|| Files.exists(EXPECTED_GRADLE_BUILD_PATH))
+				&& !Boolean.parseBoolean(System.getProperty("ares.gradle.ignore")); //$NON-NLS-1$
 	}
 	/**
 	 * Cache for the content of the build file so that we don't need to read it each
@@ -176,11 +184,20 @@ public final class ArtemisSecurityConfigurationBuilder {
 	}
 
 	private static void validateTrustedPackages(Set<PackageRule> trustedPackages) {
-		if (!IS_MAVEN)
+		String enforcerFileEntryFormat;
+		Path expectedProjectBuildFilePath;
+		if (IS_MAVEN) {
+			enforcerFileEntryFormat = MAVEN_ENFORCER_FILE_ENTRY;
+			expectedProjectBuildFilePath = EXPECTED_MAVEN_POM_PATH;
+		} else if (IS_GRADLE) {
+			enforcerFileEntryFormat = GRADLE_ENFORCER_FILE_ENTRY;
+			expectedProjectBuildFilePath = EXPECTED_GRADLE_BUILD_PATH;
+		} else {
 			return;
+		}
 		try {
 			if (buildConfigurationFileContent == null)
-				buildConfigurationFileContent = Files.readString(EXPECTED_MAVEN_POM_PATH);
+				buildConfigurationFileContent = Files.readString(expectedProjectBuildFilePath);
 			var enforcerFileRules = Stream.concat(
 					// include all package prefixes that are statically whitelisted
 					SecurityConstants.STACK_WHITELIST.stream(),
@@ -191,7 +208,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 					// Transform package name prefixes like com.example. to paths like /com/example/
 					.map(packagePrefix -> "/" + String.join("/", packagePrefix.split("\\.")) + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					// And finally wrap the paths info file rules for maven enforcer
-					.map(packagePath -> String.format("<file>${project.build.outputDirectory}%s</file>", packagePath)); //$NON-NLS-1$
+					.map(packagePath -> String.format(enforcerFileEntryFormat, packagePath));
 			// all must be contained in the build file, find the missing ones
 			var missing = enforcerFileRules.filter(Predicate.not(buildConfigurationFileContent::contains)).sorted()
 					.collect(Collectors.toList());
@@ -206,7 +223,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 		} catch (IOException e) {
 			LOG.error("Ares cannot read pom.xml", e); //$NON-NLS-1$
 			throw new ConfigurationException("Ares cannot read pom.xml and validate the configuration." //$NON-NLS-1$
-					+ " Please make sure Path.of(\"pom.xml\") can be read or otherwise "); //$NON-NLS-1$
+					+ " Please make sure " + expectedProjectBuildFilePath.getFileName() //$NON-NLS-1$
+					+ " can be read or otherwise set the 'ares.maven.ignore'/'ares.gradle.ignore' system property to true"); //$NON-NLS-1$
 		}
 	}
 

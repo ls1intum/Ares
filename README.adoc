@@ -60,7 +60,7 @@ Lines (%)]]
 
 _Note: Ares requires at least Java 11._
 
-Ares is provided as Maven dependency. To use Ares in the test
+Ares is provided as Maven/Gradle dependency. To use Ares in the test
 environment of a Maven project, include
 
 [source,xml]
@@ -71,6 +71,14 @@ environment of a Maven project, include
     <version>1.8.0</version>
     <scope>test</scope>
 </dependency>
+----
+
+in the `dependencies` section.
+
+For Gradle projects, include
+[source,groovy]
+----
+implementation 'de.tum.in.ase:artemis-java-test-sandbox:1.8.0'
 ----
 
 in the `dependencies` section.
@@ -321,9 +329,10 @@ students manage to load classes that would be in trusted packages. This
 is especially problematic if they shadow library classes, such as
 JUnit’s `Assertions`.
 
-To prevent that, you have to use the Maven Enforcer Plugin to make sure
+To prevent that, you have to use the Maven/Gradle Enforcer Plugin to make sure
 no student content lands in trusted packages:
 
+Maven:
 [source,xml]
 ----
 <plugin>
@@ -360,6 +369,8 @@ no student content lands in trusted packages:
                     <file>${project.build.outputDirectory}/org/junit/</file>
                     <file>${project.build.outputDirectory}/org/opentest4j/</file>
                     <file>${project.build.outputDirectory}/sun/</file>
+                    <file>${project.build.outputDirectory}/org/gradle/</file>
+                    <file>${project.build.outputDirectory}/worker/org/gradle/</file>
                 </files>
             </requireFilesDontExist>
         </rules>
@@ -367,6 +378,41 @@ no student content lands in trusted packages:
 </plugin>
 ----
 
+Gradle:
+
+Make sure to exactly copy the following configuration:
+[source,groovy]
+----
+
+def forbiddenPackageFolders = [ //<2>
+    "$studentOutputDir/ch/qos/logback/",
+    "$studentOutputDir/com/intellij/",
+    "$studentOutputDir/com/sun/",
+    "$studentOutputDir/de/tum/in/test/api/",
+    "$studentOutputDir/java/",
+    "$studentOutputDir/javax/",
+    "$studentOutputDir/jdk/",
+    "$studentOutputDir/net/jqwik/",
+    "$studentOutputDir/org/assertj/",
+    "$studentOutputDir/org/apache/",
+    "$studentOutputDir/org/eclipse/",
+    "$studentOutputDir/org/gradle/",
+    "$studentOutputDir/org/jacoco/",
+    "$studentOutputDir/org/json/",
+    "$studentOutputDir/org/junit/",
+    "$studentOutputDir/org/opentest4j/",
+    "$studentOutputDir/sun/",
+    "$studentOutputDir/worker/org/gradle/"
+]
+test {
+    doFirst { //<1>
+        for (String packageFolder in forbiddenPackageFolders) {
+            assert !file(packageFolder).exists(): "$packageFolder must not exist within the submission."
+        }
+    }
+    // ...
+}
+----
 <1> Important: you want to enforce the non-existence of classes after
     their generation but before testing.
 <2> This is where all folders/packages go that we don't want to exist
@@ -374,11 +420,11 @@ no student content lands in trusted packages:
     for Ares here. If you use additional third-party libraries that need
     to be configured using `@AddTrustedPackage`, you should add those
     packages here as well. Ares will check that all entries are present. +
-    If you don't want Ares to do so, set the `ares.maven.ignore` system
-    property to `true`. In case you want Ares to look into a different
-    file, you can set the `ares.maven.pom` to a path other than the
-    default `pom.xml`.
-
+    If you don't want Ares to do so, set the `ares.maven.ignore` or
+    `ares.gradle.ignore` system property to `true`. In case you want Ares
+    to look into a different file, you can set the `ares.maven.pom` or
+    `ares.gradle.build` to a path other than the default `pom.xml` or
+    `build.gradle`.
 
 === Further Important Options
 

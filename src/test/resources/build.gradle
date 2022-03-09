@@ -1,0 +1,51 @@
+/*
+ * This file is only for testing
+ */
+
+plugins {
+    id "java"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation "de.tum.in.ase:artemis-java-test-sandbox:+"
+    testImplementation "net.jqwik:jqwik:1.6.3"
+    testImplementation "net.jqwik:jqwik-engine:1.6.3"
+    testImplementation "org.junit.vintage:junit-vintage-engine:5.8.2"
+    testImplementation "org.junit.platform:junit-platform-testkit:1.8.2"
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+test {
+    systemProperty "file.encoding", "utf-8"
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching "de.tum.in.test.integration.**"
+        excludeTestsMatching "de.tum.in.test.integration.testuser.**"
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            exclude "**"
+        }
+        resources {
+            "src/main/resources"
+        }
+    }
+    test {
+        java {
+            "src/test/java"
+        }
+        resources {
+            "src/test/resources"
+        }
+    }
+}
