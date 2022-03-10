@@ -5,14 +5,15 @@ import java.time.Duration;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.Assertions;
+import org.junit.platform.engine.TestDescriptor;
 
 import net.jqwik.api.domains.DomainContext;
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 import net.jqwik.api.lifecycle.PropertyExecutionResult;
 import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
+import net.jqwik.engine.execution.lifecycle.CurrentDomainContext;
 import net.jqwik.engine.execution.lifecycle.CurrentTestDescriptor;
-import net.jqwik.engine.facades.DomainContextFacadeImpl;
 
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.internal.TimeoutUtils;
@@ -42,11 +43,11 @@ public class JqwikStrictTimeoutExtension implements AroundPropertyHook {
 	@Override
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
-		DomainContext domainContext = DomainContextFacadeImpl.getCurrentContext();
-		var desc = CurrentTestDescriptor.get();
-		return TimeoutUtils.performTimeoutExecution(() -> {
-			DomainContextFacadeImpl.setCurrentContext(domainContext);
-			return CurrentTestDescriptor.runWithDescriptor(desc, property::execute);
-		}, JqwikContext.of(context));
+		DomainContext domainContext = CurrentDomainContext.get();
+		TestDescriptor desc = CurrentTestDescriptor.get();
+		return TimeoutUtils.performTimeoutExecution(
+				() -> CurrentDomainContext.runWithContext(domainContext,
+						() -> CurrentTestDescriptor.runWithDescriptor(desc, property::execute)),
+				JqwikContext.of(context));
 	}
 }
