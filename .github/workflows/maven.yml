@@ -33,7 +33,7 @@ jobs:
         restore-keys: |
           ares-maven-
     - name: Test with Maven and JDK ${{ matrix.java }}
-      run: mvn -B clean test
+      run: mvn -B clean test -P fast
   test-gradle:
     runs-on: ubuntu-latest
     strategy:
