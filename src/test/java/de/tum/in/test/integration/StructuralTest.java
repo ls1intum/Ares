@@ -39,6 +39,10 @@ class StructuralTest {
 	private final String testMethodsSomeEnum = "testMethods()/dynamic-test:#3";
 	private final String testMethodsSomeAbstractClass = "testMethods()/dynamic-test:#4";
 	private final String testMethodsSomeFailingClass = "testMethods()/dynamic-test:#5";
+	private final String bothValid = "bothValid";
+	private final String invalidGradle = "invalidGradle";
+	private final String invalidMaven = "invalidMaven";
+	private final String noBuildToolFile = "noBuildToolFile";
 
 	/**
 	 * One for Maven and one for Gradle each.
@@ -186,5 +190,29 @@ class StructuralTest {
 		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testMethodsSomeFailingClass,
 				AssertionFailedError.class,
 				"The parameters of the expected method 'someMethodWithWrongParameterOrder' of the class 'SomeFailingClass' with the parameters: [\"int\",\"double\"] are not implemented as expected."));
+	}
+
+	@TestTest
+	void test_bothValid() {
+		tests.assertThatEvents().haveExactly(1, event(testWithSegments(bothValid), finishedSuccessfullyRep()));
+	}
+
+	@TestTest
+	void test_invalidGradle() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(invalidGradle, AssertionFailedError.class,
+				"[[ERROR] Could not retrieve source directory from project file. Contact your instructor.]"));
+	}
+
+	@TestTest
+	void test_invalidMaven() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(invalidMaven, AssertionFailedError.class,
+				"[[ERROR] Could not retrieve the source directory from the pom.xml file. Contact your instructor., "
+						+ "[ERROR] Could not retrieve source directory from project file. Contact your instructor.]"));
+	}
+
+	@TestTest
+	void test_noBuildToolFile() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(noBuildToolFile, AssertionFailedError.class,
+				"[[ERROR] Could not find any build file. Contact your instructor.]"));
 	}
 }
