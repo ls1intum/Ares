@@ -279,22 +279,26 @@ public class ClassNameScanner {
 		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
 	}
 
-	private boolean isMavenProject() {
+	private static boolean isMavenProject() {
+		if (pomXmlPath == null)
+			return false;
 		File projectFile = new File(pomXmlPath);
 		return projectFile.exists() && !projectFile.isDirectory();
 	}
 
-	private boolean isGradleProject() {
+	private static boolean isGradleProject() {
+		if (buildGradlePath == null)
+			return false;
 		File projectFile = new File(buildGradlePath);
 		return projectFile.exists() && !projectFile.isDirectory();
 	}
 
 	/**
 	 * Retrieves the assignment folder name for a maven project from the pom.xml
-	 * 
+	 *
 	 * @return the folder name of the maven project, relative to project root
 	 */
-	private String getAssignmentFolderNameForMavenProject() {
+	private static String getAssignmentFolderNameForMavenProject() {
 		try {
 			var pomFile = new File(pomXmlPath);
 			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -314,7 +318,7 @@ public class ClassNameScanner {
 					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
 				}
 			}
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException | NullPointerException e) {
 			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
 		}
 		return null;
@@ -323,10 +327,10 @@ public class ClassNameScanner {
 	/**
 	 * Retrieves the assignment folder name for a gradle project from the
 	 * build.gradle
-	 * 
+	 *
 	 * @return the folder name of the gradle project, relative to project root
 	 */
-	private String getAssignmentFolderNameForGradleProject() {
+	private static String getAssignmentFolderNameForGradleProject() {
 		try {
 			var path = Path.of(buildGradlePath);
 			String fileContent = Files.readString(path);
@@ -336,7 +340,7 @@ public class ClassNameScanner {
 				return matcher.group("dir");
 			}
 			return null;
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.",
 					e);
 		}
