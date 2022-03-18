@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+}
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+dependencies {
+    implementation 'de.tum.in.ase:artemis-java-test-sandbox:+'
+}
+def assignmentSrcDir = "src/test/java"
+def studentOutputDir = sourceSets.main.java.destinationDirectory.get()
+sourceSets {
+    test {
+        java {
+            srcDir "test"
+        }
+        resources {
+            srcDir "test"
+        }
+    }
+    main {
+        java {
+            srcDir assignmentSrcDir
+        }
+    }
+}
+// enforcing files to do not exist
+def filesToNotExist = [
+    "$studentOutputDir/ch/qos/logback/",
+    "$studentOutputDir/com/intellij/",
+    "$studentOutputDir/com/sun/",
+    "$studentOutputDir/de/tum/in/test/api/",
+    "$studentOutputDir/java/",
+    "$studentOutputDir/javax/",
+    "$studentOutputDir/jdk/",
+    "$studentOutputDir/net/jqwik/",
+    "$studentOutputDir/org/assertj/",
+    "$studentOutputDir/org/apache/",
+    "$studentOutputDir/org/eclipse/",
+    "$studentOutputDir/org/gradle/",
+    "$studentOutputDir/org/jacoco/",
+    "$studentOutputDir/org/json/",
+    "$studentOutputDir/org/junit/",
+    "$studentOutputDir/org/opentest4j/",
+    "$studentOutputDir/sun/",
+    "$studentOutputDir/worker/org/gradle/"
+]
+test {
+    doFirst {
+        for (String fileName in filesToNotExist) {
+            assert !file(fileName).exists(): "$fileName must not exist within the submission."
+        }
+    }
+    useJUnitPlatform()
+    ignoreFailures = true
+}

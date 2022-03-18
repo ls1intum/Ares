@@ -40,27 +40,33 @@ class StructuralTest {
 	private final String testMethodsSomeAbstractClass = "testMethods()/dynamic-test:#4";
 	private final String testMethodsSomeFailingClass = "testMethods()/dynamic-test:#5";
 
+	/**
+	 * One for Maven and one for Gradle each.
+	 */
+	private static final int COUNT = 2;
+
 	@TestTest
 	void test_testAttributesSomeInterface() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testAttributesSomeInterface, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testAttributesSomeInterface,
+				AssertionFailedError.class,
 				"The type of the expected attribute 'ANOTHER_CONSTANT' of the class 'SomeInterface' is not implemented as expected."));
 	}
 
 	@TestTest
 	void test_testAttributesSomeClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testAttributesSomeClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testAttributesSomeEnum() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testAttributesSomeEnum), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testAttributesSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				testFailedWith(testAttributesSomeAbstractClass, AssertionFailedError.class,
 						"The modifier(s) (access type, abstract, etc.) of the expected attribute 'someInt' "
 								+ "of the class 'SomeAbstractClass' are not implemented as expected."));
@@ -68,26 +74,26 @@ class StructuralTest {
 
 	@TestTest
 	void test_testAttributesSomeFailingClass() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testAttributesSomeFailingClass,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testAttributesSomeFailingClass,
 				IllegalArgumentException.class, "Invalid entry for modifier: 'penguin: final'"));
 	}
 
 	@TestTest
 	void test_testClassDoesNotExist() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassDoesNotExist, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassDoesNotExist, AssertionFailedError.class,
 				"The exercise expects a class with the name DoesNotExist in the package de.tum.in.test.integration.testuser.subject.structural. "
 						+ "You did not implement the class in the exercise."));
 	}
 
 	@TestTest
 	void test_testClassSomeInterface() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testClassSomeInterface), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testClassMisspelledClas() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassMisspelledClas, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassMisspelledClas, AssertionFailedError.class,
 				"The exercise expects a class with the name MisspelledClas. "
 						+ "We found that you implemented a class MisspelledClass, which deviates from the expectation. "
 						+ "Check for typos in the class name."));
@@ -95,23 +101,25 @@ class StructuralTest {
 
 	@TestTest
 	void test_testClassSomeClass() {
-		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testClassSomeClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT,
+				event(testWithSegments(testClassSomeClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testClassSomeEnum() {
-		tests.assertThatEvents().haveExactly(1, event(testWithSegments(testClassSomeEnum), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT,
+				event(testWithSegments(testClassSomeEnum), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testClassSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testClassSomeAbstractClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testClassMisspelledclass() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassMisspelledclass, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassMisspelledclass, AssertionFailedError.class,
 				"The exercise expects a class with the name Misspelledclass. "
 						+ "We found that you implemented a class MisspelledClass, which deviates from the expectation. "
 						+ "Check for wrong upper case / lower case lettering."));
@@ -119,62 +127,64 @@ class StructuralTest {
 
 	@TestTest
 	void test_testClassSomeFailingClass() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testClassSomeFailingClass, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassSomeFailingClass,
+				AssertionFailedError.class,
 				"The modifier(s) (access type, abstract, etc.) of SomeFailingClass are not implemented as expected."));
 	}
 
 	@TestTest
 	void test_testConstructorsSomeClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testConstructorsSomeClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testConstructorsSomeEnum() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testConstructorsSomeEnum, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testConstructorsSomeEnum, AssertionFailedError.class,
 				"The parameters of the expected constructor of the class 'SomeEnum' with the parameters: [\"int\"] are not implemented as expected."));
 	}
 
 	@TestTest
 	void test_testConstructorsSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testConstructorsSomeAbstractClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testConstructorsSomeFailingClass() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testConstructorsSomeFailingClass,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testConstructorsSomeFailingClass,
 				AssertionFailedError.class,
 				"The parameters of the expected constructor of the class 'SomeFailingClass' with the parameters: [\"int\",\"String\"] are not implemented as expected."));
 	}
 
 	@TestTest
 	void test_testMethodsSomeInterface() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testMethodsSomeInterface), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testMethodsSomeClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testMethodsSomeClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testMethodsSomeEnum() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testMethodsSomeEnum, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testMethodsSomeEnum, AssertionFailedError.class,
 				"the expected method 'doesNotExist' of the class 'SomeEnum' with no parameters was not found or is named wrongly."));
 	}
 
 	@TestTest
 	void test_testMethodsSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(1,
+		tests.assertThatEvents().haveExactly(COUNT,
 				event(testWithSegments(testMethodsSomeAbstractClass), finishedSuccessfullyRep()));
 	}
 
 	@TestTest
 	void test_testMethodsSomeFailingClass() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testMethodsSomeFailingClass, AssertionFailedError.class,
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testMethodsSomeFailingClass,
+				AssertionFailedError.class,
 				"The parameters of the expected method 'someMethodWithWrongParameterOrder' of the class 'SomeFailingClass' with the parameters: [\"int\",\"double\"] are not implemented as expected."));
 	}
 }

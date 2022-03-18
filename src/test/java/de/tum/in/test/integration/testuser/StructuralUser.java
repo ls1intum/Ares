@@ -2,7 +2,7 @@ package de.tum.in.test.integration.testuser;
 
 import java.net.URISyntaxException;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.TestFactory;
@@ -23,48 +23,64 @@ import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 @WhitelistPath("")
 public class StructuralUser {
 
-	@BeforeAll
-	static void setupTest() {
-		ClassNameScanner.setPomXmlPath("src/test/resources/de/tum/in/test/integration/testuser/pom.xml");
-	}
-
 	@Nested
-	class AttributeTestUser extends AttributeTestProvider {
-
-		@TestFactory
-		DynamicContainer testAttributes() throws URISyntaxException {
-			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
-			return generateTestsForAllClasses();
+	class Maven extends StrucuralTestSet {
+		@BeforeEach
+		void setupTest() {
+			ClassNameScanner.setPomXmlPath("src/test/resources/de/tum/in/test/integration/testuser/pom.xml");
+			ClassNameScanner.setBuildGradlePath(null);
 		}
 	}
 
 	@Nested
-	class ClassTestUser extends ClassTestProvider {
-
-		@TestFactory
-		DynamicContainer testClasses() throws URISyntaxException {
-			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
-			return generateTestsForAllClasses();
+	class Gradle extends StrucuralTestSet {
+		@BeforeEach
+		void setupTest() {
+			ClassNameScanner.setPomXmlPath(null);
+			ClassNameScanner.setBuildGradlePath("src/test/resources/de/tum/in/test/integration/testuser/build.gradle");
 		}
 	}
 
-	@Nested
-	class MethodTestUser extends MethodTestProvider {
+	class StrucuralTestSet {
 
-		@TestFactory
-		DynamicContainer testMethods() throws URISyntaxException {
-			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
-			return generateTestsForAllClasses();
+		@Nested
+		class AttributeTestUser extends AttributeTestProvider {
+
+			@TestFactory
+			DynamicContainer testAttributes() throws URISyntaxException {
+				structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
+				return generateTestsForAllClasses();
+			}
 		}
-	}
 
-	@Nested
-	class ConstructorTestUser extends ConstructorTestProvider {
+		@Nested
+		class ClassTestUser extends ClassTestProvider {
 
-		@TestFactory
-		DynamicContainer testConstructors() throws URISyntaxException {
-			structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
-			return generateTestsForAllClasses();
+			@TestFactory
+			DynamicContainer testClasses() throws URISyntaxException {
+				structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
+				return generateTestsForAllClasses();
+			}
+		}
+
+		@Nested
+		class MethodTestUser extends MethodTestProvider {
+
+			@TestFactory
+			DynamicContainer testMethods() throws URISyntaxException {
+				structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
+				return generateTestsForAllClasses();
+			}
+		}
+
+		@Nested
+		class ConstructorTestUser extends ConstructorTestProvider {
+
+			@TestFactory
+			DynamicContainer testConstructors() throws URISyntaxException {
+				structureOracleJSON = retrieveStructureOracleJSON(getClass().getResource("test.json"));
+				return generateTestsForAllClasses();
+			}
 		}
 	}
 }
