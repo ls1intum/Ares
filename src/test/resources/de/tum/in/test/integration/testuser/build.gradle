@@ -6,7 +6,7 @@ repositories {
     mavenLocal()
 }
 dependencies {
-    implementation 'de.tum.in.ase:artemis-java-test-sandbox:+'
+    testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:+'
 }
 def assignmentSrcDir = "src/test/java"
 def studentOutputDir = sourceSets.main.java.destinationDirectory.get()
