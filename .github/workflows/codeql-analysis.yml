@@ -43,7 +43,7 @@ jobs:
 
     # Use Maven dependency cache
     - name: Cache Maven Dependencies
-      uses: actions/cache@v2.1.7
+      uses: actions/cache@v3
       with:
         path: ~/.m2/repository
         key: ares-maven-${{ hashFiles('**/pom.xml') }}
