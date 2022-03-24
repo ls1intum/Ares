@@ -22,7 +22,7 @@ public abstract class TestContext {
 
 	public abstract Optional<Object> testInstance();
 
-	public abstract String displayName();
+	public abstract Optional<String> displayName();
 
 	public abstract Optional<AnnotatedElement> annotatedElement();
 

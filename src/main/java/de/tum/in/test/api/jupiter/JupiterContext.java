@@ -44,8 +44,8 @@ public class JupiterContext extends TestContext {
 	}
 
 	@Override
-	public String displayName() {
-		return extensionContext.getDisplayName();
+	public Optional<String> displayName() {
+		return Optional.of(extensionContext.getDisplayName());
 	}
 
 	@Override

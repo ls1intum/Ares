@@ -160,8 +160,8 @@ class AresSecurityConfigurationTest {
 		}
 
 		@Override
-		public String displayName() {
-			return "Some test";
+		public Optional<String> displayName() {
+			return Optional.of("Some test");
 		}
 
 		@Override

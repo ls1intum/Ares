@@ -42,8 +42,8 @@ public class JqwikContext extends TestContext {
 	}
 
 	@Override
-	public String displayName() {
-		return lifecycleContext.label();
+	public Optional<String> displayName() {
+		return Optional.of(lifecycleContext.label());
 	}
 
 	public PropertyLifecycleContext getPropertyLifecycleContext() {
