@@ -33,9 +33,10 @@ public final class ArtemisSecurityConfigurationBuilder {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
 
-	private static final Path EXPECTED_MAVEN_POM_PATH = Path.of(System.getProperty("ares.maven.pom", "pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final Path EXPECTED_MAVEN_POM_PATH = Path
+			.of(System.getProperty(AresSystemProperties.ARES_MAVEN_POM, "pom.xml")); //$NON-NLS-1$
 	private static final Path EXPECTED_GRADLE_BUILD_PATH = Path
-			.of(System.getProperty("ares.gradle.build", "build.gradle")); //$NON-NLS-1$ //$NON-NLS-2$
+			.of(System.getProperty(AresSystemProperties.ARES_GRADLE_BUILD, "build.gradle")); //$NON-NLS-1$
 	private static final String MAVEN_ENFORCER_FILE_ENTRY = "<file>${project.build.outputDirectory}%s</file>"; //$NON-NLS-1$
 	private static final String GRADLE_ENFORCER_FILE_ENTRY = "\"$studentOutputDir%s\""; //$NON-NLS-1$
 	private static final boolean IS_MAVEN;
@@ -44,10 +45,10 @@ public final class ArtemisSecurityConfigurationBuilder {
 		// Check if we are in a maven environment and don't intend to ignore that fact
 		IS_MAVEN = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("maven"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
-				&& !Boolean.parseBoolean(System.getProperty("ares.maven.ignore")); //$NON-NLS-1$
+				&& !Boolean.parseBoolean(System.getProperty(AresSystemProperties.ARES_MAVEN_IGNORE));
 		IS_GRADLE = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("gradle"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_GRADLE_BUILD_PATH))
-				&& !Boolean.parseBoolean(System.getProperty("ares.gradle.ignore")); //$NON-NLS-1$
+				&& !Boolean.parseBoolean(System.getProperty(AresSystemProperties.ARES_GRADLE_IGNORE));
 	}
 	/**
 	 * Cache for the content of the build file so that we don't need to read it each
