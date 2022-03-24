@@ -68,7 +68,7 @@ environment of a Maven project, include
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -78,7 +78,7 @@ in the `dependencies` section.
 For Gradle projects, include
 [source,groovy]
 ----
-testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.9.0'
+testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.9.1'
 ----
 
 in the `dependencies` section.
@@ -112,7 +112,7 @@ looks like this:
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.9.0</version>
+        <version>1.9.1</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
