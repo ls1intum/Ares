@@ -109,7 +109,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private final ThreadLocal<AtomicInteger> recursionBreak = ThreadLocal.withInitial(AtomicInteger::new);
 	private final StackWalker stackWalker = StackWalker.getInstance();
 
-	private ArtemisSecurityConfiguration configuration;
+	private AresSecurityConfiguration configuration;
 	private String accessToken;
 	private Set<Thread> whitelistedThreads = new HashSet<>();
 	private volatile boolean isPartlyDisabled;
@@ -764,7 +764,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return System.getSecurityManager() instanceof ArtemisSecurityManager;
 	}
 
-	public static synchronized String install(ArtemisSecurityConfiguration configuration) {
+	public static synchronized String install(AresSecurityConfiguration configuration) {
 		if (INSTANCE.lastUninstallFailed) {
 			LOG.info("Try recovery from lastUninstallFailed"); //$NON-NLS-1$
 			INSTANCE.checkThreadGroup();
@@ -819,7 +819,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 					formatLocalized("security.error_threads_still_active", Arrays.toString(activeThreads))); //$NON-NLS-1$
 	}
 
-	public static synchronized void configure(String accessToken, ArtemisSecurityConfiguration configuration) {
+	public static synchronized void configure(String accessToken, AresSecurityConfiguration configuration) {
 		INSTANCE.checkAccess(accessToken);
 		INSTANCE.configuration = configuration;
 	}

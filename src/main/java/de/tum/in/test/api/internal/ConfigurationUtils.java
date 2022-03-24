@@ -26,8 +26,8 @@ import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.security.ArtemisSecurityConfiguration;
-import de.tum.in.test.api.security.ArtemisSecurityConfigurationBuilder;
+import de.tum.in.test.api.security.AresSecurityConfiguration;
+import de.tum.in.test.api.security.AresSecurityConfigurationBuilder;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 import de.tum.in.test.api.util.RuleType;
@@ -38,8 +38,8 @@ public final class ConfigurationUtils {
 	private ConfigurationUtils() {
 	}
 
-	public static ArtemisSecurityConfiguration generateConfiguration(TestContext context) {
-		var config = ArtemisSecurityConfigurationBuilder.create();
+	public static AresSecurityConfiguration generateConfiguration(TestContext context) {
+		var config = AresSecurityConfigurationBuilder.create();
 		config.configureFromContext(context);
 		config.withPath(Path.of("")); //$NON-NLS-1$
 		config.addWhitelistedClassNames(generateClassWhiteList(context));
@@ -87,7 +87,7 @@ public final class ConfigurationUtils {
 				.orElse(MirrorOutput.DEFAULT_MAX_STD_OUT);
 	}
 
-	public static void configureAllowLocalPort(ArtemisSecurityConfigurationBuilder config, TestContext context) {
+	public static void configureAllowLocalPort(AresSecurityConfigurationBuilder config, TestContext context) {
 		TestContextUtils.findAnnotationIn(context, AllowLocalPort.class).ifPresent(allowLocalPort -> {
 			config.withAllowedLocalPorts(IntStream.of(allowLocalPort.value()).boxed().collect(Collectors.toSet()));
 			config.withAllowLocalPortsAbove(OptionalInt.of(allowLocalPort.allowPortsAbove()));

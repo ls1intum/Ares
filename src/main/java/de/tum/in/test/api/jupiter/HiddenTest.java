@@ -30,7 +30,7 @@ import de.tum.in.test.api.io.IOTester;
 @Retention(RUNTIME)
 @Target(METHOD)
 @Test
-@JupiterArtemisTest(TestType.HIDDEN)
+@JupiterAresTest(TestType.HIDDEN)
 public @interface HiddenTest {
 	// maker only
 }

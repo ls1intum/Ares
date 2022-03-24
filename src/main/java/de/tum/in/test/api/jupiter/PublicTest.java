@@ -27,7 +27,7 @@ import de.tum.in.test.api.io.IOTester;
 @Retention(RUNTIME)
 @Target(METHOD)
 @Test
-@JupiterArtemisTest(TestType.PUBLIC)
+@JupiterAresTest(TestType.PUBLIC)
 public @interface PublicTest {
 	// maker only
 }

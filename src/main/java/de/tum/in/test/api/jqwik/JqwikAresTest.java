@@ -1,4 +1,4 @@
-package de.tum.in.test.api.jupiter;
+package de.tum.in.test.api.jqwik;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -10,12 +10,16 @@ import java.lang.annotation.Target;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.jupiter.api.extension.ExtendWith;
+
+import net.jqwik.api.lifecycle.AddLifecycleHook;
+import net.jqwik.api.lifecycle.PropagationMode;
 
 import de.tum.in.test.api.internal.TestType;
 
 /**
  * This is only for internal use, to reduce redundancy.
+ * <p>
+ * <i>Adaption for jqwick.</i>
  *
  * @author Christian Femers
  */
@@ -24,11 +28,11 @@ import de.tum.in.test.api.internal.TestType;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-@ExtendWith(JupiterIOExtension.class)
-@ExtendWith(JupiterTestGuard.class)
-@ExtendWith(JupiterSecurityExtension.class)
-@ExtendWith(JupiterStrictTimeoutExtension.class)
-public @interface JupiterArtemisTest {
+@AddLifecycleHook(value = JqwikTestGuard.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikIOExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikSecurityExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+@AddLifecycleHook(value = JqwikStrictTimeoutExtension.class, propagateTo = PropagationMode.ALL_DESCENDANTS)
+public @interface JqwikAresTest {
 
 	TestType value();
 }

@@ -29,9 +29,9 @@ import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 @API(status = Status.INTERNAL)
-public final class ArtemisSecurityConfigurationBuilder {
+public final class AresSecurityConfigurationBuilder {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ArtemisSecurityConfigurationBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AresSecurityConfigurationBuilder.class);
 
 	private static final Path EXPECTED_MAVEN_POM_PATH = Path
 			.of(System.getProperty(AresSystemProperties.ARES_MAVEN_POM, "pom.xml")); //$NON-NLS-1$
@@ -71,7 +71,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 	private Set<PackageRule> trustedPackages;
 	private TrustScope threadTrustScope;
 
-	private ArtemisSecurityConfigurationBuilder() {
+	private AresSecurityConfigurationBuilder() {
 		testClass = Optional.empty();
 		testMethod = Optional.empty();
 		whitelistedClassNames = new HashSet<>();
@@ -86,75 +86,75 @@ public final class ArtemisSecurityConfigurationBuilder {
 		threadTrustScope = TrustScope.MINIMAL;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPath(Path executionPath) {
+	public AresSecurityConfigurationBuilder withPath(Path executionPath) {
 		this.executionPath = Objects.requireNonNull(executionPath);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathWhitelist(Collection<PathRule> whitelistedPaths) {
+	public AresSecurityConfigurationBuilder withPathWhitelist(Collection<PathRule> whitelistedPaths) {
 		this.whitelistedPaths = Set.copyOf(whitelistedPaths);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPathBlacklist(Collection<PathRule> blacklistedPaths) {
+	public AresSecurityConfigurationBuilder withPathBlacklist(Collection<PathRule> blacklistedPaths) {
 		this.blacklistedPaths = Set.copyOf(blacklistedPaths);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withAllowedLocalPorts(Set<Integer> allowedLocalPorts) {
+	public AresSecurityConfigurationBuilder withAllowedLocalPorts(Set<Integer> allowedLocalPorts) {
 		this.allowedLocalPorts = Objects.requireNonNull(allowedLocalPorts);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withAllowLocalPortsAbove(OptionalInt allowLocalPortsAbove) {
+	public AresSecurityConfigurationBuilder withAllowLocalPortsAbove(OptionalInt allowLocalPortsAbove) {
 		this.allowLocalPortsAbove = Objects.requireNonNull(allowLocalPortsAbove);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withExcludedLocalPorts(Set<Integer> excludedLocalPorts) {
+	public AresSecurityConfigurationBuilder withExcludedLocalPorts(Set<Integer> excludedLocalPorts) {
 		this.excludedLocalPorts = Objects.requireNonNull(excludedLocalPorts);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withAllowedThreadCount(OptionalInt allowedThreadCount) {
+	public AresSecurityConfigurationBuilder withAllowedThreadCount(OptionalInt allowedThreadCount) {
 		this.allowedThreadCount = Objects.requireNonNull(allowedThreadCount);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder configureFromContext(TestContext context) {
+	public AresSecurityConfigurationBuilder configureFromContext(TestContext context) {
 		testClass = Objects.requireNonNull(context.testClass());
 		testMethod = Objects.requireNonNull(context.testMethod());
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder addWhitelistedClassNames(Collection<String> classNames) {
+	public AresSecurityConfigurationBuilder addWhitelistedClassNames(Collection<String> classNames) {
 		whitelistedClassNames.addAll(classNames);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPackageBlacklist(Collection<PackageRule> packageBlacklist) {
+	public AresSecurityConfigurationBuilder withPackageBlacklist(Collection<PackageRule> packageBlacklist) {
 		blacklistedPackages = Set.copyOf(packageBlacklist);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withPackageWhitelist(Collection<PackageRule> packageWhitelist) {
+	public AresSecurityConfigurationBuilder withPackageWhitelist(Collection<PackageRule> packageWhitelist) {
 		whitelistedPackages = Set.copyOf(packageWhitelist);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withTrustedPackages(Set<PackageRule> trustedPackages) {
+	public AresSecurityConfigurationBuilder withTrustedPackages(Set<PackageRule> trustedPackages) {
 		this.trustedPackages = Set.copyOf(trustedPackages);
 		return this;
 	}
 
-	public ArtemisSecurityConfigurationBuilder withThreadTrustScope(TrustScope threadTrustScope) {
+	public AresSecurityConfigurationBuilder withThreadTrustScope(TrustScope threadTrustScope) {
 		this.threadTrustScope = Objects.requireNonNull(threadTrustScope);
 		return this;
 	}
 
-	public ArtemisSecurityConfiguration build() {
+	public AresSecurityConfiguration build() {
 		validate();
-		return new ArtemisSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
+		return new AresSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
 				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
 				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages, trustedPackages,
 				threadTrustScope);
@@ -165,8 +165,8 @@ public final class ArtemisSecurityConfigurationBuilder {
 			throw new ConfigurationException(localized("security.configuration_invalid_negative_threads")); //$NON-NLS-1$
 		if (!Collections.disjoint(allowedLocalPorts, excludedLocalPorts))
 			throw new ConfigurationException(localized("security.configuration_invalid_port_rule_intersection")); //$NON-NLS-1$
-		allowedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
-		excludedLocalPorts.forEach(ArtemisSecurityConfigurationBuilder::validatePortRange);
+		allowedLocalPorts.forEach(AresSecurityConfigurationBuilder::validatePortRange);
+		excludedLocalPorts.forEach(AresSecurityConfigurationBuilder::validatePortRange);
 		allowLocalPortsAbove.ifPresent(value -> {
 			validatePortRange(value);
 			if (allowedLocalPorts.stream().anyMatch(allowed -> allowed > value))
@@ -229,7 +229,7 @@ public final class ArtemisSecurityConfigurationBuilder {
 		}
 	}
 
-	public static ArtemisSecurityConfigurationBuilder create() {
-		return new ArtemisSecurityConfigurationBuilder();
+	public static AresSecurityConfigurationBuilder create() {
+		return new AresSecurityConfigurationBuilder();
 	}
 }

@@ -29,7 +29,7 @@ import de.tum.in.test.api.internal.TestType;
 import de.tum.in.test.api.util.PathRule;
 import de.tum.in.test.api.util.RuleType;
 
-class ArtemisSecurityConfigurationTest {
+class AresSecurityConfigurationTest {
 
 	private static final int ALLOWED_PORT_NUMBER = 42;
 	private static final int ALLOW_PORT_ABOVE = 1000;
@@ -46,11 +46,11 @@ class ArtemisSecurityConfigurationTest {
 	private static final TestContext MOCK_TEST_CONTEXT_ONE = new MockTestContext(new TestTestClass(), TEST_ONE);
 	private static final TestContext MOCK_TEST_CONTEXT_TWO = new MockTestContext(new TestTestClass(), TEST_TWO);
 
-	private final ArtemisSecurityConfiguration configurationOneA = ConfigurationUtils
+	private final AresSecurityConfiguration configurationOneA = ConfigurationUtils
 			.generateConfiguration(MOCK_TEST_CONTEXT_ONE);
-	private final ArtemisSecurityConfiguration configurationOneB = ConfigurationUtils
+	private final AresSecurityConfiguration configurationOneB = ConfigurationUtils
 			.generateConfiguration(MOCK_TEST_CONTEXT_ONE);
-	private final ArtemisSecurityConfiguration configurationTwo = ConfigurationUtils
+	private final AresSecurityConfiguration configurationTwo = ConfigurationUtils
 			.generateConfiguration(MOCK_TEST_CONTEXT_TWO);
 
 	@Test

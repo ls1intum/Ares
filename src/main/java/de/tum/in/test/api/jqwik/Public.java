@@ -42,7 +42,7 @@ import de.tum.in.test.api.io.IOTester;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, ANNOTATION_TYPE, TYPE })
-@JqwikArtemisTest(TestType.PUBLIC)
+@JqwikAresTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only
 }

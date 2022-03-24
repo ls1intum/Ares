@@ -17,7 +17,7 @@ import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 
 @API(status = Status.INTERNAL)
-public final class ArtemisSecurityConfiguration {
+public final class AresSecurityConfiguration {
 	private final Optional<Class<?>> testClass;
 	private final Optional<Method> testMethod;
 	private final Path executionPath;
@@ -33,7 +33,7 @@ public final class ArtemisSecurityConfiguration {
 	private final Set<PackageRule> trustedPackages;
 	private final TrustScope threadTrustScope;
 
-	ArtemisSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, // NOSONAR
+	AresSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, // NOSONAR
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,
@@ -114,9 +114,9 @@ public final class ArtemisSecurityConfiguration {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof ArtemisSecurityConfiguration))
+		if (!(obj instanceof AresSecurityConfiguration))
 			return false;
-		ArtemisSecurityConfiguration other = (ArtemisSecurityConfiguration) obj;
+		AresSecurityConfiguration other = (AresSecurityConfiguration) obj;
 		return Objects.equals(executionPath, other.executionPath) && Objects.equals(testClass, other.testClass)
 				&& Objects.equals(testMethod, other.testMethod)
 				&& Objects.equals(whitelistedClassNames, other.whitelistedClassNames)
@@ -139,7 +139,7 @@ public final class ArtemisSecurityConfiguration {
 
 	@Override
 	public String toString() {
-		return String.format("ArtemisSecurityConfigurationImpl [whitelistedClassNames=%s, executionPath=%s," //$NON-NLS-1$
+		return String.format("AresSecurityConfiguration [whitelistedClassNames=%s, executionPath=%s," //$NON-NLS-1$
 				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s," //$NON-NLS-1$
 				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s," //$NON-NLS-1$
 				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s, threadTrustScope=%s]", //$NON-NLS-1$

@@ -40,7 +40,7 @@ import de.tum.in.test.api.io.IOTester;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, ANNOTATION_TYPE, TYPE })
-@JupiterArtemisTest(TestType.PUBLIC)
+@JupiterAresTest(TestType.PUBLIC)
 public @interface Public {
 	// marker only
 }

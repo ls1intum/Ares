@@ -9,7 +9,7 @@ import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.jupiter.PublicTest;
 
 /**
- * Type of an Artemis test case
+ * Type of an Ares test case
  *
  * @see Hidden
  * @see Public
@@ -17,7 +17,7 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * @see PublicTest
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 @API(status = Status.INTERNAL)
 public enum TestType {

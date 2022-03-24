@@ -50,7 +50,7 @@ public class JupiterContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return TestContextUtils.findAnnotationIn(this, JupiterArtemisTest.class).map(JupiterArtemisTest::value);
+		return TestContextUtils.findAnnotationIn(this, JupiterAresTest.class).map(JupiterAresTest::value);
 	}
 
 	public ExtensionContext getExtensionContext() {

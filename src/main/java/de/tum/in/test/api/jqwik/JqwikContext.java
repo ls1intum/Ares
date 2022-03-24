@@ -56,6 +56,6 @@ public class JqwikContext extends TestContext {
 
 	@Override
 	public Optional<TestType> findTestType() {
-		return TestContextUtils.findAnnotationIn(this, JqwikArtemisTest.class).map(JqwikArtemisTest::value);
+		return TestContextUtils.findAnnotationIn(this, JqwikAresTest.class).map(JqwikAresTest::value);
 	}
 }
