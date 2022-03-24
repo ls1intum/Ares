@@ -579,6 +579,27 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		return testThreadGroup;
 	}
 
+	/**
+	 * Checks the test thread group for any threads that are still running.
+	 * <p>
+	 * <ol>
+	 * <li>If there are no threads in the test thread group, return an empty
+	 * array.</li>
+	 * <li>Otherwise, get a list of all threads in the test thread group.</li>
+	 * <li>For each thread in the list, try to interrupt it and wait for it to
+	 * terminate.</li>
+	 * <li>If there are no threads in the test thread group, return an empty
+	 * array.</li>
+	 * <li>Otherwise, for each thread in the list, try to stop it and wait for it to
+	 * terminate.</li>
+	 * <li>If there are still threads in the test thread group, throw a
+	 * {@link SecurityException}.</li>
+	 * <li>Otherwise, return the list of threads.</li>
+	 * </ol>
+	 *
+	 * @return the list of threads in the test thread group
+	 * @throws SecurityException if there are still threads in the test thread group
+	 */
 	@SuppressWarnings("deprecation")
 	private Thread[] checkThreadGroup() {
 		blockThreadCreation = true;
