@@ -291,6 +291,8 @@ But what is whitelisted?
   Therefore, *never use such package names for student assignments!*
 * Single classes whitelisted using `@WhitelistClass` and
   all classes matching `@AddTrustedPackage`
+* Additional package prefixes provided with by system property
+  `ares.security.trustedpackages` separated by a comma `,`.
 
 Ares also grants permissions that are requested by certain actions
 (`System.exit`, File IO, Networking, Threads, …) based on whitelisted
@@ -329,7 +331,7 @@ students manage to load classes that would be in trusted packages. This
 is especially problematic if they shadow library classes, such as
 JUnit’s `Assertions`.
 
-To prevent that, you have to use the Maven/Gradle Enforcer Plugin to make sure
+To prevent that, you have to use the Maven Enforcer Plugin to make sure
 no student content lands in trusted packages:
 
 Maven:
@@ -379,8 +381,6 @@ Maven:
 ----
 
 Gradle:
-
-Make sure to exactly copy the following configuration:
 [source,groovy]
 ----
 
@@ -653,6 +653,16 @@ test.
 
 <<showing-standard-output>> covers how the student output is
 managed and shown in the test logs.
+
+[TIP]
+====
+In case the default `IOTester` from Ares does not meet your requirements,
+you can provide a custom implementation by applying `@WithIOManager(MyCustomOne.class)`
+to e.g. the test class or individual methods. This also allows you to register
+a custom parameter to control IO testing with ease inside the test method.
+Have a look into the test class linked above to learn more or read the documentation of
+link:src/main/java/de/tum/in/test/api/io/IOManager.java[`IOManager`].
+====
 
 ==== Networking
 
