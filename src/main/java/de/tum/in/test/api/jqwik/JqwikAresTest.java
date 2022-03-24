@@ -14,7 +14,7 @@ import org.apiguardian.api.API.Status;
 import net.jqwik.api.lifecycle.AddLifecycleHook;
 import net.jqwik.api.lifecycle.PropagationMode;
 
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestType;
 
 /**
  * This is only for internal use, to reduce redundancy.

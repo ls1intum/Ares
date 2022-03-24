@@ -9,9 +9,9 @@ import org.apiguardian.api.API.Status;
 
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
-import de.tum.in.test.api.internal.TestContext;
-import de.tum.in.test.api.internal.TestContextUtils;
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestContext;
+import de.tum.in.test.api.context.TestContextUtils;
+import de.tum.in.test.api.context.TestType;
 
 @API(status = Status.INTERNAL)
 public class JqwikContext extends TestContext {

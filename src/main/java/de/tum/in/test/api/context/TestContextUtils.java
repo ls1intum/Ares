@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal;
+package de.tum.in.test.api.context;
 
 import static org.junit.platform.commons.support.AnnotationSupport.*;
 
@@ -19,7 +19,7 @@ import org.junit.platform.commons.support.AnnotationSupport;
  *
  * @author Christian Femers
  */
-@API(status = Status.INTERNAL)
+@API(status = Status.MAINTAINED)
 public final class TestContextUtils {
 
 	private TestContextUtils() {

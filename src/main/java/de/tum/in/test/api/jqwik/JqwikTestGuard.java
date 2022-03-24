@@ -10,8 +10,8 @@ import net.jqwik.api.lifecycle.PropertyExecutor;
 import net.jqwik.api.lifecycle.PropertyLifecycleContext;
 
 import de.tum.in.test.api.Deadline;
+import de.tum.in.test.api.context.TestContext;
 import de.tum.in.test.api.internal.ReportingUtils;
-import de.tum.in.test.api.internal.TestContext;
 import de.tum.in.test.api.jupiter.HiddenTest;
 
 /**

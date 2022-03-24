@@ -12,7 +12,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**

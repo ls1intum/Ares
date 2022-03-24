@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import de.tum.in.test.api.AllowLocalPort;
 import de.tum.in.test.api.TrustedThreads.TrustScope;
-import de.tum.in.test.api.internal.TestContext;
+import de.tum.in.test.api.context.TestContext;
 import de.tum.in.test.api.util.PackageRule;
 import de.tum.in.test.api.util.PathRule;
 

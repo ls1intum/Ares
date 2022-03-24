@@ -12,7 +12,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestType;
 
 /**
  * This is only for internal use, to reduce redundancy.

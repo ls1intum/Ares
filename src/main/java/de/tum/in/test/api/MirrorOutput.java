@@ -11,13 +11,15 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
+import de.tum.in.test.api.io.IOManager;
 import de.tum.in.test.api.io.IOTester;
 
 /**
  * This annotation can be applied to a class or method and tells the
- * {@link IOTester}, whether to pipe the output to the original standard output
- * as well (mirroring everything received). It does not affect the test result
- * (unless the standard output throws an exception).
+ * {@link IOTester} (or an alternative implementation provided by
+ * {@link IOManager}), whether to pipe the output to the original standard
+ * output as well (mirroring everything received). It does not affect the test
+ * result (unless the standard output throws an exception).
  * <p>
  * A {@link MirrorOutput} annotation on a method always overrides the one on the
  * class level.
@@ -27,7 +29,8 @@ import de.tum.in.test.api.io.IOTester;
  *
  * @author Christian Femers
  * @since 0.1.0
- * @version 1.2.0
+ * @version 1.2.1
+ * @see IOManager
  */
 @API(status = Status.STABLE)
 @Inherited
@@ -38,6 +41,10 @@ public @interface MirrorOutput {
 
 	long DEFAULT_MAX_STD_OUT = 100_000_000L;
 
+	/**
+	 * If the output should be mirrored and printed to the original standard output
+	 * in addition to being recorded.
+	 */
 	MirrorOutputPolicy value() default MirrorOutputPolicy.ENABLED;
 
 	/**

@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal;
+package de.tum.in.test.api.context;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -10,10 +10,15 @@ import org.apiguardian.api.API.Status;
 /**
  * Adapter for different JUnit 5 test runner contexts. This interface provides
  * the common properties of a test context.
+ * <p>
+ * All properties are optional as different test types and phases in the test
+ * life cycle of different test engines have different execution environments.
+ * While you can expect most properties to be present most of the time, use them
+ * defensively.
  *
  * @author Christian Femers
  */
-@API(status = Status.INTERNAL)
+@API(status = Status.MAINTAINED)
 public abstract class TestContext {
 
 	public abstract Optional<Method> testMethod();

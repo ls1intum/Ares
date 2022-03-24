@@ -23,6 +23,8 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.api.PrivilegedExceptionsOnly;
 import de.tum.in.test.api.StrictTimeout;
+import de.tum.in.test.api.context.TestContext;
+import de.tum.in.test.api.context.TestContextUtils;
 import de.tum.in.test.api.security.ArtemisSecurityManager;
 
 @API(status = Status.INTERNAL)

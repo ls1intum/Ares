@@ -1,4 +1,4 @@
-package de.tum.in.test.api.internal;
+package de.tum.in.test.api.context;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -17,9 +17,9 @@ import de.tum.in.test.api.jupiter.PublicTest;
  * @see PublicTest
  * @author Christian Femers
  * @since 0.2.0
- * @version 1.0.1
+ * @version 1.1.0
  */
-@API(status = Status.INTERNAL)
+@API(status = Status.MAINTAINED)
 public enum TestType {
 	PUBLIC,
 	HIDDEN

@@ -1,13 +1,19 @@
 package de.tum.in.test.integration.testuser;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.MethodOrderer.MethodName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.opentest4j.AssertionFailedError;
 
@@ -17,13 +23,17 @@ import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.PathType;
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.WithIOManager;
+import de.tum.in.test.api.io.AresIOContext;
+import de.tum.in.test.api.io.IOManager;
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.api.io.Line;
 import de.tum.in.test.api.io.OutputTestOptions;
-import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.integration.testuser.subject.InputOutputPenguin;
 
+@Public
 @UseLocale("en")
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
 @StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
@@ -33,12 +43,74 @@ import de.tum.in.test.integration.testuser.subject.InputOutputPenguin;
 @SuppressWarnings("static-method")
 public class InputOutputUser {
 
-	@PublicTest
+	public static class CustomManager implements IOManager<StringBuilder> {
+
+		private PrintStream previousOut;
+		private StringBuilder current;
+
+		public CustomManager() {
+		}
+
+		@Override
+		public void afterTestExecution(AresIOContext context) {
+			System.setOut(previousOut);
+			current = null;
+		}
+
+		@Override
+		@SuppressWarnings("resource")
+		public void beforeTestExecution(AresIOContext context) {
+			current = new StringBuilder();
+			var output = new ByteArrayOutputStream() {
+				@Override
+				public void flush() throws IOException {
+					super.flush();
+					current.append(toString(StandardCharsets.UTF_8));
+					reset();
+				}
+			};
+			previousOut = System.out;
+			System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+		}
+
+		@Override
+		public Class<StringBuilder> getControllerClass() {
+			return StringBuilder.class;
+		}
+
+		@Override
+		public StringBuilder getControllerInstance(AresIOContext context) {
+			return current;
+		}
+	}
+
+	public static class WrongCustomManager extends CustomManager {
+		@SuppressWarnings("unused")
+		public WrongCustomManager(int x) {
+			// one parameter instead of none
+		}
+	}
+
+	@Test
+	@WithIOManager(CustomManager.class)
+	void customStringBuilderManager(StringBuilder output) {
+		InputOutputPenguin.writeTwoLines();
+		assertThat(output).contains("Nieder mit den Eisbären!", "Pinguine sind die Besten!");
+	}
+
+	@Test
 	void makeUTF8Error() throws IOException {
 		System.out.write(new byte[] { 'P', 'i', 'n', 'g', 'u', (byte) 0xFF });
 	}
 
-	@PublicTest
+	@Test
+	@WithIOManager(WithIOManager.None.class)
+	void noneManagerInvalidParameter(IOTester tester) {
+		tester.provideInputLines("");
+		InputOutputPenguin.readTwoTimes();
+	}
+
+	@Test
 	void testLinesMatch(IOTester tester) {
 		System.out.println("ABC ((");
 		System.out.println("x");
@@ -125,7 +197,7 @@ public class InputOutputUser {
 				"This should not pass ==> fast-forward(12) error: not enough actual lines remaining (11)");
 	}
 
-	@PublicTest
+	@Test
 	void testPenguin1(IOTester tester) {
 		InputOutputPenguin.writeTwoLines();
 
@@ -138,7 +210,7 @@ public class InputOutputUser {
 		assertEquals("Pinguine sind die Besten!", firstLine);
 	}
 
-	@PublicTest
+	@Test
 	void testPenguin2(IOTester tester) {
 		InputOutputPenguin.writeTwoLines();
 
@@ -148,7 +220,7 @@ public class InputOutputUser {
 		assertEquals("Pinguine sind  die Besten!", secondLine);
 	}
 
-	@PublicTest
+	@Test
 	void testPolarBear(IOTester tester) {
 		InputOutputPenguin.writeTwoLines();
 
@@ -163,7 +235,7 @@ public class InputOutputUser {
 				.isEqualTo("Pinguine sind die Besten!\nNieder mit den Eisbären!\n");
 	}
 
-	@PublicTest
+	@Test
 	void testSquareCorrect(IOTester tester) {
 		tester.provideInputLines("5");
 
@@ -177,23 +249,30 @@ public class InputOutputUser {
 		assertEquals("25", out.get(2).text());
 	}
 
-	@PublicTest
+	@Test
 	void testSquareWrong(IOTester tester) {
 		InputOutputPenguin.calculateSquare();
 
 		assertEquals("Keine Fehlerausgabe erwartet", 0, tester.err().getLines().size());
 	}
 
-	@PublicTest
+	@Test
 	@MirrorOutput(maxCharCount = 10, value = MirrorOutputPolicy.DISABLED)
 	void testTooManyChars() {
 		InputOutputPenguin.writeTwoLines();
 	}
 
-	@PublicTest
+	@Test
 	void testTooManyReads(IOTester tester) {
 		tester.provideInputLines("12");
 
 		InputOutputPenguin.readTwoTimes();
+	}
+
+	@Test
+	@WithIOManager(WrongCustomManager.class)
+	void wrongCustomManager(StringBuilder output) {
+		InputOutputPenguin.writeTwoLines();
+		assertThat(output).contains("Nieder mit den Eisbären!", "Pinguine sind die Besten!");
 	}
 }

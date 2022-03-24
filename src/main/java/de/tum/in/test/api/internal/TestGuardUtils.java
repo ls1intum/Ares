@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import de.tum.in.test.api.ActivateHiddenBefore;
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.ExtendedDeadline;
+import de.tum.in.test.api.context.TestContext;
+import de.tum.in.test.api.context.TestType;
 
 /**
  * This class handles public/hidden tests and deadline evaluation.

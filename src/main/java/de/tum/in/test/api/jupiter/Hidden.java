@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**

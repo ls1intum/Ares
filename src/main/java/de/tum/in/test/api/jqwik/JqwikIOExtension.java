@@ -1,6 +1,7 @@
 package de.tum.in.test.api.jqwik;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -15,8 +16,7 @@ import net.jqwik.api.providers.ArbitraryProvider;
 import net.jqwik.api.providers.TypeUsage;
 import net.jqwik.engine.providers.RegisteredArbitraryProviders;
 
-import de.tum.in.test.api.internal.IOTesterManager;
-import de.tum.in.test.api.io.IOTester;
+import de.tum.in.test.api.internal.IOExtensionUtils;
 
 /**
  * <p>
@@ -35,33 +35,43 @@ public final class JqwikIOExtension implements AroundPropertyHook {
 	@Override
 	public PropertyExecutionResult aroundProperty(PropertyLifecycleContext context, PropertyExecutor property)
 			throws Throwable {
-		IOTesterManager ioTesterManager = new IOTesterManager(JqwikContext.of(context));
-		ioTesterManager.beforeTestExecution();
-		IOTesterProvider ioTesterProvider = new IOTesterProvider(ioTesterManager.getIOTester());
-		RegisteredArbitraryProviders.register(ioTesterProvider);
+		IOExtensionUtils ioExtensionUtils = new IOExtensionUtils(JqwikContext.of(context));
+		ioExtensionUtils.beforeTestExecution();
+		// register controller if possible
+		ControllerProvider controllerProvider = null;
+		if (ioExtensionUtils.providesController()) {
+			controllerProvider = new ControllerProvider(ioExtensionUtils::canProvideControllerFor,
+					ioExtensionUtils.getControllerInstance());
+			RegisteredArbitraryProviders.register(controllerProvider);
+		}
 		try {
 			return property.execute();
 		} finally {
-			RegisteredArbitraryProviders.unregister(ioTesterProvider);
-			ioTesterManager.afterTestExecution();
+			// unregister controller if necessary
+			if (ioExtensionUtils.providesController())
+				RegisteredArbitraryProviders.unregister(controllerProvider);
+			ioExtensionUtils.afterTestExecution();
 		}
 	}
 
-	private static class IOTesterProvider implements ArbitraryProvider {
-		private final IOTester ioTester;
+	private static class ControllerProvider implements ArbitraryProvider {
 
-		public IOTesterProvider(IOTester ioTester) {
-			this.ioTester = ioTester;
+		private final Predicate<Class<?>> canProvideControllerFor;
+		private final Object controllerInstance;
+
+		private ControllerProvider(Predicate<Class<?>> canProvideControllerFor, Object controllerInstance) {
+			this.canProvideControllerFor = canProvideControllerFor;
+			this.controllerInstance = controllerInstance;
 		}
 
 		@Override
 		public boolean canProvideFor(TypeUsage targetType) {
-			return targetType.getRawType().equals(IOTester.class);
+			return canProvideControllerFor.test(targetType.getRawType());
 		}
 
 		@Override
 		public Set<Arbitrary<?>> provideFor(TypeUsage targetType, SubtypeProvider subtypeProvider) {
-			return Set.of(Arbitraries.just(ioTester));
+			return Set.of(Arbitraries.just(controllerInstance));
 		}
 	}
 }

@@ -26,6 +26,8 @@ import de.tum.in.test.api.TrustedThreads.TrustScope;
 import de.tum.in.test.api.WhitelistClass;
 import de.tum.in.test.api.WhitelistPackage;
 import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.context.TestContext;
+import de.tum.in.test.api.context.TestContextUtils;
 import de.tum.in.test.api.security.AresSecurityConfiguration;
 import de.tum.in.test.api.security.AresSecurityConfigurationBuilder;
 import de.tum.in.test.api.util.PackageRule;

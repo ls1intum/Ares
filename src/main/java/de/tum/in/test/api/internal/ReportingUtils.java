@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.tum.in.test.api.context.TestContext;
 import de.tum.in.test.api.internal.sanitization.MessageTransformer;
 import de.tum.in.test.api.internal.sanitization.ThrowableInfo;
 import de.tum.in.test.api.internal.sanitization.ThrowableSanitizer;

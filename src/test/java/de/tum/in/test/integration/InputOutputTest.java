@@ -3,7 +3,10 @@ package de.tum.in.test.integration;
 import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
+import java.lang.annotation.AnnotationFormatError;
+
 import org.junit.ComparisonFailure;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.InputOutputUser;
@@ -17,7 +20,9 @@ class InputOutputTest {
 	@UserTestResults
 	private static Events tests;
 
+	private final String customStringBuilderManager = "customStringBuilderManager";
 	private final String makeUTF8Error = "makeUTF8Error";
+	private final String noneManagerInvalidParameter = "noneManagerInvalidParameter";
 	private final String testLinesMatch = "testLinesMatch";
 	private final String testPenguin1 = "testPenguin1";
 	private final String testPenguin2 = "testPenguin2";
@@ -26,10 +31,22 @@ class InputOutputTest {
 	private final String testSquareWrong = "testSquareWrong";
 	private final String testTooManyChars = "testTooManyChars";
 	private final String testTooManyReads = "testTooManyReads";
+	private final String wrongCustomManager = "wrongCustomManager";
+
+	@TestTest
+	void test_customStringBuilderManager() {
+		tests.assertThatEvents().haveExactly(1, event(test(customStringBuilderManager), finishedSuccessfullyRep()));
+	}
 
 	@TestTest
 	void test_makeUTF8Error() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(makeUTF8Error, IllegalArgumentException.class));
+	}
+
+	@TestTest
+	void test_noneManagerInvalidParameter() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(noneManagerInvalidParameter, ParameterResolutionException.class));
 	}
 
 	@TestTest
@@ -70,5 +87,10 @@ class InputOutputTest {
 	@TestTest
 	void test_testTooManyReads() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testTooManyReads, IllegalStateException.class));
+	}
+
+	@TestTest
+	void test_wrongCustomManager() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(wrongCustomManager, AnnotationFormatError.class));
 	}
 }

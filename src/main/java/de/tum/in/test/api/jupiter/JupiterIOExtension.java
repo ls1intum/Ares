@@ -8,32 +8,33 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
-import de.tum.in.test.api.internal.IOTesterManager;
-import de.tum.in.test.api.io.IOTester;
+import de.tum.in.test.api.internal.IOExtensionUtils;
 
 @API(status = Status.INTERNAL)
 public class JupiterIOExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-	private IOTesterManager ioTesterManager;
+	private IOExtensionUtils ioTesterManager;
 
 	@Override
 	public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
-		return parameterContext.getParameter().getType().equals(IOTester.class);
+		return ioTesterManager.canProvideControllerFor(parameterContext.getParameter().getType());
 	}
 
 	@Override
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
-		return ioTesterManager.getIOTester();
+		return ioTesterManager.getControllerInstance();
 	}
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception {
-		ioTesterManager = new IOTesterManager(JupiterContext.of(context));
+		ioTesterManager = new IOExtensionUtils(JupiterContext.of(context));
 		ioTesterManager.beforeTestExecution();
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) throws Exception {
-		ioTesterManager.afterTestExecution();
+		// If this is null, there was an exception in before, so ignore it here
+		if (ioTesterManager != null)
+			ioTesterManager.afterTestExecution();
 	}
 }

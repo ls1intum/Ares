@@ -15,7 +15,7 @@ import net.jqwik.api.Example;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 
-import de.tum.in.test.api.internal.TestType;
+import de.tum.in.test.api.context.TestType;
 import de.tum.in.test.api.io.IOTester;
 
 /**
