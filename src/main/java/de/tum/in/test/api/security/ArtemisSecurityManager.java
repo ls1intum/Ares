@@ -420,7 +420,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	private static String getFilePermissionsCommonPath(String path) {
 		if (RECURSIVE_FILE_PERMISSION.matcher(path).find())
 			return path.substring(0, path.length() - 2);
-		if (path.equals("*") || path.equals("-")) //$NON-NLS-1$ //$NON-NLS-2$
+		if ("*".equals(path) || "-".equals(path)) //$NON-NLS-1$ //$NON-NLS-2$
 			return ""; //$NON-NLS-1$
 		return null;
 	}
@@ -519,8 +519,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		String call = className + "." + methodName; //$NON-NLS-1$
 		return SecurityConstants.STACK_BLACKLIST.stream().anyMatch(call::startsWith)
 				|| (SecurityConstants.STACK_WHITELIST.stream().noneMatch(call::startsWith)
-						&& (configuration == null || !(configuration.whitelistedClassNames().contains(className)
-								|| configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
+						&& (configuration == null || (!configuration.whitelistedClassNames().contains(className)
+								&& !configuration.trustedPackages().stream().anyMatch(pm -> pm.matches(className)))));
 	}
 
 	private boolean isStackFrameNotWhitelisted(StackFrame sf) {

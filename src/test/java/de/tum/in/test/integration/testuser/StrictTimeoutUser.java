@@ -20,9 +20,8 @@ public class StrictTimeoutUser {
 
 	@Test
 	void testClassFailLoop() {
-		int x = 0;
-		while (true)
-			x++;
+		while (true) {
+		}
 	}
 
 	@Test
@@ -38,9 +37,8 @@ public class StrictTimeoutUser {
 	@Test
 	@StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 	void testMethodFailLoop() {
-		int x = 0;
-		while (true)
-			x++;
+		while (true) {
+		}
 	}
 
 	@Test

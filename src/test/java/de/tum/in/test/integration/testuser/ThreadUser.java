@@ -3,7 +3,6 @@ package de.tum.in.test.integration.testuser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -81,12 +80,7 @@ public class ThreadUser {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
 		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		ArtemisSecurityManager.requestThreadWhitelisting(t);
-		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				failure.set(e);
-			}
-		});
+		t.setUncaughtExceptionHandler((t1, e) -> failure.set(e));
 		t.start();
 		t.join();
 		if (failure.get() != null)
@@ -97,12 +91,7 @@ public class ThreadUser {
 	void threadWhitelistingWithPathFail() throws Throwable {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
 		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
-		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				failure.set(e);
-			}
-		});
+		t.setUncaughtExceptionHandler((t1, e) -> failure.set(e));
 		t.start();
 		t.join();
 		if (failure.get() != null)

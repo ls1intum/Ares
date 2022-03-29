@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UncheckedIOException;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
@@ -149,7 +148,7 @@ public final class SecurityPenguin {
 
 	public static void useCommonPoolBadTrick() throws Throwable {
 		FakeTrustedClass fd = new FakeTrustedClass();
-		useCommonPool(() -> FakeTrustedClass.useCommonPoolBad());
+		useCommonPool(FakeTrustedClass::useCommonPoolBad);
 		fd.equals(fd);
 	}
 
@@ -168,12 +167,7 @@ public final class SecurityPenguin {
 	public static void useReflection2() throws Throwable {
 		Thread d = new Circumvention();
 		AtomicReference<Throwable> failure = new AtomicReference<>();
-		d.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				failure.set(e);
-			}
-		});
+		d.setUncaughtExceptionHandler((t, e) -> failure.set(e));
 		d.start();
 		try {
 			d.join();

@@ -15,7 +15,7 @@ public class Circumvention extends Thread {
 //			Thread.currentThread().getThreadGroup().enumerate(theads);
 //			System.err.println(" ==> " + Arrays.toString(theads) + " - " + Thread.currentThread());
 			throw new NullPointerException();
-		} catch (NullPointerException e) {
+		} catch (@SuppressWarnings("unused") NullPointerException e) {
 //			e.printStackTrace();
 		}
 		try {

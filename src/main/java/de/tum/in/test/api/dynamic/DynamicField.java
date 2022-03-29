@@ -53,12 +53,11 @@ public class DynamicField<T> implements Checkable {
 	public boolean exists() {
 		if (field == null) {
 			var of = findField(owner.toClass());
-			if (of.isPresent()) {
-				field = of.get();
-				field.trySetAccessible();
-			} else {
+			if (!of.isPresent()) {
 				return false;
 			}
+			field = of.get();
+			field.trySetAccessible();
 		}
 		return true;
 	}

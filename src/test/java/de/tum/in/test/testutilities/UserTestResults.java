@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * The test extension will try to inject the test results of a {@link UserBased}
  * test here. Can be applied to (static) fields and parameters.
- * 
+ *
  * @author Christian Femers
  */
 @Documented

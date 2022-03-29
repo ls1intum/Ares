@@ -68,7 +68,7 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 			throws Exception {
 		var lookup = MethodHandles.privateLookupIn(target, MethodHandles.lookup());
 		var fields = ReflectionSupport.findFields(target,
-				field -> (staticFields ^ !Modifier.isStatic(field.getModifiers()))
+				field -> (staticFields == Modifier.isStatic(field.getModifiers()))
 						&& field.isAnnotationPresent(UserTestResults.class),
 				HierarchyTraversalMode.BOTTOM_UP);
 		var varHandles = new ArrayList<VarHandle>();

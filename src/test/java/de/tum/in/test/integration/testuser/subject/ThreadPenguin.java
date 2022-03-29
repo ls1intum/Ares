@@ -65,12 +65,7 @@ public final class ThreadPenguin extends Thread {
 		AtomicReference<Throwable> failure = new AtomicReference<>();
 		Thread t = new Thread(() -> Path.of("pom.xml").toFile().canWrite());
 		ArtemisSecurityManager.requestThreadWhitelisting(t);
-		t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				failure.set(e);
-			}
-		});
+		t.setUncaughtExceptionHandler((t1, e) -> failure.set(e));
 		t.start();
 		t.join();
 		if (failure.get() != null)

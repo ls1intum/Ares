@@ -65,8 +65,8 @@ class ExceptionFailureTest {
 				event(test(assertionFailed), finishedWithFailure(instanceOf(AssertionFailedError.class),
 						message("expected: <1> but was: <2>"), new Condition<>(t -> {
 							var afe = (AssertionFailedError) t;
-							return afe.getActual().getStringRepresentation().equals("2")
-									&& afe.getExpected().getStringRepresentation().equals("1");
+							return "2".equals(afe.getActual().getStringRepresentation())
+									&& "1".equals(afe.getExpected().getStringRepresentation());
 						}, "expected and actual are correct"))));
 	}
 
