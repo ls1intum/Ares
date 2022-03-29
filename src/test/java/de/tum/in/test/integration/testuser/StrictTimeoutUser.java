@@ -15,12 +15,13 @@ import de.tum.in.test.api.localization.UseLocale;
 @ExtendWith(JupiterStrictTimeoutExtension.class)
 @StrictTimeout(value = 100, unit = TimeUnit.MILLISECONDS)
 @TestMethodOrder(MethodName.class)
-@SuppressWarnings({ "static-method", "unused" })
+@SuppressWarnings({ "static-method" })
 public class StrictTimeoutUser {
 
 	@Test
 	void testClassFailLoop() {
 		while (true) {
+			// simple endless loop
 		}
 	}
 
@@ -38,6 +39,7 @@ public class StrictTimeoutUser {
 	@StrictTimeout(value = 300, unit = TimeUnit.MILLISECONDS)
 	void testMethodFailLoop() {
 		while (true) {
+			// simple endless loop
 		}
 	}
 
