@@ -347,7 +347,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				checkForNonWhitelistedStackFrames(() -> localized("security.error_management") + permString); //$NON-NLS-1$
 			if ((configuration == null || configuration.allowLocalPortsAbove().isEmpty())
 					&& (perm instanceof NetPermission || perm instanceof SocketPermission))
-				throw new SecurityException(localized("security.error_networking") + permString); //$NON-NLS-1$
+				checkForNonWhitelistedStackFrames(() -> localized("security.error_networking") + permString); //$NON-NLS-1$
 			if (perm instanceof SecurityPermission) {
 				if (permName.startsWith("getPolicy") || permName.startsWith("getProperty")) //$NON-NLS-1$ //$NON-NLS-2$
 					return;
