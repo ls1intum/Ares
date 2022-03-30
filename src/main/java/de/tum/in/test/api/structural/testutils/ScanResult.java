@@ -9,7 +9,7 @@ import org.apiguardian.api.API.Status;
  * representing the feedback tied to that result type.
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.0 (11.11.2020)
+ * @version 5.1 (2022-03-30)
  */
 @API(status = Status.MAINTAINED)
 public class ScanResult {

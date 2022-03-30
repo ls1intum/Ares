@@ -8,7 +8,7 @@ import org.apiguardian.api.API.Status;
  * between correct, mistyped or not found classes.
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.0 (11.11.2020)
+ * @version 5.1 (2022-03-30)
  */
 @API(status = Status.MAINTAINED)
 public enum ScanResultType {

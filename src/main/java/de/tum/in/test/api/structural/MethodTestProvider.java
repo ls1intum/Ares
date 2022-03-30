@@ -24,7 +24,7 @@ import org.junit.jupiter.api.DynamicNode;
  * structure oracle (test.json)
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.0 (11.11.2020)
+ * @version 5.1 (2022-03-30)
  */
 @API(status = Status.STABLE)
 public abstract class MethodTestProvider extends StructuralTestProvider {

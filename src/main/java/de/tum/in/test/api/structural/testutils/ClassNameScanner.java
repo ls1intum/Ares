@@ -57,7 +57,7 @@ import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
  * the length of the class name and is defined as ceiling(classNameLength / 4).
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.0 (11.11.2020)
+ * @version 5.1 (2022-03-30)
  */
 @API(status = Status.STABLE)
 public class ClassNameScanner {
