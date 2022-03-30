@@ -176,7 +176,7 @@ class StructuralTest {
 	@TestTest
 	void test_testMethodsSomeEnum() {
 		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testMethodsSomeEnum, AssertionFailedError.class,
-				"the expected method 'doesNotExist' of the class 'SomeEnum' with no parameters was not found or is named wrongly."));
+				"The expected method 'doesNotExist' of the class 'SomeEnum' with no parameters was not found or is named wrongly."));
 	}
 
 	@TestTest

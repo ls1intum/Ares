@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,29 +68,25 @@ public abstract class StructuralTestProvider {
 
 	private static final Logger LOG = LoggerFactory.getLogger(StructuralTestProvider.class);
 
-	protected static final String JSON_PROPERTY_SUPERCLASS = "superclass";
-	protected static final String JSON_PROPERTY_INTERFACES = "interfaces";
-	protected static final String JSON_PROPERTY_ANNOTATIONS = "annotations";
-	protected static final String JSON_PROPERTY_MODIFIERS = "modifiers";
-	protected static final String JSON_PROPERTY_PARAMETERS = "parameters";
-	protected static final String JSON_PROPERTY_CONSTRUCTORS = "constructors";
-	protected static final String JSON_PROPERTY_CLASS = "class";
-	protected static final String JSON_PROPERTY_ATTRIBUTES = "attributes";
-	protected static final String JSON_PROPERTY_METHODS = "methods";
-	protected static final String JSON_PROPERTY_PACKAGE = "package";
-	protected static final String JSON_PROPERTY_NAME = "name";
-	protected static final String JSON_PROPERTY_TYPE = "type";
-	protected static final String JSON_PROPERTY_RETURN_TYPE = "returnType";
-	protected static final String JSON_PROPERTY_ENUM_VALUES = "enumValues";
-	protected static final String JSON_PROPERTY_STRICT_ORDER = "strictOrder";
+	protected static final String JSON_PROPERTY_SUPERCLASS = "superclass"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_INTERFACES = "interfaces"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_ANNOTATIONS = "annotations"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_MODIFIERS = "modifiers"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_PARAMETERS = "parameters"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_CONSTRUCTORS = "constructors"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_CLASS = "class"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_ATTRIBUTES = "attributes"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_METHODS = "methods"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_PACKAGE = "package"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_NAME = "name"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_TYPE = "type"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_RETURN_TYPE = "returnType"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_ENUM_VALUES = "enumValues"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_STRICT_ORDER = "strictOrder"; //$NON-NLS-1$
+	protected static final String JSON_PROPERTY_OPTIONAL = "optional"; //$NON-NLS-1$
 
-	protected static final String THE_CLASS = "The class ";
-	protected static final String THE_TYPE = "The type ";
-	protected static final String THE_ENUM = "The enum ";
-
-	protected static final String NOT_IMPLEMENTED_AS_EXPECTED = " are not implemented as expected.";
-
-	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++");
+	private static final String PACKAGE_PATH_SEPARATOR = "."; //$NON-NLS-1$
+	private static final Pattern PACKAGE_NAME_IN_GENERIC_TYPE = Pattern.compile("(?:[^\\[\\]<>?,\\s.]++\\.)++"); //$NON-NLS-1$
 
 	protected static JSONArray structureOracleJSON;
 
@@ -106,7 +103,7 @@ public abstract class StructuralTestProvider {
 	 * @param typeOfTest             The name of the test type that currently called
 	 *                               the NamesScanner. The name is displayed in the
 	 *                               feedback, if it's negative.
-	 * @return The current class that undergoes the tests.
+	 * @return The current class that undergoes the tests, never null.
 	 */
 	protected static Class<?> findClassForTestType(ExpectedClassStructure expectedClassStructure, String typeOfTest) {
 		var classNameScanner = new ClassNameScanner(expectedClassStructure.getExpectedClassName(),
@@ -115,7 +112,7 @@ public abstract class StructuralTestProvider {
 		var classNameScanMessage = classNameScanner.getScanResult().getMessage();
 		// please note: inner classes are not supported
 		if (!ScanResultType.CORRECT_NAME_CORRECT_PLACE.equals(scanResultEnum))
-			fail(classNameScanMessage);
+			throw failure(classNameScanMessage);
 		try {
 			return Class.forName(expectedClassStructure.getQualifiedClassName(), false,
 					StructuralTestProvider.class.getClassLoader());
@@ -123,9 +120,7 @@ public abstract class StructuralTestProvider {
 			// Note: this error happens when the ClassNameScanner finds the correct file,
 			// e.g. 'Course.java', but the class 'Course' was not yet created correctly in
 			// this file.
-			fail("Problem during " + typeOfTest + " test: " + classNameScanMessage
-					+ ". Double check that you have implemented the class correctly!");
-			return null;
+			throw failure(formatLocalized("structural.common.classLoadFailed", typeOfTest, classNameScanMessage)); //$NON-NLS-1$
 		}
 	}
 
@@ -167,7 +162,7 @@ public abstract class StructuralTestProvider {
 		 * match. A note: for technical reasons, we get in case of no observed
 		 * modifiers, a string array with an empty string.
 		 */
-		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0)
+		if (Arrays.equals(observedModifiers, new String[] { "" }) && expectedModifiers.length() == 0) //$NON-NLS-1$
 			return true;
 		/*
 		 * Otherwise check if all expected necessary modifiers are contained in the
@@ -206,12 +201,12 @@ public abstract class StructuralTestProvider {
 		}
 
 		static ModifierSpecification getModifierForJsonString(String jsonString) {
-			String[] sections = jsonString.split(":", -1);
+			String[] sections = jsonString.split(":", -1); //$NON-NLS-1$
 			if (sections.length == 1)
 				return new ModifierSpecification(jsonString, false);
-			if ("optional".equals(sections[0]))
+			if (JSON_PROPERTY_OPTIONAL.equals(sections[0]))
 				return new ModifierSpecification(sections[1].trim(), true);
-			throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'");
+			throw new IllegalArgumentException("Invalid entry for modifier: '" + jsonString + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -296,6 +291,20 @@ public abstract class StructuralTestProvider {
 	}
 
 	/**
+	 * Returns a string describing the given parameter array.
+	 * <p>
+	 * This may be something like {@code "no parameters"} in case of empty parameter
+	 * arrays.
+	 *
+	 * @param expectedParameters the parameters to describe.
+	 * @return A localized string describing the parameters.
+	 */
+	protected static String describeParameters(JSONArray expectedParameters) {
+		return expectedParameters.isEmpty() ? localized("structural.common.noParams") //$NON-NLS-1$
+				: formatLocalized("structural.common.withParams", expectedParameters); //$NON-NLS-1$
+	}
+
+	/**
 	 * This method checks whether the actual type of any implemented structural
 	 * element matches its expected name.
 	 *
@@ -306,7 +315,7 @@ public abstract class StructuralTestProvider {
 	 * @return True if the names match, false if not.
 	 */
 	protected static boolean checkExpectedType(Class<?> actualClass, Type actualGenericType, String expectedTypeName) {
-		var expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">");
+		var expectedTypeIsGeneric = expectedTypeName.contains("<") && expectedTypeName.contains(">"); //$NON-NLS-1$ //$NON-NLS-2$
 		String actualName;
 		if (expectedTypeIsGeneric) {
 			actualName = actualGenericType.getTypeName();
@@ -315,13 +324,13 @@ public abstract class StructuralTestProvider {
 			if (actualName == null)
 				actualName = actualClass.getName();
 		}
-		var actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll("");
+		var actualSimpleName = PACKAGE_NAME_IN_GENERIC_TYPE.matcher(actualName).replaceAll(""); //$NON-NLS-1$
 		/*
 		 * If the given expected name contains a '.' it can be assumed that it
 		 * represents a full canonical name. If it does not, we can assume it represents
 		 * a simple name.
 		 */
-		if (expectedTypeName.contains("."))
+		if (expectedTypeName.contains(PACKAGE_PATH_SEPARATOR))
 			return expectedTypeName.equals(actualName);
 		return expectedTypeName.equals(actualSimpleName);
 	}
@@ -364,7 +373,7 @@ public abstract class StructuralTestProvider {
 			while ((length = bufferedReader.read(buffer, 0, buffer.length)) != -1)
 				result.append(buffer, 0, length);
 		} catch (IOException e) {
-			LOG.error("Could not open stream from URL: {}", structureOracleFileUrl, e);
+			LOG.error("Could not open stream from URL: {}", structureOracleFileUrl, e); //$NON-NLS-1$
 		}
 		return new JSONArray(result.toString());
 	}
@@ -402,7 +411,7 @@ public abstract class StructuralTestProvider {
 
 		public String getQualifiedClassName() {
 			if (!expectedPackageName.isEmpty()) {
-				return expectedPackageName + "." + expectedClassName;
+				return expectedPackageName + PACKAGE_PATH_SEPARATOR + expectedClassName;
 			}
 			return expectedClassName;
 		}
@@ -418,5 +427,9 @@ public abstract class StructuralTestProvider {
 		public JSONArray getPropertyAsJsonArray(String propertyName) {
 			return getExpectedClassJson().getJSONArray(propertyName);
 		}
+	}
+
+	protected static AssertionFailedError failure(String message) {
+		return new AssertionFailedError(message);
 	}
 }

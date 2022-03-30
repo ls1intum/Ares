@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -42,7 +42,8 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
 		if (structureOracleJSON == null)
-			fail("The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!");
+			throw failure(
+					"The MethodTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete MethodTest.java!"); //$NON-NLS-1$
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			// Only test the classes that have methods defined in the structure oracle.
@@ -52,12 +53,13 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 				var expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
 				var expectedClassStructure = new ExpectedClassStructure(expectedClassName, expectedPackageName,
 						expectedClassJSON);
-				tests.add(dynamicTest("testMethods[" + expectedClassName + "]",
+				tests.add(dynamicTest("testMethods[" + expectedClassName + "]", //$NON-NLS-1$ //$NON-NLS-2$
 						() -> testMethods(expectedClassStructure)));
 			}
 		}
 		if (tests.isEmpty())
-			fail("No tests for methods available in the structural oracle (test.json). Either provide attributes information or delete MethodTest.java!");
+			throw failure(
+					"No tests for methods available in the structural oracle (test.json). Either provide attributes information or delete MethodTest.java!"); //$NON-NLS-1$
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -75,11 +77,7 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 	 */
 	public static void testMethods(ExpectedClassStructure expectedClassStructure) {
 		var expectedClassName = expectedClassStructure.getExpectedClassName();
-		var observedClass = findClassForTestType(expectedClassStructure, "method");
-		if (observedClass == null) {
-			fail(THE_CLASS + expectedClassName + " was not found for method test");
-			return;
-		}
+		var observedClass = findClassForTestType(expectedClassStructure, "method"); //$NON-NLS-1$
 		if (expectedClassStructure.hasProperty(JSON_PROPERTY_METHODS)) {
 			var methodsJSON = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_METHODS);
 			checkMethods(expectedClassName, observedClass, methodsJSON);
@@ -115,7 +113,7 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 					checks.name = true;
 					checks.parameters = checkParameters(observedMethod.getParameterTypes(), expectedParameters,
 							strictParameterOrder);
-					checks.modifiers = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "),
+					checks.modifiers = checkModifiers(Modifier.toString(observedMethod.getModifiers()).split(" "), //$NON-NLS-1$
 							expectedModifiers);
 					checks.annotations = checkAnnotations(observedMethod.getAnnotations(), expectedAnnotations);
 					checks.returnType = checkExpectedType(observedMethod.getReturnType(),
@@ -137,20 +135,17 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 
 	private static void checkMethodCorrectness(String expectedClassName, String expectedName,
 			JSONArray expectedParameters, MethodChecks methodChecks) {
-		var expectedMethodInformation = "the expected method '" + expectedName + "' of the class '" + expectedClassName
-				+ "' with " + ((expectedParameters.length() == 0) ? "no parameters"
-						: "the parameters: " + expectedParameters.toString());
+		String parameters = StructuralTestProvider.describeParameters(expectedParameters);
 		if (!methodChecks.name)
-			fail(expectedMethodInformation + " was not found or is named wrongly.");
+			throw failure(formatLocalized("structural.method.name", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
 		if (!methodChecks.parameters)
-			fail("The parameters of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+			throw failure(formatLocalized("structural.method.parameters", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
 		if (!methodChecks.modifiers)
-			fail("The modifiers (access type, abstract, etc.) of " + expectedMethodInformation
-					+ NOT_IMPLEMENTED_AS_EXPECTED);
+			throw failure(formatLocalized("structural.method.modifiers", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
 		if (!methodChecks.annotations)
-			fail("The annotation(s) of " + expectedMethodInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+			throw failure(formatLocalized("structural.method.annoations", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
 		if (!methodChecks.returnType)
-			fail("The return type of " + expectedMethodInformation + " is not implemented as expected.");
+			throw failure(formatLocalized("structural.method.return", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
 	}
 
 	private static class MethodChecks {

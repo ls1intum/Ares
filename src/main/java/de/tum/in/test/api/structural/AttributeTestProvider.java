@@ -1,5 +1,7 @@
 package de.tum.in.test.api.structural;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static java.util.function.Predicate.not;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -10,6 +12,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -41,7 +46,8 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
 		if (structureOracleJSON == null)
-			fail("The AttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete AttributeTest.java!");
+			throw failure(
+					"The AttributeTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete AttributeTest.java!"); //$NON-NLS-1$
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			// Only test the classes that have attributes defined in the oracle.
@@ -52,12 +58,13 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 				var expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
 				var expectedClassStructure = new ExpectedClassStructure(expectedClassName, expectedPackageName,
 						expectedClassJSON);
-				tests.add(dynamicTest("testAttributes[" + expectedClassName + "]",
+				tests.add(dynamicTest("testAttributes[" + expectedClassName + "]", //$NON-NLS-1$ //$NON-NLS-2$
 						() -> testAttributes(expectedClassStructure)));
 			}
 		}
 		if (tests.isEmpty())
-			fail("No tests for attributes available in the structural oracle (test.json). Either provide attributes information or delete AttributeTest.java!");
+			throw failure(
+					"No tests for attributes available in the structural oracle (test.json). Either provide attributes information or delete AttributeTest.java!"); //$NON-NLS-1$
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -75,11 +82,7 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	 */
 	protected static void testAttributes(ExpectedClassStructure expectedClassStructure) {
 		var expectedClassName = expectedClassStructure.getExpectedClassName();
-		var observedClass = findClassForTestType(expectedClassStructure, "attribute");
-		if (observedClass == null) {
-			fail(THE_CLASS + expectedClassName + " was not found for attribute test");
-			return;
-		}
+		var observedClass = findClassForTestType(expectedClassStructure, "attribute"); //$NON-NLS-1$
 		if (expectedClassStructure.hasProperty(JSON_PROPERTY_ATTRIBUTES)) {
 			var expectedAttributes = expectedClassStructure.getPropertyAsJsonArray(JSON_PROPERTY_ATTRIBUTES);
 			checkAttributes(expectedClassName, observedClass, expectedAttributes);
@@ -123,7 +126,7 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 					nameIsCorrect = true;
 					typeIsCorrect = checkExpectedType(observedAttribute.getType(), observedAttribute.getGenericType(),
 							expectedTypeName);
-					modifiersAreCorrect = checkModifiers(Modifier.toString(observedAttribute.getModifiers()).split(" "),
+					modifiersAreCorrect = checkModifiers(Modifier.toString(observedAttribute.getModifiers()).split(" "), //$NON-NLS-1$
 							expectedModifiers);
 					annotationsAreCorrect = checkAnnotations(observedAttribute.getAnnotations(), expectedAnnotations);
 					// If all are correct, then we found our attribute and we can break the loop
@@ -139,17 +142,14 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 
 	private static void checkAttributeCorrectness(boolean nameIsCorrect, boolean typeIsCorrect,
 			boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName, String expectedClassName) {
-		var expectedAttributeInformation = "the expected attribute '" + expectedName + "' of the class '"
-				+ expectedClassName + "'";
 		if (!nameIsCorrect)
-			fail("The name of " + expectedAttributeInformation + " is not implemented as expected.");
+			throw failure(formatLocalized("structural.attribute.name", expectedName, expectedClassName)); //$NON-NLS-1$
 		if (!typeIsCorrect)
-			fail("The type of " + expectedAttributeInformation + " is not implemented as expected.");
+			throw failure(formatLocalized("structural.attribute.type", expectedName, expectedClassName)); //$NON-NLS-1$
 		if (!modifiersAreCorrect)
-			fail("The modifier(s) (access type, abstract, etc.) of " + expectedAttributeInformation
-					+ NOT_IMPLEMENTED_AS_EXPECTED);
+			throw failure(formatLocalized("structural.attribute.modifiers", expectedName, expectedClassName)); //$NON-NLS-1$
 		if (!annotationsAreCorrect)
-			fail("The annotation(s) of " + expectedAttributeInformation + NOT_IMPLEMENTED_AS_EXPECTED);
+			throw failure(formatLocalized("structural.attribute.annotations", expectedName, expectedClassName)); //$NON-NLS-1$
 	}
 
 	/**
@@ -166,29 +166,18 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	 */
 	protected static void checkEnumValues(String expectedClassName, Class<?> observedClass,
 			JSONArray expectedEnumValues) {
-		Object[] observedEnumValues = observedClass.getEnumConstants();
-		if (observedEnumValues == null) {
-			fail(THE_ENUM + "'" + expectedClassName
-					+ "' does not contain any enum constants. Make sure to implement them.");
-			return;
-		}
-		if (expectedEnumValues.length() != observedEnumValues.length) {
-			fail(THE_ENUM + "'" + expectedClassName
-					+ "' does not contain all the expected enum values. Make sure to implement the missing enums.");
-			return;
-		}
-		for (var i = 0; i < expectedEnumValues.length(); i++) {
-			var expectedEnumValue = expectedEnumValues.getString(i);
-			var enumValueExists = false;
-			for (Object observedEnumValue : observedEnumValues) {
-				if (expectedEnumValue.equals(((Enum<?>) observedEnumValue).name())) {
-					enumValueExists = true;
-					break;
-				}
-			}
-			if (!enumValueExists)
-				fail(THE_CLASS + "'" + expectedClassName + "' does not include the enum value: " + expectedEnumValue
-						+ ". Make sure to implement it as expected.");
-		}
+		if (!observedClass.isEnum())
+			throw failure(formatLocalized("structural.attribute.noEnumConstants", expectedClassName)); //$NON-NLS-1$
+		@SuppressWarnings("unchecked")
+		var observedEnumValues = ((Class<? extends Enum<?>>) observedClass).getEnumConstants();
+		var observedEnumNames = Stream.of(observedEnumValues).map(Enum::name).collect(Collectors.toSet());
+		var expectedEnumNames = IntStream.range(0, expectedEnumValues.length()).mapToObj(expectedEnumValues::getString)
+				.collect(Collectors.toSet());
+		var missing = expectedEnumNames.stream().filter(not(observedEnumNames::contains)).findFirst();
+		missing.ifPresent(missingName -> fail(
+				formatLocalized("structural.attribute.missingEnumConstants", expectedClassName, missingName))); //$NON-NLS-1$
+		var unexpected = observedEnumNames.stream().filter(not(expectedEnumNames::contains)).findFirst();
+		unexpected.ifPresent(unexpectedName -> fail(
+				formatLocalized("structural.attribute.unexpectedEnumConstants", expectedClassName, unexpectedName))); //$NON-NLS-1$
 	}
 }

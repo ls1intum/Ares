@@ -1,5 +1,6 @@
 package de.tum.in.test.api.structural.testutils;
 
+import static de.tum.in.test.api.localization.Messages.*;
 import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
@@ -79,13 +80,6 @@ public class ClassNameScanner {
 	 */
 	private static final Damerau DAMERAU_LEVENSHTEIN = new Damerau();
 
-	private static final String DEVIATES_FROM_THE_EXPECTATION = ", which deviates from the expectation.";
-	private static final String IMPLEMENTED_A_CLASS = "We found that you implemented a class ";
-	private static final String THE_CLASS = "The class ";
-	private static final String EXPECTS_CLASS_WITH_NAME = "The exercise expects a class with the name ";
-	private static final String IN_THE_PACKAGE = " in the package ";
-	private static final String CORRECT_NAME = " has the correct name";
-
 	/*
 	 * The class name and package name of the expected class that is currently being
 	 * searched after.
@@ -100,15 +94,15 @@ public class ClassNameScanner {
 	private final Map<String, List<String>> observedClasses = new HashMap<>();
 	private final ScanResult scanResult;
 
-	private static String pomXmlPath = "pom.xml";
-	private static String buildGradlePath = "build.gradle";
+	private static String pomXmlPath = "pom.xml"; //$NON-NLS-1$
+	private static String buildGradlePath = "build.gradle"; //$NON-NLS-1$
 
 	/**
 	 * Pattern for matching the assignment folder name for the build.gradle file of
 	 * a Gradle project
 	 */
 	private static final Pattern gradleSourceDirPattern = Pattern
-			.compile("def\\s+assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\"");
+			.compile("def\\s+assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\""); //$NON-NLS-1$
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -194,66 +188,41 @@ public class ClassNameScanner {
 		return scanResultType;
 	}
 
-	private ScanResult createScanResult(ScanResultType scanResultType, String foundObservedClassName,
-			String foundObservedPackageName) {
-		String scanResultMessage;
+	private ScanResult createScanResult(ScanResultType scanResultType, String foundClassName, String foundPackageName) {
+		String scanResultMessage = createScanResultMessage(scanResultType, foundClassName, foundPackageName);
+		return new ScanResult(scanResultType, scanResultMessage);
+	}
+
+	private String createScanResultMessage(ScanResultType scanResultType, String foundClassName,
+			String foundPackageName) {
 		switch (scanResultType) {
 		case CORRECT_NAME_CORRECT_PLACE:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + " and is in the correct package.";
-			break;
+			return formatLocalized("structural.scan.correctNameCorrectPlace", foundClassName); //$NON-NLS-1$
 		case CORRECT_NAME_MISPLACED:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + "," + " but the package it's in, "
-					+ foundObservedPackageName + ", deviates from the expectation."
-					+ "  Make sure it is placed in the correct package.";
-			break;
+			return formatLocalized("structural.scan.correctNameMisplaced", foundClassName, foundPackageName); //$NON-NLS-1$
 		case CORRECT_NAME_MULTIPLE:
-			scanResultMessage = THE_CLASS + foundObservedClassName + CORRECT_NAME + ","
-					+ " but it is located multiple times in the project and in the packages: "
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Make sure to place the class in the correct package and remove any superfluous ones.";
-			break;
+			return formatLocalized("structural.scan.correctNameMultiple", foundClassName, foundPackageName); //$NON-NLS-1$
 		case WRONG_CASE_CORRECT_PLACE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
-					+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering.";
-			break;
+			return formatLocalized("structural.scan.wrongCaseCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case WRONG_CASE_MISPLACED:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering and make sure you place it in the correct package.";
-			break;
+			return formatLocalized("structural.scan.wrongCaseMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
+					foundClassName, foundPackageName);
 		case WRONG_CASE_MULTIPLE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for wrong upper case / lower case lettering and make sure you place one class in the correct package and remove any superfluous classes.";
-			break;
+			return formatLocalized("structural.scan.wrongCaseMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
+					foundClassName, foundPackageName);
 		case TYPOS_CORRECT_PLACE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + ". " + IMPLEMENTED_A_CLASS
-					+ foundObservedClassName + DEVIATES_FROM_THE_EXPECTATION + " Check for typos in the class name.";
-			break;
+			return formatLocalized("structural.scan.typosCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case TYPOS_MISPLACED:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ foundObservedPackageName + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for typos in the class name and make sure you place it in the correct package.";
-			break;
+			return formatLocalized("structural.scan.typosMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
+					foundClassName, foundPackageName);
 		case TYPOS_MULTIPLE:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". " + IMPLEMENTED_A_CLASS + foundObservedClassName + "," + IN_THE_PACKAGE
-					+ observedClasses.get(foundObservedClassName).toString() + DEVIATES_FROM_THE_EXPECTATION
-					+ " Check for typos in the class name and make sure you place one class it in the correct package and remove any superfluous classes.";
-			break;
+			return formatLocalized("structural.scan.typosMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
+					foundClassName, observedClasses.get(foundClassName).toString());
 		case NOTFOUND:
-			scanResultMessage = EXPECTS_CLASS_WITH_NAME + expectedClassName + IN_THE_PACKAGE + expectedPackageName
-					+ ". You did not implement the class in the exercise.";
-			break;
+			return formatLocalized("structural.scan.notFound", expectedClassName, expectedPackageName); //$NON-NLS-1$
 		default:
-			scanResultMessage = "The class could not be scanned.";
-			break;
+			return localized("structural.scan.default"); //$NON-NLS-1$
 		}
-		return new ScanResult(scanResultType, scanResultMessage);
 	}
 
 	/**
@@ -268,12 +237,12 @@ public class ClassNameScanner {
 		} else if (isGradleProject()) {
 			assignmentFolderName = getAssignmentFolderNameForGradleProject();
 		} else {
-			LOG.error("Could not find any build file. Contact your instructor.");
+			LOG.error("Could not find any build file. Contact your instructor."); //$NON-NLS-1$
 			return;
 		}
 
 		if (assignmentFolderName == null) {
-			LOG.error("Could not retrieve source directory from project file. Contact your instructor.");
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$
 			return;
 		}
 		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
@@ -303,23 +272,23 @@ public class ClassNameScanner {
 			var pomFile = new File(pomXmlPath);
 			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			// make sure to avoid loading external files which would not be compliant
-			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
 			var documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			var pomXmlDocument = documentBuilder.parse(pomFile);
 
-			NodeList buildNodes = pomXmlDocument.getElementsByTagName("build");
+			NodeList buildNodes = pomXmlDocument.getElementsByTagName("build"); //$NON-NLS-1$
 			for (var i = 0; i < buildNodes.getLength(); i++) {
 				var buildNode = buildNodes.item(i);
 				if (buildNode.getNodeType() == Node.ELEMENT_NODE) {
 					var buildNodeElement = (Element) buildNode;
-					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0)
+					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0) //$NON-NLS-1$
 							.getTextContent();
-					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2);
+					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2); //$NON-NLS-1$
 				}
 			}
 		} catch (ParserConfigurationException | SAXException | IOException | NullPointerException e) {
-			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e);
+			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -337,11 +306,11 @@ public class ClassNameScanner {
 
 			var matcher = gradleSourceDirPattern.matcher(fileContent);
 			if (matcher.find()) {
-				return matcher.group("dir");
+				return matcher.group("dir"); //$NON-NLS-1$
 			}
 			return null;
 		} catch (IOException | NullPointerException e) {
-			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.",
+			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.", //$NON-NLS-1$
 					e);
 		}
 		return null;
@@ -366,13 +335,13 @@ public class ClassNameScanner {
 		// Required Package Name: de.tum.in.ase.eist
 		var fileName = node.getName();
 		// support Java and Kotlin files
-		if (fileName.endsWith(".java") || fileName.endsWith(".kt")) {
-			var fileNameComponents = fileName.split("\\.");
+		if (fileName.endsWith(".java") || fileName.endsWith(".kt")) { //$NON-NLS-1$ //$NON-NLS-2$
+			var fileNameComponents = fileName.split("\\."); //$NON-NLS-1$
 			var className = fileNameComponents[fileNameComponents.length - 2];
 
 			Path packagePath = Path.of(assignmentFolderName).relativize(Path.of(node.getPath()).getParent());
 			var packageName = StreamSupport.stream(packagePath.spliterator(), false).map(Object::toString)
-					.collect(Collectors.joining("."));
+					.collect(Collectors.joining(".")); //$NON-NLS-1$
 
 			if (foundClasses.containsKey(className))
 				foundClasses.get(className).add(packageName);

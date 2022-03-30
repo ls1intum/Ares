@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -41,7 +41,8 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	protected DynamicContainer generateTestsForAllClasses() throws URISyntaxException {
 		List<DynamicNode> tests = new ArrayList<>();
 		if (structureOracleJSON == null)
-			fail("The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!");
+			throw failure(
+					"The ClassTest test can only run if the structural oracle (test.json) is present. If you do not provide it, delete ClassTest.java!"); //$NON-NLS-1$
 		for (var i = 0; i < structureOracleJSON.length(); i++) {
 			var expectedClassJSON = structureOracleJSON.getJSONObject(i);
 			var expectedClassPropertiesJSON = expectedClassJSON.getJSONObject(JSON_PROPERTY_CLASS);
@@ -56,11 +57,12 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 				var expectedPackageName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_PACKAGE);
 				var expectedClassStructure = new ExpectedClassStructure(expectedClassName, expectedPackageName,
 						expectedClassJSON);
-				tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure)));
+				tests.add(dynamicTest("testClass[" + expectedClassName + "]", () -> testClass(expectedClassStructure))); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		if (tests.isEmpty())
-			fail("No tests for classes available in the structural oracle (test.json). Either provide attributes information or delete ClassTest.java!");
+			throw failure(
+					"No tests for classes available in the structural oracle (test.json). Either provide attributes information or delete ClassTest.java!"); //$NON-NLS-1$
 		/*
 		 * Using a custom URI here to workaround surefire rendering the JUnit XML
 		 * without the correct test names.
@@ -85,11 +87,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 	 */
 	protected static void testClass(ExpectedClassStructure expectedClassStructure) {
 		var expectedClassName = expectedClassStructure.getExpectedClassName();
-		var observedClass = findClassForTestType(expectedClassStructure, "class");
-		if (observedClass == null) {
-			fail(THE_CLASS + expectedClassName + " was not found for class test");
-			return;
-		}
+		var observedClass = findClassForTestType(expectedClassStructure, "class"); //$NON-NLS-1$
 		var expectedClassPropertiesJSON = expectedClassStructure.getPropertyAsJsonObject(JSON_PROPERTY_CLASS);
 		checkBasicClassProperties(expectedClassName, observedClass, expectedClassPropertiesJSON);
 		checkSuperclass(expectedClassName, observedClass, expectedClassPropertiesJSON);
@@ -99,21 +97,20 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 
 	private static void checkBasicClassProperties(String expectedClassName, Class<?> observedClass,
 			JSONObject expectedClassPropertiesJSON) {
-		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract")
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract") //$NON-NLS-1$
 				&& !Modifier.isAbstract(observedClass.getModifiers()))
-			fail(THE_CLASS + "'" + expectedClassName + "' is not abstract as it is expected.");
-		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum())
-			fail(THE_TYPE + "'" + expectedClassName + "' is not an enum as it is expected.");
-		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface")
+			throw failure(formatLocalized("structural.class.abstract", expectedClassName)); //$NON-NLS-1$
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) //$NON-NLS-1$
+			throw failure(formatLocalized("structural.class.enum", expectedClassName)); //$NON-NLS-1$
+		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface") //$NON-NLS-1$
 				&& !Modifier.isInterface(observedClass.getModifiers()))
-			fail(THE_TYPE + "'" + expectedClassName + "' is not an interface as it is expected.");
+			throw failure(formatLocalized("structural.class.interface", expectedClassName)); //$NON-NLS-1$
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
 			var expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
-			var modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "),
+			var modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "), //$NON-NLS-1$
 					expectedModifiers);
 			if (!modifiersAreCorrect)
-				fail("The modifier(s) (access type, abstract, etc.) of " + expectedClassName
-						+ NOT_IMPLEMENTED_AS_EXPECTED);
+				throw failure(formatLocalized("structural.class.modifiers", expectedClassName)); //$NON-NLS-1$
 		}
 	}
 
@@ -126,13 +123,13 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			JSONObject expectedClassPropertiesJSON) {
 		// Filter out the enums, since there is a separate test for them
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_SUPERCLASS)
-				&& !"Enum".equals(expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS))) {
+				&& !"Enum".equals(expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS))) { //$NON-NLS-1$
 			var expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
 			if (!checkExpectedType(observedClass.getSuperclass(), observedClass.getGenericSuperclass(),
 					expectedSuperClassName)) {
-				var failMessage = THE_CLASS + "'" + expectedClassName + "' is not a subclass of the class '"
-						+ expectedSuperClassName + "' as expected. Implement the class inheritance properly.";
-				fail(failMessage);
+				var failMessage = formatLocalized("structural.class.extends", expectedClassName, //$NON-NLS-1$
+						expectedSuperClassName);
+				throw failure(failMessage);
 			}
 		}
 	}
@@ -155,8 +152,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 					}
 				}
 				if (!implementsInterface)
-					fail(THE_CLASS + "'" + expectedClassName + "' does not implement the interface '"
-							+ expectedInterface + "' as expected." + " Implement the interface and its methods.");
+					throw failure(formatLocalized("structural.class.implements", expectedClassName, expectedInterface)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -168,7 +164,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			var observedAnnotations = observedClass.getAnnotations();
 			var annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
 			if (!annotationsAreRight)
-				fail("The annotation(s) of the class '" + expectedClassName + "' are not implemented as expected.");
+				throw failure(formatLocalized("structural.class.annotations", expectedClassName)); //$NON-NLS-1$
 		}
 	}
 }
