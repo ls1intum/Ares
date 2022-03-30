@@ -45,10 +45,10 @@ public final class AresSecurityConfigurationBuilder {
 		// Check if we are in a maven environment and don't intend to ignore that fact
 		IS_MAVEN = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("maven"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_MAVEN_POM_PATH))
-				&& !Boolean.parseBoolean(System.getProperty(AresSystemProperties.ARES_MAVEN_IGNORE));
+				&& !Boolean.getBoolean(AresSystemProperties.ARES_MAVEN_IGNORE);
 		IS_GRADLE = (StackWalker.getInstance().walk(sfs -> sfs.anyMatch(sf -> sf.getClassName().contains("gradle"))) //$NON-NLS-1$
 				|| Files.exists(EXPECTED_GRADLE_BUILD_PATH))
-				&& !Boolean.parseBoolean(System.getProperty(AresSystemProperties.ARES_GRADLE_IGNORE));
+				&& !Boolean.getBoolean(AresSystemProperties.ARES_GRADLE_IGNORE);
 	}
 	/**
 	 * Cache for the content of the build file so that we don't need to read it each
