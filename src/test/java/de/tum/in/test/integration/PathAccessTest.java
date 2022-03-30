@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
 
@@ -37,7 +36,7 @@ class PathAccessTest {
 
 	@TestTest
 	void test_accessPathAllowed() {
-		tests.assertThatEvents().haveExactly(1, event(test(accessPathAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(accessPathAllowed));
 	}
 
 	@TestTest
@@ -47,18 +46,17 @@ class PathAccessTest {
 
 	@TestTest
 	void test_accessPathRelativeGlobA() {
-		tests.assertThatEvents().haveExactly(1, event(test(accessPathRelativeGlobA), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(accessPathRelativeGlobA));
 	}
 
 	@TestTest
 	void test_accessPathRelativeGlobB() {
-		tests.assertThatEvents().haveExactly(1, event(test(accessPathRelativeGlobB), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(accessPathRelativeGlobB));
 	}
 
 	@TestTest
 	void test_accessPathRelativeGlobDirectChildrenAllowed() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(accessPathRelativeGlobDirectChildrenAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(accessPathRelativeGlobDirectChildrenAllowed));
 	}
 
 	@TestTest
@@ -75,8 +73,7 @@ class PathAccessTest {
 
 	@TestTest
 	void test_accessPathRelativeGlobRecursiveAllowed() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(accessPathRelativeGlobRecursiveAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(accessPathRelativeGlobRecursiveAllowed));
 	}
 
 	@TestTest
@@ -98,6 +95,6 @@ class PathAccessTest {
 
 	@TestTest
 	void test_weAccessPath() {
-		tests.assertThatEvents().haveExactly(1, event(test(weAccessPath), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(weAccessPath));
 	}
 }

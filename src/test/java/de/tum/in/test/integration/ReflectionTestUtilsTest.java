@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
@@ -20,8 +19,8 @@ class ReflectionTestUtilsTest {
 	private final String testGetConstructor_noSuchMethod = "testGetConstructor_noSuchMethod";
 	private final String testGetConstructor_success = "testGetConstructor_success";
 	private final String testGetMethod_noMethodName = "testGetMethod_noMethodName";
-	private final String testGetMethod_noSuchMethod = "testGetMethod_noSuchMethod";
 	private final String testGetMethod_noSuchMethod_noParameters = "testGetMethod_noSuchMethod_noParameters";
+	private final String testGetMethod_noSuchMethod_withParameters = "testGetMethod_noSuchMethod_withParameters";
 	private final String testGetMethod_success = "testGetMethod_success";
 	private final String testInvokeMethod_invocationTarget = "testInvokeMethod_invocationTarget";
 	private final String testInvokeMethod_success = "testInvokeMethod_success";
@@ -42,7 +41,7 @@ class ReflectionTestUtilsTest {
 
 	@TestTest
 	void test_invokeMethod_success() {
-		tests.assertThatEvents().haveExactly(1, event(test(testInvokeMethod_success), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokeMethod_success));
 	}
 
 	@TestTest
@@ -54,19 +53,13 @@ class ReflectionTestUtilsTest {
 
 	@TestTest
 	void test_testGetConstructor_success() {
-		tests.assertThatEvents().haveExactly(1, event(test(testGetConstructor_success), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testGetConstructor_success));
 	}
 
 	@TestTest
 	void test_testGetMethod_noMethodName() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetMethod_noMethodName, AssertionFailedError.class,
 				"Could not find the method 'null' from the class SomeClass because the name of the method is null. Make sure to check the name of the method."));
-	}
-
-	@TestTest
-	void test_testGetMethod_noSuchMethod() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetMethod_noSuchMethod, AssertionFailedError.class,
-				"Could not find the method 'someMethod' with the parameters: [ String ] in the class SomeClass because the method does not exist. Make sure to implement this method properly."));
 	}
 
 	@TestTest
@@ -77,8 +70,15 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
+	void test_testGetMethod_noSuchMethod_withParameters() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetMethod_noSuchMethod_withParameters,
+				AssertionFailedError.class,
+				"Could not find the method 'someMethod' with the parameters: [ String ] in the class SomeClass because the method does not exist. Make sure to implement this method properly."));
+	}
+
+	@TestTest
 	void test_testGetMethod_success() {
-		tests.assertThatEvents().haveExactly(1, event(test(testGetMethod_success), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testGetMethod_success));
 	}
 
 	@TestTest
@@ -159,7 +159,7 @@ class ReflectionTestUtilsTest {
 
 	@TestTest
 	void test_testNewInstance_success() {
-		tests.assertThatEvents().haveExactly(1, event(test(testNewInstance_success), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstance_success));
 	}
 
 	@TestTest
@@ -178,6 +178,6 @@ class ReflectionTestUtilsTest {
 
 	@TestTest
 	void test_testValueForAttribute_success() {
-		tests.assertThatEvents().haveExactly(1, event(test(testValueForAttribute_success), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForAttribute_success));
 	}
 }

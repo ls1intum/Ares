@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
 
@@ -38,14 +37,12 @@ class DeadlineAdditionsTest {
 
 	@TestTest
 	void test_testHidden_CustomDeadlineFutureActive() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHidden_CustomDeadlineFutureActive));
 	}
 
 	@TestTest
 	void test_testHidden_CustomDeadlineFutureExtendedActive() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlineFutureExtendedActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHidden_CustomDeadlineFutureExtendedActive));
 	}
 
 	@TestTest
@@ -68,8 +65,7 @@ class DeadlineAdditionsTest {
 
 	@TestTest
 	void test_testHidden_CustomDeadlinePastExtendedActive() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(testHidden_CustomDeadlinePastExtendedActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHidden_CustomDeadlinePastExtendedActive));
 	}
 
 	@TestTest
@@ -86,12 +82,12 @@ class DeadlineAdditionsTest {
 
 	@TestTest
 	void test_testHiddenActive() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenActive));
 	}
 
 	@TestTest
 	void test_testHiddenExtendedActive() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenExtendedActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenExtendedActive));
 	}
 
 	@TestTest
@@ -106,17 +102,17 @@ class DeadlineAdditionsTest {
 
 	@TestTest
 	void test_testHiddenInactive() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenInactive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenInactive));
 	}
 
 	@TestTest
 	void test_testHiddenNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenNormal));
 	}
 
 	@TestTest
 	void test_testPublicActive() {
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicActive), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPublicActive));
 	}
 
 	@TestTest

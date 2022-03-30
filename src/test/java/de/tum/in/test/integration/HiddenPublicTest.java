@@ -1,6 +1,7 @@
 package de.tum.in.test.integration;
 
-import static de.tum.in.test.testutilities.CustomConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfully;
+import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
@@ -35,7 +36,7 @@ class HiddenPublicTest {
 
 	@TestTest
 	void test_testHiddenCustomDeadlinePast() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenCustomDeadlinePast));
 	}
 
 	@TestTest
@@ -60,6 +61,6 @@ class HiddenPublicTest {
 
 	@TestTest
 	void test_testPublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPublicNormal));
 	}
 }

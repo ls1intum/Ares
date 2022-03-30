@@ -2,8 +2,6 @@ package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
 import java.lang.Thread.State;
 import java.util.Map;
@@ -16,6 +14,7 @@ import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.integration.testuser.ThreadUser;
+import de.tum.in.test.testutilities.CustomConditions.Option;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -62,7 +61,7 @@ class ThreadTest {
 
 	@TestTest
 	void test_testThreadExtension() {
-		tests.assertThatEvents().haveExactly(1, event(test(testThreadExtension), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testThreadExtension));
 	}
 
 	@TestTest
@@ -72,14 +71,13 @@ class ThreadTest {
 
 	@TestTest
 	void test_threadLimitExceeded() {
-		tests.assertThatEvents().haveExactly(1, event(test(threadLimitExceeded),
-				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains("2 (max: 1)")))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(threadLimitExceeded, SecurityException.class,
+				"too many threads: 2 (max: 1) in line 36 in ThreadPenguin.java", Option.MESSAGE_CONTAINS));
 	}
 
 	@TestTest
 	void test_threadWhitelistingWithPathCorrect() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(threadWhitelistingWithPathCorrect), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(threadWhitelistingWithPathCorrect));
 	}
 
 	@TestTest

@@ -1,6 +1,7 @@
 package de.tum.in.test.integration;
 
-import static de.tum.in.test.testutilities.CustomConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfully;
+import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
@@ -49,8 +50,7 @@ class JqwickTest {
 
 	@TestTest
 	void test_exampleHiddenCustomDeadlinePast() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(exampleHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(exampleHiddenCustomDeadlinePast));
 	}
 
 	@TestTest
@@ -66,7 +66,7 @@ class JqwickTest {
 
 	@TestTest
 	void test_examplePublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(examplePublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(examplePublicNormal));
 	}
 
 	@TestTest
@@ -77,8 +77,7 @@ class JqwickTest {
 
 	@TestTest
 	void test_propertyHiddenCustomDeadlinePast() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(propertyHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(propertyHiddenCustomDeadlinePast));
 	}
 
 	@TestTest
@@ -94,12 +93,12 @@ class JqwickTest {
 
 	@TestTest
 	void test_propertyPublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(propertyPublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(propertyPublicNormal));
 	}
 
 	@TestTest
 	void test_propertyUseIOTesterCorrect() {
-		tests.assertThatEvents().haveExactly(1, event(test(propertyUseIOTesterCorrect), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(propertyUseIOTesterCorrect));
 	}
 
 	@TestTest
@@ -135,7 +134,7 @@ class JqwickTest {
 
 	@TestTest
 	void test_testLocaleDe() {
-		tests.assertThatEvents().haveExactly(1, event(test(testLocaleDe), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testLocaleDe));
 	}
 
 	@TestTest

@@ -1,6 +1,7 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfully;
 import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
@@ -38,7 +39,7 @@ class StrictTimeoutTest {
 
 	@TestTest
 	void test_testClassSuccess() {
-		tests.assertThatEvents().haveExactly(1, event(test(testClassSuccess), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testClassSuccess));
 	}
 
 	@TestTest
@@ -53,7 +54,7 @@ class StrictTimeoutTest {
 
 	@TestTest
 	void test_testMethodSuccess() {
-		tests.assertThatEvents().haveExactly(1, event(test(testMethodSuccess), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testMethodSuccess));
 	}
 
 	@TestTest
@@ -63,7 +64,7 @@ class StrictTimeoutTest {
 
 	@TestTest
 	void test_testOneSecondSuccess() {
-		tests.assertThatEvents().haveExactly(1, event(test(testOneSecondSuccess), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testOneSecondSuccess));
 	}
 
 	@TestTest

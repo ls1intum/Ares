@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
 
@@ -35,7 +34,7 @@ class InputOutputTest {
 
 	@TestTest
 	void test_customStringBuilderManager() {
-		tests.assertThatEvents().haveExactly(1, event(test(customStringBuilderManager), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(customStringBuilderManager));
 	}
 
 	@TestTest
@@ -51,12 +50,12 @@ class InputOutputTest {
 
 	@TestTest
 	void test_testLinesMatch() {
-		tests.assertThatEvents().haveExactly(1, event(test(testLinesMatch), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testLinesMatch));
 	}
 
 	@TestTest
 	void test_testPenguin1() {
-		tests.assertThatEvents().haveExactly(1, event(test(testPenguin1), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPenguin1));
 	}
 
 	@TestTest
@@ -66,12 +65,12 @@ class InputOutputTest {
 
 	@TestTest
 	void test_testPolarBear() {
-		tests.assertThatEvents().haveExactly(1, event(test(testPolarBear), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPolarBear));
 	}
 
 	@TestTest
 	void test_testSquareCorrect() {
-		tests.assertThatEvents().haveExactly(1, event(test(testSquareCorrect), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testSquareCorrect));
 	}
 
 	@TestTest

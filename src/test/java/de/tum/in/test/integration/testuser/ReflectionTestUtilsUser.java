@@ -44,7 +44,7 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testGetMethod_noSuchMethod() {
+	void testGetMethod_noSuchMethod_withParameters() {
 		getMethod(CLASS_INSTANCE, "someMethod", String.class);
 	}
 

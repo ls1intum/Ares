@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
 
@@ -35,7 +34,7 @@ class DeadlineTest {
 
 	@TestTest
 	void test_testHiddenCustomDeadlinePast() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenCustomDeadlinePast), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenCustomDeadlinePast));
 	}
 
 	@TestTest
@@ -45,12 +44,12 @@ class DeadlineTest {
 
 	@TestTest
 	void test_testHiddenTimeZoneBerlin() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenTimeZoneBerlin), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenTimeZoneBerlin));
 	}
 
 	@TestTest
 	void test_testHiddenTimeZoneUtc() {
-		tests.assertThatEvents().haveExactly(1, event(test(testHiddenTimeZoneUtc), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHiddenTimeZoneUtc));
 	}
 
 	@TestTest
@@ -60,6 +59,6 @@ class DeadlineTest {
 
 	@TestTest
 	void test_testPublicNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(testPublicNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPublicNormal));
 	}
 }

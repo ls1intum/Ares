@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
@@ -45,12 +44,12 @@ class DynamicsTest {
 
 	@TestTest
 	void test_class_check() {
-		tests.assertThatEvents().haveExactly(1, event(test(class_check), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(class_check));
 	}
 
 	@TestTest
 	void test_class_isClass() {
-		tests.assertThatEvents().haveExactly(1, event(test(class_isClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(class_isClass));
 	}
 
 	@TestTest
@@ -85,7 +84,7 @@ class DynamicsTest {
 
 	@TestTest
 	void test_constructor_check() {
-		tests.assertThatEvents().haveExactly(1, event(test(constructor_check), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(constructor_check));
 	}
 
 	@TestTest
@@ -96,7 +95,7 @@ class DynamicsTest {
 
 	@TestTest
 	void test_constructor_newInstance() {
-		tests.assertThatEvents().haveExactly(1, event(test(constructor_newInstance), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(constructor_newInstance));
 	}
 
 	@TestTest
@@ -113,17 +112,17 @@ class DynamicsTest {
 
 	@TestTest
 	void test_field_check() {
-		tests.assertThatEvents().haveExactly(1, event(test(field_check), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_check));
 	}
 
 	@TestTest
 	void test_field_getInstance() {
-		tests.assertThatEvents().haveExactly(1, event(test(field_getInstance), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getInstance));
 	}
 
 	@TestTest
 	void test_field_getStatic() {
-		tests.assertThatEvents().haveExactly(1, event(test(field_getStatic), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getStatic));
 	}
 
 	@TestTest
@@ -146,7 +145,7 @@ class DynamicsTest {
 
 	@TestTest
 	void test_method_check() {
-		tests.assertThatEvents().haveExactly(1, event(test(method_check), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(method_check));
 	}
 
 	@TestTest
@@ -157,7 +156,7 @@ class DynamicsTest {
 
 	@TestTest
 	void test_method_invoke() {
-		tests.assertThatEvents().haveExactly(1, event(test(method_invoke), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(method_invoke));
 	}
 
 	@TestTest

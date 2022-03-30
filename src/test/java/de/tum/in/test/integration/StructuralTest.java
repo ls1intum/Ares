@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.event;
 
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
@@ -58,14 +57,12 @@ class StructuralTest {
 
 	@TestTest
 	void test_testAttributesSomeClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testAttributesSomeClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testAttributesSomeClass));
 	}
 
 	@TestTest
 	void test_testAttributesSomeEnum() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testAttributesSomeEnum), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testAttributesSomeEnum));
 	}
 
 	@TestTest
@@ -91,8 +88,7 @@ class StructuralTest {
 
 	@TestTest
 	void test_testClassSomeInterface() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testClassSomeInterface), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testClassSomeInterface));
 	}
 
 	@TestTest
@@ -105,20 +101,17 @@ class StructuralTest {
 
 	@TestTest
 	void test_testClassSomeClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testClassSomeClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testClassSomeClass));
 	}
 
 	@TestTest
 	void test_testClassSomeEnum() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testClassSomeEnum), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testClassSomeEnum));
 	}
 
 	@TestTest
 	void test_testClassSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testClassSomeAbstractClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testClassSomeAbstractClass));
 	}
 
 	@TestTest
@@ -138,8 +131,7 @@ class StructuralTest {
 
 	@TestTest
 	void test_testConstructorsSomeClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testConstructorsSomeClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testConstructorsSomeClass));
 	}
 
 	@TestTest
@@ -150,8 +142,7 @@ class StructuralTest {
 
 	@TestTest
 	void test_testConstructorsSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testConstructorsSomeAbstractClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testConstructorsSomeAbstractClass));
 	}
 
 	@TestTest
@@ -163,14 +154,12 @@ class StructuralTest {
 
 	@TestTest
 	void test_testMethodsSomeInterface() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testMethodsSomeInterface), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testMethodsSomeInterface));
 	}
 
 	@TestTest
 	void test_testMethodsSomeClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testMethodsSomeClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testMethodsSomeClass));
 	}
 
 	@TestTest
@@ -181,8 +170,7 @@ class StructuralTest {
 
 	@TestTest
 	void test_testMethodsSomeAbstractClass() {
-		tests.assertThatEvents().haveExactly(COUNT,
-				event(testWithSegments(testMethodsSomeAbstractClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(COUNT, finishedSuccessfully(testMethodsSomeAbstractClass));
 	}
 
 	@TestTest
@@ -194,7 +182,7 @@ class StructuralTest {
 
 	@TestTest
 	void test_bothValid() {
-		tests.assertThatEvents().haveExactly(1, event(testWithSegments(bothValid), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(bothValid));
 	}
 
 	@TestTest

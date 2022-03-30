@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
-import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfullyRep;
-import static org.junit.platform.testkit.engine.EventConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfully;
 
 import org.junit.platform.testkit.engine.Events;
 
@@ -26,26 +25,26 @@ class LocaleTest {
 
 	@TestTest
 	void test_testLocaleEn() {
-		tests.assertThatEvents().haveExactly(1, event(test(testLocaleEn), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testLocaleEn));
 	}
 
 	@TestTest
 	void test_testLocaleUnsupported() {
-		tests.assertThatEvents().haveExactly(1, event(test(testLocaleUnsupported), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testLocaleUnsupported));
 	}
 
 	@TestTest
 	void test_testLocaleDe() {
-		tests.assertThatEvents().haveExactly(1, event(test(testLocaleDe), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testLocaleDe));
 	}
 
 	@TestTest
 	void test_testUnknownFormatted() {
-		tests.assertThatEvents().haveExactly(1, event(test(testUnknownFormatted), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testUnknownFormatted));
 	}
 
 	@TestTest
 	void test_testUnknownNormal() {
-		tests.assertThatEvents().haveExactly(1, event(test(testUnknownNormal), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testUnknownNormal));
 	}
 }

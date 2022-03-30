@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
-import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
+import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 
 import org.assertj.core.api.Condition;
 import org.assertj.core.api.SoftAssertionError;
@@ -14,6 +13,7 @@ import org.opentest4j.MultipleFailuresError;
 import de.tum.in.test.api.util.UnexpectedExceptionError;
 import de.tum.in.test.integration.testuser.ExceptionFailureUser;
 import de.tum.in.test.testutilities.CustomConditions;
+import de.tum.in.test.testutilities.CustomConditions.Option;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -40,67 +40,67 @@ class ExceptionFailureTest {
 
 	@TestTest
 	void test_assertJMultipleFailures() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(assertJMultipleFailures),
-						finishedWithFailure(instanceOf(AssertJMultipleFailuresError.class),
-								message(m -> m.contains("Multiple Failures (2 failures)") //
-										&& m.contains("-- failure 1 --A") //
-										&& m.contains("-- failure 2 --B")),
-								new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(assertJMultipleFailures,
+				AssertJMultipleFailuresError.class, "Multiple Failures (2 failures)\n" + //
+						"-- failure 1 --A\n" + //
+						"-- failure 2 --B",
+				new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"),
+				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
 	void test_assertionFailOnly() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(assertionFailOnly), finishedWithFailure(instanceOf(AssertionFailedError.class),
-						message("This test failed. Penguin."), new Condition<>(t -> {
-							var afe = (AssertionFailedError) t;
-							return afe.getActual() == null && afe.getExpected() == null;
-						}, "expected and actual are both null"))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(assertionFailOnly, AssertionFailedError.class,
+				"This test failed. Penguin.", new Condition<>(t -> {
+					var afe = (AssertionFailedError) t;
+					return afe.getActual() == null && afe.getExpected() == null;
+				}, "expected and actual are both null")));
 	}
 
 	@TestTest
 	void test_assertionFailed() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(assertionFailed), finishedWithFailure(instanceOf(AssertionFailedError.class),
-						message("expected: <1> but was: <2>"), new Condition<>(t -> {
-							var afe = (AssertionFailedError) t;
-							return "2".equals(afe.getActual().getStringRepresentation())
-									&& "1".equals(afe.getExpected().getStringRepresentation());
-						}, "expected and actual are correct"))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(assertionFailed, AssertionFailedError.class,
+				"expected: <1> but was: <2>", new Condition<>(t -> {
+					var afe = (AssertionFailedError) t;
+					return "2".equals(afe.getActual().getStringRepresentation())
+							&& "1".equals(afe.getExpected().getStringRepresentation());
+				}, "expected and actual are correct")));
 	}
 
 	@TestTest
 	void test_customException() {
 		tests.assertThatEvents().haveExactly(1,
-				event(test(customException),
-						finishedWithFailure(instanceOf(UnexpectedExceptionError.class),
-								message("de.tum.in.test.integration.testuser.subject.CustomException: ABC"),
-								new Condition<>(t -> t.getCause() instanceof ArrayIndexOutOfBoundsException,
-										"cause is ArrayIndexOutOfBoundsException"))));
+				testFailedWith(customException, UnexpectedExceptionError.class,
+						"de.tum.in.test.integration.testuser.subject.CustomException: ABC",
+						new Condition<>(t -> t.getCause() instanceof ArrayIndexOutOfBoundsException,
+								"cause is ArrayIndexOutOfBoundsException")));
 	}
 
 	@TestTest
 	void test_exceptionInInitializer() {
-		tests.assertThatEvents().haveExactly(1, event(test(exceptionInInitializer), finishedWithFailure(
-				instanceOf(ExceptionInInitializerError.class),
-				new Condition<>(t -> t.getCause() instanceof ArithmeticException, "cause is ArithmeticException"))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(exceptionInInitializer,
+				ExceptionInInitializerError.class, CustomConditions.NO_MSG,
+				new Condition<>(t -> t.getCause() instanceof ArithmeticException, "cause is ArithmeticException")));
 	}
 
 	@TestTest
 	void test_faultyGetCauseException() {
-		tests.assertThatEvents().haveExactly(1, event(test(faultyGetCauseException), finishedWithFailure(
-				instanceOf(SecurityException.class),
-				message(m -> m.contains("AssertionError thrown, but cannot be displayed:") && m.contains(
-						"FaultyGetCauseException threw an exception when retrieving information about it. (java.lang.NullPointerException: Faulty)")))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(faultyGetCauseException, SecurityException.class, //
+				"java.lang.AssertionError" + //
+						" thrown, but cannot be displayed: " + //
+						"class de.tum.in.test.integration.testuser.ExceptionFailureUser$FaultyGetCauseException" + //
+						" threw an exception when retrieving information about it. (java.lang.NullPointerException: Faulty)",
+				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
 	void test_faultyToStringException() {
-		tests.assertThatEvents().haveExactly(1, event(test(faultyToStringException), finishedWithFailure(
-				instanceOf(SecurityException.class),
-				message(m -> m.contains("FaultyToStringException thrown, but cannot be displayed:") && m.contains(
-						"FaultyToStringException threw an exception when retrieving information about it. (java.lang.IllegalStateException: Faulty)")))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(faultyToStringException, SecurityException.class, //
+				"de.tum.in.test.integration.testuser.ExceptionFailureUser$FaultyToStringException" + //
+						" thrown, but cannot be displayed:" + //
+						" class de.tum.in.test.integration.testuser.ExceptionFailureUser$FaultyToStringException"
+						+ " threw an exception when retrieving information about it. (java.lang.IllegalStateException: Faulty)",
+				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
@@ -113,53 +113,49 @@ class ExceptionFailureTest {
 					&& error.getCause() instanceof UnexpectedExceptionError //
 					&& error.getCause().getMessage().contains("ABC");
 		}, "has one correctly sanitized AssertionError");
-		tests.assertThatEvents().haveExactly(1,
-				event(test(multipleAssertions),
-						finishedWithFailure(instanceOf(MultipleAssertionsError.class),
-								message(m -> m.contains("[Failed with 5]") //
-										&& m.contains("The following assertion failed:") //
-										&& m.contains("1) X")),
-								hasOneCorrectlySanitizedAssertionError)));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(multipleAssertions, MultipleAssertionsError.class, //
+				"[Failed with 5] \n" + //
+						"The following assertion failed:\n" + //
+						"1) X\n", //
+				hasOneCorrectlySanitizedAssertionError, Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
 	void test_multipleFailures() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(multipleFailures),
-						finishedWithFailure(instanceOf(MultipleFailuresError.class),
-								message(m -> m.contains("Multiple Failures (2 failures)") //
-										&& m.contains("java.lang.AssertionError: A") //
-										&& m.contains("java.lang.AssertionError: B")),
-								new Condition<>(t -> t.getSuppressed().length == 2, "two suppressed exceptions"))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(multipleFailures, MultipleFailuresError.class, //
+				"Multiple Failures (2 failures)\n" + //
+						"\tjava.lang.AssertionError: A\n" + //
+						"\tjava.lang.AssertionError: B", //
+				new Condition<>(t -> t.getSuppressed().length == 2, "two suppressed exceptions"),
+				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
 	void test_nullPointer() {
-		tests.assertThatEvents().haveExactly(1, event(test(nullPointer),
-				finishedWithFailure(instanceOf(NullPointerException.class), message(m -> m.contains("XYZ")))));
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(nullPointer, NullPointerException.class, "XYZ", Option.MESSAGE_CONTAINS));
 	}
 
 	@TestTest
 	void test_softAssertion() {
-		tests.assertThatEvents().haveExactly(1,
-				event(test(softAssertion),
-						finishedWithFailure(instanceOf(SoftAssertionError.class),
-								message(m -> m.contains("The following 2 assertions failed:") //
-										&& m.contains("1) A") //
-										&& m.contains("2) B")))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(softAssertion, SoftAssertionError.class, //
+				"\n" + //
+						"The following 2 assertions failed:\n" + //
+						"1) A\n" + //
+						"2) B\n",
+				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
 	@TestTest
 	void test_throwExceptionInInitializerError() {
-		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwExceptionInInitializerError,
+		tests.assertThatEvents().haveExactly(1, testFailedWith(throwExceptionInInitializerError,
 				ExceptionInInitializerError.class,
 				"abc\n" + "/// potential problem location: de.tum.in.test.integration.testuser.subject.ExceptionFailurePenguin.throwExceptionInInitializerError(ExceptionFailurePenguin.java:13) ///"));
 	}
 
 	@TestTest
 	void test_throwNullPointerException() {
-		tests.assertThatEvents().haveExactly(1, CustomConditions.testFailedWith(throwNullPointerException,
-				NullPointerException.class,
+		tests.assertThatEvents().haveExactly(1, testFailedWith(throwNullPointerException, NullPointerException.class,
 				"xyz\n" + "/// potential problem location: de.tum.in.test.integration.testuser.subject.ExceptionFailurePenguin.throwNullPointerException(ExceptionFailurePenguin.java:9) ///"));
 	}
 }

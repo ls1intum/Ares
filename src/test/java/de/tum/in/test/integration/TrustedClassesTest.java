@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
 
@@ -27,11 +26,11 @@ class TrustedClassesTest {
 
 	@TestTest
 	void test_allowLocalPortInsideAllowAboveRange() {
-		tests.assertThatEvents().haveExactly(1, event(test(testTrustedPackage), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testTrustedPackage));
 	}
 
 	@TestTest
 	void test_excludeLocalPortValueToSmall() {
-		tests.assertThatEvents().haveExactly(1, event(test(testWhitelistedClass), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testWhitelistedClass));
 	}
 }

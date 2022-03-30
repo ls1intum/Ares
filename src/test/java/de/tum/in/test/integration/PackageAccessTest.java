@@ -1,7 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
@@ -40,7 +39,7 @@ class PackageAccessTest {
 
 	@TestTest
 	void test_package_dBlackAndWhitelisting() {
-		tests.assertThatEvents().haveExactly(1, event(test(package_dBlackAndWhitelisting), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(package_dBlackAndWhitelisting));
 	}
 
 	@Disabled("Classes are only checked when they are loaded, so changing this again is impossible")

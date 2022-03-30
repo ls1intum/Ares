@@ -2,7 +2,6 @@ package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.platform.testkit.engine.EventConditions.*;
 
 import java.nio.file.Path;
 
@@ -70,7 +69,7 @@ class SecurityTest {
 
 	@TestTest
 	void test_testEvilPermission() {
-		tests.assertThatEvents().haveExactly(1, event(test(testEvilPermission), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testEvilPermission));
 	}
 
 	@TestTest
@@ -143,7 +142,7 @@ class SecurityTest {
 
 	@TestTest
 	void test_useCommonPoolGood() {
-		tests.assertThatEvents().haveExactly(1, event(test(useCommonPoolGood), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(useCommonPoolGood));
 	}
 
 	@TestTest
@@ -175,11 +174,11 @@ class SecurityTest {
 
 	@TestTest
 	void test_weUseReflection() {
-		tests.assertThatEvents().haveExactly(1, event(test(weUseReflection), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(weUseReflection));
 	}
 
 	@TestTest
 	void test_weUseShutdownHooks() {
-		tests.assertThatEvents().haveExactly(1, event(test(weUseShutdownHooks), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(weUseShutdownHooks));
 	}
 }

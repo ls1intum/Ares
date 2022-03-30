@@ -1,8 +1,6 @@
 package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.*;
-import static org.junit.platform.testkit.engine.EventConditions.*;
-import static org.junit.platform.testkit.engine.TestExecutionResultConditions.*;
 
 import java.net.SocketTimeoutException;
 
@@ -10,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.NetworkUser;
+import de.tum.in.test.testutilities.CustomConditions.Option;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -29,8 +28,8 @@ class NetworkTest {
 
 	@TestTest
 	void test_connectRemoteNotAllowed() {
-		tests.assertThatEvents().haveExactly(1, event(test(connectRemoteNotAllowed),
-				finishedWithFailure(instanceOf(SecurityException.class), message(m -> m.contains("example.com")))));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(connectRemoteNotAllowed, SecurityException.class,
+				"network use not allowed (example.com:-1)", Option.MESSAGE_CONTAINS));
 	}
 
 	@TestTest
@@ -40,13 +39,13 @@ class NetworkTest {
 
 	@TestTest
 	void test_connectLocallyAllowed() {
-		tests.assertThatEvents().haveExactly(3, event(test(connectLocallyAllowed), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(3, finishedSuccessfully(connectLocallyAllowed));
 	}
 
 	@Disabled("Does currently not work on the CI system for some reason")
 	@TestTest
 	void test_serverAllowedAndAccept() {
-		tests.assertThatEvents().haveExactly(1, event(test(serverAllowedAndAccept), finishedSuccessfullyRep()));
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(serverAllowedAndAccept));
 	}
 
 	@TestTest
@@ -56,6 +55,7 @@ class NetworkTest {
 
 	@TestTest
 	void test_serverNotAllowed() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(serverNotAllowed, SecurityException.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(serverNotAllowed, SecurityException.class,
+				"network use not allowed (listen port 80)", Option.MESSAGE_CONTAINS));
 	}
 }
