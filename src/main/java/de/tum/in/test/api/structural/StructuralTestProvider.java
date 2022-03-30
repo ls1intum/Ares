@@ -150,7 +150,7 @@ public abstract class StructuralTestProvider {
 	 * @return a boolean as specified in the JSON or false if not present
 	 */
 	protected static boolean getExpectedJsonBooleanProperty(JSONObject element, String jsonPropertyKey) {
-		return element.has(jsonPropertyKey) ? element.getBoolean(jsonPropertyKey) : false;
+		return element.has(jsonPropertyKey) && element.getBoolean(jsonPropertyKey);
 	}
 
 	/**
