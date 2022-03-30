@@ -59,14 +59,14 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testGetMethod_noMethodName() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetMethod_noMethodName, AssertionFailedError.class,
-				"Could not find the method 'null' from the class SomeClass because the name of the method is null. Make sure to check the name of the method."));
+				"Could not find the method 'null' in the class SomeClass because the name of the method is null. Make sure to check the name of the method."));
 	}
 
 	@TestTest
 	void test_testGetMethod_noSuchMethod_noParameters() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetMethod_noSuchMethod_noParameters,
 				AssertionFailedError.class,
-				"Could not find the method 'someMethod' from the class SomeClass because the method does not exist. Make sure to implement this method properly."));
+				"Could not find the method 'someMethod' in the class SomeClass because the method does not exist. Make sure to implement this method properly."));
 	}
 
 	@TestTest

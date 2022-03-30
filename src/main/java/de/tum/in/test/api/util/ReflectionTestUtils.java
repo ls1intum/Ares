@@ -1,12 +1,13 @@
 package de.tum.in.test.api.util;
 
-import static java.util.Objects.requireNonNull;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.StringJoiner;
+import java.util.function.Supplier;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -33,14 +34,10 @@ import org.opentest4j.AssertionFailedError;
  * </ul>
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.0 (11.11.2020)
+ * @version 5.1 (2022-03-30)
  */
 @API(status = Status.STABLE)
 public final class ReflectionTestUtils {
-
-	private static final String COULD_NOT_FIND_THE_METHOD = "Could not find the method ";
-	private static final String BECAUSE = " because";
-	private static final String THE_CONSTRUCTOR_WITH = " the constructor with ";
 
 	private ReflectionTestUtils() {
 	}
@@ -54,17 +51,14 @@ public final class ReflectionTestUtils {
 	 */
 	public static Class<?> getClazz(String qualifiedClassName) {
 		// The simple class name is the last part of the qualified class name.
-		var qualifiedClassNameSegments = qualifiedClassName.split("\\.");
+		var qualifiedClassNameSegments = qualifiedClassName.split("\\."); //$NON-NLS-1$
 		var className = qualifiedClassNameSegments[qualifiedClassNameSegments.length - 1];
 		try {
 			return Class.forName(qualifiedClassName);
 		} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
-			throw failure("The class '" + className
-					+ "' was not found within the submission. Make sure to implement it properly.");
+			throw failure(formatLocalized("reflection_test_utils.class_not_found", className)); //$NON-NLS-1$
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
-			throw failure("The class '" + className
-					+ "' could not be initialized because an exception was thrown in a static initializer block. "
-					+ "Make sure to implement the static initialization without errors.");
+			throw failure(formatLocalized("reflection_test_utils.class_initialization", className)); //$NON-NLS-1$
 		}
 	}
 
@@ -104,16 +98,15 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Class<?> clazz, Object... constructorArgs) {
-		var failMessage = "Could not instantiate the class " + clazz.getSimpleName() + BECAUSE;
-		var constructorArgTypes = getParameterTypes(failMessage + " a fitting constructor could not be found because",
+		var constructorArgTypes = getParameterTypes(
+				() -> formatLocalized("reflection_test_utils.constructor_null_args", clazz.getSimpleName()), //$NON-NLS-1$
 				constructorArgs);
 		try {
 			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
 			return newInstance(constructor, constructorArgs);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			throw failure(failMessage + " the class does not have a constructor with the arguments: "
-					+ getParameterTypesAsString(constructorArgTypes)
-					+ ". Make sure to implement this constructor properly.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_not_found_args", clazz.getSimpleName(), //$NON-NLS-1$
+					getParameterTypesAsString(constructorArgTypes)));
 		}
 	}
 
@@ -129,30 +122,25 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
-		var failMessage = "Could not instantiate the class " + constructor.getDeclaringClass().getSimpleName()
-				+ BECAUSE;
 		try {
 			return constructor.newInstance(constructorArgs);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			throw failure(failMessage + " access to its constructor with the parameters: "
-					+ getParameterTypesAsString(constructor.getParameterTypes()) + " was denied."
-					+ " Make sure to check the modifiers of the constructor.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_access", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(),
+					getParameterTypesAsString(constructor.getParameterTypes())));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			throw failure(failMessage
-					+ " the actual constructor or none of the actual constructors of this class match the expected one."
-					+ " We expect, amongst others, one with "
-					+ getParameterTypesAsString(constructor.getParameterTypes()) + " parameters, which does not exist."
-					+ " Make sure to implement this constructor correctly.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_arguments", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(),
+					getParameterTypesAsString(constructor.getParameterTypes())));
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
-			throw failure(failMessage + " the class is abstract and should not have a constructor."
-					+ " Make sure to remove the constructor of the class.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_abstract_class", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName()));
 		} catch (@SuppressWarnings("unused") InvocationTargetException ite) {
-			throw failure(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
-					+ " parameters threw an exception and could not be initialized."
-					+ " Make sure to check the constructor implementation.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_internal_exception", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length));
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
-			throw failure(failMessage + THE_CONSTRUCTOR_WITH + constructorArgs.length
-					+ " parameters could not be initialized.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_class_init", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length));
 		}
 	}
 
@@ -167,18 +155,15 @@ public final class ReflectionTestUtils {
 	 * @return The instance of the attribute with the wanted value.
 	 */
 	public static Object valueForAttribute(Object object, String attributeName) {
-		requireNonNull(object,
-				"Could not retrieve the value of attribute '" + attributeName + "' because the object was null.");
-		var failMessage = "Could not retrieve the attribute '" + attributeName + "' from the class "
-				+ object.getClass().getSimpleName() + BECAUSE;
+		requireNonNull(object, () -> formatLocalized("reflection_test_utils.attribute_null", attributeName)); //$NON-NLS-1$
 		try {
 			return object.getClass().getDeclaredField(attributeName).get(object);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
-			throw failure(
-					failMessage + " the attribute does not exist. Make sure to implement the attribute correctly.");
+			throw failure(formatLocalized("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName()));
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			throw failure(failMessage
-					+ " access to the attribute was denied. Make sure to check the modifiers of the attribute.");
+			throw failure(formatLocalized("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName()));
 		}
 	}
 
@@ -193,7 +178,7 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
-		requireNonNull(object, COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' because the object was null.");
+		requireNonNull(object, () -> formatLocalized("reflection_test_utils.method_null_target", methodName)); //$NON-NLS-1$
 		return getMethod(object.getClass(), methodName, parameterTypes);
 	}
 
@@ -207,18 +192,14 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
-		var failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' with the parameters: "
-				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
-				+ BECAUSE;
-		if (parameterTypes == null || parameterTypes.length == 0)
-			failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "' from the class "
-					+ declaringClass.getSimpleName() + BECAUSE;
 		try {
 			return declaringClass.getMethod(methodName, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			throw failure(failMessage + " the method does not exist. Make sure to implement this method properly.");
+			throw failure(formatLocalized("reflection_test_utils.method_not_found", methodName, //$NON-NLS-1$
+					describeParameters(parameterTypes), declaringClass.getSimpleName()));
 		} catch (@SuppressWarnings("unused") NullPointerException npe) {
-			throw failure(failMessage + " the name of the method is null. Make sure to check the name of the method.");
+			throw failure(formatLocalized("reflection_test_utils.method_name_null", methodName, //$NON-NLS-1$
+					describeParameters(parameterTypes), declaringClass.getSimpleName()));
 		}
 	}
 
@@ -238,8 +219,8 @@ public final class ReflectionTestUtils {
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, String methodName, Object... params) {
-		var failMessage = COULD_NOT_FIND_THE_METHOD + "'" + methodName + "'" + BECAUSE;
-		var parameterTypes = getParameterTypes(failMessage, params);
+		var parameterTypes = getParameterTypes(
+				() -> formatLocalized("reflection_test_utils.method_null_args", methodName), params); //$NON-NLS-1$
 		var method = getMethod(object, methodName, parameterTypes);
 		return invokeMethod(object, method, params);
 	}
@@ -256,14 +237,13 @@ public final class ReflectionTestUtils {
 	 */
 	public static Object invokeMethod(Object object, Method method, Object... params) {
 		// NOTE: object can be null, if method is static
-		var failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
-				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
 			return invokeMethodRethrowing(object, method, params);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			throw failure(failMessage + " of an exception within the method: " + e);
+			throw failure(formatLocalized("reflection_test_utils.method_internal_exception", method.getName(), //$NON-NLS-1$
+					method.getDeclaringClass().getSimpleName(), e));
 		}
 	}
 
@@ -280,22 +260,20 @@ public final class ReflectionTestUtils {
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		// NOTE: object can be null, if method is static
-		var failMessage = "Could not invoke the method '" + method.getName() + "' in the class "
-				+ method.getDeclaringClass().getSimpleName() + BECAUSE;
 		try {
 			return method.invoke(object, params);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			throw failure(
-					failMessage + " access to the method was denied. Make sure to check the modifiers of the method.");
+			throw failure(formatLocalized("reflection_test_utils.method_access", method.getName(), //$NON-NLS-1$
+					method.getDeclaringClass().getSimpleName()));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
-			throw failure(failMessage
-					+ " the parameters are not implemented right. Make sure to check the parameters of the method.");
+			throw failure(formatLocalized("reflection_test_utils.method_parameters", method.getName(), //$NON-NLS-1$
+					method.getDeclaringClass().getSimpleName()));
 		} catch (@SuppressWarnings("unused") NullPointerException e) {
-			throw failure(failMessage + " the object was null and the method is an instance method. "
-					+ "Make sure to check the static modifier of the method.");
+			throw failure(formatLocalized("reflection_test_utils.method_null_target_instance", method.getName(), //$NON-NLS-1$
+					method.getDeclaringClass().getSimpleName()));
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError e) {
-			throw failure(failMessage + " the static initialization provoked by this method failed. "
-					+ "Make sure to check the initialization triggered by this method.");
+			throw failure(formatLocalized("reflection_test_utils.method_class_init", method.getName(), //$NON-NLS-1$
+					method.getDeclaringClass().getSimpleName()));
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
@@ -311,31 +289,30 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
-		var failMessage = "Could not find the constructor with the parameters: "
-				+ getParameterTypesAsString(parameterTypes) + " in the class " + declaringClass.getSimpleName()
-				+ BECAUSE;
-		if (parameterTypes == null || parameterTypes.length == 0)
-			failMessage = "Could not find the constructor from the " + declaringClass.getSimpleName() + BECAUSE;
 		try {
 			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			throw failure(
-					failMessage + " the constructor does not exist. Make sure to implement this constructor properly.");
+			throw failure(formatLocalized("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
+					describeParameters(parameterTypes), declaringClass.getSimpleName()));
 		}
+	}
+
+	private static String describeParameters(Class<?>... parameterTypes) {
+		if (parameterTypes.length == 0)
+			return localized("reflection_test_utils.no_parameters"); //$NON-NLS-1$
+		return formatLocalized("reflection_test_utils.with_parameters", getParameterTypesAsString(parameterTypes)); //$NON-NLS-1$
 	}
 
 	/**
 	 * Retrieves the parameters types of a given collection of parameter instances.
 	 *
-	 * @param failMessage The beginning of message of the failure message if one of
-	 *                    params is null
+	 * @param failMessage The message of the failure if one of params is null
 	 * @param params      The instances of the parameters.
 	 * @return The parameter types of the instances as an array.
 	 */
-	private static Class<?>[] getParameterTypes(String failMessage, Object... params) {
-		return Arrays.stream(params)
-				.map(it -> requireNonNull(it, failMessage + " one of the supplied arguments was null."))
-				.map(Object::getClass).toArray(Class<?>[]::new);
+	private static Class<?>[] getParameterTypes(Supplier<String> messageSuppier, Object... params) {
+		return Arrays.stream(params).map(it -> requireNonNull(it, messageSuppier)).map(Object::getClass)
+				.toArray(Class<?>[]::new);
 	}
 
 	/**
@@ -345,14 +322,30 @@ public final class ReflectionTestUtils {
 	 * @return The string representation of the parameter types.
 	 */
 	private static String getParameterTypesAsString(Class<?>... parameterTypes) {
-		var joiner = new StringJoiner(", ", "[ ", " ]");
-		joiner.setEmptyValue("none");
-		Arrays.stream(parameterTypes).map(type -> requireNonNull(type, "One of the supplied types was null."))
+		var joiner = new StringJoiner(", ", "[ ", " ]"); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		joiner.setEmptyValue("none"); //$NON-NLS-1$
+		Arrays.stream(parameterTypes).map(type -> requireNonNull(type, () -> "One of the supplied types was null.")) //$NON-NLS-1$
 				.map(Class::getSimpleName).forEach(joiner::add);
 		return joiner.toString();
 	}
 
-	private static AssertionError failure(String failureMessage) {
+	/**
+	 * Throws an {@link AssertionFailedError} if the given object is null using the
+	 * provided message supplier.
+	 *
+	 * @param <T>            The type of the object that should be checked.
+	 * @param object         The object to check for null.
+	 * @param messageSuppier The message supplier to generate failure messages
+	 *                       lazily
+	 * @return the same, unchanged object in case it was not null
+	 */
+	private static <T> T requireNonNull(T object, Supplier<String> messageSuppier) {
+		if (object == null)
+			throw failure(messageSuppier.get());
+		return object;
+	}
+
+	private static AssertionFailedError failure(String failureMessage) {
 		return new AssertionFailedError(failureMessage);
 	}
 }
