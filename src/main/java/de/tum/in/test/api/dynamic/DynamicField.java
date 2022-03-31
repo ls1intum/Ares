@@ -1,5 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Field;
@@ -43,7 +44,7 @@ public class DynamicField<T> implements Checkable {
 				field = of.get();
 				field.trySetAccessible();
 			} else {
-				fail("Feld " + name + " konnte nicht gefunden werden");
+				fail(formatLocalized("dynamics.field.not_found", name)); //$NON-NLS-1$
 			}
 		}
 		return field;
@@ -66,13 +67,11 @@ public class DynamicField<T> implements Checkable {
 		try {
 			return type.cast(toField().get(o));
 		} catch (IllegalAccessException e) {
-			fail("Feld " + name + " der Klasse " + owner
-					+ " konnte nicht aufgerufen werden, Zugriff auf das Feld nicht möglich", e);
+			fail(formatLocalized("dynamics.field.access", name, owner), e); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail("Feld " + name + " von Klasse " + owner
-					+ " wurde nicht auf einem passenden Objekt aufgerufen (-> Testfehler)", e);
+			fail(formatLocalized("dynamics.field.target", name, owner), e); //$NON-NLS-1$
 		} catch (ClassCastException e) {
-			fail("Feld " + name + " der Klasse " + owner + " kann nicht nach " + type.getName() + "gecastet werden", e);
+			fail(formatLocalized("dynamics.field.cast", name, owner, type.getName()), e); //$NON-NLS-1$
 		}
 		return null; // unreachable
 	}
@@ -81,7 +80,7 @@ public class DynamicField<T> implements Checkable {
 		try {
 			return getOf(null);
 		} catch (NullPointerException e) {
-			fail("Feld " + name + " der Klasse " + owner + " ist nicht statisch", e);
+			fail(formatLocalized("dynamics.field.static", name, owner), e); //$NON-NLS-1$
 		}
 		return null; // unreachable
 	}
@@ -105,14 +104,13 @@ public class DynamicField<T> implements Checkable {
 
 	@Override
 	public String toString() {
-		return owner.toString() + "." + name;
+		return owner.toString() + "." + name; //$NON-NLS-1$
 	}
 
 	@Override
 	public void check(Check... checks) {
 		int modifiers = toField().getModifiers();
-		String desc = "Feld " + this;
 		for (Check check : checks)
-			check.checkModifiers(modifiers, desc);
+			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.field.name", this)); //$NON-NLS-1$
 	}
 }

@@ -1,6 +1,7 @@
 package de.tum.in.test.api.dynamic;
 
 import static de.tum.in.test.api.dynamic.DynamicMethod.*;
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Constructor;
@@ -30,8 +31,7 @@ public class DynamicConstructor<T> implements Checkable {
 				constructor = owner.toClass().getDeclaredConstructor(DynamicClass.resolveAll(parameters));
 				constructor.trySetAccessible();
 			} catch (NoSuchMethodException e) {
-				fail("Kein Konstruktor für " + owner + " mit Parametern " + descParams(this.parameters) + " gefunden.",
-						e);
+				fail(formatLocalized("dynamics.constructor.not_found", owner, descParams(this.parameters)), e); //$NON-NLS-1$
 			}
 		}
 		return constructor;
@@ -54,12 +54,11 @@ public class DynamicConstructor<T> implements Checkable {
 		try {
 			return toConstructor().newInstance(params);
 		} catch (InstantiationException e) {
-			fail("Objekt der Klasse " + owner + " konnte nicht erzeugt werden, ist die Klasse abstract?", e);
+			fail(formatLocalized("dynamics.constructor.abstract", owner), e); //$NON-NLS-1$
 		} catch (IllegalAccessException e) {
-			fail("Objekt der Klasse " + owner + " konnte nicht erzeugt werden, Zugriff auf Konstruktor nicht möglich",
-					e);
+			fail(formatLocalized("dynamics.constructor.access", this), e); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail("Konstruktor " + this + " konnte Parametertypen " + descArgs(params) + " nicht entgegennehmen", e);
+			fail(formatLocalized("dynamics.constructor.arguments", this, descArgs(params)), e); //$NON-NLS-1$
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof RuntimeException)
 				throw (RuntimeException) e.getTargetException();
@@ -77,8 +76,7 @@ public class DynamicConstructor<T> implements Checkable {
 	public void check(Check... checks) {
 		toConstructor();
 		int modifiers = toConstructor().getModifiers();
-		String desc = "Konstruktor " + this;
 		for (Check check : checks)
-			check.checkModifiers(modifiers, desc);
+			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.constructor.name", this)); //$NON-NLS-1$
 	}
 }

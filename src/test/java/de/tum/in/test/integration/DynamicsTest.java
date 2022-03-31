@@ -54,8 +54,8 @@ class DynamicsTest {
 
 	@TestTest
 	void test_class_notFound() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(class_notFound, AssertionFailedError.class,
-				"Klasse/Interface DoesNotExist nicht gefunden"));
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(class_notFound, AssertionFailedError.class, "Klasse DoesNotExist nicht gefunden."));
 	}
 
 	@TestTest
@@ -73,13 +73,13 @@ class DynamicsTest {
 	@TestTest
 	void test_class_searchPublicOrProtectedMethods() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(class_searchPublicOrProtectedMethods,
-				AssertionFailedError.class, "Methode doSomething(java.lang.String) ist public, sollte sie aber nicht"));
+				AssertionFailedError.class, "Methode doSomething(java.lang.String) darf nicht public sein."));
 	}
 
 	@TestTest
 	void test_constructor_abstract() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(constructor_abstract, AssertionFailedError.class,
-				"Objekt der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass konnte nicht erzeugt werden, ist die Klasse abstract?"));
+				"Objekt der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass konnte nicht erzeugt werden, ist die Klasse abstrakt?"));
 	}
 
 	@TestTest
@@ -90,7 +90,7 @@ class DynamicsTest {
 	@TestTest
 	void test_constructor_illegalArguments() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(constructor_illegalArguments, AssertionFailedError.class,
-				"Konstruktor de.tum.in.test.integration.testuser.subject.structural.SomeClass(java.lang.Integer) konnte Parametertypen (java.lang.String) nicht entgegennehmen"));
+				"Konstruktor de.tum.in.test.integration.testuser.subject.structural.SomeClass(java.lang.Integer) konnte Argumente mit den Typen (java.lang.String) nicht entgegennehmen."));
 	}
 
 	@TestTest
@@ -127,20 +127,20 @@ class DynamicsTest {
 
 	@TestTest
 	void test_field_noSuchField() {
-		tests.assertThatEvents().haveExactly(1,
-				testFailedWith(field_noSuchField, AssertionFailedError.class, "Feld [a] konnte nicht gefunden werden"));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_noSuchField, AssertionFailedError.class,
+				"Attribut [a] konnte nicht gefunden werden."));
 	}
 
 	@TestTest
 	void test_field_wrongType() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongType, AssertionFailedError.class,
-				"Feld [some_constant] konnte nicht gefunden werden"));
+				"Attribut [some_constant] konnte nicht gefunden werden."));
 	}
 
 	@TestTest
 	void test_method_badCast() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(method_badCast, AssertionFailedError.class,
-				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.doSomethingElse(int) gibt nicht double zurück"));
+				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.doSomethingElse(int) gibt nicht double zurück."));
 	}
 
 	@TestTest
@@ -151,7 +151,7 @@ class DynamicsTest {
 	@TestTest
 	void test_method_illegalArguments() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(method_illegalArguments, AssertionFailedError.class,
-				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.doSomethingElse(int) konnte Parametertypen (java.lang.String) für Objekt der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass nicht entgegennehmen"));
+				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.doSomethingElse(int) konnte Argumente mit den Typen (java.lang.String) für Objekt vom Typ de.tum.in.test.integration.testuser.subject.structural.SomeClass nicht entgegennehmen."));
 	}
 
 	@TestTest
@@ -168,13 +168,13 @@ class DynamicsTest {
 	@TestTest
 	void test_method_notStatic() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(method_notStatic, AssertionFailedError.class,
-				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.throwException() ist nicht statisch"));
+				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.throwException() ist nicht statisch."));
 	}
 
 	@TestTest
 	void test_method_null() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(method_null, AssertionFailedError.class,
-				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.throwException() konnte nicht aufgerufen werden, das Objekt ist null"));
+				"Methode de.tum.in.test.integration.testuser.subject.structural.SomeClass.throwException() konnte nicht aufgerufen werden, das Objekt ist null."));
 	}
 
 	@TestTest

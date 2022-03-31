@@ -1,5 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apiguardian.api.API;
@@ -17,6 +19,9 @@ import de.tum.in.test.api.util.UnexpectedExceptionError;
 
 @API(status = Status.MAINTAINED)
 public class DynamicMethod<T> implements Checkable {
+
+	static final Collector<CharSequence, ?, String> JOIN_PARAMS = Collectors.joining(", ", "(", ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
 	private final DynamicClass<?> owner;
 	private final String name;
 	private final DynamicClass<?>[] parameters;
@@ -42,9 +47,9 @@ public class DynamicMethod<T> implements Checkable {
 				m = owner.toClass().getDeclaredMethod(name, DynamicClass.resolveAll(parameters));
 				m.trySetAccessible();
 				if (!returnType.toClass().isAssignableFrom(m.getReturnType()))
-					fail("Methode " + this + " gibt nicht " + returnType + " zurück");
+					fail(formatLocalized("dynamics.method.return", this, returnType)); //$NON-NLS-1$
 			} catch (NoSuchMethodException e) {
-				fail("Keine Methode " + returnType + " " + this + " gefunden.", e);
+				fail(formatLocalized("dynamics.method.not_found", returnType, this), e); //$NON-NLS-1$
 			}
 		}
 		return m;
@@ -69,31 +74,31 @@ public class DynamicMethod<T> implements Checkable {
 		try {
 			return returnType.cast(toMethod().invoke(o, params));
 		} catch (NullPointerException e) {
-			fail("Methode " + this + " konnte nicht aufgerufen werden, das Objekt ist null", e);
+			fail(formatLocalized("dynamics.method.null", this), e); //$NON-NLS-1$
 		} catch (IllegalAccessException e) {
-			fail("Methode " + this + " konnte nicht aufgerufen werden, Zugriff auf die Methode nicht möglich", e);
+			fail(formatLocalized("dynamics.method.access", this), e); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail("Methode " + this + " konnte Parametertypen " + descArgs(params) + " für Objekt der Klasse "
-					+ o.getClass().getCanonicalName() + " nicht entgegennehmen", e);
+			fail(formatLocalized("dynamics.method.arguments", this, descArgs(params), o.getClass().getCanonicalName()), //$NON-NLS-1$
+					e);
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof RuntimeException)
 				throw (RuntimeException) e.getTargetException();
 			throw UnexpectedExceptionError.wrap(e.getTargetException());
 		} catch (ClassCastException e) {
-			fail("Rückgabe von " + this + " kann nicht nach " + returnType + "gecastet werden", e);
+			fail(formatLocalized("dynamics.method.cast", this, returnType), e); //$NON-NLS-1$
 		}
 		return null; // unreachable
 	}
 
 	public T invokeStatic(Object... params) {
 		if (!Modifier.isStatic(toMethod().getModifiers()))
-			fail("Methode " + this + " ist nicht statisch");
+			fail(formatLocalized("dynamics.method.static", this)); //$NON-NLS-1$
 		return invokeOn(null, params);
 	}
 
 	@Override
 	public String toString() {
-		return owner.toString() + "." + signature();
+		return owner.toString() + "." + signature(); //$NON-NLS-1$
 	}
 
 	public String signature() {
@@ -121,19 +126,17 @@ public class DynamicMethod<T> implements Checkable {
 	}
 
 	public static String descArgs(Object... args) {
-		return Arrays.stream(args).map(x -> x == null ? null : x.getClass().getCanonicalName())
-				.collect(Collectors.joining(", ", "(", ")"));
+		return Arrays.stream(args).map(x -> x == null ? null : x.getClass().getCanonicalName()).collect(JOIN_PARAMS);
 	}
 
 	public static String descParams(DynamicClass<?>... params) {
-		return Arrays.stream(params).map(DynamicClass::getName).collect(Collectors.joining(", ", "(", ")"));
+		return Arrays.stream(params).map(DynamicClass::getName).collect(JOIN_PARAMS);
 	}
 
 	@Override
 	public void check(Check... checks) {
 		int modifiers = toMethod().getModifiers();
-		String desc = "Methode " + this;
 		for (Check check : checks)
-			check.checkModifiers(modifiers, desc);
+			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.method.name", this)); //$NON-NLS-1$
 	}
 }

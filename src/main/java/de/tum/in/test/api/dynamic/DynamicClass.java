@@ -1,5 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
+import static de.tum.in.test.api.localization.Messages.formatLocalized;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Field;
@@ -44,7 +45,7 @@ public class DynamicClass<T> implements Checkable {
 			try {
 				clazz = (Class<T>) Class.forName(name);
 			} catch (ClassNotFoundException e) {
-				fail("Klasse/Interface " + name + " nicht gefunden", e);
+				fail(formatLocalized("dynamics.class.not_found", name), e); //$NON-NLS-1$
 			}
 		}
 		return clazz;
@@ -65,7 +66,7 @@ public class DynamicClass<T> implements Checkable {
 
 	public boolean isClass(Object classOrStringOrDynamicClass) {
 		if (classOrStringOrDynamicClass == null)
-			throw new NullPointerException("Internal Test Error, isClass supplied with null");
+			throw new NullPointerException("Internal Test Error, isClass supplied with null"); //$NON-NLS-1$
 		if (classOrStringOrDynamicClass instanceof String)
 			return name.equals(classOrStringOrDynamicClass);
 		if (classOrStringOrDynamicClass instanceof Class<?>) {
@@ -76,7 +77,7 @@ public class DynamicClass<T> implements Checkable {
 		if (classOrStringOrDynamicClass instanceof DynamicClass)
 			return name.equals(((DynamicClass<?>) classOrStringOrDynamicClass).name);
 		throw new IllegalArgumentException(
-				"Internal Test Error, isClass supplied with " + classOrStringOrDynamicClass.getClass());
+				"Internal Test Error, isClass supplied with " + classOrStringOrDynamicClass.getClass()); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unchecked")
@@ -86,7 +87,7 @@ public class DynamicClass<T> implements Checkable {
 			return null;
 		if (rClass.isPrimitive()) {
 			if (obj == null)
-				throw new NullPointerException("null kann nicht nach " + getName() + " gecastet werden.");
+				throw new NullPointerException(formatLocalized("dynamics.class.null", getName())); //$NON-NLS-1$
 			Class<?> objClass = obj.getClass();
 			Class<?> wrapper = primitiveWrappers.get(rClass);
 			if (objClass.equals(wrapper))
@@ -116,12 +117,12 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public static <T> DynamicClass<T> toDynamic(Class<T> clazz) {
-		return new DynamicClass<>(Objects.requireNonNull(clazz, "class must not be null"));
+		return new DynamicClass<>(Objects.requireNonNull(clazz, "class must not be null")); //$NON-NLS-1$
 	}
 
 	public static DynamicClass<?> toDynamic(Object classOrStringOrDynamicClass) { // NOSONAR
 		if (classOrStringOrDynamicClass == null)
-			throw new NullPointerException("Internal Test Error, toDynamic supplied with null");
+			throw new NullPointerException("Internal Test Error, toDynamic supplied with null"); //$NON-NLS-1$
 		if (classOrStringOrDynamicClass instanceof String)
 			return new DynamicClass<>((String) classOrStringOrDynamicClass);
 		if (classOrStringOrDynamicClass instanceof Class<?>)
@@ -129,7 +130,7 @@ public class DynamicClass<T> implements Checkable {
 		if (classOrStringOrDynamicClass instanceof DynamicClass)
 			return (DynamicClass<?>) classOrStringOrDynamicClass;
 		throw new IllegalArgumentException(
-				"Internal Test Error, toDynamic supplied with " + classOrStringOrDynamicClass.getClass());
+				"Internal Test Error, toDynamic supplied with " + classOrStringOrDynamicClass.getClass()); //$NON-NLS-1$
 	}
 
 	public static DynamicClass<?>[] toDynamic(Object[] classesOrStringsOrDynamicClasses) { // NOSONAR
@@ -144,7 +145,7 @@ public class DynamicClass<T> implements Checkable {
 		for (var i = 0; i < classes.length; i++) {
 			final int x = i;
 			classes[x] = Objects.requireNonNull(dynamicClasses[i].toClass(),
-					() -> dynamicClasses[x] + " could not be resolved");
+					() -> dynamicClasses[x] + " could not be resolved"); //$NON-NLS-1$
 		}
 		return classes;
 	}
@@ -158,9 +159,8 @@ public class DynamicClass<T> implements Checkable {
 	public void check(Check... checks) {
 		toClass();
 		int modifiers = toClass().getModifiers();
-		String desc = "Klasse/Interface " + this;
 		for (Check check : checks)
-			check.checkModifiers(modifiers, desc);
+			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.class.name", this)); //$NON-NLS-1$
 	}
 
 	public int checkForPublicOrProtectedMethods(DynamicMethod<?>... exceptions) {
@@ -176,14 +176,14 @@ public class DynamicClass<T> implements Checkable {
 				continue;
 			if (Modifier.isPublic(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if (!"main(java.lang.String[])".endsWith(sig) && !publicMethods.contains(sig)
+				if (!"main(java.lang.String[])".endsWith(sig) && !publicMethods.contains(sig) //$NON-NLS-1$
 						&& !objectMethods.contains(sig))
-					fail("Methode " + sig + " ist public, sollte sie aber nicht");
+					fail(formatLocalized("dynamics.class.method_public", sig)); //$NON-NLS-1$
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
 				if (!objectMethods.contains(sig))
-					fail("Methode " + sig + " ist protected, sollte sie aber nicht");
+					fail(formatLocalized("dynamics.class.method_protected", sig)); //$NON-NLS-1$
 			}
 			checked++;
 		}
@@ -196,7 +196,7 @@ public class DynamicClass<T> implements Checkable {
 			if (f.isSynthetic())
 				continue;
 			if (!Modifier.isPrivate(f.getModifiers()))
-				fail("Attribut " + f + " muss private sein.");
+				fail(formatLocalized("dynamics.class.field_private", f)); //$NON-NLS-1$
 			checked++;
 		}
 		return checked;
@@ -208,7 +208,7 @@ public class DynamicClass<T> implements Checkable {
 			if (f.isSynthetic())
 				continue;
 			if (!Modifier.isFinal(f.getModifiers()))
-				fail("Attribut " + f + " muss final sein.");
+				fail(formatLocalized("dynamics.class.field_final", f)); //$NON-NLS-1$
 			checked++;
 		}
 		return checked;
