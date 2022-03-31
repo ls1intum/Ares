@@ -1,7 +1,7 @@
 package de.tum.in.test.integration.testuser;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +46,18 @@ public class DynamicsUser {
 	private static final DynamicMethod<Void> SomeClass_throwException = SomeClass.method(void.class, "throwException");
 
 	@Test
+	void checks_fail() {
+		assertAll( //
+				() -> SomeClass.check(Check.NOT_PUBLIC), //
+				() -> SomeClass.check(Check.FINAL), //
+				() -> SomeClass.check(Check.STATIC), //
+				() -> SomeClass_someAttribute.check(Check.PUBLIC), //
+				() -> SomeClass_SOME_CONSTANT.check(Check.NOT_FINAL), //
+				() -> SomeClass_SOME_CONSTANT.check(Check.NOT_STATIC) //
+		);
+	}
+
+	@Test
 	void class_check() {
 		assertThat(SomeClass.exists()).isTrue();
 		SomeClass.check(Check.PUBLIC, Check.NOT_FINAL, Check.NOT_STATIC);
@@ -87,7 +99,7 @@ public class DynamicsUser {
 
 	@Test
 	void class_searchPublicOrProtectedMethods() {
-		int checked = DynamicClass.toDynamic(SUBJECT_PACKAGE + ".SomeAbstractClass").checkForPublicOrProtectedMethods();
+		int checked = SomeAbstractClass.checkForPublicOrProtectedMethods();
 		assertThat(checked).isOne();
 
 		SomeClass.checkForPublicOrProtectedMethods(SomeClass_getSomeAttribute, SomeClass_doSomethingElse,

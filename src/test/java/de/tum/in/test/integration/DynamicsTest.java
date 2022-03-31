@@ -4,8 +4,10 @@ import static de.tum.in.test.testutilities.CustomConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
+import org.opentest4j.MultipleFailuresError;
 
 import de.tum.in.test.integration.testuser.DynamicsUser;
+import de.tum.in.test.testutilities.CustomConditions.Option;
 import de.tum.in.test.testutilities.TestTest;
 import de.tum.in.test.testutilities.UserBased;
 import de.tum.in.test.testutilities.UserTestResults;
@@ -16,6 +18,7 @@ class DynamicsTest {
 	@UserTestResults
 	private static Events tests;
 
+	private final String checks_fail = "checks_fail";
 	private final String class_check = "class_check";
 	private final String class_isClass = "class_isClass";
 	private final String class_notFound = "class_notFound";
@@ -41,6 +44,19 @@ class DynamicsTest {
 	private final String method_notStatic = "method_notStatic";
 	private final String method_null = "method_null";
 	private final String method_throwing = "method_throwing";
+
+	@TestTest
+	void test_checks_fail() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(checks_fail, MultipleFailuresError.class, //
+				"Multiple Failures (6 failures)\n" //
+						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist public.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht final.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[someattribute] ist nicht public.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist final.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist statisch." //
+				, Option.MESSAGE_NORMALIZE_NEWLINE));
+	}
 
 	@TestTest
 	void test_class_check() {
