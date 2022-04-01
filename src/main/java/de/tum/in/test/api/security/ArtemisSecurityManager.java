@@ -1,6 +1,6 @@
 package de.tum.in.test.api.security;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.awt.AWTPermission;
 import java.io.FilePermission;
@@ -173,7 +173,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(formatLocalized("security.error_network_accept", host, port)); //$NON-NLS-1$
+			throw new SecurityException(localized("security.error_network_accept", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -186,7 +186,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(formatLocalized("security.error_network_connect", host, port)); //$NON-NLS-1$
+			throw new SecurityException(localized("security.error_network_connect", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -199,7 +199,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(host, port))
 				return;
-			throw new SecurityException(formatLocalized("security.error_network_connect_with_context", host, port)); //$NON-NLS-1$
+			throw new SecurityException(localized("security.error_network_connect_with_context", host, port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -212,7 +212,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				return;
 			if (isConnectionAllowed(LOCALHOST, port))
 				return;
-			throw new SecurityException(formatLocalized("security.error_network_listen", port)); //$NON-NLS-1$
+			throw new SecurityException(localized("security.error_network_listen", port)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -309,7 +309,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			LOG.info("PKG-DEF: {}", pkg); //$NON-NLS-1$
 			super.checkPackageDefinition(pkg);
 			if (SecurityConstants.STACK_WHITELIST.stream().anyMatch(pkg::startsWith))
-				throw new SecurityException(formatLocalized("security.error_package_definition", pkg)); //$NON-NLS-1$
+				throw new SecurityException(localized("security.error_package_definition", pkg)); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
@@ -402,7 +402,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			 */
 			checkForNonWhitelistedStackFrames(() -> {
 				LOG.warn(message);
-				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+				return localized("security.error_path_access", path); //$NON-NLS-1$
 			});
 		} else {
 			/*
@@ -412,7 +412,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			 */
 			checkForNonWhitelistedStackFrames(() -> {
 				LOG.warn(message);
-				return formatLocalized("security.error_path_access", path); //$NON-NLS-1$
+				return localized("security.error_path_access", path); //$NON-NLS-1$
 			}, IGNORE_ACCESS_PRIVILEGED);
 		}
 	}
@@ -450,7 +450,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 				checkForNonWhitelistedStackFrames(() -> {
 					LOG.warn("BAD PACKAGE ACCESS: {} (BL:{}, WL:{})", pkg, isPackageBlacklisted(pkg), //$NON-NLS-1$
 							isPackageWhitelisted(pkg));
-					return formatLocalized("security.error_disallowed_package", pkg); //$NON-NLS-1$
+					return localized("security.error_disallowed_package", pkg); //$NON-NLS-1$
 				}, IGNORE_ACCESS_PRIVILEGED);
 			}
 		} finally {
@@ -489,7 +489,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (!nonWhitelisted.isEmpty()) {
 			LOG.warn("NWSFs ==> {}", nonWhitelisted); //$NON-NLS-1$
 			var first = nonWhitelisted.get(0);
-			throw new SecurityException(formatLocalized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
+			throw new SecurityException(localized("security.stackframe_add_info", message.get(), //$NON-NLS-1$
 					first.getLineNumber(), first.getFileName()));
 		}
 	}
@@ -624,7 +624,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 			return new Thread[0];
 		// try forceful shutdown
 		var securityException = new SecurityException(
-				formatLocalized("security.error_threads_not_stoppable", Arrays.toString(threads))); //$NON-NLS-1$
+				localized("security.error_threads_not_stoppable", Arrays.toString(threads))); //$NON-NLS-1$
 		int alive = threads.length;
 		TRIES: for (var i = 0; i < 50 && alive > 0; i++) {
 			alive = 0;
@@ -710,7 +710,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		var current = testThreadGroup.activeCount();
 		var max = configuration.allowedThreadCount().getAsInt();
 		if (max < current)
-			checkForNonWhitelistedStackFrames(() -> formatLocalized("security.error_thread_maxExceeded", current, max)); //$NON-NLS-1$
+			checkForNonWhitelistedStackFrames(() -> localized("security.error_thread_maxExceeded", current, max)); //$NON-NLS-1$
 	}
 
 	/**
@@ -816,7 +816,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 		if (activeThreads.length > 0)
 			throw new IllegalStateException(
-					formatLocalized("security.error_threads_still_active", Arrays.toString(activeThreads))); //$NON-NLS-1$
+					localized("security.error_threads_still_active", Arrays.toString(activeThreads))); //$NON-NLS-1$
 	}
 
 	public static synchronized void configure(String accessToken, AresSecurityConfiguration configuration) {

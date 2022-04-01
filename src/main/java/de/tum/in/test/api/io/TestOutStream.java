@@ -1,6 +1,6 @@
 package de.tum.in.test.api.io;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,7 +68,7 @@ final class TestOutStream extends OutputStream {
 			result = decoder.decode(bytes);
 		} catch (CharacterCodingException e) {
 			var problemString = new String(bytes.array(), decoder.charset());
-			throw new IllegalArgumentException(formatLocalized("output_tester.output_is_invalid_utf8", problemString), //$NON-NLS-1$
+			throw new IllegalArgumentException(localized("output_tester.output_is_invalid_utf8", problemString), //$NON-NLS-1$
 					e);
 		}
 		outputAcceptor.acceptOutput(result);
@@ -92,6 +92,6 @@ final class TestOutStream extends OutputStream {
 			throw new IOException(localized("output_tester.output_closed")); //$NON-NLS-1$
 		charCount += newChars;
 		if (charCount > maxChars)
-			throw new SecurityException(formatLocalized("output_tester.output_maxExceeded", charCount)); //$NON-NLS-1$
+			throw new SecurityException(localized("output_tester.output_maxExceeded", charCount)); //$NON-NLS-1$
 	}
 }

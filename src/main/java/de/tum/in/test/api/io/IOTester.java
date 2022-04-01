@@ -1,6 +1,6 @@
 package de.tum.in.test.api.io;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -222,7 +222,7 @@ public final class IOTester {
 	private static void checkEncoding() {
 		Charset cs = Charset.defaultCharset();
 		if (!"UTF-8".equals(cs.name())) { //$NON-NLS-1$
-			String message = formatLocalized("io_tester.default_not_utf8", cs); //$NON-NLS-1$
+			String message = localized("io_tester.default_not_utf8", cs); //$NON-NLS-1$
 			System.err.println(message); // this is more noticeable in maven build log
 			throw new IllegalStateException(message);
 		}

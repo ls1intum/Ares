@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -99,18 +99,18 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			JSONObject expectedClassPropertiesJSON) {
 		if (checkBooleanOf(expectedClassPropertiesJSON, "isAbstract") //$NON-NLS-1$
 				&& !Modifier.isAbstract(observedClass.getModifiers()))
-			throw failure(formatLocalized("structural.class.abstract", expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.class.abstract", expectedClassName); //$NON-NLS-1$
 		if (checkBooleanOf(expectedClassPropertiesJSON, "isEnum") && !observedClass.isEnum()) //$NON-NLS-1$
-			throw failure(formatLocalized("structural.class.enum", expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.class.enum", expectedClassName); //$NON-NLS-1$
 		if (checkBooleanOf(expectedClassPropertiesJSON, "isInterface") //$NON-NLS-1$
 				&& !Modifier.isInterface(observedClass.getModifiers()))
-			throw failure(formatLocalized("structural.class.interface", expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.class.interface", expectedClassName); //$NON-NLS-1$
 		if (expectedClassPropertiesJSON.has(JSON_PROPERTY_MODIFIERS)) {
 			var expectedModifiers = getExpectedJsonProperty(expectedClassPropertiesJSON, JSON_PROPERTY_MODIFIERS);
 			var modifiersAreCorrect = checkModifiers(Modifier.toString(observedClass.getModifiers()).split(" "), //$NON-NLS-1$
 					expectedModifiers);
 			if (!modifiersAreCorrect)
-				throw failure(formatLocalized("structural.class.modifiers", expectedClassName)); //$NON-NLS-1$
+				throw localizedFailure("structural.class.modifiers", expectedClassName); //$NON-NLS-1$
 		}
 	}
 
@@ -127,9 +127,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			var expectedSuperClassName = expectedClassPropertiesJSON.getString(JSON_PROPERTY_SUPERCLASS);
 			if (!checkExpectedType(observedClass.getSuperclass(), observedClass.getGenericSuperclass(),
 					expectedSuperClassName)) {
-				var failMessage = formatLocalized("structural.class.extends", expectedClassName, //$NON-NLS-1$
-						expectedSuperClassName);
-				throw failure(failMessage);
+				throw localizedFailure("structural.class.extends", expectedClassName, expectedSuperClassName); //$NON-NLS-1$
 			}
 		}
 	}
@@ -152,7 +150,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 					}
 				}
 				if (!implementsInterface)
-					throw failure(formatLocalized("structural.class.implements", expectedClassName, expectedInterface)); //$NON-NLS-1$
+					throw localizedFailure("structural.class.implements", expectedClassName, expectedInterface); //$NON-NLS-1$
 			}
 		}
 	}
@@ -164,7 +162,7 @@ public abstract class ClassTestProvider extends StructuralTestProvider {
 			var observedAnnotations = observedClass.getAnnotations();
 			var annotationsAreRight = checkAnnotations(observedAnnotations, expectedAnnotations);
 			if (!annotationsAreRight)
-				throw failure(formatLocalized("structural.class.annotations", expectedClassName)); //$NON-NLS-1$
+				throw localizedFailure("structural.class.annotations", expectedClassName); //$NON-NLS-1$
 		}
 	}
 }

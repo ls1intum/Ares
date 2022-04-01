@@ -44,7 +44,7 @@ public class LocaleUser {
 
 	@Test
 	void testUnknownFormatted() {
-		assertThat(Messages.formatLocalized("_unknown_%s_", "x")).isEqualTo("!_unknown_%s_!");
+		assertThat(Messages.localized("_unknown_%s_", "x")).isEqualTo("!_unknown_%s_!");
 	}
 
 	@Test

@@ -1,7 +1,7 @@
 package de.tum.in.test.api.internal;
 
 import static de.tum.in.test.api.internal.BlacklistedInvoker.invokeChecked;
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public final class TimeoutUtils {
 	}
 
 	private static AssertionFailedError generateTimeoutFailure(Duration timeout, TestContext context) {
-		var failure = new AssertionFailedError(formatLocalized("timeout.failure_message", formatDuration(timeout))); //$NON-NLS-1$
+		var failure = localizedFailure("timeout.failure_message", formatDuration(timeout)); //$NON-NLS-1$
 		if (TestContextUtils.findAnnotationIn(context, PrivilegedExceptionsOnly.class).isPresent())
 			throw new PrivilegedException(failure);
 		return failure;

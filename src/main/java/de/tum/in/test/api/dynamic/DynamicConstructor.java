@@ -1,8 +1,7 @@
 package de.tum.in.test.api.dynamic;
 
 import static de.tum.in.test.api.dynamic.DynamicMethod.*;
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +30,7 @@ public class DynamicConstructor<T> implements Checkable {
 				constructor = owner.toClass().getDeclaredConstructor(DynamicClass.resolveAll(parameters));
 				constructor.trySetAccessible();
 			} catch (NoSuchMethodException e) {
-				fail(formatLocalized("dynamics.constructor.not_found", owner, descParams(this.parameters)), e); //$NON-NLS-1$
+				throw localizedFailure(e, "dynamics.constructor.not_found", owner, descParams(this.parameters)); //$NON-NLS-1$
 			}
 		}
 		return constructor;
@@ -54,17 +53,16 @@ public class DynamicConstructor<T> implements Checkable {
 		try {
 			return toConstructor().newInstance(params);
 		} catch (InstantiationException e) {
-			fail(formatLocalized("dynamics.constructor.abstract", owner), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.constructor.abstract", owner); //$NON-NLS-1$
 		} catch (IllegalAccessException e) {
-			fail(formatLocalized("dynamics.constructor.access", this), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.constructor.access", this); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail(formatLocalized("dynamics.constructor.arguments", this, descArgs(params)), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.constructor.arguments", this, descArgs(params)); //$NON-NLS-1$
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof RuntimeException)
 				throw (RuntimeException) e.getTargetException();
 			throw UnexpectedExceptionError.wrap(e.getTargetException());
 		}
-		return null; // unreachable
 	}
 
 	@Override
@@ -77,6 +75,6 @@ public class DynamicConstructor<T> implements Checkable {
 		toConstructor();
 		int modifiers = toConstructor().getModifiers();
 		for (Check check : checks)
-			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.constructor.name", this)); //$NON-NLS-1$
+			check.checkModifiers(modifiers, () -> localized("dynamics.constructor.name", this)); //$NON-NLS-1$
 	}
 }

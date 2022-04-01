@@ -1,6 +1,6 @@
 package de.tum.in.test.api.io;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public final class InputTester implements LineProvider {
 			return expectedInput.get(position++);
 		if (expectedInput.isEmpty())
 			throw new IllegalStateException(localized("input_tester.no_input_expected")); //$NON-NLS-1$
-		throw new IllegalStateException(formatLocalized("input_tester.no_more_input_expected", getCurrentLine())); //$NON-NLS-1$
+		throw new IllegalStateException(localized("input_tester.no_more_input_expected", getCurrentLine())); //$NON-NLS-1$
 	}
 
 	Line getCurrentLine() {

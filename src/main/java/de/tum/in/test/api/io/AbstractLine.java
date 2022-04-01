@@ -1,11 +1,11 @@
 package de.tum.in.test.api.io;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.util.Objects;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-
-import de.tum.in.test.api.localization.Messages;
 
 @API(status = Status.MAINTAINED)
 public abstract class AbstractLine implements Line {
@@ -14,8 +14,8 @@ public abstract class AbstractLine implements Line {
 
 	@Override
 	public String toString() {
-		return lineNumber == -1 ? Messages.formatLocalized("abstract_line.plain_line", text()) //$NON-NLS-1$
-				: Messages.formatLocalized("abstract_line.numbered_line", lineNumber, text()); //$NON-NLS-1$
+		return lineNumber == -1 ? localized("abstract_line.plain_line", text()) //$NON-NLS-1$
+				: localized("abstract_line.numbered_line", lineNumber, text()); //$NON-NLS-1$
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.*;
 import static java.util.function.Predicate.not;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
@@ -143,13 +143,13 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	private static void checkAttributeCorrectness(boolean nameIsCorrect, boolean typeIsCorrect,
 			boolean modifiersAreCorrect, boolean annotationsAreCorrect, String expectedName, String expectedClassName) {
 		if (!nameIsCorrect)
-			throw failure(formatLocalized("structural.attribute.name", expectedName, expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.attribute.name", expectedName, expectedClassName); //$NON-NLS-1$
 		if (!typeIsCorrect)
-			throw failure(formatLocalized("structural.attribute.type", expectedName, expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.attribute.type", expectedName, expectedClassName); //$NON-NLS-1$
 		if (!modifiersAreCorrect)
-			throw failure(formatLocalized("structural.attribute.modifiers", expectedName, expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.attribute.modifiers", expectedName, expectedClassName); //$NON-NLS-1$
 		if (!annotationsAreCorrect)
-			throw failure(formatLocalized("structural.attribute.annotations", expectedName, expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.attribute.annotations", expectedName, expectedClassName); //$NON-NLS-1$
 	}
 
 	/**
@@ -167,7 +167,7 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 	protected static void checkEnumValues(String expectedClassName, Class<?> observedClass,
 			JSONArray expectedEnumValues) {
 		if (!observedClass.isEnum())
-			throw failure(formatLocalized("structural.attribute.noEnumConstants", expectedClassName)); //$NON-NLS-1$
+			throw localizedFailure("structural.attribute.noEnumConstants", expectedClassName); //$NON-NLS-1$
 		@SuppressWarnings("unchecked")
 		var observedEnumValues = ((Class<? extends Enum<?>>) observedClass).getEnumConstants();
 		var observedEnumNames = Stream.of(observedEnumValues).map(Enum::name).collect(Collectors.toSet());
@@ -175,9 +175,9 @@ public abstract class AttributeTestProvider extends StructuralTestProvider {
 				.collect(Collectors.toSet());
 		var missing = expectedEnumNames.stream().filter(not(observedEnumNames::contains)).findFirst();
 		missing.ifPresent(missingName -> fail(
-				formatLocalized("structural.attribute.missingEnumConstants", expectedClassName, missingName))); //$NON-NLS-1$
+				localized("structural.attribute.missingEnumConstants", expectedClassName, missingName))); //$NON-NLS-1$
 		var unexpected = observedEnumNames.stream().filter(not(expectedEnumNames::contains)).findFirst();
 		unexpected.ifPresent(unexpectedName -> fail(
-				formatLocalized("structural.attribute.unexpectedEnumConstants", expectedClassName, unexpectedName))); //$NON-NLS-1$
+				localized("structural.attribute.unexpectedEnumConstants", expectedClassName, unexpectedName))); //$NON-NLS-1$
 	}
 }

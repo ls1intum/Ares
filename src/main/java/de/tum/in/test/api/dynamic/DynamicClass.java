@@ -1,7 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -45,7 +44,7 @@ public class DynamicClass<T> implements Checkable {
 			try {
 				clazz = (Class<T>) Class.forName(name);
 			} catch (ClassNotFoundException e) {
-				fail(formatLocalized("dynamics.class.not_found", name), e); //$NON-NLS-1$
+				throw localizedFailure(e, "dynamics.class.not_found", name); //$NON-NLS-1$
 			}
 		}
 		return clazz;
@@ -87,7 +86,7 @@ public class DynamicClass<T> implements Checkable {
 			return null;
 		if (rClass.isPrimitive()) {
 			if (obj == null)
-				throw new NullPointerException(formatLocalized("dynamics.class.null", getName())); //$NON-NLS-1$
+				throw new NullPointerException(localized("dynamics.class.null", getName())); //$NON-NLS-1$
 			Class<?> objClass = obj.getClass();
 			Class<?> wrapper = primitiveWrappers.get(rClass);
 			if (objClass.equals(wrapper))
@@ -160,7 +159,7 @@ public class DynamicClass<T> implements Checkable {
 		toClass();
 		int modifiers = toClass().getModifiers();
 		for (Check check : checks)
-			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.class.name", this)); //$NON-NLS-1$
+			check.checkModifiers(modifiers, () -> localized("dynamics.class.name", this)); //$NON-NLS-1$
 	}
 
 	public int checkForPublicOrProtectedMethods(DynamicMethod<?>... exceptions) {
@@ -178,12 +177,12 @@ public class DynamicClass<T> implements Checkable {
 				String sig = DynamicMethod.signatureOf(m);
 				if (!"main(java.lang.String[])".endsWith(sig) && !publicMethods.contains(sig) //$NON-NLS-1$
 						&& !objectMethods.contains(sig))
-					fail(formatLocalized("dynamics.class.method_public", sig)); //$NON-NLS-1$
+					throw localizedFailure("dynamics.class.method_public", sig); //$NON-NLS-1$
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
 				if (!objectMethods.contains(sig))
-					fail(formatLocalized("dynamics.class.method_protected", sig)); //$NON-NLS-1$
+					throw localizedFailure("dynamics.class.method_protected", sig); //$NON-NLS-1$
 			}
 			checked++;
 		}
@@ -196,7 +195,7 @@ public class DynamicClass<T> implements Checkable {
 			if (f.isSynthetic())
 				continue;
 			if (!Modifier.isPrivate(f.getModifiers()))
-				fail(formatLocalized("dynamics.class.field_private", f)); //$NON-NLS-1$
+				throw localizedFailure("dynamics.class.field_private", f); //$NON-NLS-1$
 			checked++;
 		}
 		return checked;
@@ -208,7 +207,7 @@ public class DynamicClass<T> implements Checkable {
 			if (f.isSynthetic())
 				continue;
 			if (!Modifier.isFinal(f.getModifiers()))
-				fail(formatLocalized("dynamics.class.field_final", f)); //$NON-NLS-1$
+				throw localizedFailure("dynamics.class.field_final", f); //$NON-NLS-1$
 			checked++;
 		}
 		return checked;

@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -132,10 +132,10 @@ public abstract class ConstructorTestProvider extends StructuralTestProvider {
 			boolean parametersAreCorrect, boolean modifiersAreCorrect, boolean annotationsAreCorrect) {
 		String parameters = describeParameters(expectedParameters);
 		if (!parametersAreCorrect)
-			throw failure(formatLocalized("structural.constructor.parameters", expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.constructor.parameters", expectedClassName, parameters); //$NON-NLS-1$
 		if (!modifiersAreCorrect)
-			throw failure(formatLocalized("structural.constructor.modifiers", expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.constructor.modifiers", expectedClassName, parameters); //$NON-NLS-1$
 		if (!annotationsAreCorrect)
-			throw failure(formatLocalized("structural.constructor.annotations", expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.constructor.annotations", expectedClassName, parameters); //$NON-NLS-1$
 	}
 }

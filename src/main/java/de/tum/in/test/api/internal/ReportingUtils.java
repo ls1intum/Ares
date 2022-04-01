@@ -1,6 +1,6 @@
 package de.tum.in.test.api.internal;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -79,7 +79,7 @@ public final class ReportingUtils {
 	private static Throwable handleSanitizationFailure(String name, Throwable error) {
 		var info = BlacklistedInvoker.invokeOrElse(error::toString, () -> error.getClass().toString());
 		LOG.error("Sanitization failed for {} with error {}", name, info); //$NON-NLS-1$
-		return new SecurityException(formatLocalized("sanitization.sanitization_failure", name, info)); //$NON-NLS-1$
+		return new SecurityException(localized("sanitization.sanitization_failure", name, info)); //$NON-NLS-1$
 	}
 
 	private static void addStackframeInfoToMessage(ThrowableInfo info) {
@@ -88,7 +88,7 @@ public final class ReportingUtils {
 		if (first.isPresent()) {
 			var call = first.get().toString();
 			info.setMessage(Objects.toString(info.getMessage(), "") + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-					+ formatLocalized("reporting.problem_location_hint", call)); //$NON-NLS-1$
+					+ localized("reporting.problem_location_hint", call)); //$NON-NLS-1$
 		}
 	}
 }

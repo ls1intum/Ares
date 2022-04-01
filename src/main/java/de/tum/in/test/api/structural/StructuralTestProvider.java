@@ -120,7 +120,7 @@ public abstract class StructuralTestProvider {
 			// Note: this error happens when the ClassNameScanner finds the correct file,
 			// e.g. 'Course.java', but the class 'Course' was not yet created correctly in
 			// this file.
-			throw failure(formatLocalized("structural.common.classLoadFailed", typeOfTest, classNameScanMessage)); //$NON-NLS-1$
+			throw localizedFailure("structural.common.classLoadFailed", typeOfTest, classNameScanMessage); //$NON-NLS-1$
 		}
 	}
 
@@ -301,7 +301,7 @@ public abstract class StructuralTestProvider {
 	 */
 	protected static String describeParameters(JSONArray expectedParameters) {
 		return expectedParameters.isEmpty() ? localized("structural.common.noParams") //$NON-NLS-1$
-				: formatLocalized("structural.common.withParams", expectedParameters); //$NON-NLS-1$
+				: localized("structural.common.withParams", expectedParameters); //$NON-NLS-1$
 	}
 
 	/**

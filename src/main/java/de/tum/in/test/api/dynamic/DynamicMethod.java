@@ -1,7 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -47,9 +46,9 @@ public class DynamicMethod<T> implements Checkable {
 				m = owner.toClass().getDeclaredMethod(name, DynamicClass.resolveAll(parameters));
 				m.trySetAccessible();
 				if (!returnType.toClass().isAssignableFrom(m.getReturnType()))
-					fail(formatLocalized("dynamics.method.return", this, returnType)); //$NON-NLS-1$
+					throw localizedFailure("dynamics.method.return", this, returnType); //$NON-NLS-1$
 			} catch (NoSuchMethodException e) {
-				fail(formatLocalized("dynamics.method.not_found", returnType, this), e); //$NON-NLS-1$
+				throw localizedFailure(e, "dynamics.method.not_found", returnType, this); //$NON-NLS-1$
 			}
 		}
 		return m;
@@ -74,25 +73,24 @@ public class DynamicMethod<T> implements Checkable {
 		try {
 			return returnType.cast(toMethod().invoke(o, params));
 		} catch (NullPointerException e) {
-			fail(formatLocalized("dynamics.method.null", this), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.method.null", this); //$NON-NLS-1$
 		} catch (IllegalAccessException e) {
-			fail(formatLocalized("dynamics.method.access", this), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.method.access", this); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail(formatLocalized("dynamics.method.arguments", this, descArgs(params), o.getClass().getCanonicalName()), //$NON-NLS-1$
-					e);
+			throw localizedFailure(e, "dynamics.method.arguments", this, descArgs(params), //$NON-NLS-1$
+					o.getClass().getCanonicalName());
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof RuntimeException)
 				throw (RuntimeException) e.getTargetException();
 			throw UnexpectedExceptionError.wrap(e.getTargetException());
 		} catch (ClassCastException e) {
-			fail(formatLocalized("dynamics.method.cast", this, returnType), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.method.cast", this, returnType); //$NON-NLS-1$
 		}
-		return null; // unreachable
 	}
 
 	public T invokeStatic(Object... params) {
 		if (!Modifier.isStatic(toMethod().getModifiers()))
-			fail(formatLocalized("dynamics.method.static", this)); //$NON-NLS-1$
+			throw localizedFailure("dynamics.method.static", this); //$NON-NLS-1$
 		return invokeOn(null, params);
 	}
 
@@ -137,6 +135,6 @@ public class DynamicMethod<T> implements Checkable {
 	public void check(Check... checks) {
 		int modifiers = toMethod().getModifiers();
 		for (Check check : checks)
-			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.method.name", this)); //$NON-NLS-1$
+			check.checkModifiers(modifiers, () -> localized("dynamics.method.name", this)); //$NON-NLS-1$
 	}
 }

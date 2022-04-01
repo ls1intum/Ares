@@ -1,7 +1,6 @@
 package de.tum.in.test.api.internal;
 
 import static de.tum.in.test.api.localization.Messages.*;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.annotation.Annotation;
@@ -53,7 +52,7 @@ public final class TestGuardUtils {
 			// check if there are both, that would be a mistake
 			if (hasAnnotationType(context, TestType.PUBLIC))
 				throw new AnnotationFormatError(
-						formatLocalized("test_guard.test_cannot_be_public_and_hidden", context.displayName())); //$NON-NLS-1$
+						localized("test_guard.test_cannot_be_public_and_hidden", context.displayName())); //$NON-NLS-1$
 
 			var now = ZonedDateTime.now();
 			var finalDeadline = extractDeadline(context);
@@ -64,10 +63,11 @@ public final class TestGuardUtils {
 			Optional<ZonedDateTime> activationBefore = extractActivationBefore(context);
 			if (activationBefore.map(now::isBefore).orElse(false))
 				return;
-			fail(localized("test_guard.hidden_test_before_deadline_message")); //$NON-NLS-1$
-		} else if (hasAnnotation(context, Deadline.class) || hasAnnotation(context, ExtendedDeadline.class)) {
+			throw localizedFailure("test_guard.hidden_test_before_deadline_message"); //$NON-NLS-1$
+		}
+		if (hasAnnotation(context, Deadline.class) || hasAnnotation(context, ExtendedDeadline.class)) {
 			throw new AnnotationFormatError(
-					formatLocalized("test_guard.public_test_cannot_have_deadline", context.displayName())); //$NON-NLS-1$
+					localized("test_guard.public_test_cannot_have_deadline", context.displayName())); //$NON-NLS-1$
 		}
 	}
 
@@ -84,8 +84,7 @@ public final class TestGuardUtils {
 		var deadline = extractDeadline(context.testClass(), context.testMethod());
 		if (deadline.isPresent())
 			return deadline.get();
-		throw new AnnotationFormatError(
-				formatLocalized("test_guard.hidden_test_missing_deadline", context.displayName())); //$NON-NLS-1$
+		throw new AnnotationFormatError(localized("test_guard.hidden_test_missing_deadline", context.displayName())); //$NON-NLS-1$
 	}
 
 	public static Optional<ZonedDateTime> extractDeadline(Optional<Class<?>> testClass, Optional<Method> testMethod) {
@@ -147,7 +146,7 @@ public final class TestGuardUtils {
 			}
 			return dateTime.atZone(zone);
 		} catch (DateTimeParseException e) {
-			throw new AnnotationFormatError(formatLocalized("test_guard.invalid_deadline_format", deadlineString), //$NON-NLS-1$
+			throw new AnnotationFormatError(localized("test_guard.invalid_deadline_format", deadlineString), //$NON-NLS-1$
 					e);
 		}
 	}
@@ -187,15 +186,13 @@ public final class TestGuardUtils {
 	public static Duration parseDuration(String durationString) {
 		var matcher = DURATION_PATTERN.matcher(durationString);
 		if (!matcher.matches())
-			throw new AnnotationFormatError(
-					formatLocalized("test_guard.invalid_extended_deadline_format", durationString)); //$NON-NLS-1$
+			throw new AnnotationFormatError(localized("test_guard.invalid_extended_deadline_format", durationString)); //$NON-NLS-1$
 		int d = Optional.ofNullable(matcher.group("d")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
 		int h = Optional.ofNullable(matcher.group("h")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
 		int m = Optional.ofNullable(matcher.group("m")).map(Integer::parseInt).orElse(0); //$NON-NLS-1$
 		var duration = Duration.ofDays(d).plusHours(h).plusMinutes(m);
 		if (duration.isZero() || duration.isNegative())
-			throw new AnnotationFormatError(
-					formatLocalized("test_guard.extended_deadline_zero_or_negative", durationString)); //$NON-NLS-1$
+			throw new AnnotationFormatError(localized("test_guard.extended_deadline_zero_or_negative", durationString)); //$NON-NLS-1$
 		return duration;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.api.util.LruCache;
 
@@ -22,20 +23,23 @@ public final class Messages {
 	private Messages() {
 	}
 
-	public static String localized(String key) {
+	public static String localized(String key, Object... args) {
 		try {
-			return getBundleForCurrentLocale().getString(key);
+			String localizedText = getBundleForCurrentLocale().getString(key);
+			if (args.length == 0)
+				return localizedText;
+			return String.format(localizedText, args);
 		} catch (@SuppressWarnings("unused") MissingResourceException e) {
 			return '!' + key + '!';
 		}
 	}
 
-	public static String formatLocalized(String key, Object... args) {
-		try {
-			return String.format(getBundleForCurrentLocale().getString(key), args);
-		} catch (@SuppressWarnings("unused") MissingResourceException e) {
-			return '!' + key + '!';
-		}
+	public static AssertionFailedError localizedFailure(String key, Object... args) {
+		return new AssertionFailedError(localized(key, args));
+	}
+
+	public static AssertionFailedError localizedFailure(Throwable cause, String key, Object... args) {
+		return new AssertionFailedError(localized(key, args), cause);
 	}
 
 	private static ResourceBundle getBundleForCurrentLocale() {

@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -137,15 +137,15 @@ public abstract class MethodTestProvider extends StructuralTestProvider {
 			JSONArray expectedParameters, MethodChecks methodChecks) {
 		String parameters = StructuralTestProvider.describeParameters(expectedParameters);
 		if (!methodChecks.name)
-			throw failure(formatLocalized("structural.method.name", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.method.name", expectedName, expectedClassName, parameters); //$NON-NLS-1$
 		if (!methodChecks.parameters)
-			throw failure(formatLocalized("structural.method.parameters", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.method.parameters", expectedName, expectedClassName, parameters); //$NON-NLS-1$
 		if (!methodChecks.modifiers)
-			throw failure(formatLocalized("structural.method.modifiers", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.method.modifiers", expectedName, expectedClassName, parameters); //$NON-NLS-1$
 		if (!methodChecks.annotations)
-			throw failure(formatLocalized("structural.method.annoations", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.method.annoations", expectedName, expectedClassName, parameters); //$NON-NLS-1$
 		if (!methodChecks.returnType)
-			throw failure(formatLocalized("structural.method.return", expectedName, expectedClassName, parameters)); //$NON-NLS-1$
+			throw localizedFailure("structural.method.return", expectedName, expectedClassName, parameters); //$NON-NLS-1$
 	}
 
 	private static class MethodChecks {

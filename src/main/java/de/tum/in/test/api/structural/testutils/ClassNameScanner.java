@@ -1,6 +1,6 @@
 package de.tum.in.test.api.structural.testutils;
 
-import static de.tum.in.test.api.localization.Messages.*;
+import static de.tum.in.test.api.localization.Messages.localized;
 import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
 import java.io.File;
@@ -197,29 +197,29 @@ public class ClassNameScanner {
 			String foundPackageName) {
 		switch (scanResultType) {
 		case CORRECT_NAME_CORRECT_PLACE:
-			return formatLocalized("structural.scan.correctNameCorrectPlace", foundClassName); //$NON-NLS-1$
+			return localized("structural.scan.correctNameCorrectPlace", foundClassName); //$NON-NLS-1$
 		case CORRECT_NAME_MISPLACED:
-			return formatLocalized("structural.scan.correctNameMisplaced", foundClassName, foundPackageName); //$NON-NLS-1$
+			return localized("structural.scan.correctNameMisplaced", foundClassName, foundPackageName); //$NON-NLS-1$
 		case CORRECT_NAME_MULTIPLE:
-			return formatLocalized("structural.scan.correctNameMultiple", foundClassName, foundPackageName); //$NON-NLS-1$
+			return localized("structural.scan.correctNameMultiple", foundClassName, foundPackageName); //$NON-NLS-1$
 		case WRONG_CASE_CORRECT_PLACE:
-			return formatLocalized("structural.scan.wrongCaseCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
+			return localized("structural.scan.wrongCaseCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case WRONG_CASE_MISPLACED:
-			return formatLocalized("structural.scan.wrongCaseMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
+			return localized("structural.scan.wrongCaseMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
 					foundClassName, foundPackageName);
 		case WRONG_CASE_MULTIPLE:
-			return formatLocalized("structural.scan.wrongCaseMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
+			return localized("structural.scan.wrongCaseMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
 					foundClassName, foundPackageName);
 		case TYPOS_CORRECT_PLACE:
-			return formatLocalized("structural.scan.typosCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
+			return localized("structural.scan.typosCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case TYPOS_MISPLACED:
-			return formatLocalized("structural.scan.typosMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
+			return localized("structural.scan.typosMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
 					foundClassName, foundPackageName);
 		case TYPOS_MULTIPLE:
-			return formatLocalized("structural.scan.typosMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
+			return localized("structural.scan.typosMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
 					foundClassName, observedClasses.get(foundClassName).toString());
 		case NOTFOUND:
-			return formatLocalized("structural.scan.notFound", expectedClassName, expectedPackageName); //$NON-NLS-1$
+			return localized("structural.scan.notFound", expectedClassName, expectedPackageName); //$NON-NLS-1$
 		default:
 			return localized("structural.scan.default"); //$NON-NLS-1$
 		}

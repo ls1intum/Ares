@@ -1,7 +1,6 @@
 package de.tum.in.test.api.dynamic;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
-import static org.junit.jupiter.api.Assertions.fail;
+import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -40,12 +39,11 @@ public class DynamicField<T> implements Checkable {
 	public Field toField() {
 		if (field == null) {
 			var of = findField(owner.toClass());
-			if (of.isPresent()) {
-				field = of.get();
-				field.trySetAccessible();
-			} else {
-				fail(formatLocalized("dynamics.field.not_found", name)); //$NON-NLS-1$
+			if (!of.isPresent()) {
+				throw localizedFailure("dynamics.field.not_found", name); //$NON-NLS-1$
 			}
+			field = of.get();
+			field.trySetAccessible();
 		}
 		return field;
 	}
@@ -67,22 +65,20 @@ public class DynamicField<T> implements Checkable {
 		try {
 			return type.cast(toField().get(o));
 		} catch (IllegalAccessException e) {
-			fail(formatLocalized("dynamics.field.access", name, owner), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.field.access", name, owner); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
-			fail(formatLocalized("dynamics.field.target", name, owner), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.field.target", name, owner); //$NON-NLS-1$
 		} catch (ClassCastException e) {
-			fail(formatLocalized("dynamics.field.cast", name, owner, type.getName()), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.field.cast", name, owner, type.getName()); //$NON-NLS-1$
 		}
-		return null; // unreachable
 	}
 
 	public T getStatic() {
 		try {
 			return getOf(null);
 		} catch (NullPointerException e) {
-			fail(formatLocalized("dynamics.field.static", name, owner), e); //$NON-NLS-1$
+			throw localizedFailure(e, "dynamics.field.static", name, owner); //$NON-NLS-1$
 		}
-		return null; // unreachable
 	}
 
 	private Optional<Field> findField(Class<?> c) {
@@ -111,6 +107,6 @@ public class DynamicField<T> implements Checkable {
 	public void check(Check... checks) {
 		int modifiers = toField().getModifiers();
 		for (Check check : checks)
-			check.checkModifiers(modifiers, () -> formatLocalized("dynamics.field.name", this)); //$NON-NLS-1$
+			check.checkModifiers(modifiers, () -> localized("dynamics.field.name", this)); //$NON-NLS-1$
 	}
 }

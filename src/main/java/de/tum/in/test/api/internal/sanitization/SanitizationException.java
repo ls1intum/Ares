@@ -1,6 +1,6 @@
 package de.tum.in.test.api.internal.sanitization;
 
-import static de.tum.in.test.api.localization.Messages.formatLocalized;
+import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ class SanitizationException extends RuntimeException {
 	}
 
 	private static String generateMessage(Class<?> originClass, Throwable cause) {
-		return formatLocalized("sanitization.sanitization_exception_message", originClass.toString(), //$NON-NLS-1$
+		return localized("sanitization.sanitization_exception_message", originClass.toString(), //$NON-NLS-1$
 				BlacklistedInvoker.invoke(cause::toString));
 	}
 
