@@ -3,6 +3,7 @@ package de.tum.in.test.api.util;
 import static de.tum.in.test.api.localization.Messages.*;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -83,6 +84,31 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
+	 * Instantiate an object of a class by its qualified name and the constructor
+	 * arguments, if applicable.
+	 * <p>
+	 * This method does not support passing null, passing subclasses of the
+	 * parameter types or invoking constructors with primitive parameters. Use
+	 * {@link #newInstance(Constructor, Object...)} for that.
+	 * <p>
+	 * Forces the access to package-private, {@code protected}, and {@code private}
+	 * constructors. Use {@link #newInstance(String, Object...)} if you do not
+	 * require this functionality.
+	 *
+	 * @param qualifiedClassName The qualified name of the class that needs to get
+	 *                           retrieved (package.classname)
+	 * @param constructorArgs    Parameter instances of the constructor of the
+	 *                           class, that it should use to get instantiated with.
+	 *                           Do not include, if the constructor has no
+	 *                           arguments.
+	 * @return The instance of this class.
+	 * @see #newInstance(Class, Object...)
+	 */
+	public static Object newInstanceFromPrivateConstructor(String qualifiedClassName, Object... constructorArgs) {
+		return newInstanceFromPrivateConstructor(getClazz(qualifiedClassName), constructorArgs);
+	}
+
+	/**
 	 * Instantiate an object of a given class using the given constructor arguments,
 	 * if applicable.
 	 * <p>
@@ -97,15 +123,29 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Class<?> clazz, Object... constructorArgs) {
-		var constructorArgTypes = getParameterTypes(constructorArgs, "reflection_test_utils.constructor_null_args", //$NON-NLS-1$
-				clazz.getSimpleName());
-		try {
-			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
-			return newInstance(constructor, constructorArgs);
-		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
-			throw localizedFailure("reflection_test_utils.constructor_not_found_args", clazz.getSimpleName(), //$NON-NLS-1$
-					getParameterTypesAsString(constructorArgTypes));
-		}
+		return newInstanceAccessible(clazz, false, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a given class using the given constructor arguments,
+	 * if applicable.
+	 * <p>
+	 * This method does not support passing null, passing subclasses of the
+	 * parameter types or invoking constructors with primitive parameters. Use
+	 * {@link #newInstance(Constructor, Object...)} for that.
+	 * <p>
+	 * Forces the access to package-private, {@code protected}, and {@code private}
+	 * constructors. Use {@link #newInstance(Class, Object...)} if you do not
+	 * require this functionality.
+	 *
+	 * @param clazz           The class for which a new instance should be created
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with. Do not
+	 *                        include, if the constructor has no arguments.
+	 * @return The instance of this class.
+	 */
+	public static Object newInstanceFromPrivateConstructor(Class<?> clazz, Object... constructorArgs) {
+		return newInstanceAccessible(clazz, true, constructorArgs);
 	}
 
 	/**
@@ -120,7 +160,52 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
+		return newInstanceAccessible(constructor, false, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable.
+	 *
+	 * @param clazz           The type of the class that should be instantiated.
+	 * @param forceAccess     True, if access to a (package) private or protected
+	 *                        constructor should be forced. Might fail with an
+	 *                        {@link IllegalAccessException} otherwise.
+	 * @param constructorArgs Parameter instances the constructor should be called
+	 *                        with.
+	 * @return An instance of the given class type.
+	 */
+	private static Object newInstanceAccessible(Class<?> clazz, boolean forceAccess, Object[] constructorArgs) {
+		var constructorArgTypes = getParameterTypes(constructorArgs, "reflection_test_utils.constructor_null_args", //$NON-NLS-1$
+				clazz.getSimpleName());
 		try {
+			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
+			return newInstanceAccessible(constructor, forceAccess, constructorArgs);
+		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
+			throw localizedFailure("reflection_test_utils.constructor_not_found_args", clazz.getSimpleName(), //$NON-NLS-1$
+					getParameterTypesAsString(constructorArgTypes));
+		}
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable.
+	 *
+	 * @param constructor     The constructor that should be used to instantiate an
+	 *                        object.
+	 * @param forceAccess     True, if access to a (package) private or protected
+	 *                        constructor should be forced. Might fail with an
+	 *                        {@link IllegalAccessException} otherwise.
+	 * @param constructorArgs Parameter instances the constructor should be called
+	 *                        with.
+	 * @return The object created by calling the given constructor.
+	 */
+	private static Object newInstanceAccessible(Constructor<?> constructor, boolean forceAccess,
+			Object[] constructorArgs) {
+		try {
+			if (forceAccess) {
+				constructor.setAccessible(true);
+			}
 			return constructor.newInstance(constructorArgs);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.constructor_access", //$NON-NLS-1$
@@ -153,9 +238,46 @@ public final class ReflectionTestUtils {
 	 * @return The instance of the attribute with the wanted value.
 	 */
 	public static Object valueForAttribute(Object object, String attributeName) {
+		return valueForAttribute(object, attributeName, false);
+	}
+
+	/**
+	 * Retrieve an attribute value of a given instance of a class by the attribute
+	 * name.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * attributes. Use {@link #valueForAttribute(Object, String)} when reading
+	 * accessible attributes.
+	 *
+	 * @param object        The instance of the class that contains the attribute.
+	 *                      Must not be null, even for static fields.
+	 * @param attributeName The name of the attribute whose value needs to get
+	 *                      retrieved.
+	 * @return The instance of the attribute with the wanted value.
+	 */
+	public static Object valueForPrivateAttribute(Object object, String attributeName) {
+		return valueForAttribute(object, attributeName, true);
+	}
+
+	/**
+	 * Retrieve an attribute value of a given instance of a class by the attribute
+	 * name.
+	 *
+	 * @param object        The object from which the attribute should be read.
+	 * @param attributeName The name of the attribute that should be read.
+	 * @param forceAccess   True, if access to a (package) private or protected
+	 *                      attribute should be forced. Might fail with an
+	 *                      {@link IllegalAccessException} otherwise.
+	 * @return The value that is stored in the attribute in the given object.
+	 */
+	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
 		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
 		try {
-			return object.getClass().getDeclaredField(attributeName).get(object);
+			Field field = object.getClass().getDeclaredField(attributeName);
+			if (forceAccess) {
+				field.setAccessible(true);
+			}
+			return field.get(object);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
 			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
 					object.getClass().getSimpleName());
@@ -191,7 +313,7 @@ public final class ReflectionTestUtils {
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
 		try {
-			return declaringClass.getMethod(methodName, parameterTypes);
+			return declaringClass.getDeclaredMethod(methodName, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.method_not_found", methodName, //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());
@@ -217,9 +339,30 @@ public final class ReflectionTestUtils {
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, String methodName, Object... params) {
-		var parameterTypes = getParameterTypes(params, "reflection_test_utils.method_null_args", methodName); //$NON-NLS-1$
-		var method = getMethod(object, methodName, parameterTypes);
-		return invokeMethod(object, method, params);
+		return invokeMethodAccessible(object, methodName, false, params);
+	}
+
+	/**
+	 * Invoke a given method name of a given object with instances of the
+	 * parameters.
+	 * <p>
+	 * This method does not support invoking static methods and passing null,
+	 * passing subclasses of the parameter types or invoking methods with primitive
+	 * parameters. Use {@link #invokeMethod(Object, Method, Object...)} for that.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * methods. Use {@link #invokeMethod(Object, String, Object...)} when invoking
+	 * accessible methods.
+	 *
+	 * @param object     The instance of the class that should invoke the method.
+	 *                   Must not be null, even for static methods.
+	 * @param methodName The method name that has to get invoked.
+	 * @param params     Parameter instances of the method. Do not include if the
+	 *                   method has no parameters.
+	 * @return The return value of the method.
+	 */
+	public static Object invokePrivateMethod(Object object, String methodName, Object... params) {
+		return invokeMethodAccessible(object, methodName, true, params);
 	}
 
 	/**
@@ -233,9 +376,60 @@ public final class ReflectionTestUtils {
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, Method method, Object... params) {
+		return invokeMethodAccessible(object, method, false, params);
+	}
+
+	/**
+	 * Invoke a given method of a given object with instances of the parameters.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * methods. Use {@link #invokeMethod(Object, Method, Object...)} when invoking
+	 * accessible methods.
+	 *
+	 * @param object The instance of the class that should invoke the method. Can be
+	 *               null if the method is static.
+	 * @param method The method that has to get invoked.
+	 * @param params Parameter instances of the method. Do not include if the method
+	 *               has no parameters.
+	 * @return The return value of the method.
+	 */
+	public static Object invokePrivateMethod(Object object, Method method, Object... params) {
+		return invokeMethodAccessible(object, method, true, params);
+	}
+
+	/**
+	 * Invoke a given method of a given object with instances of the parameters.
+	 *
+	 * @param object      The instance of the class that should invoke the method.
+	 * @param methodName  The name of the method that has to get invoked.
+	 * @param forceAccess True, if access to a (package) private or protected method
+	 *                    should be forced. Might fail with an
+	 *                    {@link IllegalAccessException} otherwise.
+	 * @param params      Parameter instances of the method.
+	 * @return The return value of the method.
+	 */
+	private static Object invokeMethodAccessible(Object object, String methodName, boolean forceAccess,
+			Object[] params) {
+		var parameterTypes = getParameterTypes(params, "reflection_test_utils.method_null_args", methodName); //$NON-NLS-1$
+		var method = getMethod(object, methodName, parameterTypes);
+		return invokeMethodAccessible(object, method, forceAccess, params);
+	}
+
+	/**
+	 * Invoke a given method of a given object with instances of the parameters.
+	 *
+	 * @param object      The instance of the class that should invoke the method.
+	 * @param method      The method that has to get invoked.
+	 * @param forceAccess True, if access to a (package) private or protected method
+	 *                    should be forced. Might fail with an
+	 *                    {@link IllegalAccessException} otherwise.
+	 * @param params      Parameter instances of the method.
+	 * @return The return value of the method.
+	 */
+	private static Object invokeMethodAccessible(Object object, Method method, boolean forceAccess, Object[] params) {
 		// NOTE: object can be null, if method is static
 		try {
-			return invokeMethodRethrowing(object, method, params);
+			return invokeMethodRethrowingAccessible(object, method, forceAccess, params);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -256,8 +450,49 @@ public final class ReflectionTestUtils {
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
+		return invokeMethodRethrowingAccessible(object, method, false, params);
+	}
+
+	/**
+	 * Invoke a given method of a given object with instances of the parameters, and
+	 * rethrow an exception if one occurs during the method execution.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * methods. Use {@link #invokeMethodRethrowing(Object, Method, Object...)} when
+	 * invoking accessible methods.
+	 *
+	 * @param object The instance of the class that should invoke the method.
+	 * @param method The method that has to get invoked.
+	 * @param params Parameter instances of the method. Do not include if the method
+	 *               has no parameters.
+	 * @throws Throwable the exception that was caught and which will be rethrown
+	 * @return The return value of the method.
+	 */
+	public static Object invokePrivateMethodRethrowing(Object object, Method method, Object... params)
+			throws Throwable {
+		return invokeMethodRethrowingAccessible(object, method, true, params);
+	}
+
+	/**
+	 * Invoke a given method of a given object with instances of the parameters, and
+	 * rethrow an exception if one occurs during the method execution.
+	 *
+	 * @param object      The instance of the class that should invoke the method.
+	 * @param method      The method that has to get invoked.
+	 * @param forceAccess True, if access to a (package) private or protected method
+	 *                    should be forced. Might fail with an
+	 *                    {@link IllegalAccessException} otherwise.
+	 * @param params      Parameter instances of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
+	 * @return The return value of the method.
+	 */
+	private static Object invokeMethodRethrowingAccessible(Object object, Method method, boolean forceAccess,
+			Object[] params) throws Throwable {
 		// NOTE: object can be null, if method is static
 		try {
+			if (forceAccess) {
+				method.setAccessible(true);
+			}
 			return method.invoke(object, params);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.method_access", method.getName(), //$NON-NLS-1$
@@ -287,7 +522,7 @@ public final class ReflectionTestUtils {
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		try {
-			return declaringClass.getConstructor(parameterTypes);
+			return declaringClass.getDeclaredConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());

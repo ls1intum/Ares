@@ -71,9 +71,20 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testInvokePrivateMethodByName_success() {
+		invokePrivateMethod(CLASS_INSTANCE, "superSecretMethod");
+	}
+
+	@Test
 	void testInvokeMethodRethrowing_illegalAccess() throws NoSuchMethodException {
 		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
 		invokeMethod(CLASS_INSTANCE, privateMethod);
+	}
+
+	@Test
+	void testInvokePrivateMethodRethrowing_success() throws NoSuchMethodException {
+		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
+		invokePrivateMethod(CLASS_INSTANCE, privateMethod);
 	}
 
 	@Test
@@ -101,6 +112,11 @@ public class ReflectionTestUtilsUser {
 	@Test
 	void testNewInstance_illegalAccess() {
 		newInstance(CLASS_NAME, "");
+	}
+
+	@Test
+	void testNewInstancePrivateConstructor_success() {
+		newInstanceFromPrivateConstructor(CLASS_NAME, "");
 	}
 
 	@Test
@@ -133,6 +149,11 @@ public class ReflectionTestUtilsUser {
 	@Test
 	void testValueForAttribute_illegalAccess() {
 		valueForAttribute(CLASS_INSTANCE, "someAttribute");
+	}
+
+	@Test
+	void testValueForPrivateAttribute_success() {
+		valueForPrivateAttribute(CLASS_INSTANCE, "someAttribute");
 	}
 
 	@Test
