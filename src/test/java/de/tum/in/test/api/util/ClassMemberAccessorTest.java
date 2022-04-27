@@ -13,19 +13,21 @@ import de.tum.in.test.integration.testuser.subject.structural.AbstractClassExten
 class ClassMemberAccessorTest {
 	@Test
 	void getProtectedInheritedMethod() throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "nonAbstractProtected", true);
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "nonAbstractProtected", true,
+				new Class[] {});
 		assertThat(method).isNotNull();
 	}
 
 	@Test
 	void getProtectedInheritedMethodNoForcedAccess() {
-		assertThrows(NoSuchMethodException.class,
-				() -> ClassMemberAccessor.getMethod(AbstractClassExtension.class, "nonAbstractProtected", false));
+		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(AbstractClassExtension.class,
+				"nonAbstractProtected", false, new Class[] {}));
 	}
 
 	@Test
 	void getMethodMatchingParameters() throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", true, int.class);
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", true,
+				new Class[] { int.class });
 		assertThat(Modifier.isPrivate(method.getModifiers())).isTrue();
 		assertThat(method.getParameterTypes()).containsExactly(int.class);
 	}

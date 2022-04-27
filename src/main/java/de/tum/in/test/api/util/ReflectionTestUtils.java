@@ -179,7 +179,7 @@ public final class ReflectionTestUtils {
 		var constructorArgTypes = getParameterTypes(constructorArgs, "reflection_test_utils.constructor_null_args", //$NON-NLS-1$
 				clazz.getSimpleName());
 		try {
-			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
+			Constructor<?> constructor = ClassMemberAccessor.getConstructor(clazz, forceAccess, constructorArgTypes);
 			return newInstanceAccessible(constructor, forceAccess, constructorArgs);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_args", clazz.getSimpleName(), //$NON-NLS-1$
@@ -273,7 +273,7 @@ public final class ReflectionTestUtils {
 	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
 		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
 		try {
-			Field field = object.getClass().getDeclaredField(attributeName);
+			Field field = ClassMemberAccessor.getAttribute(object.getClass(), attributeName, forceAccess);
 			if (forceAccess) {
 				field.setAccessible(true);
 			}
