@@ -14,4 +14,8 @@ public abstract class SomeAbstractClass {
 	}
 
 	abstract void doNothing();
+
+	protected void nonAbstractProtected() {
+		// nothing
+	}
 }

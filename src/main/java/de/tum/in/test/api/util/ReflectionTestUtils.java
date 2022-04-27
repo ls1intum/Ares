@@ -312,8 +312,24 @@ public final class ReflectionTestUtils {
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
+		return getMethodAccessible(declaringClass, methodName, false, parameterTypes);
+	}
+
+	/**
+	 * Retrieve a method with arguments of a given class by its name.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param methodName     The name of this method.
+	 * @param findPrivate    True, if this method should search for (package)
+	 *                       private or protected methods.
+	 * @param parameterTypes The parameter types of this method. Do not include if
+	 *                       the method has no parameters.
+	 * @return The wanted method.
+	 */
+	private static Method getMethodAccessible(Class<?> declaringClass, String methodName, boolean findPrivate,
+			Class<?>[] parameterTypes) {
 		try {
-			return declaringClass.getDeclaredMethod(methodName, parameterTypes);
+			return ClassMemberAccessor.getMethod(declaringClass, methodName, findPrivate, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.method_not_found", methodName, //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());
@@ -411,7 +427,7 @@ public final class ReflectionTestUtils {
 	private static Object invokeMethodAccessible(Object object, String methodName, boolean forceAccess,
 			Object[] params) {
 		var parameterTypes = getParameterTypes(params, "reflection_test_utils.method_null_args", methodName); //$NON-NLS-1$
-		var method = getMethod(object, methodName, parameterTypes);
+		var method = getMethodAccessible(object.getClass(), methodName, forceAccess, parameterTypes);
 		return invokeMethodAccessible(object, method, forceAccess, params);
 	}
 
