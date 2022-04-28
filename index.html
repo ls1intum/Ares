@@ -439,14 +439,229 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge .cm {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cp {
+  color: #999999;
+  font-weight: bold;
+}
+pre.rouge .c1 {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+pre.rouge .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+pre.rouge .ge {
+  color: #000000;
+  font-style: italic;
+}
+pre.rouge .gr {
+  color: #aa0000;
+}
+pre.rouge .gh {
+  color: #999999;
+}
+pre.rouge .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+pre.rouge .go {
+  color: #888888;
+}
+pre.rouge .gp {
+  color: #555555;
+}
+pre.rouge .gs {
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #aaaaaa;
+}
+pre.rouge .gt {
+  color: #aa0000;
+}
+pre.rouge .kc {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kd {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kn {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kp {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kr {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kt {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .k, pre.rouge .kv {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .mf {
+  color: #009999;
+}
+pre.rouge .mh {
+  color: #009999;
+}
+pre.rouge .il {
+  color: #009999;
+}
+pre.rouge .mi {
+  color: #009999;
+}
+pre.rouge .mo {
+  color: #009999;
+}
+pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
+  color: #009999;
+}
+pre.rouge .sa {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .sb {
+  color: #d14;
+}
+pre.rouge .sc {
+  color: #d14;
+}
+pre.rouge .sd {
+  color: #d14;
+}
+pre.rouge .s2 {
+  color: #d14;
+}
+pre.rouge .se {
+  color: #d14;
+}
+pre.rouge .sh {
+  color: #d14;
+}
+pre.rouge .si {
+  color: #d14;
+}
+pre.rouge .sx {
+  color: #d14;
+}
+pre.rouge .sr {
+  color: #009926;
+}
+pre.rouge .s1 {
+  color: #d14;
+}
+pre.rouge .ss {
+  color: #990073;
+}
+pre.rouge .s, pre.rouge .dl {
+  color: #d14;
+}
+pre.rouge .na {
+  color: #008080;
+}
+pre.rouge .bp {
+  color: #999999;
+}
+pre.rouge .nb {
+  color: #0086B3;
+}
+pre.rouge .nc {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .no {
+  color: #008080;
+}
+pre.rouge .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+pre.rouge .ni {
+  color: #800080;
+}
+pre.rouge .ne {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nl {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nn {
+  color: #555555;
+}
+pre.rouge .nt {
+  color: #000080;
+}
+pre.rouge .vc {
+  color: #008080;
+}
+pre.rouge .vg {
+  color: #008080;
+}
+pre.rouge .vi {
+  color: #008080;
+}
+pre.rouge .nv, pre.rouge .vm {
+  color: #008080;
+}
+pre.rouge .ow {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .o {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .w {
+  color: #bbbbbb;
+}
+pre.rouge {
+  background-color: #f8f8f8;
+}
+</style>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
 <h1>Ares</h1>
 <div class="details">
 <span id="author" class="author">Christian Femers</span><br>
-<span id="revnumber">version 3edfae5c9cfd9b343e0e8e7cca126355a7bb1035,</span>
-<span id="revdate">2022-04-29 00:04:47 +0200</span>
+<span id="revnumber">version 77cf5b5b6307df2b32966ae0439d16342f75a463,</span>
+<span id="revdate">2022-04-29 00:46:24 +0200</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -556,12 +771,12 @@ environment of a Maven project, include</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;de.tum.in.ase&lt;/groupId&gt;
-    &lt;artifactId&gt;artemis-java-test-sandbox&lt;/artifactId&gt;
-    &lt;version&gt;1.9.2&lt;/version&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>de.tum.in.ase<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>artemis-java-test-sandbox<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.9.2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -572,7 +787,7 @@ environment of a Maven project, include</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.9.2'</code></pre>
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">testImplementation</span> <span class="s1">'de.tum.in.ase:artemis-java-test-sandbox:1.9.2'</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -604,19 +819,19 @@ looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;properties&gt;
-    &lt;maven.compiler.source&gt;11&lt;/maven.compiler.source&gt;
-    &lt;maven.compiler.target&gt;11&lt;/maven.compiler.target&gt;
-&lt;/properties&gt;
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;maven.compiler.source&gt;</span>11<span class="nt">&lt;/maven.compiler.source&gt;</span>
+    <span class="nt">&lt;maven.compiler.target&gt;</span>11<span class="nt">&lt;/maven.compiler.target&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
 
-&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;de.tum.in.ase&lt;/groupId&gt;
-        &lt;artifactId&gt;artemis-java-test-sandbox&lt;/artifactId&gt;
-        &lt;version&gt;1.9.2&lt;/version&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></pre>
+<span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>de.tum.in.ase<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>artemis-java-test-sandbox<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.9.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencies&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -624,20 +839,20 @@ looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import java.util.Objects;
+<pre class="rouge highlight"><code data-lang="java"><span class="kn">import</span> <span class="nn">java.util.Objects</span><span class="o">;</span>
 
-public final class Penguin {
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Penguin</span> <span class="o">{</span>
 
-    private final String name;
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
 
-    public Penguin(String name) {
-        this.name = Objects.requireNonNull(name, "name must not be null");
-    }
+    <span class="kd">public</span> <span class="nf">Penguin</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="s">"name must not be null"</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    public String getName() {
-        return name;
-    }
-}</code></pre>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -645,22 +860,22 @@ public final class Penguin {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+<pre class="rouge highlight"><code data-lang="java"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">jupiter</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">Assertions</span><span class="o">.*;</span>
+<span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Test</span><span class="o">;</span>
 
-public class PenguinTest {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PenguinTest</span> <span class="o">{</span>
 
-    @Test
-    void testPenguinPublic() {
-        Penguin pingu = new Penguin("Julian");
-        assertEquals("Julian", pingu.getName(), "getName() does not return the name supplied to the contructor");
-    }
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">testPenguinPublic</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Penguin</span> <span class="n">pingu</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Penguin</span><span class="o">(</span><span class="s">"Julian"</span><span class="o">);</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">"Julian"</span><span class="o">,</span> <span class="n">pingu</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="s">"getName() does not return the name supplied to the contructor"</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    @Test
-    void testPenguinHidden() {
-        assertThrows(NullPointerException.class, () -&gt; new Penguin(null));
-    }
-}</code></pre>
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">testPenguinHidden</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">assertThrows</span><span class="o">(</span><span class="nc">NullPointerException</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">Penguin</span><span class="o">(</span><span class="kc">null</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -708,29 +923,29 @@ feedback. The most basic way to do this is by using the <code>@Public</code> and
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+<pre class="rouge highlight"><code data-lang="java"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">jupiter</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">Assertions</span><span class="o">.*;</span>
+<span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Test</span><span class="o">;</span>
 
-// IMPORTANT: make sure to use the "jupiter" ones (if you are not using jqwik)
-import de.tum.in.test.api.jupiter.Hidden;
-import de.tum.in.test.api.jupiter.Public;
+<span class="c1">// IMPORTANT: make sure to use the "jupiter" ones (if you are not using jqwik)</span>
+<span class="kn">import</span> <span class="nn">de.tum.in.test.api.jupiter.Hidden</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">de.tum.in.test.api.jupiter.Public</span><span class="o">;</span>
 
-// This example won't work just like that, see below why
-public class PenguinTest {
+<span class="c1">// This example won't work just like that, see below why</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PenguinTest</span> <span class="o">{</span>
 
-    @Public
-    @Test
-    void testPenguinPublic() {
-        Penguin pingu = new Penguin("Julian");
-        assertEquals("Julian", pingu.getName(), "getName() does not return the name supplied to the contructor");
-    }
+    <span class="nd">@Public</span>
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">testPenguinPublic</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Penguin</span> <span class="n">pingu</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Penguin</span><span class="o">(</span><span class="s">"Julian"</span><span class="o">);</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">"Julian"</span><span class="o">,</span> <span class="n">pingu</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="s">"getName() does not return the name supplied to the contructor"</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    @Hidden
-    @Test
-    void testPenguinHidden() {
-        assertThrows(NullPointerException.class, () -&gt; new Penguin(null));
-    }
-}</code></pre>
+    <span class="nd">@Hidden</span>
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">testPenguinHidden</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">assertThrows</span><span class="o">(</span><span class="nc">NullPointerException</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">Penguin</span><span class="o">(</span><span class="kc">null</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -744,11 +959,11 @@ annotation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">// Format must be ISO_LOCAL_DATE(T| )ISO_LOCAL_TIME( ZONE_ID)?
-@Deadline("2020-06-09 03:14 Europe/Berlin")
-public class PenguinTest {
-    // ...
-}</code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Format must be ISO_LOCAL_DATE(T| )ISO_LOCAL_TIME( ZONE_ID)?</span>
+<span class="nd">@Deadline</span><span class="o">(</span><span class="s">"2020-06-09 03:14 Europe/Berlin"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PenguinTest</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -783,10 +998,10 @@ its contents. If you change <code>getName()</code> to</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">public String getName() {
-    System.exit(0);
-    return name;
-}</code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -845,9 +1060,9 @@ itself, and it will still pass using the correct student code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Files.readString(Path.of("pom.xml"));
-// or
-Files.readString(Path.of("src/test/java/PenguinTest.java")); // assuming default maven structure</code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Files</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="nc">Path</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"pom.xml"</span><span class="o">));</span>
+<span class="c1">// or</span>
+<span class="nc">Files</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="nc">Path</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"src/test/java/PenguinTest.java"</span><span class="o">));</span> <span class="c1">// assuming default maven structure</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -882,47 +1097,47 @@ no student content lands in trusted packages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-enforcer-plugin&lt;/artifactId&gt;
-    &lt;version&gt;3.0.0&lt;/version&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;id&gt;enforce-no-student-code-in-trusted-packages&lt;/id&gt;
-            &lt;phase&gt;process-classes&lt;/phase&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-            &lt;goals&gt;
-                &lt;goal&gt;enforce&lt;/goal&gt;
-            &lt;/goals&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-    &lt;configuration&gt;
-        &lt;rules&gt;
-            &lt;requireFilesDontExist&gt;
-                &lt;files&gt;
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>maven-enforcer-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;executions&gt;</span>
+        <span class="nt">&lt;execution&gt;</span>
+            <span class="nt">&lt;id&gt;</span>enforce-no-student-code-in-trusted-packages<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;phase&gt;</span>process-classes<span class="nt">&lt;/phase&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+            <span class="nt">&lt;goals&gt;</span>
+                <span class="nt">&lt;goal&gt;</span>enforce<span class="nt">&lt;/goal&gt;</span>
+            <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;/execution&gt;</span>
+    <span class="nt">&lt;/executions&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;rules&gt;</span>
+            <span class="nt">&lt;requireFilesDontExist&gt;</span>
+                <span class="nt">&lt;files&gt;</span>
                     <i class="conum" data-value="2"></i><b>(2)</b>
-                    &lt;file&gt;${project.build.outputDirectory}/ch/qos/logback/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/com/intellij/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/com/sun/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/de/tum/in/test/api/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/java/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/javax/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/jdk/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/net/jqwik/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/apache/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/assertj/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/eclipse/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/jacoco/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/json/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/junit/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/opentest4j/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/sun/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/org/gradle/&lt;/file&gt;
-                    &lt;file&gt;${project.build.outputDirectory}/worker/org/gradle/&lt;/file&gt;
-                &lt;/files&gt;
-            &lt;/requireFilesDontExist&gt;
-        &lt;/rules&gt;
-    &lt;/configuration&gt;
-&lt;/plugin&gt;</code></pre>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/ch/qos/logback/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/com/intellij/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/com/sun/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/de/tum/in/test/api/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/java/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/javax/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/jdk/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/net/jqwik/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/apache/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/assertj/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/eclipse/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/jacoco/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/json/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/junit/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/opentest4j/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/sun/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/org/gradle/<span class="nt">&lt;/file&gt;</span>
+                    <span class="nt">&lt;file&gt;</span>${project.build.outputDirectory}/worker/org/gradle/<span class="nt">&lt;/file&gt;</span>
+                <span class="nt">&lt;/files&gt;</span>
+            <span class="nt">&lt;/requireFilesDontExist&gt;</span>
+        <span class="nt">&lt;/rules&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -930,34 +1145,34 @@ no student content lands in trusted packages:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">def forbiddenPackageFolders = [ <i class="conum" data-value="2"></i><b>(2)</b>
-    "$studentOutputDir/ch/qos/logback/",
-    "$studentOutputDir/com/intellij/",
-    "$studentOutputDir/com/sun/",
-    "$studentOutputDir/de/tum/in/test/api/",
-    "$studentOutputDir/java/",
-    "$studentOutputDir/javax/",
-    "$studentOutputDir/jdk/",
-    "$studentOutputDir/net/jqwik/",
-    "$studentOutputDir/org/assertj/",
-    "$studentOutputDir/org/apache/",
-    "$studentOutputDir/org/eclipse/",
-    "$studentOutputDir/org/gradle/",
-    "$studentOutputDir/org/jacoco/",
-    "$studentOutputDir/org/json/",
-    "$studentOutputDir/org/junit/",
-    "$studentOutputDir/org/opentest4j/",
-    "$studentOutputDir/sun/",
-    "$studentOutputDir/worker/org/gradle/"
-]
-test {
-    doFirst { <i class="conum" data-value="1"></i><b>(1)</b>
-        for (String packageFolder in forbiddenPackageFolders) {
-            assert !file(packageFolder).exists(): "$packageFolder must not exist within the submission."
-        }
-    }
-    // ...
-}</code></pre>
+<pre class="rouge highlight"><code data-lang="groovy"><span class="kt">def</span> <span class="n">forbiddenPackageFolders</span> <span class="o">=</span> <span class="o">[</span> <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="s2">"$studentOutputDir/ch/qos/logback/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/com/intellij/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/com/sun/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/de/tum/in/test/api/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/java/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/javax/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/jdk/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/net/jqwik/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/assertj/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/apache/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/eclipse/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/gradle/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/jacoco/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/json/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/junit/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/org/opentest4j/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/sun/"</span><span class="o">,</span>
+    <span class="s2">"$studentOutputDir/worker/org/gradle/"</span>
+<span class="o">]</span>
+<span class="n">test</span> <span class="o">{</span>
+    <span class="n">doFirst</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">packageFolder</span> <span class="k">in</span> <span class="n">forbiddenPackageFolders</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">assert</span> <span class="o">!</span><span class="n">file</span><span class="o">(</span><span class="n">packageFolder</span><span class="o">).</span><span class="na">exists</span><span class="o">():</span> <span class="s2">"$packageFolder must not exist within the submission."</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1071,9 +1286,9 @@ Before you give up, here is my recommendation how to start:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@WhitelistPath(value = "../course1920xyz**", type = PathType.GLOB) // for manual assessment and development
-@WhitelistPath("target") // mainly for Artemis
-@BlacklistPath("target/test-classes") // prevent access to test-related classes and resources</code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nd">@WhitelistPath</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"../course1920xyz**"</span><span class="o">,</span> <span class="n">type</span> <span class="o">=</span> <span class="nc">PathType</span><span class="o">.</span><span class="na">GLOB</span><span class="o">)</span> <span class="c1">// for manual assessment and development</span>
+<span class="nd">@WhitelistPath</span><span class="o">(</span><span class="s">"target"</span><span class="o">)</span> <span class="c1">// mainly for Artemis</span>
+<span class="nd">@BlacklistPath</span><span class="o">(</span><span class="s">"target/test-classes"</span><span class="o">)</span> <span class="c1">// prevent access to test-related classes and resources</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1246,17 +1461,17 @@ calling the method and its stack must be whitelisted, of course.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">void testSquareCorrect(IOTester tester) { <i class="conum" data-value="1"></i><b>(1)</b>
-    tester.provideInputLines("5"); <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="rouge highlight"><code data-lang="java"><span class="kt">void</span> <span class="nf">testSquareCorrect</span><span class="o">(</span><span class="nc">IOTester</span> <span class="n">tester</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="n">tester</span><span class="o">.</span><span class="na">provideInputLines</span><span class="o">(</span><span class="s">"5"</span><span class="o">);</span> <i class="conum" data-value="2"></i><b>(2)</b>
 
-    InputOutputPenguin.calculateSquare(); <i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="nc">InputOutputPenguin</span><span class="o">.</span><span class="na">calculateSquare</span><span class="o">();</span> <i class="conum" data-value="3"></i><b>(3)</b>
 
-    tester.err().assertThat().isEmpty(); <i class="conum" data-value="4"></i><b>(4)</b>
-    tester.out().assertThat().isEqualTo("""
+    <span class="n">tester</span><span class="o">.</span><span class="na">err</span><span class="o">().</span><span class="na">assertThat</span><span class="o">().</span><span class="na">isEmpty</span><span class="o">();</span> <i class="conum" data-value="4"></i><b>(4)</b>
+    <span class="n">tester</span><span class="o">.</span><span class="na">out</span><span class="o">().</span><span class="na">assertThat</span><span class="o">().</span><span class="na">isEqualTo</span><span class="o">(</span><span class="s">"""
                 Enter Number:
                 Answer:
-                25"""); <i class="conum" data-value="5"></i><b>(5)</b>
-}</code></pre>
+                25"""</span><span class="o">);</span> <i class="conum" data-value="5"></i><b>(5)</b>
+<span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1390,13 +1605,13 @@ use</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;ares&lt;/id&gt;
-        &lt;name&gt;Ares Maven Packages&lt;/name&gt;
-        &lt;url&gt;https://maven.pkg.github.com/ls1intum/Ares&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;</code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;repositories&gt;</span>
+    <span class="nt">&lt;repository&gt;</span>
+        <span class="nt">&lt;id&gt;</span>ares<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;name&gt;</span>Ares Maven Packages<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;url&gt;</span>https://maven.pkg.github.com/ls1intum/Ares<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+<span class="nt">&lt;/repositories&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1415,8 +1630,8 @@ use</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 3edfae5c9cfd9b343e0e8e7cca126355a7bb1035<br>
-Last updated 2022-04-28 22:08:47 UTC
+Version 77cf5b5b6307df2b32966ae0439d16342f75a463<br>
+Last updated 2022-04-28 22:48:13 UTC
 </div>
 </div>
 </body>
