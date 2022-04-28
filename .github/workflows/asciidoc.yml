@@ -21,7 +21,7 @@ jobs:
       - name: Extract revision info
         id: rev_info
         run: |
-          cd main
+          cd repo
           echo ::set-output name=date::$(git show -s --format=%ci ${{ github.sha }})
           REV_TAG=$(git tag --list '*.*.*' --points-at ${{ github.sha }})
           REV_VERSION=$(if [[ $REV_TAG ]]; then echo "$REV_TAG"; else echo "${{ github.sha }}"; fi)
