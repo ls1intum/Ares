@@ -43,7 +43,7 @@ jobs:
     name: Deploy to GitHub Pages
     if: startsWith(github.event.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     needs: build-doc
-    environment: github-pages
+    environment: github-pages-branch
     steps:
       - name: Download documentation artifact into ./public
         uses: actions/download-artifact@v2
