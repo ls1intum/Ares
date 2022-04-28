@@ -1,0 +1,57 @@
+name: AsciiDoc Documentation
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  build-doc:
+    runs-on: ubuntu-latest
+    name: Build AsciiDoc documentation
+    steps:
+      - name: Checkout into ./repo
+        uses: actions/checkout@v2
+        with:
+          path: repo
+      - name: Extract revision info
+        id: rev_info
+        run: |
+          cd main
+          echo ::set-output name=date::$(git show -s --format=%ci ${{ github.sha }})
+          REV_TAG=$(git tag --list '*.*.*' --points-at ${{ github.sha }})
+          REV_VERSION=$(if [[ $REV_TAG ]]; then echo "$REV_TAG"; else echo "${{ github.sha }}"; fi)
+          echo ::set-output name=tag::"$REV_TAG"
+          echo ::set-output name=version::"$REV_VERSION"
+          cd ..
+      - name: Process AsciiDoc from ./repo to ./public
+        uses: avattathil/asciidoctor-action@v2
+        with:
+          program: asciidoctor -D public -b html5 -o index.html -a toc=left -a revdate="${{ steps.rev_info.outputs.date }}" -a revnumber="${{ steps.rev_info.outputs.version }}" repo/README.adoc
+      - name: Upload AsciiDoc documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs-${{ github.sha }}
+          path: public
+          retention-days: 3
+  publish-doc:
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    if: startsWith(github.event.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    needs: build-doc
+    environment: github-pages
+    steps:
+      - name: Download documentation artifact into ./public
+        uses: actions/download-artifact@v2
+        with:
+          name: docs-${{ github.sha }}
+          path: public
+      - name: Push content of ./public
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: public
