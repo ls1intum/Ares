@@ -19,6 +19,15 @@ Central]]
 image:https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org[Sonatype
 Nexus (Snapshots)]
 
+// ----------------------------------------------------------
+// Display the following for standard GitHub AsciiDoc display
+// ----------------------------------------------------------
+ifdef::env-github[]
+
+https://ls1intum.github.io/Ares/[*View this documentation on GitHub Pages!*]
+
+endif::env-github[]
+
 Ares, also known as Artemis Java Test Sandbox _(abbr. AJTS)_, is a JUnit
 5 extension for easy and secure Java testing on the interactive learning
 platform https://github.com/ls1intum/Artemis[Artemis].
