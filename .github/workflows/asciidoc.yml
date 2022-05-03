@@ -46,7 +46,7 @@ jobs:
     environment: github-pages-branch
     steps:
       - name: Download documentation artifact into ./public
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: docs-${{ github.sha }}
           path: public
