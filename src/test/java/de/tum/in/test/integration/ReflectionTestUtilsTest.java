@@ -22,26 +22,26 @@ class ReflectionTestUtilsTest {
 	private final String testGetMethod_noSuchMethod_noParameters = "testGetMethod_noSuchMethod_noParameters";
 	private final String testGetMethod_noSuchMethod_withParameters = "testGetMethod_noSuchMethod_withParameters";
 	private final String testGetMethod_success = "testGetMethod_success";
+	private final String testInvokeMethodRethrowing_illegalAccess = "testInvokeMethodRethrowing_illegalAccess";
+	private final String testInvokeMethodRethrowing_illegalArgument = "testInvokeMethodRethrowing_illegalArgument";
+	private final String testInvokeMethodRethrowing_nullPointer = "testInvokeMethodRethrowing_nullPointer";
 	private final String testInvokeMethod_invocationTarget = "testInvokeMethod_invocationTarget";
 	private final String testInvokeMethod_success = "testInvokeMethod_success";
 	private final String testInvokePrivateMethodByName_success = "testInvokePrivateMethodByName_success";
-	private final String testInvokeMethodRethrowing_illegalAccess = "testInvokeMethodRethrowing_illegalAccess";
 	private final String testInvokePrivateMethodRethrowing_success = "testInvokePrivateMethodRethrowing_success";
-	private final String testInvokeMethodRethrowing_illegalArgument = "testInvokeMethodRethrowing_illegalArgument";
-	private final String testInvokeMethodRethrowing_nullPointer = "testInvokeMethodRethrowing_nullPointer";
+	private final String testNewInstancePrivateConstructor_success = "testNewInstancePrivateConstructor_success";
 	private final String testNewInstance_classNotFound = "testNewInstance_classNotFound";
 	private final String testNewInstance_exceptionInInitializer = "testNewInstance_exceptionInInitializer";
 	private final String testNewInstance_illegalAccess = "testNewInstance_illegalAccess";
-	private final String testNewInstancePrivateConstructor_success = "testNewInstancePrivateConstructor_success";
 	private final String testNewInstance_illegalArguments = "testNewInstance_illegalArguments";
 	private final String testNewInstance_instantiation = "testNewInstance_instantiation";
 	private final String testNewInstance_invocationTarget = "testNewInstance_invocationTarget";
 	private final String testNewInstance_noSuchMethod = "testNewInstance_noSuchMethod";
 	private final String testNewInstance_success = "testNewInstance_success";
 	private final String testValueForAttribute_illegalAccess = "testValueForAttribute_illegalAccess";
-	private final String testValueForPrivateAttribute_success = "testValueForPrivateAttribute_success";
 	private final String testValueForAttribute_noSuchField = "testValueForAttribute_noSuchField";
 	private final String testValueForAttribute_success = "testValueForAttribute_success";
+	private final String testValueForPrivateAttribute_success = "testValueForPrivateAttribute_success";
 
 	@TestTest
 	void test_invokeMethod_success() {
@@ -91,22 +91,10 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
-	void test_testInvokeMethod_invocationTarget() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethod_invocationTarget,
-				AssertionFailedError.class,
-				"Could not invoke the method 'throwException' in the class SomeClass because of an exception within the method: java.lang.RuntimeException"));
-	}
-
-	@TestTest
 	void test_testInvokeMethodRethrowing_illegalAccess() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethodRethrowing_illegalAccess,
 				AssertionFailedError.class,
 				"Could not invoke the method 'superSecretMethod' in the class SomeClass because access to the method was denied. Make sure to check the modifiers of the method."));
-	}
-
-	@TestTest
-	void test_testInvokePrivateMethodRethrowing_success() {
-		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokePrivateMethodRethrowing_success));
 	}
 
 	@TestTest
@@ -121,6 +109,23 @@ class ReflectionTestUtilsTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethodRethrowing_nullPointer,
 				AssertionFailedError.class,
 				"Could not invoke the method 'getAnotherAttribute' in the class SomeClass because the object was null and the method is an instance method. Make sure to check the static modifier of the method."));
+	}
+
+	@TestTest
+	void test_testInvokeMethod_invocationTarget() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethod_invocationTarget,
+				AssertionFailedError.class,
+				"Could not invoke the method 'throwException' in the class SomeClass because of an exception within the method: java.lang.RuntimeException"));
+	}
+
+	@TestTest
+	void test_testInvokePrivateMethodRethrowing_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokePrivateMethodRethrowing_success));
+	}
+
+	@TestTest
+	void test_testNewInstancePrivateConstructor_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstancePrivateConstructor_success));
 	}
 
 	@TestTest
@@ -142,11 +147,6 @@ class ReflectionTestUtilsTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewInstance_illegalAccess,
 				AssertionFailedError.class,
 				"Could not instantiate the class SomeClass because access to its constructor with the parameters: [ String ] was denied. Make sure to check the modifiers of the constructor."));
-	}
-
-	@TestTest
-	void test_testNewInstancePrivateConstructor_success() {
-		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstancePrivateConstructor_success));
 	}
 
 	@TestTest
@@ -189,11 +189,6 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
-	void test_testValueForPrivateAttribute_success() {
-		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForPrivateAttribute_success));
-	}
-
-	@TestTest
 	void test_testValueForAttribute_noSuchField() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testValueForAttribute_noSuchField,
 				AssertionFailedError.class,
@@ -203,5 +198,10 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testValueForAttribute_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForAttribute_success));
+	}
+
+	@TestTest
+	void test_testValueForPrivateAttribute_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForPrivateAttribute_success));
 	}
 }

@@ -1,11 +1,12 @@
 package de.tum.in.test.integration.testuser.subject.structural;
 
-public class AbstractClassExtension extends SomeAbstractClass {
+public class AbstractClassExtension extends SomeAbstractClass implements SomeInterface {
 	@Override
 	void doNothing() {
 		// nothing
 	}
 
+	@SuppressWarnings("unused")
 	public void declaredMethod() {
 		// nothing
 	}
@@ -18,5 +19,10 @@ public class AbstractClassExtension extends SomeAbstractClass {
 	@SuppressWarnings("unused")
 	private void declaredMethod(String s) {
 		// nothing
+	}
+
+	@Override
+	public int doSomething(String someString) {
+		return 10;
 	}
 }

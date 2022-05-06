@@ -44,19 +44,37 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testGetMethod_noSuchMethod_withParameters() {
-		getMethod(CLASS_INSTANCE, "someMethod", String.class);
+	void testGetMethod_noSuchMethod_noParameters() {
+		getMethod(CLASS_INSTANCE, "someMethod");
 	}
 
 	@Test
-	void testGetMethod_noSuchMethod_noParameters() {
-		getMethod(CLASS_INSTANCE, "someMethod");
+	void testGetMethod_noSuchMethod_withParameters() {
+		getMethod(CLASS_INSTANCE, "someMethod", String.class);
 	}
 
 	@Test
 	void testGetMethod_success() {
 		var method = getMethod(CLASS_INSTANCE, "getAnotherAttribute");
 		assertThat(method).isInstanceOf(Method.class);
+	}
+
+	@Test
+	void testInvokeMethodRethrowing_illegalAccess() throws NoSuchMethodException {
+		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
+		invokeMethod(CLASS_INSTANCE, privateMethod);
+	}
+
+	@Test
+	void testInvokeMethodRethrowing_illegalArgument() throws NoSuchMethodException {
+		var method = CLASS_INSTANCE.getClass().getMethod("getAnotherAttribute");
+		invokeMethod(CLASS_INSTANCE, method, "Illegal");
+	}
+
+	@Test
+	void testInvokeMethodRethrowing_nullPointer() throws NoSuchMethodException {
+		var method = CLASS_INSTANCE.getClass().getMethod("getAnotherAttribute");
+		invokeMethod(null, method);
 	}
 
 	@Test
@@ -76,27 +94,14 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testInvokeMethodRethrowing_illegalAccess() throws NoSuchMethodException {
-		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
-		invokeMethod(CLASS_INSTANCE, privateMethod);
-	}
-
-	@Test
 	void testInvokePrivateMethodRethrowing_success() throws NoSuchMethodException {
 		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
 		invokePrivateMethod(CLASS_INSTANCE, privateMethod);
 	}
 
 	@Test
-	void testInvokeMethodRethrowing_illegalArgument() throws NoSuchMethodException {
-		var method = CLASS_INSTANCE.getClass().getMethod("getAnotherAttribute");
-		invokeMethod(CLASS_INSTANCE, method, "Illegal");
-	}
-
-	@Test
-	void testInvokeMethodRethrowing_nullPointer() throws NoSuchMethodException {
-		var method = CLASS_INSTANCE.getClass().getMethod("getAnotherAttribute");
-		invokeMethod(null, method);
+	void testNewInstancePrivateConstructor_success() {
+		newInstanceFromPrivateConstructor(CLASS_NAME, "");
 	}
 
 	@Test
@@ -112,11 +117,6 @@ public class ReflectionTestUtilsUser {
 	@Test
 	void testNewInstance_illegalAccess() {
 		newInstance(CLASS_NAME, "");
-	}
-
-	@Test
-	void testNewInstancePrivateConstructor_success() {
-		newInstanceFromPrivateConstructor(CLASS_NAME, "");
 	}
 
 	@Test
@@ -152,11 +152,6 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testValueForPrivateAttribute_success() {
-		valueForPrivateAttribute(CLASS_INSTANCE, "someAttribute");
-	}
-
-	@Test
 	void testValueForAttribute_noSuchField() {
 		valueForAttribute(CLASS_INSTANCE, "noSuchField");
 	}
@@ -165,5 +160,10 @@ public class ReflectionTestUtilsUser {
 	void testValueForAttribute_success() {
 		var value = valueForAttribute(CLASS_INSTANCE, "SOME_CONSTANT");
 		assertThat(value).isEqualTo(SomeClass.SOME_CONSTANT);
+	}
+
+	@Test
+	void testValueForPrivateAttribute_success() {
+		valueForPrivateAttribute(CLASS_INSTANCE, "someAttribute");
 	}
 }

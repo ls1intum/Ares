@@ -179,7 +179,7 @@ public final class ReflectionTestUtils {
 		var constructorArgTypes = getParameterTypes(constructorArgs, "reflection_test_utils.constructor_null_args", //$NON-NLS-1$
 				clazz.getSimpleName());
 		try {
-			Constructor<?> constructor = ClassMemberAccessor.getConstructor(clazz, forceAccess, constructorArgTypes);
+			Constructor<?> constructor = clazz.getDeclaredConstructor(constructorArgTypes);
 			return newInstanceAccessible(constructor, forceAccess, constructorArgs);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_args", clazz.getSimpleName(), //$NON-NLS-1$
@@ -322,8 +322,7 @@ public final class ReflectionTestUtils {
 	 * @param methodName     The name of this method.
 	 * @param findPrivate    True, if this method should search for (package)
 	 *                       private or protected methods.
-	 * @param parameterTypes The parameter types of this method. Do not include if
-	 *                       the method has no parameters.
+	 * @param parameterTypes The parameter types of this method.
 	 * @return The wanted method.
 	 */
 	private static Method getMethodAccessible(Class<?> declaringClass, String methodName, boolean findPrivate,
