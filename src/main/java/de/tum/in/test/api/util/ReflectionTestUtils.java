@@ -87,7 +87,7 @@ public final class ReflectionTestUtils {
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
-	 * {@link #newInstance(Constructor, Object...)} for that.
+	 * {@link #newInstanceFromPrivateConstructor(Constructor, Object...)} for that.
 	 * <p>
 	 * Forces the access to package-private, {@code protected}, and {@code private}
 	 * constructors. Use {@link #newInstance(String, Object...)} if you do not
