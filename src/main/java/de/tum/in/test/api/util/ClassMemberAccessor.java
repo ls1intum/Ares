@@ -9,8 +9,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Provides utility methods to access public, (package) private and protected
- * (inherited) members of classes.
+ * Provides utility methods to search for declared and inherited public,
+ * protected, and (package) private members of classes.
  */
 class ClassMemberAccessor {
 	private ClassMemberAccessor() {
@@ -35,6 +35,9 @@ class ClassMemberAccessor {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
 				if (c.equals(declaringClass) || findPrivate) {
+					// Also search for declared methods in the own class even when not explicitly
+					// searching for private methods to be able to provide error messages to the
+					// users that the method exists, but with the wrong visibility.
 					return getInheritedMethod(declaringClass, c, methodName, parameterTypes);
 				} else {
 					return Stream.of(c.getMethod(methodName, parameterTypes));
@@ -85,11 +88,14 @@ class ClassMemberAccessor {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
 				if (c.equals(declaringClass) || findPrivate) {
+					// Also search for declared fields in the own class even when not explicitly
+					// searching for private fields to be able to provide error messages to the
+					// users that the field exists, but with the wrong visibility.
 					return getInheritedField(declaringClass, c, fieldName).stream();
 				} else {
 					return Stream.of(c.getField(fieldName));
 				}
-			} catch (NoSuchFieldException nmse) {
+			} catch (NoSuchFieldException nsfe) {
 				return Stream.empty();
 			}
 		}).findFirst().orElseThrow(() -> new NoSuchFieldException(fieldName));
@@ -137,7 +143,9 @@ class ClassMemberAccessor {
 	 * Checks if a field or method member of a class is accessible in a subclass.
 	 *
 	 * @param targetClass     The class in which the class member of
-	 *                        {@code declaredInClass} should be accessible.
+	 *                        {@code declaredInClass} should be accessible. Assumes
+	 *                        that {@code declaredInClass} is a superclass of
+	 *                        {@code targetClass}.
 	 * @param declaredInClass The class in which the member was declared.
 	 * @param modifier        The modifiers of the member.
 	 * @return True, if the class member of {@code declaredInClass} is accessible in
