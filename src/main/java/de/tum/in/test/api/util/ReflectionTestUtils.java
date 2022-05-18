@@ -540,7 +540,7 @@ public final class ReflectionTestUtils {
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		try {
-			return declaringClass.getDeclaredConstructor(parameterTypes);
+			return declaringClass.getConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());
