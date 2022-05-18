@@ -74,8 +74,6 @@ public final class ReflectionTestUtils {
 	 *                           retrieved (package.classname)
 	 * @param constructorArgs    Parameter instances of the constructor of the
 	 *                           class, that it should use to get instantiated with.
-	 *                           Do not include, if the constructor has no
-	 *                           arguments.
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
@@ -97,10 +95,8 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param qualifiedClassName The qualified name of the class that needs to get
 	 *                           retrieved (package.classname)
-	 * @param constructorArgs    Parameter instances of the constructor of the
-	 *                           class, that it should use to get instantiated with.
-	 *                           Do not include, if the constructor has no
-	 *                           arguments.
+	 * @param constructorArgs    Parameter instances of the constructor of the class
+	 *                           that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
@@ -118,8 +114,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param clazz           The class for which a new instance should be created
 	 * @param constructorArgs Parameter instances of the constructor of the class,
-	 *                        that it should use to get instantiated with. Do not
-	 *                        include, if the constructor has no arguments.
+	 *                        that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Class<?> clazz, Object... constructorArgs) {
@@ -132,7 +127,7 @@ public final class ReflectionTestUtils {
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
-	 * {@link #newInstance(Constructor, Object...)} for that.
+	 * {@link #newInstance(Constructor, Object[])} for that.
 	 * <p>
 	 * Forces the access to package-private, {@code protected}, and {@code private}
 	 * constructors. Use {@link #newInstance(Class, Object...)} if you do not
@@ -140,8 +135,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param clazz           The class for which a new instance should be created
 	 * @param constructorArgs Parameter instances of the constructor of the class,
-	 *                        that it should use to get instantiated with. Do not
-	 *                        include, if the constructor has no arguments.
+	 *                        that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 */
 	public static Object newInstanceFromPrivateConstructor(Class<?> clazz, Object... constructorArgs) {
@@ -155,12 +149,29 @@ public final class ReflectionTestUtils {
 	 * @param constructor     The actual constructor that should be used for
 	 *                        creating a new instance of the object
 	 * @param constructorArgs Parameter instances of the constructor of the class,
-	 *                        that it should use to get instantiated with. Do not
-	 *                        include, if the constructor has no arguments.
+	 *                        that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 */
 	public static Object newInstance(Constructor<?> constructor, Object... constructorArgs) {
 		return newInstanceAccessible(constructor, false, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable.
+	 * <p>
+	 * Forces the access to package-private, {@code protected}, and {@code private}
+	 * constructors. Use {@link #newInstance(Constructor, Object...)} if you do not
+	 * require this functionality.
+	 *
+	 * @param constructor     The actual constructor that should be used for
+	 *                        creating a new instance of the object
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with.
+	 * @return The instance of this class.
+	 */
+	public static Object newInstanceFromPrivateConstructor(Constructor<?> constructor, Object... constructorArgs) {
+		return newInstanceAccessible(constructor, true, constructorArgs);
 	}
 
 	/**
@@ -293,8 +304,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param object         instance of the class that defines the method.
 	 * @param methodName     the name of the method.
-	 * @param parameterTypes The parameter types of this method. Do not include if
-	 *                       the method has no parameters.
+	 * @param parameterTypes The parameter types of this method.
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
@@ -307,8 +317,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
-	 * @param parameterTypes The parameter types of this method. Do not include if
-	 *                       the method has no parameters.
+	 * @param parameterTypes The parameter types of this method.
 	 * @return The wanted method.
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
@@ -349,8 +358,7 @@ public final class ReflectionTestUtils {
 	 * @param object     The instance of the class that should invoke the method.
 	 *                   Must not be null, even for static methods.
 	 * @param methodName The method name that has to get invoked.
-	 * @param params     Parameter instances of the method. Do not include if the
-	 *                   method has no parameters.
+	 * @param params     Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, String methodName, Object... params) {
@@ -363,7 +371,8 @@ public final class ReflectionTestUtils {
 	 * <p>
 	 * This method does not support invoking static methods and passing null,
 	 * passing subclasses of the parameter types or invoking methods with primitive
-	 * parameters. Use {@link #invokeMethod(Object, Method, Object...)} for that.
+	 * parameters. Use {@link #invokePrivateMethod(Object, Method, Object...)} for
+	 * that.
 	 * <p>
 	 * Forces access to package-private, {@code protected}, and {@code private}
 	 * methods. Use {@link #invokeMethod(Object, String, Object...)} when invoking
@@ -372,8 +381,7 @@ public final class ReflectionTestUtils {
 	 * @param object     The instance of the class that should invoke the method.
 	 *                   Must not be null, even for static methods.
 	 * @param methodName The method name that has to get invoked.
-	 * @param params     Parameter instances of the method. Do not include if the
-	 *                   method has no parameters.
+	 * @param params     Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
 	public static Object invokePrivateMethod(Object object, String methodName, Object... params) {
@@ -386,8 +394,7 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method. Can be
 	 *               null if the method is static.
 	 * @param method The method that has to get invoked.
-	 * @param params Parameter instances of the method. Do not include if the method
-	 *               has no parameters.
+	 * @param params Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
 	public static Object invokeMethod(Object object, Method method, Object... params) {
@@ -404,8 +411,7 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method. Can be
 	 *               null if the method is static.
 	 * @param method The method that has to get invoked.
-	 * @param params Parameter instances of the method. Do not include if the method
-	 *               has no parameters.
+	 * @param params Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
 	public static Object invokePrivateMethod(Object object, Method method, Object... params) {
@@ -459,8 +465,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
-	 * @param params Parameter instances of the method. Do not include if the method
-	 *               has no parameters.
+	 * @param params Parameter instances of the method.
 	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
 	 */
@@ -478,8 +483,7 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
-	 * @param params Parameter instances of the method. Do not include if the method
-	 *               has no parameters.
+	 * @param params Parameter instances of the method.
 	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
 	 */
@@ -530,8 +534,7 @@ public final class ReflectionTestUtils {
 	 * Retrieve a constructor with arguments of a given class.
 	 *
 	 * @param declaringClass The class that declares this constructor.
-	 * @param parameterTypes The parameter types of this method. Do not include if
-	 *                       the method has no parameters.
+	 * @param parameterTypes The parameter types of this method.
 	 * @param <T>            The type parameter of the constructor and class
 	 * @return The wanted method.
 	 */
