@@ -42,7 +42,7 @@ class ClassMemberAccessor {
 				} else {
 					return Stream.of(c.getMethod(methodName, parameterTypes));
 				}
-			} catch (NoSuchMethodException nmse) {
+			} catch (NoSuchMethodException nsme) {
 				return Stream.empty();
 			}
 		}).findFirst().orElseThrow(() -> new NoSuchMethodException(methodName));
@@ -63,7 +63,7 @@ class ClassMemberAccessor {
 	private static Stream<Method> getInheritedMethod(Class<?> targetClass, Class<?> declaringClass, String methodName,
 			Class<?>[] parameterTypes) throws NoSuchMethodException {
 		Method method = declaringClass.getDeclaredMethod(methodName, parameterTypes);
-		if (isInherited(targetClass, declaringClass, method.getModifiers())) {
+		if (isInheritable(targetClass, declaringClass, method.getModifiers())) {
 			return Stream.of(method);
 		} else {
 			return Stream.empty();
@@ -115,7 +115,7 @@ class ClassMemberAccessor {
 	private static Optional<Field> getInheritedField(Class<?> targetClass, Class<?> declaringClass, String fieldName)
 			throws NoSuchFieldException {
 		Field field = declaringClass.getDeclaredField(fieldName);
-		if (isInherited(targetClass, declaringClass, field.getModifiers())) {
+		if (isInheritable(targetClass, declaringClass, field.getModifiers())) {
 			return Optional.of(field);
 		} else {
 			return Optional.empty();
@@ -151,7 +151,10 @@ class ClassMemberAccessor {
 	 * @return True, if the class member of {@code declaredInClass} is accessible in
 	 *         its subclass {@code targetClass}.
 	 */
-	private static boolean isInherited(Class<?> targetClass, Class<?> declaredInClass, int modifier) {
-		return targetClass.equals(declaredInClass) || !Modifier.isPrivate(modifier);
+	private static boolean isInheritable(Class<?> targetClass, Class<?> declaredInClass, int modifier) {
+		boolean isInheritable = Modifier.isProtected(modifier) || Modifier.isPublic(modifier);
+		boolean isInheritableInPackage = !Modifier.isPrivate(modifier)
+				&& targetClass.getPackage().equals(declaredInClass.getPackage());
+		return targetClass.equals(declaredInClass) || isInheritable || isInheritableInPackage;
 	}
 }

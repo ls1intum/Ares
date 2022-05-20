@@ -26,4 +26,8 @@ public abstract class SomeAbstractClass {
 	private void nonAbstractPrivate() {
 		// nothing
 	}
+
+	void nonAbstractPackagePrivate() {
+		// nothing
+	}
 }

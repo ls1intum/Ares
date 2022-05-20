@@ -14,15 +14,23 @@ import org.junit.jupiter.params.provider.ValueSource;
 import de.tum.in.test.integration.testuser.subject.structural.AbstractClassExtension;
 import de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass;
 import de.tum.in.test.integration.testuser.subject.structural.SomeInterface;
+import de.tum.in.test.integration.testuser.subject.structural.subpackage.SubpackageClass;
 
 class ClassMemberAccessorTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getPublicMethod(boolean findPrivate) throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", findPrivate,
-				new Class[] {});
-		assertThat(method).isNotNull();
+	void getInheritedInterfaceDefaultMethod(boolean findPrivate) throws NoSuchMethodException {
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "doSomethingElse", findPrivate,
+				new Class[] { int.class });
+		assertThat(method.getDeclaringClass()).isEqualTo(SomeInterface.class);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void getInterfaceAttribute(boolean findPrivate) throws NoSuchFieldException {
+		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "ANOTHER_CONSTANT", findPrivate);
+		assertThat(field.getDeclaringClass()).isEqualTo(SomeInterface.class);
 	}
 
 	@Test
@@ -31,6 +39,39 @@ class ClassMemberAccessorTest {
 				new Class[] { int.class });
 		assertThat(Modifier.isPrivate(method.getModifiers())).isTrue();
 		assertThat(method.getParameterTypes()).containsExactly(int.class);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void getNonAccessiblePrivateSuperclassField(boolean findPrivate) {
+		assertThrows(NoSuchFieldException.class, () -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class,
+				"somePrivateAttribute", findPrivate));
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void getNonAccessiblePrivateSuperclassMethod(boolean findPrivate) {
+		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(AbstractClassExtension.class,
+				"nonAbstractPrivate", findPrivate, new Class[] {}));
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void getPackagePrivateMethodNoAccessInSubpackage(boolean findPrivate) {
+		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(SubpackageClass.class,
+				"nonAbstractPackagePrivate", findPrivate, new Class[] {}));
+	}
+
+	@Test
+	void getProtectedInheritedAttribute() throws NoSuchFieldException {
+		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", true);
+		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
+	}
+
+	@Test
+	void getProtectedInheritedAttributeNoForcedAccess() {
+		assertThrows(NoSuchFieldException.class,
+				() -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", false));
 	}
 
 	@Test
@@ -46,19 +87,11 @@ class ClassMemberAccessorTest {
 				"nonAbstractProtected", false, new Class[] {}));
 	}
 
-	@ParameterizedTest
-	@ValueSource(booleans = { true, false })
-	void getInheritedInterfaceDefaultMethod(boolean findPrivate) throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "doSomethingElse", findPrivate,
-				new Class[] { int.class });
-		assertThat(method.getDeclaringClass()).isEqualTo(SomeInterface.class);
-	}
-
-	@ParameterizedTest
-	@ValueSource(booleans = { true, false })
-	void getNonAccessiblePrivateSuperclassMethod(boolean findPrivate) {
-		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(AbstractClassExtension.class,
-				"nonAbstractPrivate", findPrivate, new Class[] {}));
+	@Test
+	void getProtectedMethodAccessInSubpackage() throws NoSuchMethodException {
+		Method method = ClassMemberAccessor.getMethod(SubpackageClass.class, "nonAbstractProtected", true,
+				new Class[] {});
+		assertThat(method).isNotNull();
 	}
 
 	@ParameterizedTest
@@ -68,29 +101,11 @@ class ClassMemberAccessorTest {
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
 	}
 
-	@Test
-	void getProtectedInheritedAttribute() throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", true);
-		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
-	}
-
-	@Test
-	void getProtectedInheritedAttributeNoForcedAccess() {
-		assertThrows(NoSuchFieldException.class,
-				() -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", false));
-	}
-
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getInterfaceAttribute(boolean findPrivate) throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "ANOTHER_CONSTANT", findPrivate);
-		assertThat(field.getDeclaringClass()).isEqualTo(SomeInterface.class);
-	}
-
-	@ParameterizedTest
-	@ValueSource(booleans = { true, false })
-	void getNonAccessiblePrivateSuperclassField(boolean findPrivate) {
-		assertThrows(NoSuchFieldException.class, () -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class,
-				"somePrivateAttribute", findPrivate));
+	void getPublicMethod(boolean findPrivate) throws NoSuchMethodException {
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", findPrivate,
+				new Class[] {});
+		assertThat(method).isNotNull();
 	}
 }
