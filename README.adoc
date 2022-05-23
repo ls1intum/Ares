@@ -654,7 +654,7 @@ java.lang.IllegalStateException: no further console input request after the last
 ...
 
 See also `IOTester` and for more examples, the
-link:src/test/java/de/tum/in/testuser/InputOutputUser.java[`InputOutputUser`]
+link:src/test/java/de/tum/in/test/integration/testuser/InputOutputUser.java[`InputOutputUser`]
 test.
 
 <<showing-standard-output>> covers how the student output is
@@ -682,7 +682,7 @@ a way that they cannot be stopped (waiting in native code), so we
 recommend using timeouts for connections at least on one end consistently.
 
 For examples, have a look at the test
-link:src/test/java/de/tum/in/testuser/NetworkUser.java[`NetworkUser`].
+link:src/test/java/de/tum/in/test/integration/testuser/NetworkUser.java[`NetworkUser`].
 
 ==== Locale
 
@@ -695,7 +695,7 @@ where the annotation is applied.
 Ares is currently localized in German (`de_DE`) and English (`en_US`),
 where `en_US` is the fallback for any other locale.
 
-See also the link:src/test/java/de/tum/in/testuser/LocaleUser.java[`LocaleUser`]
+See also the link:src/test/java/de/tum/in/test/integration/testuser/LocaleUser.java[`LocaleUser`]
 test for more examples.
 
 == Additional Notes
