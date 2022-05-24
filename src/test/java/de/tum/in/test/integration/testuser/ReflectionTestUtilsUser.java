@@ -60,6 +60,17 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testInvokeMethod_invocationTarget() {
+		invokeMethod(CLASS_INSTANCE, "throwException");
+	}
+
+	@Test
+	void testInvokeMethod_success() {
+		var returnValue = invokeMethod(CLASS_INSTANCE, "getAnotherAttribute");
+		assertThat(returnValue).isEqualTo(CLASS_INSTANCE.getAnotherAttribute());
+	}
+
+	@Test
 	void testInvokeMethodRethrowing_illegalAccess() throws NoSuchMethodException {
 		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
 		invokeMethod(CLASS_INSTANCE, privateMethod);
@@ -78,17 +89,6 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testInvokeMethod_invocationTarget() {
-		invokeMethod(CLASS_INSTANCE, "throwException");
-	}
-
-	@Test
-	void testInvokeMethod_success() {
-		var returnValue = invokeMethod(CLASS_INSTANCE, "getAnotherAttribute");
-		assertThat(returnValue).isEqualTo(CLASS_INSTANCE.getAnotherAttribute());
-	}
-
-	@Test
 	void testInvokePrivateMethodByName_success() {
 		invokePrivateMethod(CLASS_INSTANCE, "superSecretMethod");
 	}
@@ -97,11 +97,6 @@ public class ReflectionTestUtilsUser {
 	void testInvokePrivateMethodRethrowing_success() throws NoSuchMethodException {
 		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
 		invokePrivateMethod(CLASS_INSTANCE, privateMethod);
-	}
-
-	@Test
-	void testNewInstancePrivateConstructor_success() {
-		newInstanceFromPrivateConstructor(CLASS_NAME, "");
 	}
 
 	@Test
@@ -144,6 +139,11 @@ public class ReflectionTestUtilsUser {
 	void testNewInstance_success() {
 		var instance = newInstance(CLASS_NAME, 1);
 		assertThat(instance).isInstanceOf(SomeClass.class);
+	}
+
+	@Test
+	void testNewInstancePrivateConstructor_success() {
+		newInstanceFromPrivateConstructor(CLASS_NAME, "");
 	}
 
 	@Test
