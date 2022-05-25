@@ -284,7 +284,7 @@ public final class ReflectionTestUtils {
 	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
 		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
 		try {
-			Field field = ClassMemberAccessor.getAttribute(object.getClass(), attributeName, forceAccess);
+			Field field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
 			if (forceAccess) {
 				field.setAccessible(true);
 			}

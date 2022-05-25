@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import de.tum.in.test.integration.testuser.subject.structural.AbstractClassExtension;
 import de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass;
+import de.tum.in.test.integration.testuser.subject.structural.SomeClass;
 import de.tum.in.test.integration.testuser.subject.structural.SomeInterface;
 import de.tum.in.test.integration.testuser.subject.structural.subpackage.SubpackageClass;
 
@@ -29,7 +30,7 @@ class ClassMemberAccessorTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
 	void getInterfaceAttribute(boolean findPrivate) throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "ANOTHER_CONSTANT", findPrivate);
+		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "ANOTHER_CONSTANT", findPrivate);
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeInterface.class);
 	}
 
@@ -44,8 +45,8 @@ class ClassMemberAccessorTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
 	void getNonAccessiblePrivateSuperclassField(boolean findPrivate) {
-		assertThrows(NoSuchFieldException.class, () -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class,
-				"somePrivateAttribute", findPrivate));
+		assertThrows(NoSuchFieldException.class,
+				() -> ClassMemberAccessor.getField(AbstractClassExtension.class, "somePrivateAttribute", findPrivate));
 	}
 
 	@ParameterizedTest
@@ -64,14 +65,14 @@ class ClassMemberAccessorTest {
 
 	@Test
 	void getProtectedInheritedAttribute() throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", true);
+		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "someProtectedAttribute", true);
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
 	}
 
 	@Test
 	void getProtectedInheritedAttributeNoForcedAccess() {
 		assertThrows(NoSuchFieldException.class,
-				() -> ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someProtectedAttribute", false));
+				() -> ClassMemberAccessor.getField(AbstractClassExtension.class, "someProtectedAttribute", false));
 	}
 
 	@Test
@@ -97,7 +98,7 @@ class ClassMemberAccessorTest {
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
 	void getPublicInheritedAttribute(boolean findPrivate) throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getAttribute(AbstractClassExtension.class, "someInt", findPrivate);
+		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "someInt", findPrivate);
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
 	}
 
@@ -107,5 +108,12 @@ class ClassMemberAccessorTest {
 		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", findPrivate,
 				new Class[] {});
 		assertThat(method).isNotNull();
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void getStaticMethodFromInterface(boolean findPrivate) {
+		assertThrows(NoSuchMethodException.class,
+				() -> ClassMemberAccessor.getMethod(SomeClass.class, "getOne", findPrivate, new Class[] {}));
 	}
 }

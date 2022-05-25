@@ -19,8 +19,8 @@ class ClassMemberAccessor {
 	/**
 	 * Retrieve a method with arguments of a given class by its name.
 	 * <p>
-	 * Also recursively searches for the method in all superclasses and implemented
-	 * interfaces.
+	 * Also recursively searches for an inherited method in all superclasses and
+	 * implemented interfaces.
 	 *
 	 * @param declaringClass The class that declares or inherits the method.
 	 * @param methodName     The name of the method.
@@ -32,16 +32,38 @@ class ClassMemberAccessor {
 	 */
 	static Method getMethod(Class<?> declaringClass, String methodName, boolean findPrivate, Class<?>[] parameterTypes)
 			throws NoSuchMethodException {
+		if (!findPrivate) {
+			try {
+				return declaringClass.getMethod(methodName, parameterTypes);
+			} catch (NoSuchMethodException nsme) {
+				// Also search for declared methods in the own class even when not explicitly
+				// searching for private methods to be able to provide error messages to the
+				// users that the method exists, but with the wrong visibility.
+				return declaringClass.getDeclaredMethod(methodName, parameterTypes);
+			}
+		} else {
+			return getPrivateMethod(declaringClass, methodName, parameterTypes);
+		}
+	}
+
+	/**
+	 * Retrieve a method with arguments of a given class by its name.
+	 * <p>
+	 * Also recursively searches for an inherited method in all superclasses and
+	 * implemented interfaces. Finds a method even if it is not declared to be
+	 * visible outside the declaring class.
+	 *
+	 * @param declaringClass The class that declares or inherits the method.
+	 * @param methodName     The name of the method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 * @throws NoSuchMethodException Thrown if the specified method cannot be found.
+	 */
+	private static Method getPrivateMethod(Class<?> declaringClass, String methodName, Class<?>[] parameterTypes)
+			throws NoSuchMethodException {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
-				if (c.equals(declaringClass) || findPrivate) {
-					// Also search for declared methods in the own class even when not explicitly
-					// searching for private methods to be able to provide error messages to the
-					// users that the method exists, but with the wrong visibility.
-					return getInheritedMethod(declaringClass, c, methodName, parameterTypes);
-				} else {
-					return Stream.of(c.getMethod(methodName, parameterTypes));
-				}
+				return getInheritedMethod(declaringClass, c, methodName, parameterTypes);
 			} catch (NoSuchMethodException nsme) {
 				return Stream.empty();
 			}
@@ -63,7 +85,7 @@ class ClassMemberAccessor {
 	private static Stream<Method> getInheritedMethod(Class<?> targetClass, Class<?> declaringClass, String methodName,
 			Class<?>[] parameterTypes) throws NoSuchMethodException {
 		Method method = declaringClass.getDeclaredMethod(methodName, parameterTypes);
-		if (isInheritable(targetClass, declaringClass, method.getModifiers())) {
+		if (isInheritable(targetClass, declaringClass, method.getModifiers(), true)) {
 			return Stream.of(method);
 		} else {
 			return Stream.empty();
@@ -73,8 +95,9 @@ class ClassMemberAccessor {
 	/**
 	 * Retrieve a field of a given class by its name.
 	 * <p>
-	 * Also recursively searches for the field in all superclasses and implemented
-	 * interfaces.
+	 * Also recursively searches for an inherited field in all superclasses and
+	 * implemented interfaces. Finds a field even if it is not declared to be
+	 * visible outside the declaring class.
 	 *
 	 * @param declaringClass The class that declares or inherits the field.
 	 * @param fieldName      The name of the attribute.
@@ -83,18 +106,36 @@ class ClassMemberAccessor {
 	 * @return The wanted field.
 	 * @throws NoSuchFieldException Thrown if the specified field cannot be found.
 	 */
-	static Field getAttribute(Class<?> declaringClass, String fieldName, boolean findPrivate)
-			throws NoSuchFieldException {
+	static Field getField(Class<?> declaringClass, String fieldName, boolean findPrivate) throws NoSuchFieldException {
+		if (!findPrivate) {
+			try {
+				return declaringClass.getField(fieldName);
+			} catch (NoSuchFieldException nsfe) {
+				// Also search for declared fields in the own class even when not explicitly
+				// searching for private fields to be able to provide error messages to the
+				// users that the field exists, but with the wrong visibility.
+				return declaringClass.getDeclaredField(fieldName);
+			}
+		} else {
+			return getPrivateField(declaringClass, fieldName);
+		}
+	}
+
+	/**
+	 * Retrieve a field of a given class by its name.
+	 * <p>
+	 * Also recursively searches for an inherited field in all superclasses and
+	 * implemented interfaces.
+	 *
+	 * @param declaringClass The class that declares or inherits the field.
+	 * @param fieldName      The name of the attribute.
+	 * @return The wanted field.
+	 * @throws NoSuchFieldException Thrown if the specified field cannot be found.
+	 */
+	private static Field getPrivateField(Class<?> declaringClass, String fieldName) throws NoSuchFieldException {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
-				if (c.equals(declaringClass) || findPrivate) {
-					// Also search for declared fields in the own class even when not explicitly
-					// searching for private fields to be able to provide error messages to the
-					// users that the field exists, but with the wrong visibility.
-					return getInheritedField(declaringClass, c, fieldName).stream();
-				} else {
-					return Stream.of(c.getField(fieldName));
-				}
+				return getInheritedField(declaringClass, c, fieldName).stream();
 			} catch (NoSuchFieldException nsfe) {
 				return Stream.empty();
 			}
@@ -115,7 +156,7 @@ class ClassMemberAccessor {
 	private static Optional<Field> getInheritedField(Class<?> targetClass, Class<?> declaringClass, String fieldName)
 			throws NoSuchFieldException {
 		Field field = declaringClass.getDeclaredField(fieldName);
-		if (isInheritable(targetClass, declaringClass, field.getModifiers())) {
+		if (isInheritable(targetClass, declaringClass, field.getModifiers(), false)) {
 			return Optional.of(field);
 		} else {
 			return Optional.empty();
@@ -148,13 +189,25 @@ class ClassMemberAccessor {
 	 *                        {@code targetClass}.
 	 * @param declaredInClass The class in which the member was declared.
 	 * @param modifier        The modifiers of the member.
+	 * @param isMethod        True, if the inheritance check should be performed for
+	 *                        a method.
 	 * @return True, if the class member of {@code declaredInClass} is accessible in
 	 *         its subclass {@code targetClass}.
 	 */
-	private static boolean isInheritable(Class<?> targetClass, Class<?> declaredInClass, int modifier) {
-		boolean isInheritable = Modifier.isProtected(modifier) || Modifier.isPublic(modifier);
-		boolean isInheritableInPackage = !Modifier.isPrivate(modifier)
-				&& targetClass.getPackage().equals(declaredInClass.getPackage());
-		return targetClass.equals(declaredInClass) || isInheritable || isInheritableInPackage;
+	private static boolean isInheritable(Class<?> targetClass, Class<?> declaredInClass, int modifier,
+			boolean isMethod) {
+		if (targetClass.equals(declaredInClass)) {
+			return true;
+		} else if (isMethod && declaredInClass.isInterface() && Modifier.isStatic(modifier)) {
+			// static methods are not inherited from interfaces;
+			// interface attributes are implicitly declared static, too, but follow the
+			// usual inheritance rules
+			return false;
+		} else {
+			boolean isInheritable = Modifier.isProtected(modifier) || Modifier.isPublic(modifier);
+			boolean isInheritableInPackage = !Modifier.isPrivate(modifier)
+					&& targetClass.getPackage().equals(declaredInClass.getPackage());
+			return isInheritable || isInheritableInPackage;
+		}
 	}
 }
