@@ -27,6 +27,8 @@ class ReflectionTestUtilsTest {
 	private final String testInvokeMethodRethrowing_illegalAccess = "testInvokeMethodRethrowing_illegalAccess";
 	private final String testInvokeMethodRethrowing_illegalArgument = "testInvokeMethodRethrowing_illegalArgument";
 	private final String testInvokeMethodRethrowing_nullPointer = "testInvokeMethodRethrowing_nullPointer";
+	private final String testInvokePrivateMethodByName_success = "testInvokePrivateMethodByName_success";
+	private final String testInvokePrivateMethodRethrowing_success = "testInvokePrivateMethodRethrowing_success";
 	private final String testNewInstance_classNotFound = "testNewInstance_classNotFound";
 	private final String testNewInstance_exceptionInInitializer = "testNewInstance_exceptionInInitializer";
 	private final String testNewInstance_illegalAccess = "testNewInstance_illegalAccess";
@@ -35,13 +37,20 @@ class ReflectionTestUtilsTest {
 	private final String testNewInstance_invocationTarget = "testNewInstance_invocationTarget";
 	private final String testNewInstance_noSuchMethod = "testNewInstance_noSuchMethod";
 	private final String testNewInstance_success = "testNewInstance_success";
+	private final String testNewInstancePrivateConstructor_success = "testNewInstancePrivateConstructor_success";
 	private final String testValueForAttribute_illegalAccess = "testValueForAttribute_illegalAccess";
 	private final String testValueForAttribute_noSuchField = "testValueForAttribute_noSuchField";
 	private final String testValueForAttribute_success = "testValueForAttribute_success";
+	private final String testValueForPrivateAttribute_success = "testValueForPrivateAttribute_success";
 
 	@TestTest
 	void test_invokeMethod_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokeMethod_success));
+	}
+
+	@TestTest
+	void test_invokePrivateMethodByName_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokePrivateMethodByName_success));
 	}
 
 	@TestTest
@@ -110,6 +119,11 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
+	void test_testInvokePrivateMethodRethrowing_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testInvokePrivateMethodRethrowing_success));
+	}
+
+	@TestTest
 	void test_testNewInstance_classNotFound() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewInstance_classNotFound,
 				AssertionFailedError.class,
@@ -163,6 +177,11 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
+	void test_testNewInstancePrivateConstructor_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstancePrivateConstructor_success));
+	}
+
+	@TestTest
 	void test_testValueForAttribute_illegalAccess() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testValueForAttribute_illegalAccess,
 				AssertionFailedError.class,
@@ -179,5 +198,10 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testValueForAttribute_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForAttribute_success));
+	}
+
+	@TestTest
+	void test_testValueForPrivateAttribute_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForPrivateAttribute_success));
 	}
 }

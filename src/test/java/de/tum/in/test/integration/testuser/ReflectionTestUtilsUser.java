@@ -44,13 +44,13 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
-	void testGetMethod_noSuchMethod_withParameters() {
-		getMethod(CLASS_INSTANCE, "someMethod", String.class);
+	void testGetMethod_noSuchMethod_noParameters() {
+		getMethod(CLASS_INSTANCE, "someMethod");
 	}
 
 	@Test
-	void testGetMethod_noSuchMethod_noParameters() {
-		getMethod(CLASS_INSTANCE, "someMethod");
+	void testGetMethod_noSuchMethod_withParameters() {
+		getMethod(CLASS_INSTANCE, "someMethod", String.class);
 	}
 
 	@Test
@@ -86,6 +86,17 @@ public class ReflectionTestUtilsUser {
 	void testInvokeMethodRethrowing_nullPointer() throws NoSuchMethodException {
 		var method = CLASS_INSTANCE.getClass().getMethod("getAnotherAttribute");
 		invokeMethod(null, method);
+	}
+
+	@Test
+	void testInvokePrivateMethodByName_success() {
+		invokeNonPublicMethod(CLASS_INSTANCE, "superSecretMethod");
+	}
+
+	@Test
+	void testInvokePrivateMethodRethrowing_success() throws NoSuchMethodException {
+		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
+		invokeNonPublicMethod(CLASS_INSTANCE, privateMethod);
 	}
 
 	@Test
@@ -131,6 +142,11 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testNewInstancePrivateConstructor_success() {
+		newInstanceFromNonPublicConstructor(CLASS_NAME, "");
+	}
+
+	@Test
 	void testValueForAttribute_illegalAccess() {
 		valueForAttribute(CLASS_INSTANCE, "someAttribute");
 	}
@@ -144,5 +160,10 @@ public class ReflectionTestUtilsUser {
 	void testValueForAttribute_success() {
 		var value = valueForAttribute(CLASS_INSTANCE, "SOME_CONSTANT");
 		assertThat(value).isEqualTo(SomeClass.SOME_CONSTANT);
+	}
+
+	@Test
+	void testValueForPrivateAttribute_success() {
+		valueForNonPublicAttribute(CLASS_INSTANCE, "someAttribute");
 	}
 }
