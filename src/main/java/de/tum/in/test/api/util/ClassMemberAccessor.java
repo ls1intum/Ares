@@ -63,7 +63,7 @@ class ClassMemberAccessor {
 			throws NoSuchMethodException {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
-				return getInheritedMethod(declaringClass, c, methodName, parameterTypes);
+				return getInheritedMethod(declaringClass, c, methodName, parameterTypes).stream();
 			} catch (NoSuchMethodException nsme) {
 				return Stream.empty();
 			}
@@ -82,13 +82,13 @@ class ClassMemberAccessor {
 	 * @throws NoSuchMethodException Thrown if no method as specified could be found
 	 *                               in either class.
 	 */
-	private static Stream<Method> getInheritedMethod(Class<?> targetClass, Class<?> declaringClass, String methodName,
+	private static Optional<Method> getInheritedMethod(Class<?> targetClass, Class<?> declaringClass, String methodName,
 			Class<?>[] parameterTypes) throws NoSuchMethodException {
 		Method method = declaringClass.getDeclaredMethod(methodName, parameterTypes);
 		if (isInheritable(targetClass, declaringClass, method.getModifiers(), true)) {
-			return Stream.of(method);
+			return Optional.of(method);
 		} else {
-			return Stream.empty();
+			return Optional.empty();
 		}
 	}
 
