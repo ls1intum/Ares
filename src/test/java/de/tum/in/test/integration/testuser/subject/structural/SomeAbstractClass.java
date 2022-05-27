@@ -6,6 +6,7 @@ public abstract class SomeAbstractClass {
 
 	protected final String someProtectedAttribute = "hidden";
 
+	@SuppressWarnings("unused")
 	private final long somePrivateAttribute = 3L;
 
 	public SomeAbstractClass() {
@@ -23,6 +24,7 @@ public abstract class SomeAbstractClass {
 		// nothing
 	}
 
+	@SuppressWarnings("unused")
 	private void nonAbstractPrivate() {
 		// nothing
 	}

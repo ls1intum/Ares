@@ -6,7 +6,6 @@ public class AbstractClassExtension extends SomeAbstractClass implements SomeInt
 		// nothing
 	}
 
-	@SuppressWarnings("unused")
 	public void declaredMethod() {
 		// nothing
 	}
