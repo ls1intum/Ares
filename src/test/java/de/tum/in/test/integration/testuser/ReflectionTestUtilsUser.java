@@ -90,13 +90,13 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testInvokePrivateMethodByName_success() {
-		invokePrivateMethod(CLASS_INSTANCE, "superSecretMethod");
+		invokeNonPublicMethod(CLASS_INSTANCE, "superSecretMethod");
 	}
 
 	@Test
 	void testInvokePrivateMethodRethrowing_success() throws NoSuchMethodException {
 		var privateMethod = CLASS_INSTANCE.getClass().getDeclaredMethod("superSecretMethod");
-		invokePrivateMethod(CLASS_INSTANCE, privateMethod);
+		invokeNonPublicMethod(CLASS_INSTANCE, privateMethod);
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testNewInstancePrivateConstructor_success() {
-		newInstanceFromPrivateConstructor(CLASS_NAME, "");
+		newInstanceFromNonPublicConstructor(CLASS_NAME, "");
 	}
 
 	@Test
@@ -164,6 +164,6 @@ public class ReflectionTestUtilsUser {
 
 	@Test
 	void testValueForPrivateAttribute_success() {
-		valueForPrivateAttribute(CLASS_INSTANCE, "someAttribute");
+		valueForNonPublicAttribute(CLASS_INSTANCE, "someAttribute");
 	}
 }

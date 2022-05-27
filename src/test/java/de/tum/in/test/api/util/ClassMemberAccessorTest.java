@@ -21,16 +21,16 @@ class ClassMemberAccessorTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getInheritedInterfaceDefaultMethod(boolean findPrivate) throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "doSomethingElse", findPrivate,
+	void getInheritedInterfaceDefaultMethod(boolean findNonPublic) throws NoSuchMethodException {
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "doSomethingElse", findNonPublic,
 				new Class[] { int.class });
 		assertThat(method.getDeclaringClass()).isEqualTo(SomeInterface.class);
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getInterfaceAttribute(boolean findPrivate) throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "ANOTHER_CONSTANT", findPrivate);
+	void getInterfaceAttribute(boolean findNonPublic) throws NoSuchFieldException {
+		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "ANOTHER_CONSTANT", findNonPublic);
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeInterface.class);
 	}
 
@@ -44,23 +44,23 @@ class ClassMemberAccessorTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getNonAccessiblePrivateSuperclassField(boolean findPrivate) {
-		assertThrows(NoSuchFieldException.class,
-				() -> ClassMemberAccessor.getField(AbstractClassExtension.class, "somePrivateAttribute", findPrivate));
+	void getNonAccessiblePrivateSuperclassField(boolean findNonPublic) {
+		assertThrows(NoSuchFieldException.class, () -> ClassMemberAccessor.getField(AbstractClassExtension.class,
+				"somePrivateAttribute", findNonPublic));
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getNonAccessiblePrivateSuperclassMethod(boolean findPrivate) {
+	void getNonAccessiblePrivateSuperclassMethod(boolean findNonPublic) {
 		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(AbstractClassExtension.class,
-				"nonAbstractPrivate", findPrivate, new Class[] {}));
+				"nonAbstractPrivate", findNonPublic, new Class[] {}));
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getPackagePrivateMethodNoAccessInSubpackage(boolean findPrivate) {
+	void getPackagePrivateMethodNoAccessInSubpackage(boolean findNonPublic) {
 		assertThrows(NoSuchMethodException.class, () -> ClassMemberAccessor.getMethod(SubpackageClass.class,
-				"nonAbstractPackagePrivate", findPrivate, new Class[] {}));
+				"nonAbstractPackagePrivate", findNonPublic, new Class[] {}));
 	}
 
 	@Test
@@ -97,23 +97,23 @@ class ClassMemberAccessorTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getPublicInheritedAttribute(boolean findPrivate) throws NoSuchFieldException {
-		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "someInt", findPrivate);
+	void getPublicInheritedAttribute(boolean findNonPublic) throws NoSuchFieldException {
+		Field field = ClassMemberAccessor.getField(AbstractClassExtension.class, "someInt", findNonPublic);
 		assertThat(field.getDeclaringClass()).isEqualTo(SomeAbstractClass.class);
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getPublicMethod(boolean findPrivate) throws NoSuchMethodException {
-		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", findPrivate,
+	void getPublicMethod(boolean findNonPublic) throws NoSuchMethodException {
+		Method method = ClassMemberAccessor.getMethod(AbstractClassExtension.class, "declaredMethod", findNonPublic,
 				new Class[] {});
 		assertThat(method).isNotNull();
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void getStaticMethodFromInterface(boolean findPrivate) {
+	void getStaticMethodFromInterface(boolean findNonPublic) {
 		assertThrows(NoSuchMethodException.class,
-				() -> ClassMemberAccessor.getMethod(SomeClass.class, "getOne", findPrivate, new Class[] {}));
+				() -> ClassMemberAccessor.getMethod(SomeClass.class, "getOne", findNonPublic, new Class[] {}));
 	}
 }

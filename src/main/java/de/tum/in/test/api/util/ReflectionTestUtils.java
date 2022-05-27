@@ -87,7 +87,8 @@ public final class ReflectionTestUtils {
 	 * <p>
 	 * This method does not support passing null, passing subclasses of the
 	 * parameter types or invoking constructors with primitive parameters. Use
-	 * {@link #newInstanceFromPrivateConstructor(Constructor, Object...)} for that.
+	 * {@link #newInstanceFromNonPublicConstructor(Constructor, Object...)} for
+	 * that.
 	 * <p>
 	 * Forces the access to package-private, {@code protected}, and {@code private}
 	 * constructors. Use {@link #newInstance(String, Object...)} if you do not
@@ -100,8 +101,8 @@ public final class ReflectionTestUtils {
 	 * @return The instance of this class.
 	 * @see #newInstance(Class, Object...)
 	 */
-	public static Object newInstanceFromPrivateConstructor(String qualifiedClassName, Object... constructorArgs) {
-		return newInstanceFromPrivateConstructor(getClazz(qualifiedClassName), constructorArgs);
+	public static Object newInstanceFromNonPublicConstructor(String qualifiedClassName, Object... constructorArgs) {
+		return newInstanceFromNonPublicConstructor(getClazz(qualifiedClassName), constructorArgs);
 	}
 
 	/**
@@ -138,7 +139,7 @@ public final class ReflectionTestUtils {
 	 *                        that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 */
-	public static Object newInstanceFromPrivateConstructor(Class<?> clazz, Object... constructorArgs) {
+	public static Object newInstanceFromNonPublicConstructor(Class<?> clazz, Object... constructorArgs) {
 		return newInstanceAccessible(clazz, true, constructorArgs);
 	}
 
@@ -170,7 +171,7 @@ public final class ReflectionTestUtils {
 	 *                        that it should use to get instantiated with.
 	 * @return The instance of this class.
 	 */
-	public static Object newInstanceFromPrivateConstructor(Constructor<?> constructor, Object... constructorArgs) {
+	public static Object newInstanceFromNonPublicConstructor(Constructor<?> constructor, Object... constructorArgs) {
 		return newInstanceAccessible(constructor, true, constructorArgs);
 	}
 
@@ -266,7 +267,7 @@ public final class ReflectionTestUtils {
 	 *                      retrieved.
 	 * @return The instance of the attribute with the wanted value.
 	 */
-	public static Object valueForPrivateAttribute(Object object, String attributeName) {
+	public static Object valueForNonPublicAttribute(Object object, String attributeName) {
 		return valueForAttribute(object, attributeName, true);
 	}
 
@@ -329,15 +330,15 @@ public final class ReflectionTestUtils {
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
-	 * @param findPrivate    True, if this method should search for (package)
+	 * @param findNonPublic  True, if this method should search for (package)
 	 *                       private or protected methods.
 	 * @param parameterTypes The parameter types of this method.
 	 * @return The wanted method.
 	 */
-	private static Method getMethodAccessible(Class<?> declaringClass, String methodName, boolean findPrivate,
+	private static Method getMethodAccessible(Class<?> declaringClass, String methodName, boolean findNonPublic,
 			Class<?>[] parameterTypes) {
 		try {
-			return ClassMemberAccessor.getMethod(declaringClass, methodName, findPrivate, parameterTypes);
+			return ClassMemberAccessor.getMethod(declaringClass, methodName, findNonPublic, parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.method_not_found", methodName, //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());
@@ -371,7 +372,7 @@ public final class ReflectionTestUtils {
 	 * <p>
 	 * This method does not support invoking static methods and passing null,
 	 * passing subclasses of the parameter types or invoking methods with primitive
-	 * parameters. Use {@link #invokePrivateMethod(Object, Method, Object...)} for
+	 * parameters. Use {@link #invokeNonPublicMethod(Object, Method, Object...)} for
 	 * that.
 	 * <p>
 	 * Forces access to package-private, {@code protected}, and {@code private}
@@ -384,7 +385,7 @@ public final class ReflectionTestUtils {
 	 * @param params     Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
-	public static Object invokePrivateMethod(Object object, String methodName, Object... params) {
+	public static Object invokeNonPublicMethod(Object object, String methodName, Object... params) {
 		return invokeMethodAccessible(object, methodName, true, params);
 	}
 
@@ -414,7 +415,7 @@ public final class ReflectionTestUtils {
 	 * @param params Parameter instances of the method.
 	 * @return The return value of the method.
 	 */
-	public static Object invokePrivateMethod(Object object, Method method, Object... params) {
+	public static Object invokeNonPublicMethod(Object object, Method method, Object... params) {
 		return invokeMethodAccessible(object, method, true, params);
 	}
 
@@ -487,7 +488,7 @@ public final class ReflectionTestUtils {
 	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
 	 */
-	public static Object invokePrivateMethodRethrowing(Object object, Method method, Object... params)
+	public static Object invokeNonPublicMethodRethrowing(Object object, Method method, Object... params)
 			throws Throwable {
 		return invokeMethodRethrowingAccessible(object, method, true, params);
 	}
