@@ -34,7 +34,7 @@ import org.opentest4j.AssertionFailedError;
  * </ul>
  *
  * @author Stephan Krusche (krusche@in.tum.de)
- * @version 5.1 (2022-03-30)
+ * @version 6.0 (2022-05-27)
  */
 @API(status = Status.STABLE)
 public final class ReflectionTestUtils {
