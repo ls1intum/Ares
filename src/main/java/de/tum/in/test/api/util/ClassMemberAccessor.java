@@ -22,7 +22,7 @@ class ClassMemberAccessor {
 	 * Also recursively searches for an inherited method in all superclasses and
 	 * implemented interfaces.
 	 *
-	 * @param declaringClass The class that declares or inherits the method.
+	 * @param clazz          The class that declares or inherits the method.
 	 * @param methodName     The name of the method.
 	 * @param findPrivate    True, if this method should search for (package)
 	 *                       private or protected (inherited) methods.
@@ -30,19 +30,19 @@ class ClassMemberAccessor {
 	 * @return The wanted method.
 	 * @throws NoSuchMethodException Thrown if the specified method cannot be found.
 	 */
-	static Method getMethod(Class<?> declaringClass, String methodName, boolean findPrivate, Class<?>[] parameterTypes)
+	static Method getMethod(Class<?> clazz, String methodName, boolean findPrivate, Class<?>[] parameterTypes)
 			throws NoSuchMethodException {
 		if (!findPrivate) {
 			try {
-				return declaringClass.getMethod(methodName, parameterTypes);
+				return clazz.getMethod(methodName, parameterTypes);
 			} catch (NoSuchMethodException nsme) {
 				// Also search for declared methods in the own class even when not explicitly
 				// searching for private methods to be able to provide error messages to the
 				// users that the method exists, but with the wrong visibility.
-				return declaringClass.getDeclaredMethod(methodName, parameterTypes);
+				return clazz.getDeclaredMethod(methodName, parameterTypes);
 			}
 		} else {
-			return getPrivateMethod(declaringClass, methodName, parameterTypes);
+			return getPrivateMethod(clazz, methodName, parameterTypes);
 		}
 	}
 
@@ -99,25 +99,25 @@ class ClassMemberAccessor {
 	 * implemented interfaces. Finds a field even if it is not declared to be
 	 * visible outside the declaring class.
 	 *
-	 * @param declaringClass The class that declares or inherits the field.
-	 * @param fieldName      The name of the attribute.
-	 * @param findPrivate    True, if this method should search for (package)
-	 *                       private or protected (inherited) attributes.
+	 * @param clazz       The class that declares or inherits the field.
+	 * @param fieldName   The name of the attribute.
+	 * @param findPrivate True, if this method should search for (package) private
+	 *                    or protected (inherited) attributes.
 	 * @return The wanted field.
 	 * @throws NoSuchFieldException Thrown if the specified field cannot be found.
 	 */
-	static Field getField(Class<?> declaringClass, String fieldName, boolean findPrivate) throws NoSuchFieldException {
+	static Field getField(Class<?> clazz, String fieldName, boolean findPrivate) throws NoSuchFieldException {
 		if (!findPrivate) {
 			try {
-				return declaringClass.getField(fieldName);
+				return clazz.getField(fieldName);
 			} catch (NoSuchFieldException nsfe) {
 				// Also search for declared fields in the own class even when not explicitly
 				// searching for private fields to be able to provide error messages to the
 				// users that the field exists, but with the wrong visibility.
-				return declaringClass.getDeclaredField(fieldName);
+				return clazz.getDeclaredField(fieldName);
 			}
 		} else {
-			return getPrivateField(declaringClass, fieldName);
+			return getPrivateField(clazz, fieldName);
 		}
 	}
 
