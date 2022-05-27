@@ -113,9 +113,11 @@ class ClassMemberAccessor {
 		try {
 			return clazz.getField(fieldName);
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
-			// Also search for declared fields in the own class even when not explicitly
-			// searching for private fields to be able to provide error messages to the
-			// users that the field exists, but with the wrong visibility.
+			/*
+			 * Also search for declared fields in the own class even when not explicitly
+			 * searching for private fields to be able to provide error messages to the
+			 * users that the field exists, but with the wrong visibility.
+			 */
 			return clazz.getDeclaredField(fieldName);
 		}
 	}
