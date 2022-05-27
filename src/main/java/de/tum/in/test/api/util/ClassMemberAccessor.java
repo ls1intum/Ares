@@ -32,17 +32,18 @@ class ClassMemberAccessor {
 	 */
 	static Method getMethod(Class<?> clazz, String methodName, boolean findNonPublic, Class<?>[] parameterTypes)
 			throws NoSuchMethodException {
-		if (!findNonPublic) {
-			try {
-				return clazz.getMethod(methodName, parameterTypes);
-			} catch (NoSuchMethodException nsme) {
-				// Also search for declared methods in the own class even when not explicitly
-				// searching for private methods to be able to provide error messages to the
-				// users that the method exists, but with the wrong visibility.
-				return clazz.getDeclaredMethod(methodName, parameterTypes);
-			}
-		} else {
+		if (findNonPublic) {
 			return getNonPublicMethod(clazz, methodName, parameterTypes);
+		}
+		try {
+			return clazz.getMethod(methodName, parameterTypes);
+		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
+			/*
+			 * Also search for declared methods in the own class even when not explicitly
+			 * searching for private methods to be able to provide error messages to the
+			 * users that the method exists, but with the wrong visibility.
+			 */
+			return clazz.getDeclaredMethod(methodName, parameterTypes);
 		}
 	}
 
@@ -64,7 +65,7 @@ class ClassMemberAccessor {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
 				return getInheritedMethod(declaringClass, c, methodName, parameterTypes).stream();
-			} catch (NoSuchMethodException nsme) {
+			} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 				return Stream.empty();
 			}
 		}).findFirst().orElseThrow(() -> new NoSuchMethodException(methodName));
@@ -87,9 +88,8 @@ class ClassMemberAccessor {
 		Method method = declaringClass.getDeclaredMethod(methodName, parameterTypes);
 		if (isInheritable(targetClass, declaringClass, method.getModifiers(), true)) {
 			return Optional.of(method);
-		} else {
-			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 
 	/**
@@ -107,17 +107,16 @@ class ClassMemberAccessor {
 	 * @throws NoSuchFieldException Thrown if the specified field cannot be found.
 	 */
 	static Field getField(Class<?> clazz, String fieldName, boolean findNonPublic) throws NoSuchFieldException {
-		if (!findNonPublic) {
-			try {
-				return clazz.getField(fieldName);
-			} catch (NoSuchFieldException nsfe) {
-				// Also search for declared fields in the own class even when not explicitly
-				// searching for private fields to be able to provide error messages to the
-				// users that the field exists, but with the wrong visibility.
-				return clazz.getDeclaredField(fieldName);
-			}
-		} else {
+		if (findNonPublic) {
 			return getNonPublicField(clazz, fieldName);
+		}
+		try {
+			return clazz.getField(fieldName);
+		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
+			// Also search for declared fields in the own class even when not explicitly
+			// searching for private fields to be able to provide error messages to the
+			// users that the field exists, but with the wrong visibility.
+			return clazz.getDeclaredField(fieldName);
 		}
 	}
 
@@ -136,7 +135,7 @@ class ClassMemberAccessor {
 		return getClassHierarchy(declaringClass).flatMap(c -> {
 			try {
 				return getInheritedField(declaringClass, c, fieldName).stream();
-			} catch (NoSuchFieldException nsfe) {
+			} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
 				return Stream.empty();
 			}
 		}).findFirst().orElseThrow(() -> new NoSuchFieldException(fieldName));
@@ -158,9 +157,8 @@ class ClassMemberAccessor {
 		Field field = declaringClass.getDeclaredField(fieldName);
 		if (isInheritable(targetClass, declaringClass, field.getModifiers(), false)) {
 			return Optional.of(field);
-		} else {
-			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 
 	/**
@@ -198,16 +196,17 @@ class ClassMemberAccessor {
 			boolean isMethod) {
 		if (targetClass.equals(declaredInClass)) {
 			return true;
-		} else if (isMethod && declaredInClass.isInterface() && Modifier.isStatic(modifier)) {
-			// static methods are not inherited from interfaces;
-			// interface attributes are implicitly declared static, too, but follow the
-			// usual inheritance rules
-			return false;
-		} else {
-			boolean isInheritable = Modifier.isProtected(modifier) || Modifier.isPublic(modifier);
-			boolean isInheritableInPackage = !Modifier.isPrivate(modifier)
-					&& targetClass.getPackage().equals(declaredInClass.getPackage());
-			return isInheritable || isInheritableInPackage;
 		}
+		if (isMethod && declaredInClass.isInterface() && Modifier.isStatic(modifier)) {
+			/*
+			 * Static methods are not inherited from interfaces. Interface attributes are
+			 * implicitly declared static, too, but follow the usual inheritance rules.
+			 */
+			return false;
+		}
+		boolean isInheritable = Modifier.isProtected(modifier) || Modifier.isPublic(modifier);
+		boolean isInheritableInPackage = !Modifier.isPrivate(modifier)
+				&& targetClass.getPackage().equals(declaredInClass.getPackage());
+		return isInheritable || isInheritableInPackage;
 	}
 }
