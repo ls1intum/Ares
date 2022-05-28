@@ -645,7 +645,7 @@ void testSquareCorrect(IOTester tester) { //<1>
     blocks, be aware of their newline handling).
 
 Note that Ares normalizes the line breaks to `\n`, and
-link:src/main/java/de/tum/in/test/api/io/OutputTester.java[`OutputTester`]
+https://github.com/ls1intum/Ares/blob/master/src/main/java/de/tum/in/test/api/io/OutputTester.java[`OutputTester`]
 offers many different approaches to checking output (e.g. single string, list of strings, ...).
 
 If students read more lines than provided, they get the following feedback:
@@ -654,7 +654,7 @@ java.lang.IllegalStateException: no further console input request after the last
 ...
 
 See also `IOTester` and for more examples, the
-link:src/test/java/de/tum/in/test/integration/testuser/InputOutputUser.java[`InputOutputUser`]
+https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/InputOutputUser.java[`InputOutputUser`]
 test.
 
 <<showing-standard-output>> covers how the student output is
@@ -667,7 +667,7 @@ you can provide a custom implementation by applying `@WithIOManager(MyCustomOne.
 to e.g. the test class or individual methods. This also allows you to register
 a custom parameter to control IO testing with ease inside the test method.
 Have a look into the test class linked above to learn more or read the documentation of
-link:src/main/java/de/tum/in/test/api/io/IOManager.java[`IOManager`].
+https://github.com/ls1intum/Ares/blob/master/src/main/java/de/tum/in/test/api/io/IOManager.java[`IOManager`].
 ====
 
 ==== Networking
@@ -682,7 +682,7 @@ a way that they cannot be stopped (waiting in native code), so we
 recommend using timeouts for connections at least on one end consistently.
 
 For examples, have a look at the test
-link:src/test/java/de/tum/in/test/integration/testuser/NetworkUser.java[`NetworkUser`].
+https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/NetworkUser.java[`NetworkUser`].
 
 ==== Locale
 
@@ -695,7 +695,7 @@ where the annotation is applied.
 Ares is currently localized in German (`de_DE`) and English (`en_US`),
 where `en_US` is the fallback for any other locale.
 
-See also the link:src/test/java/de/tum/in/test/integration/testuser/LocaleUser.java[`LocaleUser`]
+See also the https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/LocaleUser.java[`LocaleUser`]
 test for more examples.
 
 == Additional Notes
