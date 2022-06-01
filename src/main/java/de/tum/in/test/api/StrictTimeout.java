@@ -3,21 +3,15 @@ package de.tum.in.test.api;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.*;
 
 import de.tum.in.test.api.jqwik.JqwikStrictTimeoutExtension;
-import de.tum.in.test.api.jupiter.Hidden;
-import de.tum.in.test.api.jupiter.JupiterStrictTimeoutExtension;
-import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.jupiter.*;
 
 /**
  * Works like

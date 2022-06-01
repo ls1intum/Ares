@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.PackageAccessUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(PackageAccessUser.class)
 class PackageAccessTest {

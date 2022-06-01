@@ -1,10 +1,8 @@
 package org.apache.xyz;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 
 public class MaliciousInvocationTargetException extends InvocationTargetException {
 

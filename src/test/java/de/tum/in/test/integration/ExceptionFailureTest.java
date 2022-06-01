@@ -2,21 +2,15 @@ package de.tum.in.test.integration;
 
 import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
 
-import org.assertj.core.api.Condition;
-import org.assertj.core.api.SoftAssertionError;
-import org.assertj.core.error.AssertJMultipleFailuresError;
-import org.assertj.core.error.MultipleAssertionsError;
+import org.assertj.core.api.*;
+import org.assertj.core.error.*;
 import org.junit.platform.testkit.engine.Events;
-import org.opentest4j.AssertionFailedError;
-import org.opentest4j.MultipleFailuresError;
+import org.opentest4j.*;
 
 import de.tum.in.test.api.util.UnexpectedExceptionError;
 import de.tum.in.test.integration.testuser.ExceptionFailureUser;
-import de.tum.in.test.testutilities.CustomConditions;
+import de.tum.in.test.testutilities.*;
 import de.tum.in.test.testutilities.CustomConditions.Option;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
 
 @UserBased(ExceptionFailureUser.class)
 class ExceptionFailureTest {
@@ -41,13 +35,13 @@ class ExceptionFailureTest {
 	@TestTest
 	void test_assertJMultipleFailures() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(assertJMultipleFailures,
-				AssertJMultipleFailuresError.class, "Multiple Failures (2 failures)\n" + //
+				AssertJMultipleFailuresError.class, "Multiple Failures \\(2 failures\\)\n" + //
 						"-- failure 1 --A\n" + //
-						"at ExceptionFailureUser.lambda$assertJMultipleFailures$0(ExceptionFailureUser.java:71)\n" + //
+						"at ExceptionFailureUser.+\n" + //
 						"-- failure 2 --B\n" + //
-						"at ExceptionFailureUser.lambda$assertJMultipleFailures$1(ExceptionFailureUser.java:73)",
+						"at ExceptionFailureUser.+",
 				new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"),
-				Option.MESSAGE_NORMALIZE_NEWLINE));
+				Option.MESSAGE_NORMALIZE_NEWLINE, Option.MESSAGE_REGEX));
 	}
 
 	@TestTest

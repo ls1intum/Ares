@@ -1,8 +1,6 @@
 package de.tum.in.test.api.io;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apiguardian.api.API;

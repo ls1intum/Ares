@@ -1,15 +1,12 @@
 package de.tum.in.test.api;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.internal.BlacklistedInvoker;
-import de.tum.in.test.api.internal.PrivilegedException;
+import de.tum.in.test.api.internal.*;
 
 /**
  * Utilities for writing tests with Ares in the form of static methods.

@@ -1,12 +1,10 @@
 package de.tum.in.test.integration.testuser;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.jupiter.Hidden;
-import de.tum.in.test.api.jupiter.Public;
+import de.tum.in.test.api.jupiter.*;
 import de.tum.in.test.api.localization.UseLocale;
 
 @UseLocale("en")

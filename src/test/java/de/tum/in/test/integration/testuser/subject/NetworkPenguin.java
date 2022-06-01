@@ -2,8 +2,7 @@ package de.tum.in.test.integration.testuser.subject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 

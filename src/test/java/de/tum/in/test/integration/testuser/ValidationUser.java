@@ -2,8 +2,7 @@ package de.tum.in.test.integration.testuser;
 
 import org.junit.jupiter.api.Test;
 
-import de.tum.in.test.api.AllowLocalPort;
-import de.tum.in.test.api.AllowThreads;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
 

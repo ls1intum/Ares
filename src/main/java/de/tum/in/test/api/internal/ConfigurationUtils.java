@@ -2,37 +2,18 @@ package de.tum.in.test.api.internal;
 
 import java.lang.StackWalker.StackFrame;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.AddTrustedPackage;
-import de.tum.in.test.api.AllowLocalPort;
-import de.tum.in.test.api.AllowThreads;
-import de.tum.in.test.api.BlacklistPackage;
-import de.tum.in.test.api.BlacklistPath;
-import de.tum.in.test.api.MirrorOutput;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
-import de.tum.in.test.api.PrivilegedExceptionsOnly;
-import de.tum.in.test.api.TrustedThreads;
 import de.tum.in.test.api.TrustedThreads.TrustScope;
-import de.tum.in.test.api.WhitelistClass;
-import de.tum.in.test.api.WhitelistPackage;
-import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.context.TestContext;
-import de.tum.in.test.api.context.TestContextUtils;
-import de.tum.in.test.api.security.AresSecurityConfiguration;
-import de.tum.in.test.api.security.AresSecurityConfigurationBuilder;
-import de.tum.in.test.api.util.PackageRule;
-import de.tum.in.test.api.util.PathRule;
-import de.tum.in.test.api.util.RuleType;
+import de.tum.in.test.api.context.*;
+import de.tum.in.test.api.security.*;
+import de.tum.in.test.api.util.*;
 
 @API(status = Status.INTERNAL)
 public final class ConfigurationUtils {

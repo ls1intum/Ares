@@ -2,15 +2,9 @@ package de.tum.in.test.api.io;
 
 import static de.tum.in.test.api.localization.Messages.localized;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.*;
+import java.nio.charset.*;
 
 final class TestOutStream extends OutputStream {
 

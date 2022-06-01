@@ -1,15 +1,13 @@
 package de.tum.in.test.api.util;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.BlacklistPackage;
-import de.tum.in.test.api.WhitelistPackage;
+import de.tum.in.test.api.*;
 
 @API(status = Status.INTERNAL)
 public final class PackageRule {

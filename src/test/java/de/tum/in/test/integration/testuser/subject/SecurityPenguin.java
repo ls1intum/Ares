@@ -1,24 +1,13 @@
 package de.tum.in.test.integration.testuser.subject;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.*;
+import java.net.*;
 import java.nio.file.Path;
-import java.security.AccessController;
-import java.security.Permission;
-import java.security.PrivilegedAction;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import java.security.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
-import org.apache.xyz.Circumvention;
-import org.apache.xyz.FakeTrustedClass;
-import org.apache.xyz.MaliciousExceptionB;
-import org.apache.xyz.MaliciousInvocationTargetException;
+import org.apache.xyz.*;
 
 import de.tum.in.test.api.io.IOTester;
 import de.tum.in.test.integration.testuser.subject.structural.SomeClass;

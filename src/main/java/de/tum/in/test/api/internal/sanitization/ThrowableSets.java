@@ -1,11 +1,8 @@
 package de.tum.in.test.api.internal.sanitization;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import de.tum.in.test.api.security.ConfigurationException;
 

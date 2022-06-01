@@ -1,9 +1,7 @@
 package de.tum.in.test.integration.testuser.subject;
 
-import java.io.FilePermission;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.*;
+import java.nio.file.*;
 
 public final class PathAccessPenguin {
 

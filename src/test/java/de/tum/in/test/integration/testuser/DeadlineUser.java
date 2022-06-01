@@ -4,8 +4,7 @@ import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.jupiter.HiddenTest;
-import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.jupiter.*;
 import de.tum.in.test.api.localization.UseLocale;
 
 @UseLocale("en")

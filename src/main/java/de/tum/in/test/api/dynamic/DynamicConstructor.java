@@ -3,8 +3,7 @@ package de.tum.in.test.api.dynamic;
 import static de.tum.in.test.api.dynamic.DynamicMethod.*;
 import static de.tum.in.test.api.localization.Messages.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.util.Objects;
 
 import org.apiguardian.api.API;

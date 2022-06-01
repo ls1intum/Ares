@@ -9,9 +9,7 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.InputOutputUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(InputOutputUser.class)
 class InputOutputTest {

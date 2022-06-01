@@ -3,17 +3,11 @@ package de.tum.in.test.integration.testuser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
-import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.dynamic.Check;
-import de.tum.in.test.api.dynamic.DynamicClass;
-import de.tum.in.test.api.dynamic.DynamicConstructor;
-import de.tum.in.test.api.dynamic.DynamicField;
-import de.tum.in.test.api.dynamic.DynamicMethod;
+import de.tum.in.test.api.*;
+import de.tum.in.test.api.dynamic.*;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.integration.testuser.subject.structural.SomeClass;

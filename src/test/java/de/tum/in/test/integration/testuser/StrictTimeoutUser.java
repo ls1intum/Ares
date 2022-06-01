@@ -2,9 +2,8 @@ package de.tum.in.test.integration.testuser;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.tum.in.test.api.StrictTimeout;

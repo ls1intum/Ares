@@ -2,14 +2,9 @@ package de.tum.in.test.api.dynamic;
 
 import static de.tum.in.test.api.localization.Messages.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.stream.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

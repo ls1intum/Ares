@@ -2,8 +2,7 @@ package de.tum.in.test.api.io;
 
 import static de.tum.in.test.api.localization.Messages.localized;
 
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 

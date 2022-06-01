@@ -1,9 +1,7 @@
 package de.tum.in.test.api.internal;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

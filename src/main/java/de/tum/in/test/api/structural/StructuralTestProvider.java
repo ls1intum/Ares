@@ -2,31 +2,21 @@ package de.tum.in.test.api.structural;
 
 import static de.tum.in.test.api.localization.Messages.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.*;
 import org.opentest4j.AssertionFailedError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
-import de.tum.in.test.api.structural.testutils.ClassNameScanner;
-import de.tum.in.test.api.structural.testutils.ScanResultType;
+import de.tum.in.test.api.structural.testutils.*;
 
 /**
  * This test and its subclasses evaluate if the following specified elements of

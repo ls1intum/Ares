@@ -2,9 +2,7 @@ package de.tum.in.test.api.io;
 
 import static de.tum.in.test.api.localization.Messages.localized;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

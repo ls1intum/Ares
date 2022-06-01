@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import org.assertj.core.api.SoftAssertionError;
 import org.assertj.core.description.TextDescription;
@@ -13,14 +12,10 @@ import org.assertj.core.error.MultipleAssertionsError;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import de.tum.in.test.api.AllowThreads;
-import de.tum.in.test.api.BlacklistPath;
-import de.tum.in.test.api.PathType;
-import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.localization.UseLocale;
-import de.tum.in.test.integration.testuser.subject.CustomException;
-import de.tum.in.test.integration.testuser.subject.ExceptionFailurePenguin;
+import de.tum.in.test.integration.testuser.subject.*;
 
 @UseLocale("en")
 @AllowThreads(maxActiveCount = 100)

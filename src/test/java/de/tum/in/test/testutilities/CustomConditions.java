@@ -7,21 +7,14 @@ import static org.junit.platform.testkit.engine.EventConditions.event;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.platform.engine.TestExecutionResult;
-import org.junit.platform.testkit.engine.Event;
-import org.junit.platform.testkit.engine.EventConditions;
+import org.junit.platform.testkit.engine.*;
 import org.opentest4j.AssertionFailedError;
 
 public final class CustomConditions {
@@ -36,6 +29,7 @@ public final class CustomConditions {
 
 	public enum Option {
 		MESSAGE_CONTAINS,
+		MESSAGE_REGEX,
 		MESSAGE_NORMALIZE_NEWLINE
 	}
 
@@ -76,23 +70,39 @@ public final class CustomConditions {
 	}
 
 	private static Condition<Throwable> createMessageCondition(String message, EnumSet<Option> optionSet) {
-		if (optionSet.contains(Option.MESSAGE_CONTAINS)) {
-			return new Condition<>(where(Throwable::getMessage, actualMessage -> {
-				var messageForComparison = normalizeMessageNewLines(optionSet, actualMessage);
-				if (shouldDirectlyFail())
-					assertThat(messageForComparison).contains(message);
-				return actualMessage != null && messageForComparison.contains(message);
-			}), "message contains '%s'", message); //$NON-NLS-1$
-		}
+		var messageContains = optionSet.contains(Option.MESSAGE_CONTAINS);
+		var messageRegex = optionSet.contains(Option.MESSAGE_REGEX);
+		if (messageContains && messageRegex)
+			throw new UnsupportedOperationException("regex matching any substring in the message is not implemented"); //$NON-NLS-1$
+		if (messageContains)
+			return createMessageCondition(message, optionSet,
+					messageForComparison -> assertThat(messageForComparison).contains(message),
+					messageForComparison -> messageForComparison != null && messageForComparison.contains(message),
+					"message contains '%s'"); //$NON-NLS-1$
+		if (messageRegex)
+			return createMessageCondition(message, optionSet,
+					messageForComparison -> assertThat(messageForComparison).matches(message),
+					messageForComparison -> messageForComparison != null && messageForComparison.matches(message),
+					"message matches the regex '%s'"); //$NON-NLS-1$
+		return createMessageCondition(message, optionSet,
+				messageForComparison -> assertThat(messageForComparison).isEqualTo(message),
+				messageForComparison -> Objects.equals(messageForComparison, message), "message is '%s'"); //$NON-NLS-1$
+	}
+
+	private static Condition<Throwable> createMessageCondition(String message, EnumSet<Option> optionSet,
+			Consumer<String> directlyFailingAssertion, Predicate<String> assertionAsBoolean,
+			String descriptionWithPlaceholder) {
 		return new Condition<>(where(Throwable::getMessage, actualMessage -> {
 			var messageForComparison = normalizeMessageNewLines(optionSet, actualMessage);
 			if (shouldDirectlyFail())
-				assertThat(messageForComparison).isEqualTo(message);
-			return Objects.equals(messageForComparison, message);
-		}), "message is '%s'", message); //$NON-NLS-1$
+				directlyFailingAssertion.accept(messageForComparison);
+			return assertionAsBoolean.test(messageForComparison);
+		}), descriptionWithPlaceholder, message); // $NON-NLS-1$
 	}
 
 	private static String normalizeMessageNewLines(EnumSet<Option> optionSet, String actualMessage) {
+		if (actualMessage == null)
+			return null;
 		return optionSet.contains(Option.MESSAGE_NORMALIZE_NEWLINE) ? actualMessage.replaceAll("\\R", "\n") //$NON-NLS-1$ //$NON-NLS-2$
 				: actualMessage;
 	}

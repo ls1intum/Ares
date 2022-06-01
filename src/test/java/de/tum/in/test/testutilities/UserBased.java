@@ -3,9 +3,7 @@ package de.tum.in.test.testutilities;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

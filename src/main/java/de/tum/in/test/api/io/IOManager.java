@@ -2,8 +2,7 @@ package de.tum.in.test.api.io;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.*;
 
 import net.jqwik.api.lifecycle.AroundPropertyHook;
 

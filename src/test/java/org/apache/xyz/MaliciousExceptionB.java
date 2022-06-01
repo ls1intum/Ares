@@ -1,8 +1,7 @@
 package org.apache.xyz;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.opentest4j.AssertionFailedError;

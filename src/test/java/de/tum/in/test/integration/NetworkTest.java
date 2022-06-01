@@ -8,10 +8,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.NetworkUser;
+import de.tum.in.test.testutilities.*;
 import de.tum.in.test.testutilities.CustomConditions.Option;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
 
 @UserBased(NetworkUser.class)
 class NetworkTest {

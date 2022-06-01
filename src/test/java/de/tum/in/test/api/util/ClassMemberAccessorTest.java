@@ -3,18 +3,13 @@ package de.tum.in.test.api.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import de.tum.in.test.integration.testuser.subject.structural.AbstractClassExtension;
-import de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass;
-import de.tum.in.test.integration.testuser.subject.structural.SomeClass;
-import de.tum.in.test.integration.testuser.subject.structural.SomeInterface;
+import de.tum.in.test.integration.testuser.subject.structural.*;
 import de.tum.in.test.integration.testuser.subject.structural.subpackage.SubpackageClass;
 
 class ClassMemberAccessorTest {

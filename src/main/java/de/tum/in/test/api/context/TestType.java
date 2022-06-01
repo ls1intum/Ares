@@ -3,10 +3,7 @@ package de.tum.in.test.api.context;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.jupiter.Hidden;
-import de.tum.in.test.api.jupiter.HiddenTest;
-import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.jupiter.*;
 
 /**
  * Type of an Ares test case

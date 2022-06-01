@@ -6,21 +6,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.lang.reflect.*;
+import java.net.*;
+import java.util.*;
+import java.util.stream.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.json.JSONArray;
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.*;
 
 /**
  * This test evaluates if the specified attributes in the structure oracle are

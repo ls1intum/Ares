@@ -12,9 +12,7 @@ import org.opentest4j.AssertionFailedError;
 import net.jqwik.engine.JqwikTestEngine;
 
 import de.tum.in.test.integration.testuser.JqwickUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(value = JqwickUser.class, testEngineId = JqwikTestEngine.ENGINE_ID)
 class JqwickTest {

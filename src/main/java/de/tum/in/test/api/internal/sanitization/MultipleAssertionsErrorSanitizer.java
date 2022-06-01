@@ -2,8 +2,7 @@ package de.tum.in.test.api.internal.sanitization;
 
 import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.assertj.core.description.TextDescription;

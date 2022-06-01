@@ -1,10 +1,7 @@
 package de.tum.in.test.integration.testuser;
 
-import de.tum.in.test.api.ActivateHiddenBefore;
-import de.tum.in.test.api.Deadline;
-import de.tum.in.test.api.ExtendedDeadline;
-import de.tum.in.test.api.jupiter.HiddenTest;
-import de.tum.in.test.api.jupiter.PublicTest;
+import de.tum.in.test.api.*;
+import de.tum.in.test.api.jupiter.*;
 import de.tum.in.test.api.localization.UseLocale;
 
 @UseLocale("en")

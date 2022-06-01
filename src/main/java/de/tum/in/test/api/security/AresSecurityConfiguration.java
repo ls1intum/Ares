@@ -2,19 +2,13 @@ package de.tum.in.test.api.security;
 
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.TrustedThreads.TrustScope;
-import de.tum.in.test.api.util.PackageRule;
-import de.tum.in.test.api.util.PathRule;
+import de.tum.in.test.api.util.*;
 
 @API(status = Status.INTERNAL)
 public final class AresSecurityConfiguration {

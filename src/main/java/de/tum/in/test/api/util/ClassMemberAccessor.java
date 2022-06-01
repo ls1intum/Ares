@@ -1,11 +1,7 @@
 package de.tum.in.test.api.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**

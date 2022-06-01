@@ -8,12 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.platform.engine.TestDescriptor;
 
 import net.jqwik.api.domains.DomainContext;
-import net.jqwik.api.lifecycle.AroundPropertyHook;
-import net.jqwik.api.lifecycle.PropertyExecutionResult;
-import net.jqwik.api.lifecycle.PropertyExecutor;
-import net.jqwik.api.lifecycle.PropertyLifecycleContext;
-import net.jqwik.engine.execution.lifecycle.CurrentDomainContext;
-import net.jqwik.engine.execution.lifecycle.CurrentTestDescriptor;
+import net.jqwik.api.lifecycle.*;
+import net.jqwik.engine.execution.lifecycle.*;
 
 import de.tum.in.test.api.StrictTimeout;
 import de.tum.in.test.api.internal.TimeoutUtils;

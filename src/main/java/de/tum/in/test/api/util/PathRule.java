@@ -1,17 +1,13 @@
 package de.tum.in.test.api.util;
 
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import java.nio.file.*;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.BlacklistPath;
-import de.tum.in.test.api.PathActionLevel;
-import de.tum.in.test.api.PathType;
-import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.*;
 
 @API(status = Status.INTERNAL)
 public final class PathRule {

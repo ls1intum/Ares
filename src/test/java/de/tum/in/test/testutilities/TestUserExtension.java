@@ -2,25 +2,14 @@ package de.tum.in.test.testutilities;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.invoke.*;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.jupiter.api.extension.ExtensionContext.Store;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolver;
-import org.junit.jupiter.api.extension.TestInstancePostProcessor;
-import org.junit.platform.commons.support.AnnotationSupport;
-import org.junit.platform.commons.support.HierarchyTraversalMode;
-import org.junit.platform.commons.support.ReflectionSupport;
-import org.junit.platform.engine.discovery.ClassSelector;
-import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.ExtensionContext.*;
+import org.junit.platform.commons.support.*;
+import org.junit.platform.engine.discovery.*;
 import org.junit.platform.testkit.engine.EngineTestKit;
 
 class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor, ParameterResolver {

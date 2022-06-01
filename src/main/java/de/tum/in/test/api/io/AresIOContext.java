@@ -4,8 +4,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import de.tum.in.test.api.MirrorOutput;
-import de.tum.in.test.api.context.AresContext;
-import de.tum.in.test.api.context.TestContext;
+import de.tum.in.test.api.context.*;
 import de.tum.in.test.api.internal.ConfigurationUtils;
 
 @API(status = Status.EXPERIMENTAL)

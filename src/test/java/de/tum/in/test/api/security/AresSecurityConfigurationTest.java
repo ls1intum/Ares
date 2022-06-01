@@ -3,31 +3,18 @@ package de.tum.in.test.api.security;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.InstanceOfAssertFactories.iterable;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.Objects;
-import java.util.Optional;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.support.ReflectionSupport;
 
-import de.tum.in.test.api.AddTrustedPackage;
-import de.tum.in.test.api.AllowLocalPort;
-import de.tum.in.test.api.AllowThreads;
-import de.tum.in.test.api.BlacklistPackage;
-import de.tum.in.test.api.BlacklistPath;
-import de.tum.in.test.api.PathActionLevel;
-import de.tum.in.test.api.TrustedThreads;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.TrustedThreads.TrustScope;
-import de.tum.in.test.api.WhitelistClass;
-import de.tum.in.test.api.WhitelistPackage;
-import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.context.TestContext;
-import de.tum.in.test.api.context.TestType;
+import de.tum.in.test.api.context.*;
 import de.tum.in.test.api.internal.ConfigurationUtils;
-import de.tum.in.test.api.util.PathRule;
-import de.tum.in.test.api.util.RuleType;
+import de.tum.in.test.api.util.*;
 
 class AresSecurityConfigurationTest {
 

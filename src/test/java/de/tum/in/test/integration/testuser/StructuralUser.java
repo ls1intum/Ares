@@ -5,26 +5,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.net.URISyntaxException;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
-import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.WhitelistPath;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
-import de.tum.in.test.api.structural.AttributeTestProvider;
-import de.tum.in.test.api.structural.ClassTestProvider;
-import de.tum.in.test.api.structural.ConstructorTestProvider;
-import de.tum.in.test.api.structural.MethodTestProvider;
+import de.tum.in.test.api.structural.*;
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
 
 @Public

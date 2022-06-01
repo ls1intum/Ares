@@ -4,20 +4,16 @@ import static de.tum.in.test.testutilities.CustomConditions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.Thread.State;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.api.TestUtils;
 import de.tum.in.test.integration.testuser.ThreadUser;
+import de.tum.in.test.testutilities.*;
 import de.tum.in.test.testutilities.CustomConditions.Option;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
 
 @UserBased(ThreadUser.class)
 class ThreadTest {

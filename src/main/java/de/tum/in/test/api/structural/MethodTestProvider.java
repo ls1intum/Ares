@@ -4,18 +4,14 @@ import static de.tum.in.test.api.localization.Messages.localizedFailure;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.*;
+import java.net.*;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.json.JSONArray;
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.*;
 
 /**
  * This test evaluates if the specified methods in the structure oracle are

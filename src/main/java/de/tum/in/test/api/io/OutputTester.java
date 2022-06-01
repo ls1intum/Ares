@@ -4,22 +4,15 @@ import static de.tum.in.test.api.localization.Messages.localized;
 
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.assertj.core.api.AbstractStringAssert;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ListAssert;
-import org.opentest4j.AssertionFailedError;
-import org.opentest4j.ValueWrapper;
+import org.assertj.core.api.*;
+import org.opentest4j.*;
 
 /**
  * Captures console output as {@link Line}s, and therefore is OS line separator

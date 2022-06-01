@@ -1,7 +1,6 @@
 package de.tum.in.test.api.util;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

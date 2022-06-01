@@ -3,12 +3,8 @@ package de.tum.in.test.api.internal.sanitization;
 import static de.tum.in.test.api.internal.BlacklistedInvoker.invoke;
 import static de.tum.in.test.api.internal.sanitization.ThrowableUtils.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.UnaryOperator;
+import java.util.*;
+import java.util.function.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

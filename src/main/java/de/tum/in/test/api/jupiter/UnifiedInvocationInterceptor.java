@@ -1,16 +1,12 @@
 package de.tum.in.test.api.jupiter;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Optional;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.extension.DynamicTestInvocationContext;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.InvocationInterceptor;
-import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
+import org.junit.jupiter.api.extension.*;
 
 /**
  * Combines all invocation interceptions into one method called

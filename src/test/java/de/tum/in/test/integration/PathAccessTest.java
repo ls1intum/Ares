@@ -5,9 +5,7 @@ import static de.tum.in.test.testutilities.CustomConditions.*;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.PathAccessUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(PathAccessUser.class)
 class PathAccessTest {

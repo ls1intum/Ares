@@ -5,30 +5,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.opentest4j.AssertionFailedError;
 
-import de.tum.in.test.api.BlacklistPath;
-import de.tum.in.test.api.MirrorOutput;
+import de.tum.in.test.api.*;
 import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
-import de.tum.in.test.api.PathType;
-import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.WhitelistPath;
-import de.tum.in.test.api.WithIOManager;
-import de.tum.in.test.api.io.AresIOContext;
-import de.tum.in.test.api.io.IOManager;
-import de.tum.in.test.api.io.IOTester;
-import de.tum.in.test.api.io.Line;
-import de.tum.in.test.api.io.OutputTestOptions;
+import de.tum.in.test.api.io.*;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.integration.testuser.subject.InputOutputPenguin;

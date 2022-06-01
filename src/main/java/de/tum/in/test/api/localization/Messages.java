@@ -1,11 +1,7 @@
 package de.tum.in.test.api.localization;
 
-import java.util.Collections;
-import java.util.Locale;
+import java.util.*;
 import java.util.Locale.Category;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

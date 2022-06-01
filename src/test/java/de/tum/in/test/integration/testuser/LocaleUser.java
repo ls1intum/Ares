@@ -7,8 +7,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 import de.tum.in.test.api.jupiter.Public;
-import de.tum.in.test.api.localization.Messages;
-import de.tum.in.test.api.localization.UseLocale;
+import de.tum.in.test.api.localization.*;
 
 @Public
 @UseLocale("de")

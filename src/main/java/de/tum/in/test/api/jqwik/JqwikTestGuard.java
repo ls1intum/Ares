@@ -4,10 +4,7 @@ import static de.tum.in.test.api.internal.TestGuardUtils.checkForHidden;
 
 import org.apiguardian.api.API;
 
-import net.jqwik.api.lifecycle.AroundPropertyHook;
-import net.jqwik.api.lifecycle.PropertyExecutionResult;
-import net.jqwik.api.lifecycle.PropertyExecutor;
-import net.jqwik.api.lifecycle.PropertyLifecycleContext;
+import net.jqwik.api.lifecycle.*;
 
 import de.tum.in.test.api.Deadline;
 import de.tum.in.test.api.context.TestContext;

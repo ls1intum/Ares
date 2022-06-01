@@ -11,9 +11,7 @@ import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.api.security.ConfigurationException;
 import de.tum.in.test.integration.testuser.SecurityUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(SecurityUser.class)
 class SecurityTest {

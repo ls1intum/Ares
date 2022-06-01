@@ -5,16 +5,13 @@ import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.lang.reflect.Modifier;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.json.JSONObject;
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.*;
 
 /**
  * This test evaluates the hierarchy of the class, i.e. if the class is abstract

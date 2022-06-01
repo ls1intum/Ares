@@ -3,14 +3,11 @@ package de.tum.in.test.integration;
 import static de.tum.in.test.testutilities.CustomConditions.*;
 
 import org.junit.platform.testkit.engine.Events;
-import org.opentest4j.AssertionFailedError;
-import org.opentest4j.MultipleFailuresError;
+import org.opentest4j.*;
 
 import de.tum.in.test.integration.testuser.DynamicsUser;
+import de.tum.in.test.testutilities.*;
 import de.tum.in.test.testutilities.CustomConditions.Option;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
 
 @UserBased(DynamicsUser.class)
 class DynamicsTest {
