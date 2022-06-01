@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tum.in.ase</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>1.10.1-SNAPSHOT</version>
+	<version>1.10.1</version>
 	<name>Ares</name>
 	<description>The Artemis Java Test Sandbox. A JUnit 5 Extension for secure Artemis Java Testing.</description>
 	<url>https://github.com/ls1intum/Ares</url>
