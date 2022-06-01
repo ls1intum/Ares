@@ -43,7 +43,9 @@ class ExceptionFailureTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(assertJMultipleFailures,
 				AssertJMultipleFailuresError.class, "Multiple Failures (2 failures)\n" + //
 						"-- failure 1 --A\n" + //
-						"-- failure 2 --B",
+						"at ExceptionFailureUser.lambda$assertJMultipleFailures$0(ExceptionFailureUser.java:71)\n" + //
+						"-- failure 2 --B\n" + //
+						"at ExceptionFailureUser.lambda$assertJMultipleFailures$1(ExceptionFailureUser.java:73)",
 				new Condition<>(t -> t.getSuppressed().length == 2, "failures added as suppressed"),
 				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
