@@ -7,7 +7,7 @@ public final class PackageAccessPenguin {
 	private PackageAccessPenguin() {
 	}
 
-	public static void useArrayList() {
+	public static void usePattern() {
 		Pattern pattern = Pattern.compile("a+");
 		pattern.asMatchPredicate().test("aaa");
 	}

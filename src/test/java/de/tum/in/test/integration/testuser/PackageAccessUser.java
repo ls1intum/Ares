@@ -23,31 +23,31 @@ public class PackageAccessUser {
 	@BlacklistPackage("java.util.regex")
 	@PublicTest
 	void package_aBlacklistingRegex() {
-		PackageAccessPenguin.useArrayList();
+		PackageAccessPenguin.usePattern();
 	}
 
 	@BlacklistPackage("java.**")
 	@PublicTest
 	void package_bBlacklistingJava() {
-		PackageAccessPenguin.useArrayList();
+		PackageAccessPenguin.usePattern();
 	}
 
 	@BlacklistPackage("**")
 	@PublicTest
 	void package_cBlacklistingAll() {
-		PackageAccessPenguin.useArrayList();
+		PackageAccessPenguin.usePattern();
 	}
 
 	@BlacklistPackage("**")
 	@WhitelistPackage("java.util.regex")
 	@PublicTest
 	void package_dBlackAndWhitelisting() {
-		PackageAccessPenguin.useArrayList();
+		PackageAccessPenguin.usePattern();
 	}
 
 	@BlacklistPackage("java.util.regex")
 	@PublicTest
 	void package_eBlackPenguinAgain() {
-		PackageAccessPenguin.useArrayList();
+		PackageAccessPenguin.usePattern();
 	}
 }
