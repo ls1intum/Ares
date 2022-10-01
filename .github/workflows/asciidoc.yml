@@ -29,7 +29,7 @@ jobs:
           echo ::set-output name=version::"$REV_VERSION"
           cd ..
       - name: Process AsciiDoc from ./repo to ./public
-        uses: avattathil/asciidoctor-action@v2
+        uses: tonynv/asciidoctor-action@v2
         with:
           program: asciidoctor -D public -b html5 -o index.html -a toc=left -a revdate="${{ steps.rev_info.outputs.date }}" -a revnumber="${{ steps.rev_info.outputs.version }}" -a source-highlighter=rouge repo/README.adoc
       - name: Upload AsciiDoc documentation
