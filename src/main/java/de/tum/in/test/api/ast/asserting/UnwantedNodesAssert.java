@@ -1,18 +1,18 @@
 package de.tum.in.test.api.ast.asserting;
 
-import de.tum.in.test.api.ast.data.UnwantedNodesSetting;
+import de.tum.in.test.api.ast.data.PathConfiguration;
 import de.tum.in.test.api.ast.manager.UnwantedNodeManager;
 import de.tum.in.test.api.ast.type.*;
 import org.assertj.core.api.AbstractAssert;
 
-public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, UnwantedNodesSetting> {
+public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, PathConfiguration> {
 
-    protected UnwantedNodesAssert(UnwantedNodesSetting actual, Class<?> selfType) {
-        super(actual, selfType);
+    public UnwantedNodesAssert(PathConfiguration actual) {
+        super(actual, UnwantedNodesAssert.class);
     }
 
-    public static UnwantedNodesAssert assertThat(UnwantedNodesSetting actual, Class<?> selfType) {
-        return new UnwantedNodesAssert(actual, selfType);
+    public static UnwantedNodesAssert assertThat(PathConfiguration actual) {
+        return new UnwantedNodesAssert(actual);
     }
 
     public UnwantedNodesAssert hasBelowNo(ClassType classType) {
