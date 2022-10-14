@@ -32,7 +32,7 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         "- In src/test/java/de/tum/in/test/integration/testuser/subject/structural/ClassWithAllKindsOfLoops.java:\n" +
                         "  - For-Statement was found:\n" +
-                        "    -  Between line 6 (column 9) and line 8 (column 9)\nI"));
+                        "    -  Between line 6 (column 9) and line 8 (column 9)\n"));
     }
 
     @TestTest
