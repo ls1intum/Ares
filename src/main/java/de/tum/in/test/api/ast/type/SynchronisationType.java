@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum SynchronisationType {
+    /**
+     * Returns a list with all synchronisation types
+     */
     ALL(new ArrayList<>() {
         {
-            add(new Pair<>("Synchronized-Statement", SynchronizedStmt.class));
+            add(new Pair<>("Synchronised-Statement", SynchronizedStmt.class));
         }
     });
 
@@ -20,6 +23,10 @@ public enum SynchronisationType {
         this.nodeNamePairs = nodeNamePairs;
     }
 
+    /**
+     * Returns the list of all node-name/node-type pairs
+     * @return List of all node-name/node-type pairs
+     */
     public List<Pair<String, Class<? extends Node>>> getNodeNamePairs() {
         return nodeNamePairs;
     }

@@ -9,22 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum ClassType {
+    /**
+     * Returns a list with all class types
+     */
     ALL(new ArrayList<>() {
         {
-            add(new Pair<>("Class-Statement", LocalClassDeclarationStmt.class));
-            add(new Pair<>("Record-Statement", LocalRecordDeclarationStmt.class));
+            add(new Pair<>("Local-Class-Statement", LocalClassDeclarationStmt.class));
+            add(new Pair<>("Local-Record-Statement", LocalRecordDeclarationStmt.class));
         }
     }),
 
-    CLASS(new ArrayList<>() {
+    /**
+     *
+     */
+    LOCALCLASS(new ArrayList<>() {
         {
-            add(new Pair<>("Class-Statement", LocalClassDeclarationStmt.class));
+            add(new Pair<>("Local-Class-Statement", LocalClassDeclarationStmt.class));
         }
     }),
 
-    RECORD(new ArrayList<>() {
+    /**
+     *
+     */
+    LOCALRECORD(new ArrayList<>() {
         {
-            add(new Pair<>("Record-Statement", LocalRecordDeclarationStmt.class));
+            add(new Pair<>("Local-Record-Statement", LocalRecordDeclarationStmt.class));
         }
     });
 
@@ -34,6 +43,10 @@ public enum ClassType {
         this.nodeNamePairs = nodeNamePairs;
     }
 
+    /**
+     * Returns the list of all node-name/node-type pairs
+     * @return List of all node-name/node-type pairs
+     */
     public List<Pair<String, Class<? extends Node>>> getNodeNamePairs() {
         return nodeNamePairs;
     }

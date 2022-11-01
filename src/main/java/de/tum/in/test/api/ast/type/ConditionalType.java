@@ -11,18 +11,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum ConditionalType {
+    /**
+     * Returns a list with all conditional types
+     */
     ALL(new ArrayList<>() {{
         add(new Pair<>("If-Statement", IfStmt.class));
         add(new Pair<>("Switch-Statement", SwitchStmt.class));
-        add(new Pair<>("Switch-Entry", SwitchEntry.class));
+        add(new Pair<>("Switch-Entry-Statement", SwitchEntry.class));
         add(new Pair<>("Yield-Statement", YieldStmt.class));
     }}),
+    /**
+     * Returns the if condition type
+     */
     IF(new ArrayList<>() {{
         add(new Pair<>("If-Statement", IfStmt.class));
     }}),
+    /**
+     * Returns the switch condition type
+     */
     SWITCH(new ArrayList<>() {{
         add(new Pair<>("Switch-Statement", SwitchStmt.class));
-        add(new Pair<>("Switch-Entry", SwitchEntry.class));
+        add(new Pair<>("Switch-Entry-Statement", SwitchEntry.class));
         add(new Pair<>("Yield-Statement", YieldStmt.class));
     }});
 
@@ -32,6 +41,10 @@ public enum ConditionalType {
         this.nodeNamePairs = nodeNamePairs;
     }
 
+    /**
+     * Returns the list of all node-name/node-type pairs
+     * @return List of all node-name/node-type pairs
+     */
     public List<Pair<String, Class<? extends Node>>> getNodeNamePairs() {
         return nodeNamePairs;
     }

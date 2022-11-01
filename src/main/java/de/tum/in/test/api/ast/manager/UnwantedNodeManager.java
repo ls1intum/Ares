@@ -9,7 +9,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Manages the detection of unwanted nodes
+ */
 public class UnwantedNodeManager {
+    /**
+     * Detects a provided list of unwanted nodes in a Java-File at a given path
+     * @param pathOfJavaFile Path to the Java-File, where unwanted nodes shall be detected
+     * @param nodesDefinedAsUnwanted List of unwanted nodes
+     * @return Pair of File-Path and their respective information about unwanted nodes
+     */
     public static Optional<Pair<Path, UnwantedNodesInformation>>
     getPathAndUnwantedNodesInformationPairForUnwantedNodesForJavaFileAt(
             Path pathOfJavaFile, List<Pair<String, Class<? extends Node>>> nodesDefinedAsUnwanted
@@ -25,6 +34,12 @@ public class UnwantedNodeManager {
                 });
     }
 
+    /**
+     * Detects a provided list of unwanted nodes in Java-Files below a given path
+     * @param pathOfDirectory Path to the Directory, at and below where unwanted nodes shall be detected
+     * @param nodesDefinedAsUnwanted List of unwanted nodes
+     * @return List of pairs of File-Path and their respective information about unwanted nodes
+     */
     public static List<Pair<Path, UnwantedNodesInformation>>
     getPathAndUnwantedNodesInformationPairForUnwantedNodesForJavaFilesBelow(
             Path pathOfDirectory, List<Pair<String, Class<? extends Node>>> nodesDefinedAsUnwanted
@@ -38,6 +53,12 @@ public class UnwantedNodeManager {
     }
 
 
+    /**
+     * Creates an error message in case unwanted files are detected
+     * @param pathOfJavaFile Path to the Java-File, where unwanted nodes shall be detected
+     * @param nodesDefinedAsUnwanted List of unwanted nodes
+     * @return Error message
+     */
     public static Optional<String>
     getMessageForUnwantedNodesForJavaFileAt(
             Path pathOfJavaFile, List<Pair<String, Class<? extends Node>>> nodesDefinedAsUnwanted
@@ -58,11 +79,17 @@ public class UnwantedNodeManager {
                                 .orElse(""));
     }
 
+    /**
+     * Creates an error message in case unwanted files are detected
+     * @param pathOfDirectory Path to the Directory, at and below where unwanted nodes shall be detected
+     * @param unwantedNodeList List of unwanted nodes
+     * @return Error message
+     */
     public static Optional<String>
     getMessageForUnwantedNodesForAllJavaFilesBelow(
-            Path path, List<Pair<String, Class<? extends Node>>> unwantedNodeList
+            Path pathOfDirectory, List<Pair<String, Class<? extends Node>>> unwantedNodeList
     ) {
-        return ASTManager.getPathAndASTPairsFromAllJavaFilesBelow(path)
+        return ASTManager.getPathAndASTPairsFromAllJavaFilesBelow(pathOfDirectory)
                 .stream()
                 .map(pathAndAST -> getMessageForUnwantedNodesForJavaFileAt(pathAndAST.a, unwantedNodeList))
                 .filter(Optional::isPresent)

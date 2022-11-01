@@ -1,4 +1,4 @@
-package de.tum.in.test.integration.testuser.subject.structural;
+package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.loops.yes;
 
 public class ClassWithAllKindsOfLoops {
 

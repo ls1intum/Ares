@@ -6,12 +6,31 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.Optional;
 
+/**
+ * Stores information about the beginning and the end of a node
+ */
 public class NodePosition {
+    /**
+     * Indicates whether the node has a beginning
+     */
     private final boolean hasBegin;
+    /**
+     * Position of the node beginning (or null if the node has no beginning)
+     */
     private final Pair<Integer, Integer> begin;
+    /**
+     * Indicates whether the node has an end
+     */
     private final boolean hasEnd;
+    /**
+     * Position of the node end (or null if the node has no end)
+     */
     private final Pair<Integer, Integer> end;
 
+    /**
+     * Creates the node beginning and end information
+     * @param node Node, for which the information about the beginning and the end shall be stored
+     */
     public NodePosition(Node node) {
         Optional<Position> nodeBegin = node.getBegin();
         hasBegin = nodeBegin.isPresent();
