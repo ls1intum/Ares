@@ -301,8 +301,8 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Helper method that retrieves a public method with arguments of a given object by its
-	 * name.
+	 * Helper method that retrieves a public method with arguments of a given object
+	 * by its name.
 	 *
 	 * @param object         instance of the class that defines the method.
 	 * @param methodName     the name of the method.
@@ -327,8 +327,8 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Helper method that retrieves a non-public method with arguments of a given object by its
-	 * name.
+	 * Helper method that retrieves a non-public method with arguments of a given
+	 * object by its name.
 	 *
 	 * @param object         instance of the class that defines the method.
 	 * @param methodName     the name of the method.
