@@ -1,8 +1,7 @@
 package de.tum.in.test.api.util;
 
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
-import org.opentest4j.AssertionFailedError;
+import static de.tum.in.test.api.localization.Messages.localized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -11,8 +10,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
-import static de.tum.in.test.api.localization.Messages.localized;
-import static de.tum.in.test.api.localization.Messages.localizedFailure;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.opentest4j.AssertionFailedError;
 
 /**
  * This class serves as an API to Java Reflection to facilitate various
