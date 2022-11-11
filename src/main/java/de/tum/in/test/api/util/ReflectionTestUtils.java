@@ -1,13 +1,18 @@
 package de.tum.in.test.api.util;
 
-import static de.tum.in.test.api.localization.Messages.*;
-
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.opentest4j.AssertionFailedError;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.StringJoiner;
+
+import static de.tum.in.test.api.localization.Messages.localized;
+import static de.tum.in.test.api.localization.Messages.localizedFailure;
 
 /**
  * This class serves as an API to Java Reflection to facilitate various
@@ -296,7 +301,7 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Helper method that retrieves a method with arguments of a given object by its
+	 * Helper method that retrieves a public method with arguments of a given object by its
 	 * name.
 	 *
 	 * @param object         instance of the class that defines the method.
@@ -310,7 +315,7 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Retrieve a method with arguments of a given class by its name.
+	 * Retrieve a public method with arguments of a given class by its name.
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
@@ -319,6 +324,32 @@ public final class ReflectionTestUtils {
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
 		return getMethodAccessible(declaringClass, methodName, false, parameterTypes);
+	}
+
+	/**
+	 * Helper method that retrieves a non-public method with arguments of a given object by its
+	 * name.
+	 *
+	 * @param object         instance of the class that defines the method.
+	 * @param methodName     the name of the method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Object object, String methodName, Class<?>... parameterTypes) {
+		requireNonNull(object, "reflection_test_utils.method_null_target", methodName); //$NON-NLS-1$
+		return getNonPublicMethod(object.getClass(), methodName, parameterTypes);
+	}
+
+	/**
+	 * Retrieve a non-public method with arguments of a given class by its name.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param methodName     The name of this method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
+		return getMethodAccessible(declaringClass, methodName, true, parameterTypes);
 	}
 
 	/**
