@@ -1,14 +1,9 @@
 package de.tum.in.test.api.util;
 
-import static de.tum.in.test.api.localization.Messages.localized;
-import static de.tum.in.test.api.localization.Messages.localizedFailure;
+import static de.tum.in.test.api.localization.Messages.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.StringJoiner;
+import java.lang.reflect.*;
+import java.util.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -330,8 +325,8 @@ public final class ReflectionTestUtils {
 	 * Helper method that retrieves a non-public method with arguments of a given
 	 * object by its name.
 	 *
-	 * @param object         instance of the class that defines the method.
-	 * @param methodName     the name of the method.
+	 * @param object         Instance of the class that defines the method.
+	 * @param methodName     The name of the method.
 	 * @param parameterTypes The parameter types of this method.
 	 * @return The wanted method.
 	 */
@@ -494,8 +489,8 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		return invokeMethodRethrowingAccessible(object, method, false, params);
@@ -512,8 +507,8 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	public static Object invokeNonPublicMethodRethrowing(Object object, Method method, Object... params)
 			throws Throwable {
@@ -530,8 +525,8 @@ public final class ReflectionTestUtils {
 	 *                    should be forced. Might fail with an
 	 *                    {@link IllegalAccessException} otherwise.
 	 * @param params      Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	private static Object invokeMethodRethrowingAccessible(Object object, Method method, boolean forceAccess,
 			Object[] params) throws Throwable {
