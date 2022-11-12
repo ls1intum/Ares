@@ -58,6 +58,12 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testGetNonPublicMethod_success() {
+		var method = getNonPublicMethod(CLASS_INSTANCE, "superSecretMethod");
+		assertThat(method).isInstanceOf(Method.class);
+	}
+
+	@Test
 	void testInvokeMethod_invocationTarget() {
 		invokeMethod(CLASS_INSTANCE, "throwException");
 	}

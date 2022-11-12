@@ -296,8 +296,8 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Helper method that retrieves a method with arguments of a given object by its
-	 * name.
+	 * Helper method that retrieves a public method with arguments of a given object
+	 * by its name.
 	 *
 	 * @param object         instance of the class that defines the method.
 	 * @param methodName     the name of the method.
@@ -310,7 +310,7 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Retrieve a method with arguments of a given class by its name.
+	 * Retrieve a public method with arguments of a given class by its name.
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
@@ -319,6 +319,32 @@ public final class ReflectionTestUtils {
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
 		return getMethodAccessible(declaringClass, methodName, false, parameterTypes);
+	}
+
+	/**
+	 * Helper method that retrieves a non-public method with arguments of a given
+	 * object by its name.
+	 *
+	 * @param object         Instance of the class that defines the method.
+	 * @param methodName     The name of the method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Object object, String methodName, Class<?>... parameterTypes) {
+		requireNonNull(object, "reflection_test_utils.method_null_target", methodName); //$NON-NLS-1$
+		return getNonPublicMethod(object.getClass(), methodName, parameterTypes);
+	}
+
+	/**
+	 * Retrieve a non-public method with arguments of a given class by its name.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param methodName     The name of this method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
+		return getMethodAccessible(declaringClass, methodName, true, parameterTypes);
 	}
 
 	/**
@@ -463,8 +489,8 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		return invokeMethodRethrowingAccessible(object, method, false, params);
@@ -481,8 +507,8 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	public static Object invokeNonPublicMethodRethrowing(Object object, Method method, Object... params)
 			throws Throwable {
@@ -499,8 +525,8 @@ public final class ReflectionTestUtils {
 	 *                    should be forced. Might fail with an
 	 *                    {@link IllegalAccessException} otherwise.
 	 * @param params      Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	private static Object invokeMethodRethrowingAccessible(Object object, Method method, boolean forceAccess,
 			Object[] params) throws Throwable {
