@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.18">
 <meta name="description" content="The Artemis Java Test Sandbox">
 <meta name="keywords" content="java, testing, students, deadline, education, tum, test, feedback, sandbox, thread, exercise, teaching, junit, test-framework, ares, junit5, artemis, jqwik, ajts">
 <meta name="author" content="Christian Femers">
@@ -87,10 +87,10 @@ code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
-ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
-ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
 ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
@@ -660,8 +660,8 @@ pre.rouge {
 <h1>Ares</h1>
 <div class="details">
 <span id="author" class="author">Christian Femers</span><br>
-<span id="revnumber">version 1.10.1,</span>
-<span id="revdate">2022-06-01 02:27:23 +0200</span>
+<span id="revnumber">version 1.11.0,</span>
+<span id="revdate">2022-11-12 21:51:05 +0100</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -774,7 +774,7 @@ environment of a Maven project, include</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>de.tum.in.ase<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>artemis-java-test-sandbox<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.10.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.11.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
@@ -787,7 +787,7 @@ environment of a Maven project, include</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="groovy"><span class="n">testImplementation</span> <span class="s1">'de.tum.in.ase:artemis-java-test-sandbox:1.10.1'</span></code></pre>
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">testImplementation</span> <span class="s1">'de.tum.in.ase:artemis-java-test-sandbox:1.11.0'</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -828,7 +828,7 @@ looks like this:</p>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>de.tum.in.ase<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>artemis-java-test-sandbox<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>1.10.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.11.0<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;/dependencies&gt;</span></code></pre>
@@ -1100,7 +1100,7 @@ no student content lands in trusted packages:</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;plugin&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>maven-enforcer-plugin<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>3.0.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;executions&gt;</span>
         <span class="nt">&lt;execution&gt;</span>
             <span class="nt">&lt;id&gt;</span>enforce-no-student-code-in-trusted-packages<span class="nt">&lt;/id&gt;</span>
@@ -1630,8 +1630,8 @@ use</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.10.1<br>
-Last updated 2022-06-01 00:35:39 UTC
+Version 1.11.0<br>
+Last updated 2022-11-12 21:06:37 UTC
 </div>
 </div>
 </body>
