@@ -103,11 +103,11 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public <R> DynamicField<R> field(DynamicClass<R> type, String... possibleNames) {
-		return new DynamicField<>(this, type, true, possibleNames);
+		return new DynamicField<>(this, type, false, possibleNames);
 	}
 
 	public <R> DynamicField<R> field(Class<R> type, String... possibleNames) {
-		return new DynamicField<>(this, type, true, possibleNames);
+		return new DynamicField<>(this, type, false, possibleNames);
 	}
 
 	public static <T> DynamicClass<T> toDynamic(Class<T> clazz) {
