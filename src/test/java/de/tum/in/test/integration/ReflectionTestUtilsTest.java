@@ -48,6 +48,9 @@ class ReflectionTestUtilsTest {
 	private final String testValueForAttribute_noSuchField = "testValueForAttribute_noSuchField";
 	private final String testValueForAttribute_success = "testValueForAttribute_success";
 	private final String testValueForPrivateAttribute_success = "testValueForPrivateAttribute_success";
+	private final String testNewInstanceRethrowing_invocationTarget = "testNewInstanceRethrowing_invocationTarget";
+	private final String testNewInstanceFromNonPublicConstructorRethrowing_success = "testNewInstanceFromNonPublicConstructorRethrowing_success";
+	private final String testGetNonPublicConstructor_noSuchMethod = "testGetNonPublicConstructor_noSuchMethod";
 
 	@TestTest
 	void test_invokeMethod_success() {
@@ -261,5 +264,24 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testValueForPrivateAttribute_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testValueForPrivateAttribute_success));
+	}
+
+	@TestTest
+	void test_testNewInstanceRethrowing_invocationTarget() {
+		tests.assertThatEvents().haveExactly(1,
+				testFailedWith(testNewInstanceRethrowing_invocationTarget, RuntimeException.class));
+	}
+
+	@TestTest
+	void test_testNewInstanceFromNonPublicConstructorRethrowing_success() {
+		tests.assertThatEvents().haveExactly(1,
+				finishedSuccessfully(testNewInstanceFromNonPublicConstructorRethrowing_success));
+	}
+
+	@TestTest
+	void test_testGetNonPublicConstructor_noSuchMethod() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testGetNonPublicConstructor_noSuchMethod,
+				AssertionFailedError.class,
+				"Could not find the constructor with the parameters: [ String, Boolean ] in the class SomeClass because the constructor does not exist. Make sure to implement this constructor properly."));
 	}
 }

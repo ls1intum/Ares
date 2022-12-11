@@ -211,6 +211,70 @@ public final class ReflectionTestUtils {
 	private static Object newInstanceAccessible(Constructor<?> constructor, boolean forceAccess,
 			Object[] constructorArgs) {
 		try {
+			return newInstanceRethrowingAccessible(constructor, forceAccess, constructorArgs);
+		} catch (AssertionFailedError e) {
+			throw e;
+		} catch (@SuppressWarnings("unused") Throwable e) {
+			throw localizedFailure("reflection_test_utils.constructor_internal_exception", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
+		}
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the method execution.
+	 *
+	 * @param constructor     The actual constructor that should be used for
+	 *                        creating a new instance of the object
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with.
+	 * @return The instance of this class.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	public static Object newInstanceRethrowing(Constructor<?> constructor, Object... constructorArgs) throws Throwable {
+		return newInstanceRethrowingAccessible(constructor, false, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the method execution.
+	 * <p>
+	 * Forces the access to package-private, {@code protected}, and {@code private}
+	 * constructors. Use {@link #newInstance(Constructor, Object...)} if you do not
+	 * require this functionality.
+	 *
+	 * @param constructor     The actual constructor that should be used for
+	 *                        creating a new instance of the object
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with.
+	 * @return The instance of this class.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	public static Object newInstanceFromNonPublicConstructorRethrowing(Constructor<?> constructor,
+			Object... constructorArgs) throws Throwable {
+		return newInstanceRethrowingAccessible(constructor, true, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the construction.
+	 *
+	 * @param constructor     The constructor that should be used to instantiate an
+	 *                        object.
+	 * @param forceAccess     True, if access to a (package) private or protected
+	 *                        constructor should be forced. Might fail with an
+	 *                        {@link IllegalAccessException} otherwise.
+	 * @param constructorArgs Parameter instances the constructor should be called
+	 *                        with.
+	 * @return The object created by calling the given constructor.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	private static Object newInstanceRethrowingAccessible(Constructor<?> constructor, boolean forceAccess,
+			Object[] constructorArgs) throws Throwable {
+		try {
 			if (forceAccess) {
 				constructor.setAccessible(true);
 			}
@@ -226,12 +290,11 @@ public final class ReflectionTestUtils {
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
 			throw localizedFailure("reflection_test_utils.constructor_abstract_class", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName());
-		} catch (@SuppressWarnings("unused") InvocationTargetException ite) {
-			throw localizedFailure("reflection_test_utils.constructor_internal_exception", //$NON-NLS-1$
-					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
 			throw localizedFailure("reflection_test_utils.constructor_class_init", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
+		} catch (InvocationTargetException ite) {
+			throw ite.getCause();
 		}
 	}
 
@@ -549,13 +612,13 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters, and
-	 * rethrow an exception if one occurs during the method execution.
+	 * re-throw an exception if one occurs during the method execution.
 	 *
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
 	 * @return The return value of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
+	 * @throws Throwable the exception that was caught and which will be re-thrown
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		return invokeMethodRethrowingAccessible(object, method, false, params);
@@ -563,7 +626,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters, and
-	 * rethrow an exception if one occurs during the method execution.
+	 * re-throw an exception if one occurs during the method execution.
 	 * <p>
 	 * Forces access to package-private, {@code protected}, and {@code private}
 	 * methods. Use {@link #invokeMethodRethrowing(Object, Method, Object...)} when
@@ -573,7 +636,7 @@ public final class ReflectionTestUtils {
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
 	 * @return The return value of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
+	 * @throws Throwable the exception that was caught and which will be re-thrown
 	 */
 	public static Object invokeNonPublicMethodRethrowing(Object object, Method method, Object... params)
 			throws Throwable {
@@ -624,11 +687,28 @@ public final class ReflectionTestUtils {
 	 * @param declaringClass The class that declares this constructor.
 	 * @param parameterTypes The parameter types of this method.
 	 * @param <T>            The type parameter of the constructor and class
-	 * @return The wanted method.
+	 * @return The wanted constructor.
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		try {
 			return declaringClass.getConstructor(parameterTypes);
+		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
+			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
+					describeParameters(parameterTypes), declaringClass.getSimpleName());
+		}
+	}
+
+	/**
+	 * Retrieve a non-public constructor with arguments of a given class.
+	 *
+	 * @param declaringClass The class that declares this constructor.
+	 * @param parameterTypes The parameter types of this method.
+	 * @param <T>            The type parameter of the constructor and class
+	 * @return The wanted constructor.
+	 */
+	public static <T> Constructor<T> getNonPublicConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
+		try {
+			return declaringClass.getDeclaredConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());

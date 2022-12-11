@@ -33,6 +33,11 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testGetNonPublicConstructor_noSuchMethod() {
+		getNonPublicConstructor(classInstance.getClass(), String.class, Boolean.class);
+	}
+
+	@Test
 	void testGetConstructor_success() {
 		var constructor = getConstructor(classInstance.getClass());
 		assertThat(constructor).isInstanceOf(Constructor.class);
@@ -217,5 +222,17 @@ public class ReflectionTestUtilsUser {
 	@Test
 	void testValueForPrivateAttribute_success() {
 		valueForNonPublicAttribute(classInstance, "someAttribute");
+	}
+
+	@Test
+	void testNewInstanceRethrowing_invocationTarget() throws Throwable {
+		var constructor = getConstructor(SomeClass.class, Boolean.class);
+		newInstanceRethrowing(constructor, true);
+	}
+
+	@Test
+	void testNewInstanceFromNonPublicConstructorRethrowing_success() throws Throwable {
+		var constructor = getNonPublicConstructor(SomeClass.class, String.class);
+		newInstanceFromNonPublicConstructorRethrowing(constructor, "x");
 	}
 }
