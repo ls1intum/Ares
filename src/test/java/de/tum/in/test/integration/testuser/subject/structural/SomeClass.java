@@ -69,4 +69,16 @@ public class SomeClass implements SomeInterface {
 		return ThreadLocalRandom.current()
 				.nextInt(doSomethingOperations == null ? SOME_CONSTANT : doSomethingOperations.size());
 	}
+
+	static class Nested {
+
+		public int innerValue = -1;
+
+		public Nested() {
+		}
+
+		public static void publicMethod() {
+			throw new UnsupportedOperationException();
+		}
+	}
 }

@@ -218,7 +218,7 @@ public final class ReflectionTestUtils {
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.constructor_access", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(),
-					getParameterTypesAsString(constructor.getParameterTypes()));
+					getParameterTypesAsString(constructor.getParameterTypes()), getIllegalAccessSource(constructor));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			throw localizedFailure("reflection_test_utils.constructor_arguments", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(),
@@ -280,18 +280,21 @@ public final class ReflectionTestUtils {
 	 */
 	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
 		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
+		Field field;
 		try {
-			Field field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
+			field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
+		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
+			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName());
+		}
+		try {
 			if (forceAccess) {
 				field.setAccessible(true);
 			}
 			return field.get(object);
-		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
-			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
-					object.getClass().getSimpleName());
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
-					object.getClass().getSimpleName());
+					object.getClass().getSimpleName(), getIllegalAccessSource(field));
 		}
 	}
 
@@ -538,7 +541,7 @@ public final class ReflectionTestUtils {
 			return method.invoke(object, params);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.method_access", method.getName(), //$NON-NLS-1$
-					method.getDeclaringClass().getSimpleName());
+					method.getDeclaringClass().getSimpleName(), getIllegalAccessSource(method));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			throw localizedFailure("reflection_test_utils.method_parameters", method.getName(), //$NON-NLS-1$
 					method.getDeclaringClass().getSimpleName());
@@ -617,5 +620,12 @@ public final class ReflectionTestUtils {
 		if (object == null)
 			throw localizedFailure(key, messageArgs);
 		return object;
+	}
+
+	private static String getIllegalAccessSource(Member member) {
+		if (!Modifier.isPublic(member.getModifiers()))
+			return localized(
+					"reflection_test_utils.construct." + member.getClass().getSimpleName().toLowerCase(Locale.ROOT)); //$NON-NLS-1$
+		return localized("reflection_test_utils.construct.class"); //$NON-NLS-1$
 	}
 }

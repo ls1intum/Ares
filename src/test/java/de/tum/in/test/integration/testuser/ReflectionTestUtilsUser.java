@@ -20,6 +20,7 @@ public class ReflectionTestUtilsUser {
 
 	private static final String SUBJECT_PACKAGE = "de.tum.in.test.integration.testuser.subject.structural";
 	private static final String CLASS_NAME = SUBJECT_PACKAGE + ".SomeClass";
+	private static final String NESTED_CLASS_NAME = CLASS_NAME + "$Nested";
 	private static final String ABSTRACT_CLASS_NAME = SUBJECT_PACKAGE + ".SomeAbstractClass";
 	private static final String FAILING_CLASS_NAME = SUBJECT_PACKAGE + ".SomeFailingClass";
 
@@ -61,6 +62,12 @@ public class ReflectionTestUtilsUser {
 	void testGetNonPublicMethod_success() {
 		var method = getNonPublicMethod(CLASS_INSTANCE, "superSecretMethod");
 		assertThat(method).isInstanceOf(Method.class);
+	}
+
+	@Test
+	void testInvokeMethod_classNotVisible() {
+		var innerInstance = newInstanceFromNonPublicConstructor(NESTED_CLASS_NAME);
+		invokeMethod(innerInstance, "publicMethod");
 	}
 
 	@Test
@@ -109,6 +116,11 @@ public class ReflectionTestUtilsUser {
 	}
 
 	@Test
+	void testNewInstance_classNotVisible() {
+		newInstance(NESTED_CLASS_NAME);
+	}
+
+	@Test
 	void testNewInstance_exceptionInInitializer() {
 		newInstance(FAILING_CLASS_NAME);
 	}
@@ -148,6 +160,12 @@ public class ReflectionTestUtilsUser {
 	@Test
 	void testNewInstancePrivateConstructor_success() {
 		newInstanceFromNonPublicConstructor(CLASS_NAME, "");
+	}
+
+	@Test
+	void testValueForAttribute_classNotVisible() {
+		var innerInstance = newInstanceFromNonPublicConstructor(NESTED_CLASS_NAME);
+		valueForAttribute(innerInstance, "innerValue");
 	}
 
 	@Test

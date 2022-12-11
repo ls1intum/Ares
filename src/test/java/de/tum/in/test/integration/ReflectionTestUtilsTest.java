@@ -20,6 +20,7 @@ class ReflectionTestUtilsTest {
 	private final String testGetMethod_noSuchMethod_noParameters = "testGetMethod_noSuchMethod_noParameters";
 	private final String testGetMethod_noSuchMethod_withParameters = "testGetMethod_noSuchMethod_withParameters";
 	private final String testGetMethod_success = "testGetMethod_success";
+	private final String testInvokeMethod_classNotVisible = "testInvokeMethod_classNotVisible";
 	private final String testInvokeMethod_invocationTarget = "testInvokeMethod_invocationTarget";
 	private final String testInvokeMethod_success = "testInvokeMethod_success";
 	private final String testInvokeMethodRethrowing_illegalAccess = "testInvokeMethodRethrowing_illegalAccess";
@@ -28,6 +29,7 @@ class ReflectionTestUtilsTest {
 	private final String testInvokePrivateMethodByName_success = "testInvokePrivateMethodByName_success";
 	private final String testInvokePrivateMethodRethrowing_success = "testInvokePrivateMethodRethrowing_success";
 	private final String testNewInstance_classNotFound = "testNewInstance_classNotFound";
+	private final String testNewInstance_classNotVisible = "testNewInstance_classNotVisible";
 	private final String testNewInstance_exceptionInInitializer = "testNewInstance_exceptionInInitializer";
 	private final String testNewInstance_illegalAccess = "testNewInstance_illegalAccess";
 	private final String testNewInstance_illegalArguments = "testNewInstance_illegalArguments";
@@ -36,6 +38,7 @@ class ReflectionTestUtilsTest {
 	private final String testNewInstance_noSuchMethod = "testNewInstance_noSuchMethod";
 	private final String testNewInstance_success = "testNewInstance_success";
 	private final String testNewInstancePrivateConstructor_success = "testNewInstancePrivateConstructor_success";
+	private final String testValueForAttribute_classNotVisible = "testValueForAttribute_classNotVisible";
 	private final String testValueForAttribute_illegalAccess = "testValueForAttribute_illegalAccess";
 	private final String testValueForAttribute_noSuchField = "testValueForAttribute_noSuchField";
 	private final String testValueForAttribute_success = "testValueForAttribute_success";
@@ -89,6 +92,13 @@ class ReflectionTestUtilsTest {
 	}
 
 	@TestTest
+	void test_testInvokeMethod_classNotVisible() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethod_classNotVisible,
+				AssertionFailedError.class,
+				"Could not invoke the method 'publicMethod' in the class Nested because access to the method was denied. Make sure to check the modifiers of the class."));
+	}
+
+	@TestTest
 	void test_testInvokeMethod_invocationTarget() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testInvokeMethod_invocationTarget,
 				AssertionFailedError.class,
@@ -126,6 +136,13 @@ class ReflectionTestUtilsTest {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewInstance_classNotFound,
 				AssertionFailedError.class,
 				"The class 'DoesNotExist' was not found within the submission. Make sure to implement it properly."));
+	}
+
+	@TestTest
+	void test_testNewInstance_classNotVisible() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testNewInstance_classNotVisible,
+				AssertionFailedError.class,
+				"Could not instantiate the class Nested because access to its constructor with the parameters: none was denied. Make sure to check the modifiers of the class."));
 	}
 
 	@TestTest
@@ -177,6 +194,13 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testNewInstancePrivateConstructor_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstancePrivateConstructor_success));
+	}
+
+	@TestTest
+	void test_testValueForAttribute_classNotVisible() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testValueForAttribute_classNotVisible,
+				AssertionFailedError.class,
+				"Could not retrieve the attribute 'innerValue' from the class Nested because access to the attribute was denied. Make sure to check the modifiers of the class."));
 	}
 
 	@TestTest
