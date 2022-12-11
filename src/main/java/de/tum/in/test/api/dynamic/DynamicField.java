@@ -2,7 +2,7 @@ package de.tum.in.test.api.dynamic;
 
 import static de.tum.in.test.api.localization.Messages.*;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -72,6 +72,29 @@ public class DynamicField<T> implements Checkable {
 	public T getStatic() {
 		try {
 			return getOf(null);
+		} catch (NullPointerException e) {
+			throw localizedFailure(e, "dynamics.field.static", name, owner); //$NON-NLS-1$
+		}
+	}
+
+	public void setOf(Object o, T newValue) {
+		if (Modifier.isFinal(toField().getModifiers()))
+			throw localizedFailure("dynamics.field.final", name, owner); //$NON-NLS-1$
+		try {
+			toField().set(o, type.cast(newValue));
+		} catch (IllegalAccessException e) {
+			throw localizedFailure(e, "dynamics.field.access", name, owner); //$NON-NLS-1$
+		} catch (IllegalArgumentException e) {
+			throw localizedFailure(e, "dynamics.field.target", name, owner); //$NON-NLS-1$
+		} catch (ClassCastException e) {
+			throw localizedFailure(e, "dynamics.field.cast_set", name, owner, type.getName(), //$NON-NLS-1$
+					newValue == null ? "null" : newValue.getClass()); //$NON-NLS-1$
+		}
+	}
+
+	public void setStatic(T newValue) {
+		try {
+			setOf(null, newValue);
 		} catch (NullPointerException e) {
 			throw localizedFailure(e, "dynamics.field.static", name, owner); //$NON-NLS-1$
 		}

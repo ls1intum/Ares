@@ -159,8 +159,32 @@ public class DynamicsUser {
 	}
 
 	@Test
-	void field_wrongType() {
+	void field_setOf() {
+		var instance = new SomeClass();
+		SomeClass_someAttribute.setOf(instance, "x");
+		assertThat(instance.getSomeAttribute()).isEqualTo("x");
+	}
+
+	@Test
+	void field_setStaticFinal() {
+		SomeClass_SOME_CONSTANT.setStatic(-1);
+	}
+
+	@Test
+	void field_wrongObject() {
+		SomeClass_someAttribute.setOf(123, "x");
+	}
+
+	@Test
+	void field_wrongTypeGet() {
 		SomeClass.field(byte.class, "SOME_CONSTANT").getStatic();
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void field_wrongTypeSet() {
+		var instance = new SomeClass();
+		((DynamicField) SomeClass_someAttribute).setOf(instance, 1);
 	}
 
 	@Test

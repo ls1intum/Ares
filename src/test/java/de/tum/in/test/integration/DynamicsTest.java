@@ -32,7 +32,11 @@ class DynamicsTest {
 	private final String field_getInstance = "field_getInstance";
 	private final String field_getStatic = "field_getStatic";
 	private final String field_noSuchField = "field_noSuchField";
-	private final String field_wrongType = "field_wrongType";
+	private final String field_setOf = "field_setOf";
+	private final String field_setStaticFinal = "field_setStaticFinal";
+	private final String field_wrongObject = "field_wrongObject";
+	private final String field_wrongTypeGet = "field_wrongTypeGet";
+	private final String field_wrongTypeSet = "field_wrongTypeSet";
 	private final String method_badCast = "method_badCast";
 	private final String method_check = "method_check";
 	private final String method_illegalArguments = "method_illegalArguments";
@@ -145,9 +149,32 @@ class DynamicsTest {
 	}
 
 	@TestTest
-	void test_field_wrongType() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongType, AssertionFailedError.class,
+	void test_field_setOf() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_setOf));
+	}
+
+	@TestTest
+	void test_field_setStaticFinal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setStaticFinal, AssertionFailedError.class,
+				"Attribut [SOME_CONSTANT] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass kann nicht gesetzt werden, da es final ist."));
+	}
+
+	@TestTest
+	void test_field_wrongObject() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongObject, AssertionFailedError.class,
+				"Attribut [someAttribute] von Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass wurde nicht auf einem passenden Objekt aufgerufen."));
+	}
+
+	@TestTest
+	void test_field_wrongTypeGet() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongTypeGet, AssertionFailedError.class,
 				"Attribut [SOME_CONSTANT] konnte nicht gefunden werden."));
+	}
+
+	@TestTest
+	void test_field_wrongTypeSet() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongTypeSet, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass vom Typ java.lang.String kann keine Instanz der Klasse class java.lang.Integer zugewiesen werden."));
 	}
 
 	@TestTest
