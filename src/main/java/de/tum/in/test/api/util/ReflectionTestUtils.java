@@ -704,7 +704,7 @@ public final class ReflectionTestUtils {
 	 * @param declaringClass The class that declares this constructor.
 	 * @param parameterTypes The parameter types of this method.
 	 * @param <T>            The type parameter of the constructor and class
-	 * @return The wanted constructor.
+	 * @return The wanted method.
 	 */
 	public static <T> Constructor<T> getNonPublicConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		try {

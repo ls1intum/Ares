@@ -30,13 +30,17 @@ class DynamicsTest {
 	private final String constructor_throwing = "constructor_throwing";
 	private final String field_check = "field_check";
 	private final String field_getInstance = "field_getInstance";
-	private final String field_getStatic = "field_getStatic";
+	private final String field_getStaticNull = "field_getStaticNull";
+	private final String field_getStaticSuccess = "field_getStaticSuccess";
+	private final String field_getWrongObject = "field_getWrongObject";
+	private final String field_getWrongType = "field_getWrongType";
 	private final String field_noSuchField = "field_noSuchField";
 	private final String field_setOf = "field_setOf";
 	private final String field_setStaticFinal = "field_setStaticFinal";
-	private final String field_wrongObject = "field_wrongObject";
-	private final String field_wrongTypeGet = "field_wrongTypeGet";
-	private final String field_wrongTypeSet = "field_wrongTypeSet";
+	private final String field_setStaticNull = "field_setStaticNull";
+	private final String field_setStaticSuccess = "field_setStaticSuccess";
+	private final String field_setWrongObject = "field_setWrongObject";
+	private final String field_setWrongType = "field_setWrongType";
 	private final String method_badCast = "method_badCast";
 	private final String method_check = "method_check";
 	private final String method_illegalArguments = "method_illegalArguments";
@@ -90,7 +94,7 @@ class DynamicsTest {
 	@TestTest
 	void test_class_searchPublicOrProtectedMethods() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(class_searchPublicOrProtectedMethods,
-				AssertionFailedError.class, "Methode nonAbstractProtected() darf nicht protected sein."));
+				AssertionFailedError.class, "Methode doSomething(java.lang.String) darf nicht public sein."));
 	}
 
 	@TestTest
@@ -138,8 +142,26 @@ class DynamicsTest {
 	}
 
 	@TestTest
-	void test_field_getStatic() {
-		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getStatic));
+	void test_field_getStaticNull() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getStaticNull, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch."));
+	}
+
+	@TestTest
+	void test_field_getStaticSuccess() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getStaticSuccess));
+	}
+
+	@TestTest
+	void test_field_getWrongObject() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getWrongObject, AssertionFailedError.class,
+				"Attribut [someAttribute] von Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass wurde nicht auf einem passenden Objekt aufgerufen."));
+	}
+
+	@TestTest
+	void test_field_getWrongType() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getWrongType, AssertionFailedError.class,
+				"Attribut [SOME_CONSTANT] konnte nicht gefunden werden."));
 	}
 
 	@TestTest
@@ -160,20 +182,25 @@ class DynamicsTest {
 	}
 
 	@TestTest
-	void test_field_wrongObject() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongObject, AssertionFailedError.class,
+	void test_field_setStaticNull() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setStaticNull, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch."));
+	}
+
+	@TestTest
+	void test_field_setStaticSuccess() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_setStaticSuccess));
+	}
+
+	@TestTest
+	void test_field_setWrongObject() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setWrongObject, AssertionFailedError.class,
 				"Attribut [someAttribute] von Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass wurde nicht auf einem passenden Objekt aufgerufen."));
 	}
 
 	@TestTest
-	void test_field_wrongTypeGet() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongTypeGet, AssertionFailedError.class,
-				"Attribut [SOME_CONSTANT] konnte nicht gefunden werden."));
-	}
-
-	@TestTest
-	void test_field_wrongTypeSet() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongTypeSet, AssertionFailedError.class,
+	void test_field_setWrongType() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setWrongType, AssertionFailedError.class,
 				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass vom Typ java.lang.String kann keine Instanz der Klasse class java.lang.Integer zugewiesen werden."));
 	}
 
