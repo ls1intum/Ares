@@ -207,4 +207,9 @@ public class DynamicClass<T> implements Checkable {
 		}
 		return checked;
 	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends Throwable, R> R rethrowUnchecked(Throwable t) throws T {
+		throw (T) t;
+	}
 }
