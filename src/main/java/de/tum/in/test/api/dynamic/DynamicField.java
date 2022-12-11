@@ -15,21 +15,16 @@ public class DynamicField<T> implements Checkable {
 	private final DynamicClass<?> owner;
 	private final List<String> name;
 	private final DynamicClass<T> type;
-	private final boolean ignoreCase;
 	private Field field;
 
-	public DynamicField(DynamicClass<?> dClass, Class<T> fType, boolean ignoreCase, String... possibleNames) {
-		this(dClass, DynamicClass.toDynamic(fType), ignoreCase, possibleNames);
+	public DynamicField(DynamicClass<?> dClass, Class<T> fType, String... possibleNames) {
+		this(dClass, DynamicClass.toDynamic(fType), possibleNames);
 	}
 
-	public DynamicField(DynamicClass<?> dClass, DynamicClass<T> fType, boolean ignoreCase, String... possibleNames) {
+	public DynamicField(DynamicClass<?> dClass, DynamicClass<T> fType, String... possibleNames) {
 		this.owner = Objects.requireNonNull(dClass);
-		if (ignoreCase)
-			this.name = Stream.of(possibleNames).map(String::toLowerCase).collect(Collectors.toUnmodifiableList());
-		else
-			this.name = List.of(possibleNames);
+		this.name = List.of(possibleNames);
 		this.type = Objects.requireNonNull(fType);
-		this.ignoreCase = ignoreCase;
 	}
 
 	public Field toField() {
@@ -78,8 +73,7 @@ public class DynamicField<T> implements Checkable {
 	}
 
 	private Optional<Field> findField(Class<?> c) {
-		return fieldsOf(c).stream().filter(f -> name.contains(ignoreCase ? f.getName().toLowerCase() : f.getName()))
-				.findFirst();
+		return fieldsOf(c).stream().filter(f -> name.contains(f.getName())).findFirst();
 	}
 
 	private List<Field> fieldsOf(Class<?> c) {
