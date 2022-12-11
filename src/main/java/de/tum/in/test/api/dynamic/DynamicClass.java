@@ -176,7 +176,7 @@ public class DynamicClass<T> implements Checkable {
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if (!objectMethods.contains(sig))
+				if (!objectMethods.contains(sig) && !publicMethods.contains(sig))
 					throw localizedFailure("dynamics.class.method_protected", sig); //$NON-NLS-1$
 			}
 			checked++;
