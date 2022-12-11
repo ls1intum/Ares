@@ -49,9 +49,9 @@ class DynamicsTest {
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist public.\n" //
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht final.\n" //
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[someattribute] ist nicht public.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist final.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist statisch." //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[someAttribute] ist nicht public.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[SOME_CONSTANT] ist final.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[SOME_CONSTANT] ist statisch." //
 				, Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
@@ -147,7 +147,7 @@ class DynamicsTest {
 	@TestTest
 	void test_field_wrongType() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongType, AssertionFailedError.class,
-				"Attribut [some_constant] konnte nicht gefunden werden."));
+				"Attribut [SOME_CONSTANT] konnte nicht gefunden werden."));
 	}
 
 	@TestTest
