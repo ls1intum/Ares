@@ -16,7 +16,6 @@ public class DynamicField<T> implements Checkable {
 	private final List<String> name;
 	private final DynamicClass<T> type;
 	private final boolean ignoreCase;
-
 	private Field field;
 
 	public DynamicField(DynamicClass<?> dClass, Class<T> fType, boolean ignoreCase, String... possibleNames) {
