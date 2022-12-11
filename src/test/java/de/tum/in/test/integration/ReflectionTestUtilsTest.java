@@ -38,6 +38,11 @@ class ReflectionTestUtilsTest {
 	private final String testNewInstance_noSuchMethod = "testNewInstance_noSuchMethod";
 	private final String testNewInstance_success = "testNewInstance_success";
 	private final String testNewInstancePrivateConstructor_success = "testNewInstancePrivateConstructor_success";
+	private final String testSetValueOfAttribute_final = "testSetValueOfAttribute_final";
+	private final String testSetValueOfAttribute_illegalAccess = "testSetValueOfAttribute_illegalAccess";
+	private final String testSetValueOfAttribute_success = "testSetValueOfAttribute_success";
+	private final String testSetValueOfNonPublicAttribute_final = "testSetValueOfNonPublicAttribute_final";
+	private final String testSetValueOfNonPublicAttribute_success = "testSetValueOfNonPublicAttribute_success";
 	private final String testValueForAttribute_classNotVisible = "testValueForAttribute_classNotVisible";
 	private final String testValueForAttribute_illegalAccess = "testValueForAttribute_illegalAccess";
 	private final String testValueForAttribute_noSuchField = "testValueForAttribute_noSuchField";
@@ -194,6 +199,37 @@ class ReflectionTestUtilsTest {
 	@TestTest
 	void test_testNewInstancePrivateConstructor_success() {
 		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testNewInstancePrivateConstructor_success));
+	}
+
+	@TestTest
+	void test_testSetValueOfAttribute_final() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testSetValueOfAttribute_final,
+				AssertionFailedError.class,
+				"Could not set the value of attribute 'SOME_CONSTANT' from the class SomeClass because it is final. Make sure to check the modifiers of the attribute."));
+	}
+
+	@TestTest
+	void test_testSetValueOfAttribute_illegalAccess() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testSetValueOfAttribute_illegalAccess,
+				AssertionFailedError.class,
+				"Could not retrieve the attribute 'someAttribute' from the class SomeClass because access to the attribute was denied. Make sure to check the modifiers of the attribute."));
+	}
+
+	@TestTest
+	void test_testSetValueOfAttribute_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testSetValueOfAttribute_success));
+	}
+
+	@TestTest
+	void test_testSetValueOfNonPublicAttribute_final() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testSetValueOfNonPublicAttribute_final,
+				AssertionFailedError.class,
+				"Could not set the value of attribute 'someFinalAttribute' from the class SomeClass because it is final. Make sure to check the modifiers of the attribute."));
+	}
+
+	@TestTest
+	void test_testSetValueOfNonPublicAttribute_success() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testSetValueOfNonPublicAttribute_success));
 	}
 
 	@TestTest

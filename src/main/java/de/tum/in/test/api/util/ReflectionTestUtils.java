@@ -279,23 +279,85 @@ public final class ReflectionTestUtils {
 	 * @return The value that is stored in the attribute in the given object.
 	 */
 	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
+		Field field = getAttribute(object, attributeName, forceAccess);
+		try {
+			return field.get(object);
+		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
+			throw attributeAccessFailure(object, attributeName, field);
+		}
+	}
+
+	/**
+	 * Sets the attribute value of a given instance of a class by the attribute
+	 * name.
+	 *
+	 * @param object        The instance of the class that contains the attribute.
+	 *                      Must not be null, even for static fields.
+	 * @param attributeName The name of the attribute whose value should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 */
+	public static void setValueOfAttribute(Object object, String attributeName, Object newValue) {
+		setValueOfAttribute(object, attributeName, newValue, false);
+	}
+
+	/**
+	 * Sets the attribute value of a given instance of a class by the attribute
+	 * name.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * attributes. Use {@link #valueForAttribute(Object, String)} when reading
+	 * accessible attributes.
+	 *
+	 * @param object        The instance of the class that contains the attribute.
+	 *                      Must not be null, even for static fields.
+	 * @param attributeName The name of the attribute whose value should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 */
+	public static void setValueOfNonPublicAttribute(Object object, String attributeName, Object newValue) {
+		setValueOfAttribute(object, attributeName, newValue, true);
+	}
+
+	/**
+	 * Sets the attribute value of a given instance of a class by the attribute
+	 * name.
+	 *
+	 * @param object        The object for which the attribute should be set.
+	 * @param attributeName The name of the attribute that should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 * @param forceAccess   True, if access to a (package) private or protected
+	 *                      attribute should be forced. Might fail with an
+	 *                      {@link IllegalAccessException} otherwise.
+	 */
+	private static void setValueOfAttribute(Object object, String attributeName, Object newValue, boolean forceAccess) {
+		Field field = getAttribute(object, attributeName, forceAccess);
+		if (Modifier.isFinal(field.getModifiers()))
+			throw localizedFailure("reflection_test_utils.attribute_set_final", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName());
+		try {
+			field.set(object, newValue);
+		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
+			throw attributeAccessFailure(object, attributeName, field);
+		}
+	}
+
+	private static Field getAttribute(Object object, String attributeName, boolean forceAccess) {
 		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
 		Field field;
 		try {
 			field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
+			if (forceAccess) {
+				field.setAccessible(true);
+			}
 		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
 			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
 					object.getClass().getSimpleName());
 		}
-		try {
-			if (forceAccess) {
-				field.setAccessible(true);
-			}
-			return field.get(object);
-		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			throw localizedFailure("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
-					object.getClass().getSimpleName(), getIllegalAccessSource(field));
-		}
+		return field;
+	}
+
+	private static AssertionFailedError attributeAccessFailure(Object object, String attributeName, Field field) {
+		return localizedFailure("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
+				object.getClass().getSimpleName(), getIllegalAccessSource(field));
 	}
 
 	/**
