@@ -31,15 +31,14 @@ public class ASTTest {
         String testHasBelowNoForLoop_Fail = "testHasBelowNoForLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoForLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)"
+        ));
     }
 
     @TestTest
@@ -53,12 +52,11 @@ public class ASTTest {
         String testHasAtNoForLoop_Fail = "testHasAtNoForLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoForLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)"
+        ));
     }
     //</editor-fold>
 
@@ -74,15 +72,14 @@ public class ASTTest {
         String testHasBelowNoForEachLoop_Fail = "testHasBelowNoForEachLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoForEachLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)"
+        ));
     }
 
     @TestTest
@@ -96,12 +93,11 @@ public class ASTTest {
         String testHasAtNoForEachLoop_Fail = "testHasAtNoForEachLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoForEachLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)"
+        ));
     }
     //</editor-fold>
 
@@ -118,15 +114,14 @@ public class ASTTest {
         String testHasBelowNoWhileLoop_Fail = "testHasBelowNoWhileLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)"
+        ));
     }
 
     @TestTest
@@ -140,12 +135,11 @@ public class ASTTest {
         String testHasAtNoWhileLoop_Fail = "testHasAtNoWhileLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)"
+        ));
     }
     //</editor-fold>
 
@@ -162,15 +156,14 @@ public class ASTTest {
         String testHasBelowNoDoWhileLoop_Fail = "testHasBelowNoDoWhileLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoDoWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
 
     @TestTest
@@ -184,173 +177,167 @@ public class ASTTest {
         String testHasAtNoDoWhileLoop_Fail = "testHasAtNoDoWhileLoop_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoDoWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-For-Loop">
+    //<editor-fold desc="Any-For-Loop">
     @TestTest
-    void test_testHasBelowNoAllForLoop_Success() {
+    void test_testHasBelowNoAnyForLoop_Success() {
 
-        String testHasBelowNoAllForLoop_Success = "testHasBelowNoAllForLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllForLoop_Success));
+        String testHasBelowNoAnyForLoop_Success = "testHasBelowNoAnyForLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyForLoop_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllForLoop_Fail() {
-        String testHasBelowNoAllForLoop_Fail = "testHasBelowNoAllForLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllForLoop_Fail,
+    void test_testHasBelowNoAnyForLoop_Fail() {
+        String testHasBelowNoAnyForLoop_Fail = "testHasBelowNoAnyForLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyForLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllForLoop_Success() {
-        String testHasAtNoAllForLoop_Success = "testHasAtNoAllForLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllForLoop_Success));
+    void test_testHasAtNoAnyForLoop_Success() {
+        String testHasAtNoAnyForLoop_Success = "testHasAtNoAnyForLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyForLoop_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllForLoop_Fail() {
-        String testHasAtNoAllForLoop_Fail = "testHasAtNoAllForLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllForLoop_Fail,
+    void test_testHasAtNoAnyForLoop_Fail() {
+        String testHasAtNoAnyForLoop_Fail = "testHasAtNoAnyForLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyForLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)"
+
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-While-Loop">
+    //<editor-fold desc="Any-While-Loop">
 
     @TestTest
-    void test_testHasBelowNoAllWhileLoop_Success() {
-        String testHasBelowNoAllWhileLoop_Success = "testHasBelowNoAllWhileLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllWhileLoop_Success));
+    void test_testHasBelowNoAnyWhileLoop_Success() {
+        String testHasBelowNoAnyWhileLoop_Success = "testHasBelowNoAnyWhileLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyWhileLoop_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllWhileLoop_Fail() {
-        String testHasBelowNoAllWhileLoop_Fail = "testHasBelowNoAllWhileLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllWhileLoop_Fail,
+    void test_testHasBelowNoAnyWhileLoop_Fail() {
+        String testHasBelowNoAnyWhileLoop_Fail = "testHasBelowNoAnyWhileLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllWhileLoop_Success() {
-        String testHasAtNoAllWhileLoop_Success = "testHasAtNoAllWhileLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllWhileLoop_Success));
+    void test_testHasAtNoAnyWhileLoop_Success() {
+        String testHasAtNoAnyWhileLoop_Success = "testHasAtNoAnyWhileLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyWhileLoop_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllWhileLoop_Fail() {
-        String testHasAtNoAllWhileLoop_Fail = "testHasAtNoAllWhileLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllWhileLoop_Fail,
+    void test_testHasAtNoAnyWhileLoop_Fail() {
+        String testHasAtNoAnyWhileLoop_Fail = "testHasAtNoAnyWhileLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyWhileLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Loop">
+    //<editor-fold desc="Any-Loop">
     @TestTest
-    void test_testHasBelowNoAllLoop_Success() {
-        String testHasBelowNoAllLoop_Success = "testHasBelowNoAllLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllLoop_Success));
+    void test_testHasBelowNoAnyLoop_Success() {
+        String testHasBelowNoAnyLoop_Success = "testHasBelowNoAnyLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyLoop_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllLoop_Fail() {
-        String testHasBelowNoAllLoop_Fail = "testHasBelowNoAllLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllLoop_Fail,
+    void test_testHasBelowNoAnyLoop_Fail() {
+        String testHasBelowNoAnyLoop_Fail = "testHasBelowNoAnyLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops2.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllLoop_Success() {
-        String testHasAtNoAllLoop_Success = "testHasAtNoAllLoop_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllLoop_Success));
+    void test_testHasAtNoAnyLoop_Success() {
+        String testHasAtNoAnyLoop_Success = "testHasAtNoAnyLoop_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyLoop_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllLoop_Fail() {
-        String testHasAtNoAllLoop_Fail = "testHasAtNoAllLoop_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllLoop_Fail,
+    void test_testHasAtNoAnyLoop_Fail() {
+        String testHasAtNoAnyLoop_Fail = "testHasAtNoAnyLoop_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyLoop_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java:
-                          - For-Statement was found:
-                            -  Between line 6 (column 9) and line 8 (column 9)
-                          - For-Each-Statement was found:
-                            -  Between line 12 (column 9) and line 14 (column 9)
-                          - While-Statement was found:
-                            -  Between line 19 (column 9) and line 22 (column 9)
-                          - Do-While-Statement was found:
-                            -  Between line 28 (column 9) and line 31 (column 25)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
+                        "  - For-Statement was found:\n" +
+                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
+                        "  - For-Each-Statement was found:\n" +
+                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
+                        "  - While-Statement was found:\n" +
+                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
+                        "  - Do-While-Statement was found:\n" +
+                        "   - Between line 28 (column 9) and line 31 (column 25)"
+        ));
     }
     //</editor-fold>
 
@@ -367,17 +354,16 @@ public class ASTTest {
         String testHasBelowNoIfConditional_Fail = "testHasBelowNoIfConditional_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoIfConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals2.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)"
+        ));
     }
 
     @TestTest
@@ -391,13 +377,12 @@ public class ASTTest {
         String testHasAtNoIfConditional_Fail = "testHasAtNoIfConditional_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoIfConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)"
+        ));
     }
     //</editor-fold>
 
@@ -414,23 +399,14 @@ public class ASTTest {
         String testHasBelowNoSwitchConditional_Fail = "testHasBelowNoSwitchConditional_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoSwitchConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals2.java:
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)"
+        ));
     }
 
     @TestTest
@@ -444,219 +420,63 @@ public class ASTTest {
         String testHasAtNoSwitchConditional_Fail = "testHasAtNoSwitchConditional_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoSwitchConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Conditional">
+    //<editor-fold desc="Any-Conditional">
 
     @TestTest
-    void test_testHasBelowNoAllConditional_Success() {
-        String testHasBelowNoAllConditional_Success = "testHasBelowNoAllConditional_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllConditional_Success));
+    void test_testHasBelowNoAnyConditional_Success() {
+        String testHasBelowNoAnyConditional_Success = "testHasBelowNoAnyConditional_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyConditional_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllConditional_Fail() {
-        String testHasBelowNoAllConditional_Fail = "testHasBelowNoAllConditional_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllConditional_Fail,
+    void test_testHasBelowNoAnyConditional_Fail() {
+        String testHasBelowNoAnyConditional_Fail = "testHasBelowNoAnyConditional_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals2.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllConditional_Success() {
-        String testHasAtNoAllConditional_Success = "testHasAtNoAllConditional_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllConditional_Success));
+    void test_testHasAtNoAnyConditional_Success() {
+        String testHasAtNoAnyConditional_Success = "testHasAtNoAnyConditional_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyConditional_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllConditional_Fail() {
-        String testHasAtNoAllConditional_Fail = "testHasAtNoAllConditional_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllConditional_Fail,
+    void test_testHasAtNoAnyConditional_Fail() {
+        String testHasAtNoAnyConditional_Fail = "testHasAtNoAnyConditional_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyConditional_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java:
-                          - If-Statement was found:
-                            -  Between line 9 (column 9) and line 15 (column 9)
-                            -  Between line 11 (column 16) and line 15 (column 9)
-                          - Switch-Statement was found:
-                            -  Between line 20 (column 9) and line 30 (column 9)
-                          - Switch-Entry-Statement was found:
-                            -  Between line 21 (column 13) and line 23 (column 22)
-                            -  Between line 24 (column 13) and line 26 (column 22)
-                            -  Between line 27 (column 13) and line 29 (column 22)
-                        """));
-    }
-    //</editor-fold>
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
+                        "  - If-Statement was found:\n" +
+                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
+                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
+                        "  - Switch-Statement was found:\n" +
+                        "   - Between line 20 (column 9) and line 30 (column 9)"
 
-    //<editor-fold desc="New-Function">
-
-    @TestTest
-    void test_testHasBelowNoExplicitConstructorInvocationFunction_Success() {
-        String testHasBelowNoExplicitConstructorInvocationFunction_Success = "testHasBelowNoExplicitConstructorInvocationFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoExplicitConstructorInvocationFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoExplicitConstructorInvocationFunction_Fail() {
-        String testHasBelowNoExplicitConstructorInvocationFunction_Fail = "testHasBelowNoExplicitConstructorInvocationFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoExplicitConstructorInvocationFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions2.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                        """));
-    }
-
-    @TestTest
-    void test_testHasAtNoExplicitConstructorInvocationFunction_Success() {
-        String testHasAtNoExplicitConstructorInvocationFunction_Success = "testHasAtNoExplicitConstructorInvocationFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoExplicitConstructorInvocationFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoExplicitConstructorInvocationFunction_Fail() {
-        String testHasAtNoExplicitConstructorInvocationFunction_Fail = "testHasAtNoExplicitConstructorInvocationFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoExplicitConstructorInvocationFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                        """));
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Return-Function">
-
-    @TestTest
-    void test_testHasBelowNoReturnFunction_Success() {
-        String testHasBelowNoReturnFunction_Success = "testHasBelowNoReturnFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoReturnFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoReturnFunction_Fail() {
-        String testHasBelowNoReturnFunction_Fail = "testHasBelowNoReturnFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoReturnFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions2.java:
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        """));
-    }
-
-    @TestTest
-    void test_testHasAtNoReturnFunction_Success() {
-        String testHasAtNoReturnFunction_Success = "testHasAtNoReturnFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoReturnFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoReturnFunction_Fail() {
-        String testHasAtNoReturnFunction_Fail = "testHasAtNoReturnFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoReturnFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        """));
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="All-Function">
-
-    @TestTest
-    void test_testHasBelowNoAllFunction_Success() {
-        String testHasBelowNoAllFunction_Success = "testHasBelowNoAllFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoAllFunction_Fail() {
-        String testHasBelowNoAllFunction_Fail = "testHasBelowNoAllFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions2.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        """));
-    }
-
-    @TestTest
-    void test_testHasAtNoAllFunction_Success() {
-        String testHasAtNoAllFunction_Success = "testHasAtNoAllFunction_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllFunction_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoAllFunction_Fail() {
-        String testHasAtNoAllFunction_Fail = "testHasAtNoAllFunction_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllFunction_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java:
-                          - Explicit-Constructor-Invocation-Statement was found:
-                            -  Between line 8 (column 9) and line 8 (column 21)
-                          - Return-Statement was found:
-                            -  Between line 12 (column 9) and line 12 (column 17)
-                        """));
+        ));
     }
     //</editor-fold>
 
@@ -673,15 +493,14 @@ public class ASTTest {
         String testHasBelowNoLocalClassClass_Fail = "testHasBelowNoLocalClassClass_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoLocalClassClass_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses2.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses2.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)"
+        ));
     }
 
     @TestTest
@@ -695,106 +514,53 @@ public class ASTTest {
         String testHasAtNoLocalClassClass_Fail = "testHasAtNoLocalClassClass_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoLocalClassClass_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="LocalRecord-Class">
+    //<editor-fold desc="Any-Class">
 
     @TestTest
-    void test_testHasBelowNoLocalRecordClass_Success() {
-        String testHasBelowNoLocalRecordClass_Success = "testHasBelowNoLocalRecordClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoLocalRecordClass_Success));
+    void test_testHasBelowNoAnyClass_Success() {
+        String testHasBelowNoAnyClass_Success = "testHasBelowNoAnyClass_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyClass_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoLocalRecordClass_Fail() {
-        String testHasBelowNoLocalRecordClass_Fail = "testHasBelowNoLocalRecordClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoLocalRecordClass_Fail,
+    void test_testHasBelowNoAnyClass_Fail() {
+        String testHasBelowNoAnyClass_Fail = "testHasBelowNoAnyClass_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyClass_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses2.java:
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses2.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoLocalRecordClass_Success() {
-        String testHasAtNoLocalRecordClass_Success = "testHasAtNoLocalRecordClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoLocalRecordClass_Success));
+    void test_testHasAtNoAnyClass_Success() {
+        String testHasAtNoAnyClass_Success = "testHasAtNoAnyClass_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyClass_Success));
     }
 
     @TestTest
-    void test_testHasAtNoLocalRecordClass_Fail() {
-        String testHasAtNoLocalRecordClass_Fail = "testHasAtNoLocalRecordClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoLocalRecordClass_Fail,
+    void test_testHasAtNoAnyClass_Fail() {
+        String testHasAtNoAnyClass_Fail = "testHasAtNoAnyClass_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyClass_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        """));
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="All-Class">
-
-    @TestTest
-    void test_testHasBelowNoAllClass_Success() {
-        String testHasBelowNoAllClass_Success = "testHasBelowNoAllClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllClass_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoAllClass_Fail() {
-        String testHasBelowNoAllClass_Fail = "testHasBelowNoAllClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllClass_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses2.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        """));
-    }
-
-    @TestTest
-    void test_testHasAtNoAllClass_Success() {
-        String testHasAtNoAllClass_Success = "testHasAtNoAllClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllClass_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoAllClass_Fail() {
-        String testHasAtNoAllClass_Fail = "testHasAtNoAllClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllClass_Fail,
-                AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java:
-                          - Local-Class-Statement was found:
-                            -  Between line 5 (column 43) and line 5 (column 61)
-                          - Local-Record-Statement was found:
-                            -  Between line 7 (column 44) and line 7 (column 66)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
+                        "  - Local-Class-Statement was found:\n" +
+                        "   - Between line 5 (column 43) and line 5 (column 61)"
+        ));
     }
     //</editor-fold>
 
@@ -811,15 +577,14 @@ public class ASTTest {
         String testHasBelowNoAssertExceptionHandling_Fail = "testHasBelowNoAssertExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAssertExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings2.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)"
+        ));
     }
 
     @TestTest
@@ -833,12 +598,11 @@ public class ASTTest {
         String testHasAtNoAssertExceptionHandling_Fail = "testHasAtNoAssertExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAssertExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)"
+        ));
     }
     //</editor-fold>
 
@@ -855,15 +619,14 @@ public class ASTTest {
         String testHasBelowNoThrowExceptionHandling_Fail = "testHasBelowNoThrowExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoThrowExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings2.java:
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)"
+        ));
     }
 
     @TestTest
@@ -877,12 +640,11 @@ public class ASTTest {
         String testHasAtNoThrowExceptionHandling_Fail = "testHasAtNoThrowExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoThrowExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)"
+        ));
     }
     //</editor-fold>
 
@@ -899,19 +661,18 @@ public class ASTTest {
         String testHasBelowNoTryCatchExceptionHandling_Fail = "testHasBelowNoTryCatchExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoTryCatchExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings2.java:
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)"
+        ));
     }
 
     @TestTest
@@ -925,120 +686,115 @@ public class ASTTest {
         String testHasAtNoTryCatchExceptionHandling_Fail = "testHasAtNoTryCatchExceptionHandling_Fail";
         tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoTryCatchExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-ExceptionHandling">
+    //<editor-fold desc="Any-ExceptionHandling">
 
     @TestTest
-    void test_testHasBelowNoAllExceptionHandling_Success() {
-        String testHasBelowNoAllExceptionHandling_Success = "testHasBelowNoAllExceptionHandling_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllExceptionHandling_Success));
+    void test_testHasBelowNoAnyExceptionHandling_Success() {
+        String testHasBelowNoAnyExceptionHandling_Success = "testHasBelowNoAnyExceptionHandling_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyExceptionHandling_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllExceptionHandling_Fail() {
-        String testHasBelowNoAllExceptionHandling_Fail = "testHasBelowNoAllExceptionHandling_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllExceptionHandling_Fail,
+    void test_testHasBelowNoAnyExceptionHandling_Fail() {
+        String testHasBelowNoAnyExceptionHandling_Fail = "testHasBelowNoAnyExceptionHandling_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings2.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllExceptionHandling_Success() {
-        String testHasAtNoAllExceptionHandling_Success = "testHasAtNoAllExceptionHandling_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllExceptionHandling_Success));
+    void test_testHasAtNoAnyExceptionHandling_Success() {
+        String testHasAtNoAnyExceptionHandling_Success = "testHasAtNoAnyExceptionHandling_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnyExceptionHandling_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllExceptionHandling_Fail() {
-        String testHasAtNoAllExceptionHandling_Fail = "testHasAtNoAllExceptionHandling_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllExceptionHandling_Fail,
+    void test_testHasAtNoAnyExceptionHandling_Fail() {
+        String testHasAtNoAnyExceptionHandling_Fail = "testHasAtNoAnyExceptionHandling_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnyExceptionHandling_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java:
-                          - Assert-Statement was found:
-                            -  Between line 7 (column 9) and line 7 (column 22)
-                          - Throw-Statement was found:
-                            -  Between line 11 (column 9) and line 11 (column 60)
-                          - Try-Statement was found:
-                            -  Between line 15 (column 9) and line 17 (column 32)
-                          - Catch-Statement was found:
-                            -  Between line 17 (column 11) and line 17 (column 32)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
+                        "  - Assert-Statement was found:\n" +
+                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
+                        "  - Throw-Statement was found:\n" +
+                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
+                        "  - Try-Statement was found:\n" +
+                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
+                        "  - Catch-Statement was found:\n" +
+                        "   - Between line 17 (column 11) and line 17 (column 32)"
+        ));
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Synchronisation">
+    //<editor-fold desc="Any-Synchronisation">
 
     @TestTest
-    void test_testHasBelowNoAllSynchronisation_Success() {
-        String testHasBelowNoAllSynchronisation_Success = "testHasBelowNoAllSynchronisation_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAllSynchronisation_Success));
+    void test_testHasBelowNoAnySynchronisation_Success() {
+        String testHasBelowNoAnySynchronisation_Success = "testHasBelowNoAnySynchronisation_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnySynchronisation_Success));
     }
 
     @TestTest
-    void test_testHasBelowNoAllSynchronisation_Fail() {
-        String testHasBelowNoAllSynchronisation_Fail = "testHasBelowNoAllSynchronisation_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAllSynchronisation_Fail,
+    void test_testHasBelowNoAnySynchronisation_Fail() {
+        String testHasBelowNoAnySynchronisation_Fail = "testHasBelowNoAnySynchronisation_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnySynchronisation_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAllKindsOfSynchronisations2.java:
-                          - Synchronised-Statement was found:
-                            -  Between line 8 (column 9) and line 10 (column 9)
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAllKindsOfSynchronisations.java:
-                          - Synchronised-Statement was found:
-                            -  Between line 8 (column 9) and line 10 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations2.java:\n" +
+                        "  - Synchronised-Statement was found:\n" +
+                        "   - Between line 8 (column 9) and line 10 (column 9)\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations.java: \n" +
+                        "  - Synchronised-Statement was found:\n" +
+                        "   - Between line 8 (column 9) and line 10 (column 9)"
+        ));
     }
 
     @TestTest
-    void test_testHasAtNoAllSynchronisation_Success() {
-        String testHasAtNoAllSynchronisation_Success = "testHasAtNoAllSynchronisation_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAllSynchronisation_Success));
+    void test_testHasAtNoAnySynchronisation_Success() {
+        String testHasAtNoAnySynchronisation_Success = "testHasAtNoAnySynchronisation_Success";
+        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnySynchronisation_Success));
     }
 
     @TestTest
-    void test_testHasAtNoAllSynchronisation_Fail() {
-        String testHasAtNoAllSynchronisation_Fail = "testHasAtNoAllSynchronisation_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAllSynchronisation_Fail,
+    void test_testHasAtNoAnySynchronisation_Fail() {
+        String testHasAtNoAnySynchronisation_Fail = "testHasAtNoAnySynchronisation_Fail";
+        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnySynchronisation_Fail,
                 AssertionError.class,
-                """
-                        Unwanted statement found:
-                        - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAllKindsOfSynchronisations.java:
-                          - Synchronised-Statement was found:
-                            -  Between line 8 (column 9) and line 10 (column 9)
-                        """));
+                "Unwanted statement found:\n" +
+                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations.java:\n" +
+                        "  - Synchronised-Statement was found:\n" +
+                        "   - Between line 8 (column 9) and line 10 (column 9)"
+        ));
     }
     //</editor-fold>
 }

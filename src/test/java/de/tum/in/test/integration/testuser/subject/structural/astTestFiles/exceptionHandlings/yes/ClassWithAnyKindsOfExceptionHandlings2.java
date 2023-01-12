@@ -1,6 +1,6 @@
 package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.exceptionHandlings.yes;
 
-public class ClassWithAllKindsOfExceptionHandlings2 {
+public class ClassWithAnyKindsOfExceptionHandlings2 {
 
     public void assertStatement() {
         int x = 0;

@@ -2,7 +2,7 @@ package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.cond
 
 import java.util.Random;
 
-public class ClassWithAllKindsOfConditionals {
+public class ClassWithAnyKindsOfConditionals2 {
 
     public void ifStatement() {
         int x = new Random().nextInt(3);

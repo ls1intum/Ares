@@ -1,8 +1,6 @@
 package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.classes.yes;
 
-public class ClassWithAllKindsOfClasses2 {
+public class ClassWithAnyKindsOfClasses2 {
 
     void localClassContainingFunction() { class localClass {} }
-
-    void localRecordContainingFunction() { record localRecord() {} }
 }

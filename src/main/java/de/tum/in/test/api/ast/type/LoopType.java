@@ -5,71 +5,70 @@ import com.github.javaparser.ast.stmt.DoStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.utils.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-public enum LoopType {
+public enum LoopType implements Type {
     /**
      * Returns a list with all loop types
      */
-    ALL(new ArrayList<>() {{
-        add(new Pair<>("For-Statement", ForStmt.class));
-        add(new Pair<>("For-Each-Statement", ForEachStmt.class));
-        add(new Pair<>("While-Statement", WhileStmt.class));
-        add(new Pair<>("Do-While-Statement", DoStmt.class));
-    }}),
+    ANY(Map.of(
+            "For-Statement", ForStmt.class,
+            "For-Each-Statement", ForEachStmt.class,
+            "While-Statement", WhileStmt.class,
+            "Do-While-Statement", DoStmt.class
+    )),
     /**
      * Returns a list with all for-related loop types
      */
-    ALLFOR(new ArrayList<>() {{
-        add(new Pair<>("For-Statement", ForStmt.class));
-        add(new Pair<>("For-Each-Statement", ForEachStmt.class));
-    }}),
+    ANYFOR(Map.of(
+            "For-Statement", ForStmt.class,
+            "For-Each-Statement", ForEachStmt.class
+    )),
     /**
      * Returns the for loop type
      */
-    FOR(new ArrayList<>() {{
-        add(new Pair<>("For-Statement", ForStmt.class));
-    }}),
+    FOR(Map.of(
+            "For-Statement", ForStmt.class
+    )),
     /**
      * Returns the for each loop type
      */
-    FOREACH(new ArrayList<>() {{
-        add(new Pair<>("For-Each-Statement", ForEachStmt.class));
-    }}),
+    FOREACH(Map.of(
+            "For-Each-Statement", ForEachStmt.class
+    )),
     /**
      * Returns a list with all while-related loop types
      */
-    ALLWHILE(new ArrayList<>() {{
-        add(new Pair<>("While-Statement", WhileStmt.class));
-        add(new Pair<>("Do-While-Statement", DoStmt.class));
-    }}),
+    ANYWHILE(Map.of(
+            "While-Statement", WhileStmt.class,
+            "Do-While-Statement", DoStmt.class
+    )),
     /**
      * Returns the while loop type
      */
-    WHILE(new ArrayList<>() {{
-        add(new Pair<>("While-Statement", WhileStmt.class));
-    }}),
+    WHILE(Map.of(
+            "While-Statement", WhileStmt.class
+    )),
     /**
      * Returns the do while loop type
      */
-    DOWHILE(new ArrayList<>() {{
-        add(new Pair<>("Do-While-Statement", DoStmt.class));
-    }});
+    DOWHILE(Map.of(
+            "Do-While-Statement", DoStmt.class
+    ));
 
-    private final List<Pair<String, Class<? extends Node>>> nodeNamePairs;
+    private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
-    LoopType(List<Pair<String, Class<? extends Node>>> nodeNamePairs) {
-        this.nodeNamePairs = nodeNamePairs;
+    LoopType(Map<String, Class<? extends Node>> nodeNameNodeMap) {
+        this.nodeNameNodeMap = nodeNameNodeMap;
     }
 
     /**
      * Returns the list of all node-name/node-type pairs
+     *
      * @return List of all node-name/node-type pairs
      */
-    public List<Pair<String, Class<? extends Node>>> getNodeNamePairs() {
-        return nodeNamePairs;
+    public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
+        return nodeNameNodeMap;
     }
 }

@@ -1,6 +1,6 @@
 package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.loops.yes;
 
-public class ClassWithAllKindsOfLoops {
+public class ClassWithAnyKindsOfLoops2 {
 
     public void forLoop() {
         for (int i = 0; i < 10; i++) {

@@ -22,472 +22,382 @@ public class ITASTTestUser {
     //<editor-fold desc="For-Loop">
     @Test
     void testHasBelowNoForLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.FOR);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.FOR);
     }
 
     @Test
     void testHasBelowNoForLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.FOR);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.FOR);
     }
 
     @Test
     void testHasAtNoForLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.FOR);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.FOR);
     }
 
     @Test
     void testHasAtNoForLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.FOR);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.FOR);
     }
     //</editor-fold>
 
     //<editor-fold desc="For-Each-Loop">
     @Test
     void testHasBelowNoForEachLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.FOREACH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.FOREACH);
 
     }
 
     @Test
     void testHasBelowNoForEachLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.FOREACH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.FOREACH);
     }
 
     @Test
     void testHasAtNoForEachLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.FOREACH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.FOREACH);
     }
 
     @Test
     void testHasAtNoForEachLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.FOREACH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.FOREACH);
     }
     //</editor-fold>
 
     //<editor-fold desc="While-Loop">
     @Test
     void testHasBelowNoWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.WHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.WHILE);
 
     }
 
     @Test
     void testHasBelowNoWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.WHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.WHILE);
     }
 
     @Test
     void testHasAtNoWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.WHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.WHILE);
     }
 
     @Test
     void testHasAtNoWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.WHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.WHILE);
     }
     //</editor-fold>
 
     //<editor-fold desc="Do-While-Loop">
     @Test
     void testHasBelowNoDoWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.DOWHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.DOWHILE);
 
     }
 
     @Test
     void testHasBelowNoDoWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.DOWHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.DOWHILE);
     }
 
     @Test
     void testHasAtNoDoWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.DOWHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.DOWHILE);
     }
 
     @Test
     void testHasAtNoDoWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.DOWHILE);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.DOWHILE);
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-For-Loop">
+    //<editor-fold desc="Any-For-Loop">
     @Test
-    void testHasBelowNoAllForLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.ALLFOR);
+    void testHasBelowNoAnyForLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.ANYFOR);
 
     }
 
     @Test
-    void testHasBelowNoAllForLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.ALLFOR);
+    void testHasBelowNoAnyForLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.ANYFOR);
     }
 
     @Test
-    void testHasAtNoAllForLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.ALLFOR);
+    void testHasAtNoAnyForLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.ANYFOR);
     }
 
     @Test
-    void testHasAtNoAllForLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.ALLFOR);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="All-While-Loop">
-    @Test
-    void testHasBelowNoAllWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.ALLWHILE);
-
-    }
-
-    @Test
-    void testHasBelowNoAllWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.ALLWHILE);
-    }
-
-    @Test
-    void testHasAtNoAllWhileLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.ALLWHILE);
-    }
-
-    @Test
-    void testHasAtNoAllWhileLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.ALLWHILE);
+    void testHasAtNoAnyForLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.ANYFOR);
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Loop">
+    //<editor-fold desc="Any-While-Loop">
     @Test
-    void testHasBelowNoAllLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).hasBelowNo(LoopType.ALL);
+    void testHasBelowNoAnyWhileLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.ANYWHILE);
 
     }
 
     @Test
-    void testHasBelowNoAllLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).hasBelowNo(LoopType.ALL);
+    void testHasBelowNoAnyWhileLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.ANYWHILE);
     }
 
     @Test
-    void testHasAtNoAllLoop_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(LoopType.ALL);
+    void testHasAtNoAnyWhileLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.ANYWHILE);
     }
 
     @Test
-    void testHasAtNoAllLoop_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAllKindsOfLoops.java")).hasAtNo(LoopType.ALL);
+    void testHasAtNoAnyWhileLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.ANYWHILE);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Any-Loop">
+    @Test
+    void testHasBelowNoAnyLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no")).asDirectory().hasNo(LoopType.ANY);
+
+    }
+
+    @Test
+    void testHasBelowNoAnyLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes")).asDirectory().hasNo(LoopType.ANY);
+    }
+
+    @Test
+    void testHasAtNoAnyLoop_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(LoopType.ANY);
+    }
+
+    @Test
+    void testHasAtNoAnyLoop_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java")).asFile().hasNo(LoopType.ANY);
     }
     //</editor-fold>
 
     //<editor-fold desc="If-Conditional">
     @Test
     void testHasBelowNoIfConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).hasBelowNo(ConditionalType.IF);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).asDirectory().hasNo(ConditionalType.IF);
 
     }
 
     @Test
     void testHasBelowNoIfConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).hasBelowNo(ConditionalType.IF);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).asDirectory().hasNo(ConditionalType.IF);
     }
 
     @Test
     void testHasAtNoIfConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(ConditionalType.IF);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(ConditionalType.IF);
     }
 
     @Test
     void testHasAtNoIfConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java")).hasAtNo(ConditionalType.IF);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java")).asFile().hasNo(ConditionalType.IF);
     }
     //</editor-fold>
 
     //<editor-fold desc="Switch-Conditional">
     @Test
     void testHasBelowNoSwitchConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).hasBelowNo(ConditionalType.SWITCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).asDirectory().hasNo(ConditionalType.SWITCH);
     }
 
     @Test
     void testHasBelowNoSwitchConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).hasBelowNo(ConditionalType.SWITCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).asDirectory().hasNo(ConditionalType.SWITCH);
     }
 
     @Test
     void testHasAtNoSwitchConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(ConditionalType.SWITCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(ConditionalType.SWITCH);
     }
 
     @Test
     void testHasAtNoSwitchConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java")).hasAtNo(ConditionalType.SWITCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java")).asFile().hasNo(ConditionalType.SWITCH);
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Conditional">
+    //<editor-fold desc="Any-Conditional">
     @Test
-    void testHasBelowNoAllConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).hasBelowNo(ConditionalType.ALL);
+    void testHasBelowNoAnyConditional_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no")).asDirectory().hasNo(ConditionalType.ANY);
 
     }
 
     @Test
-    void testHasBelowNoAllConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).hasBelowNo(ConditionalType.ALL);
+    void testHasBelowNoAnyConditional_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes")).asDirectory().hasNo(ConditionalType.ANY);
     }
 
     @Test
-    void testHasAtNoAllConditional_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).hasAtNo(ConditionalType.ALL);
+    void testHasAtNoAnyConditional_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/no/ClassWithNoKindsOfConditionals.java")).asFile().hasNo(ConditionalType.ANY);
     }
 
     @Test
-    void testHasAtNoAllConditional_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAllKindsOfConditionals.java")).hasAtNo(ConditionalType.ALL);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="ExplicitConstructorInvocation-Function">
-    @Test
-    void testHasBelowNoExplicitConstructorInvocationFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no")).hasBelowNo(FunctionType.EXPLICITCONSTRUCTORINVOCATION);
-    }
-
-    @Test
-    void testHasBelowNoExplicitConstructorInvocationFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes")).hasBelowNo(FunctionType.EXPLICITCONSTRUCTORINVOCATION);
-    }
-
-    @Test
-    void testHasAtNoExplicitConstructorInvocationFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no/ClassWithNoKindsOfFunctions.java")).hasAtNo(FunctionType.EXPLICITCONSTRUCTORINVOCATION);
-    }
-
-    @Test
-    void testHasAtNoExplicitConstructorInvocationFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java")).hasAtNo(FunctionType.EXPLICITCONSTRUCTORINVOCATION);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Return-Function">
-    @Test
-    void testHasBelowNoReturnFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no")).hasBelowNo(FunctionType.RETURN);
-
-    }
-
-    @Test
-    void testHasBelowNoReturnFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes")).hasBelowNo(FunctionType.RETURN);
-    }
-
-    @Test
-    void testHasAtNoReturnFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no/ClassWithNoKindsOfFunctions.java")).hasAtNo(FunctionType.RETURN);
-    }
-
-    @Test
-    void testHasAtNoReturnFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java")).hasAtNo(FunctionType.RETURN);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="All-Function">
-    @Test
-    void testHasBelowNoAllFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no")).hasBelowNo(FunctionType.ALL);
-
-    }
-
-    @Test
-    void testHasBelowNoAllFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes")).hasBelowNo(FunctionType.ALL);
-    }
-
-    @Test
-    void testHasAtNoAllFunction_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/no/ClassWithNoKindsOfFunctions.java")).hasAtNo(FunctionType.ALL);
-    }
-
-    @Test
-    void testHasAtNoAllFunction_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/functions/yes/ClassWithAllKindsOfFunctions.java")).hasAtNo(FunctionType.ALL);
+    void testHasAtNoAnyConditional_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java")).asFile().hasNo(ConditionalType.ANY);
     }
     //</editor-fold>
 
     //<editor-fold desc="LocalClass-Class">
     @Test
     void testHasBelowNoLocalClassClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).hasBelowNo(ClassType.LOCALCLASS);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).asDirectory().hasNo(ClassType.LOCALCLASS);
     }
 
     @Test
     void testHasBelowNoLocalClassClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).hasBelowNo(ClassType.LOCALCLASS);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).asDirectory().hasNo(ClassType.LOCALCLASS);
     }
 
     @Test
     void testHasAtNoLocalClassClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).hasAtNo(ClassType.LOCALCLASS);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).asFile().hasNo(ClassType.LOCALCLASS);
     }
 
     @Test
     void testHasAtNoLocalClassClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java")).hasAtNo(ClassType.LOCALCLASS);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java")).asFile().hasNo(ClassType.LOCALCLASS);
     }
     //</editor-fold>
 
-    //<editor-fold desc="LocalRecord-Class">
+    //<editor-fold desc="Any-Class">
     @Test
-    void testHasBelowNoLocalRecordClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).hasBelowNo(ClassType.LOCALRECORD);
+    void testHasBelowNoAnyClass_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).asDirectory().hasNo(ClassType.ANY);
     }
 
     @Test
-    void testHasBelowNoLocalRecordClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).hasBelowNo(ClassType.LOCALRECORD);
+    void testHasBelowNoAnyClass_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).asDirectory().hasNo(ClassType.ANY);
     }
 
     @Test
-    void testHasAtNoLocalRecordClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).hasAtNo(ClassType.LOCALRECORD);
+    void testHasAtNoAnyClass_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).asFile().hasNo(ClassType.ANY);
     }
 
     @Test
-    void testHasAtNoLocalRecordClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java")).hasAtNo(ClassType.LOCALRECORD);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="All-Class">
-    @Test
-    void testHasBelowNoAllClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).hasBelowNo(ClassType.ALL);
-    }
-
-    @Test
-    void testHasBelowNoAllClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).hasBelowNo(ClassType.ALL);
-    }
-
-    @Test
-    void testHasAtNoAllClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).hasAtNo(ClassType.ALL);
-    }
-
-    @Test
-    void testHasAtNoAllClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAllKindsOfClasses.java")).hasAtNo(ClassType.ALL);
+    void testHasAtNoAnyClass_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java")).asFile().hasNo(ClassType.ANY);
     }
     //</editor-fold>
 
     //<editor-fold desc="Assert-ExceptionHandling">
     @Test
     void testHasBelowNoAssertExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).hasBelowNo(ExceptionHandlingType.ASSERT);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).asDirectory().hasNo(ExceptionHandlingType.ASSERT);
     }
 
     @Test
     void testHasBelowNoAssertExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).hasBelowNo(ExceptionHandlingType.ASSERT);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).asDirectory().hasNo(ExceptionHandlingType.ASSERT);
     }
 
     @Test
     void testHasAtNoAssertExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.ASSERT);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.ASSERT);
     }
 
     @Test
     void testHasAtNoAssertExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.ASSERT);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.ASSERT);
     }
     //</editor-fold>
 
     //<editor-fold desc="Throw-ExceptionHandling">
     @Test
     void testHasBelowNoThrowExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).hasBelowNo(ExceptionHandlingType.THROW);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).asDirectory().hasNo(ExceptionHandlingType.THROW);
     }
 
     @Test
     void testHasBelowNoThrowExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).hasBelowNo(ExceptionHandlingType.THROW);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).asDirectory().hasNo(ExceptionHandlingType.THROW);
     }
 
     @Test
     void testHasAtNoThrowExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.THROW);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.THROW);
     }
 
     @Test
     void testHasAtNoThrowExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.THROW);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.THROW);
     }
     //</editor-fold>
 
     //<editor-fold desc="TryCatch-ExceptionHandling">
     @Test
     void testHasBelowNoTryCatchExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).hasBelowNo(ExceptionHandlingType.TRYCATCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).asDirectory().hasNo(ExceptionHandlingType.TRYCATCH);
     }
 
     @Test
     void testHasBelowNoTryCatchExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).hasBelowNo(ExceptionHandlingType.TRYCATCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).asDirectory().hasNo(ExceptionHandlingType.TRYCATCH);
     }
 
     @Test
     void testHasAtNoTryCatchExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.TRYCATCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.TRYCATCH);
     }
 
     @Test
     void testHasAtNoTryCatchExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.TRYCATCH);
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.TRYCATCH);
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-ExceptionHandling">
+    //<editor-fold desc="Any-ExceptionHandling">
     @Test
-    void testHasBelowNoAllExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).hasBelowNo(ExceptionHandlingType.ALL);
+    void testHasBelowNoAnyExceptionHandling_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no")).asDirectory().hasNo(ExceptionHandlingType.ANY);
     }
 
     @Test
-    void testHasBelowNoAllExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).hasBelowNo(ExceptionHandlingType.ALL);
+    void testHasBelowNoAnyExceptionHandling_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes")).asDirectory().hasNo(ExceptionHandlingType.ANY);
     }
 
     @Test
-    void testHasAtNoAllExceptionHandling_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.ALL);
+    void testHasAtNoAnyExceptionHandling_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/no/ClassWithNoKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.ANY);
     }
 
     @Test
-    void testHasAtNoAllExceptionHandling_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAllKindsOfExceptionHandlings.java")).hasAtNo(ExceptionHandlingType.ALL);
+    void testHasAtNoAnyExceptionHandling_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.ANY);
     }
     //</editor-fold>
 
-    //<editor-fold desc="All-Synchronisation">
+    //<editor-fold desc="Any-Synchronization">
     @Test
-    void testHasBelowNoAllSynchronisation_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronisations/no")).hasBelowNo(SynchronisationType.ALL);
+    void testHasBelowNoAnySynchronization_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/no")).asDirectory().hasNo(SynchronizationType.ANY);
     }
 
     @Test
-    void testHasBelowNoAllSynchronisation_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronisations/yes")).hasBelowNo(SynchronisationType.ALL);
+    void testHasBelowNoAnySynchronization_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/yes")).asDirectory().hasNo(SynchronizationType.ANY);
     }
 
     @Test
-    void testHasAtNoAllSynchronisation_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronisations/no/ClassWithNoKindsOfSynchronisations.java")).hasAtNo(SynchronisationType.ALL);
+    void testHasAtNoAnySynchronization_Success() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/no/ClassWithNoKindsOfSynchronizations.java")).asFile().hasNo(SynchronizationType.ANY);
     }
 
     @Test
-    void testHasAtNoAllSynchronisation_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAllKindsOfSynchronisations.java")).hasAtNo(SynchronisationType.ALL);
+    void testHasAtNoAnySynchronization_Fail() {
+        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/yes/ClassWithAnyKindsOfSynchronizations.java")).asFile().hasNo(SynchronizationType.ANY);
     }
     //</editor-fold>
 }
