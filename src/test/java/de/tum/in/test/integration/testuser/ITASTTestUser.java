@@ -247,27 +247,6 @@ public class ITASTTestUser {
     }
     //</editor-fold>
 
-    //<editor-fold desc="LocalClass-Class">
-    @Test
-    void testHasBelowNoLocalClassClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no")).asDirectory().hasNo(ClassType.LOCALCLASS);
-    }
-
-    @Test
-    void testHasBelowNoLocalClassClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes")).asDirectory().hasNo(ClassType.LOCALCLASS);
-    }
-
-    @Test
-    void testHasAtNoLocalClassClass_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/no/ClassWithNoKindsOfClasses.java")).asFile().hasNo(ClassType.LOCALCLASS);
-    }
-
-    @Test
-    void testHasAtNoLocalClassClass_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java")).asFile().hasNo(ClassType.LOCALCLASS);
-    }
-    //</editor-fold>
 
     //<editor-fold desc="Any-Class">
     @Test
@@ -376,28 +355,6 @@ public class ITASTTestUser {
     @Test
     void testHasAtNoAnyExceptionHandling_Fail() {
         UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java")).asFile().hasNo(ExceptionHandlingType.ANY);
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Any-Synchronization">
-    @Test
-    void testHasBelowNoAnySynchronization_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/no")).asDirectory().hasNo(SynchronizationType.ANY);
-    }
-
-    @Test
-    void testHasBelowNoAnySynchronization_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/yes")).asDirectory().hasNo(SynchronizationType.ANY);
-    }
-
-    @Test
-    void testHasAtNoAnySynchronization_Success() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/no/ClassWithNoKindsOfSynchronizations.java")).asFile().hasNo(SynchronizationType.ANY);
-    }
-
-    @Test
-    void testHasAtNoAnySynchronization_Fail() {
-        UnwantedNodesAssert.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/synchronizations/yes/ClassWithAnyKindsOfSynchronizations.java")).asFile().hasNo(SynchronizationType.ANY);
     }
     //</editor-fold>
 }

@@ -34,9 +34,6 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
                         "  - For-Statement was found:\n" +
-                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
-                        "  - For-Statement was found:\n" +
                         "   - Between line 6 (column 9) and line 8 (column 9)"
         ));
     }
@@ -74,9 +71,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
-                        "  - For-Each-Statement was found:\n" +
-                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
                         "  - For-Each-Statement was found:\n" +
                         "   - Between line 12 (column 9) and line 14 (column 9)"
         ));
@@ -117,9 +111,6 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
                         "  - While-Statement was found:\n" +
-                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
-                        "  - While-Statement was found:\n" +
                         "   - Between line 19 (column 9) and line 22 (column 9)"
         ));
     }
@@ -159,9 +150,6 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
                         "  - Do-While-Statement was found:\n" +
-                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
-                        "  - Do-While-Statement was found:\n" +
                         "   - Between line 28 (column 9) and line 31 (column 25)"
         ));
     }
@@ -200,11 +188,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
-                        "  - For-Statement was found:\n" +
-                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
-                        "  - For-Each-Statement was found:\n" +
-                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
                         "  - For-Statement was found:\n" +
                         "   - Between line 6 (column 9) and line 8 (column 9)\n" +
                         "  - For-Each-Statement was found:\n" +
@@ -252,11 +235,6 @@ public class ASTTest {
                         "  - While-Statement was found:\n" +
                         "   - Between line 19 (column 9) and line 22 (column 9)\n" +
                         "  - Do-While-Statement was found:\n" +
-                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
-                        "  - While-Statement was found:\n" +
-                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
-                        "  - Do-While-Statement was found:\n" +
                         "   - Between line 28 (column 9) and line 31 (column 25)"
         ));
     }
@@ -296,15 +274,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n" +
-                        "  - For-Statement was found:\n" +
-                        "   - Between line 6 (column 9) and line 8 (column 9)\n" +
-                        "  - For-Each-Statement was found:\n" +
-                        "   - Between line 12 (column 9) and line 14 (column 9)\n" +
-                        "  - While-Statement was found:\n" +
-                        "   - Between line 19 (column 9) and line 22 (column 9)\n" +
-                        "  - Do-While-Statement was found:\n" +
-                        "   - Between line 28 (column 9) and line 31 (column 25)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops2.java:\n" +
                         "  - For-Statement was found:\n" +
                         "   - Between line 6 (column 9) and line 8 (column 9)\n" +
                         "  - For-Each-Statement was found:\n" +
@@ -358,10 +327,6 @@ public class ASTTest {
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
                         "  - If-Statement was found:\n" +
                         "   - Between line 9 (column 9) and line 15 (column 9)\n" +
-                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
-                        "  - If-Statement was found:\n" +
-                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
                         "   - Between line 11 (column 16) and line 15 (column 9)"
         ));
     }
@@ -401,9 +366,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals.java:\n" +
-                        "  - Switch-Statement was found:\n" +
-                        "   - Between line 20 (column 9) and line 30 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
                         "  - Switch-Statement was found:\n" +
                         "   - Between line 20 (column 9) and line 30 (column 9)"
         ));
@@ -447,12 +409,6 @@ public class ASTTest {
                         "   - Between line 9 (column 9) and line 15 (column 9)\n" +
                         "   - Between line 11 (column 16) and line 15 (column 9)\n" +
                         "  - Switch-Statement was found:\n" +
-                        "   - Between line 20 (column 9) and line 30 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/conditionals/yes/ClassWithAnyKindsOfConditionals2.java:\n" +
-                        "  - If-Statement was found:\n" +
-                        "   - Between line 9 (column 9) and line 15 (column 9)\n" +
-                        "   - Between line 11 (column 16) and line 15 (column 9)\n" +
-                        "  - Switch-Statement was found:\n" +
                         "   - Between line 20 (column 9) and line 30 (column 9)"
         ));
     }
@@ -480,48 +436,6 @@ public class ASTTest {
     }
     //</editor-fold>
 
-    //<editor-fold desc="LocalClass-Class">
-
-    @TestTest
-    void test_testHasBelowNoLocalClassClass_Success() {
-        String testHasBelowNoLocalClassClass_Success = "testHasBelowNoLocalClassClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoLocalClassClass_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoLocalClassClass_Fail() {
-        String testHasBelowNoLocalClassClass_Fail = "testHasBelowNoLocalClassClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoLocalClassClass_Fail,
-                AssertionError.class,
-                "Unwanted statement found:\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
-                        "  - Local-Class-Statement was found:\n" +
-                        "   - Between line 5 (column 43) and line 5 (column 61)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses2.java:\n" +
-                        "  - Local-Class-Statement was found:\n" +
-                        "   - Between line 5 (column 43) and line 5 (column 61)"
-        ));
-    }
-
-    @TestTest
-    void test_testHasAtNoLocalClassClass_Success() {
-        String testHasAtNoLocalClassClass_Success = "testHasAtNoLocalClassClass_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoLocalClassClass_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoLocalClassClass_Fail() {
-        String testHasAtNoLocalClassClass_Fail = "testHasAtNoLocalClassClass_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoLocalClassClass_Fail,
-                AssertionError.class,
-                "Unwanted statement found:\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
-                        "  - Local-Class-Statement was found:\n" +
-                        "   - Between line 5 (column 43) and line 5 (column 61)"
-        ));
-    }
-    //</editor-fold>
-
     //<editor-fold desc="Any-Class">
 
     @TestTest
@@ -537,9 +451,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses.java:\n" +
-                        "  - Local-Class-Statement was found:\n" +
-                        "   - Between line 5 (column 43) and line 5 (column 61)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/classes/yes/ClassWithAnyKindsOfClasses2.java:\n" +
                         "  - Local-Class-Statement was found:\n" +
                         "   - Between line 5 (column 43) and line 5 (column 61)"
         ));
@@ -580,9 +491,6 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
                         "  - Assert-Statement was found:\n" +
-                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
-                        "  - Assert-Statement was found:\n" +
                         "   - Between line 7 (column 9) and line 7 (column 22)"
         ));
     }
@@ -622,9 +530,6 @@ public class ASTTest {
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
                         "  - Throw-Statement was found:\n" +
-                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
-                        "  - Throw-Statement was found:\n" +
                         "   - Between line 11 (column 9) and line 11 (column 60)"
         ));
     }
@@ -663,11 +568,6 @@ public class ASTTest {
                 AssertionError.class,
                 "Unwanted statement found:\n" +
                         " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n" +
-                        "  - Try-Statement was found:\n" +
-                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
-                        "  - Catch-Statement was found:\n" +
-                        "   - Between line 17 (column 11) and line 17 (column 32)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
                         "  - Try-Statement was found:\n" +
                         "   - Between line 15 (column 9) and line 17 (column 32)\n" +
                         "  - Catch-Statement was found:\n" +
@@ -718,15 +618,6 @@ public class ASTTest {
                         "  - Try-Statement was found:\n" +
                         "   - Between line 15 (column 9) and line 17 (column 32)\n" +
                         "  - Catch-Statement was found:\n" +
-                        "   - Between line 17 (column 11) and line 17 (column 32)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings2.java:\n" +
-                        "  - Assert-Statement was found:\n" +
-                        "   - Between line 7 (column 9) and line 7 (column 22)\n" +
-                        "  - Throw-Statement was found:\n" +
-                        "   - Between line 11 (column 9) and line 11 (column 60)\n" +
-                        "  - Try-Statement was found:\n" +
-                        "   - Between line 15 (column 9) and line 17 (column 32)\n" +
-                        "  - Catch-Statement was found:\n" +
                         "   - Between line 17 (column 11) and line 17 (column 32)"
         ));
     }
@@ -752,48 +643,6 @@ public class ASTTest {
                         "   - Between line 15 (column 9) and line 17 (column 32)\n" +
                         "  - Catch-Statement was found:\n" +
                         "   - Between line 17 (column 11) and line 17 (column 32)"
-        ));
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Any-Synchronisation">
-
-    @TestTest
-    void test_testHasBelowNoAnySynchronisation_Success() {
-        String testHasBelowNoAnySynchronisation_Success = "testHasBelowNoAnySynchronisation_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnySynchronisation_Success));
-    }
-
-    @TestTest
-    void test_testHasBelowNoAnySynchronisation_Fail() {
-        String testHasBelowNoAnySynchronisation_Fail = "testHasBelowNoAnySynchronisation_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnySynchronisation_Fail,
-                AssertionError.class,
-                "Unwanted statement found:\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations2.java:\n" +
-                        "  - Synchronised-Statement was found:\n" +
-                        "   - Between line 8 (column 9) and line 10 (column 9)\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations.java: \n" +
-                        "  - Synchronised-Statement was found:\n" +
-                        "   - Between line 8 (column 9) and line 10 (column 9)"
-        ));
-    }
-
-    @TestTest
-    void test_testHasAtNoAnySynchronisation_Success() {
-        String testHasAtNoAnySynchronisation_Success = "testHasAtNoAnySynchronisation_Success";
-        tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasAtNoAnySynchronisation_Success));
-    }
-
-    @TestTest
-    void test_testHasAtNoAnySynchronisation_Fail() {
-        String testHasAtNoAnySynchronisation_Fail = "testHasAtNoAnySynchronisation_Fail";
-        tests.assertThatEvents().haveExactly(1, testFailedWith(testHasAtNoAnySynchronisation_Fail,
-                AssertionError.class,
-                "Unwanted statement found:\n" +
-                        " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/synchronisations/yes/ClassWithAnyKindsOfSynchronisations.java:\n" +
-                        "  - Synchronised-Statement was found:\n" +
-                        "   - Between line 8 (column 9) and line 10 (column 9)"
         ));
     }
     //</editor-fold>

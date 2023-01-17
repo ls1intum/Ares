@@ -1,8 +1,5 @@
 package de.tum.in.test.api.ast.tool;
 
-
-import de.tum.in.test.api.structural.testutils.ClassNameScanner;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -22,11 +19,11 @@ import java.util.Properties;
  * </pre>
  * The Path.properties file needs to be stored in ./
  */
-@SuppressWarnings("JavadocLinkAsPlainText")
 public class PathTool {
 
     /**
      * Adds #packageDef#/#assignmentSrcDir# to a relative path in order to reach a file
+     *
      * @param pathInsideThePackage Relative string-path beginning from #packageDef#/#assignmentSrcDir# (working directory)
      * @return Full path
      */
