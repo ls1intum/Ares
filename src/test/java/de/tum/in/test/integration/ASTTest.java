@@ -571,7 +571,7 @@ public class ASTTest {
 				testFailedWith(testHasAtNoAnyExceptionHandling_Fail, AssertionError.class, "Unwanted statement found:\n"
 						+ " - In src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/exceptionHandlings/yes/ClassWithAnyKindsOfExceptionHandlings.java:\n"
 						+ "  - Assert-Statement was found:\n"
-						+ "   - Between line 7 (column 3) and line 7 (column 1)\n" + "  - Throw-Statement was found:\n"
+						+ "   - Between line 7 (column 3) and line 7 (column 16)\n" + "  - Throw-Statement was found:\n"
 						+ "   - Between line 11 (column 3) and line 11 (column 54)\n" + "  - Try-Statement was found:\n"
 						+ "   - Between line 15 (column 3) and line 18 (column 3)\n"
 						+ "  - Catch-Statement was found:\n"
