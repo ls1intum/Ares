@@ -2,5 +2,8 @@ package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.clas
 
 public class ClassWithAnyKindsOfClasses {
 
-    void localClassContainingFunction() { class localClass {} }
+	void localClassContainingFunction() {
+		class localClass {
+		}
+	}
 }
