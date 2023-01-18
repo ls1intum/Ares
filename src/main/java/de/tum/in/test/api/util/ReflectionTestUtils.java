@@ -211,6 +211,70 @@ public final class ReflectionTestUtils {
 	private static Object newInstanceAccessible(Constructor<?> constructor, boolean forceAccess,
 			Object[] constructorArgs) {
 		try {
+			return newInstanceRethrowingAccessible(constructor, forceAccess, constructorArgs);
+		} catch (AssertionFailedError e) {
+			throw e;
+		} catch (@SuppressWarnings("unused") Throwable e) {
+			throw localizedFailure("reflection_test_utils.constructor_internal_exception", //$NON-NLS-1$
+					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
+		}
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the method execution.
+	 *
+	 * @param constructor     The actual constructor that should be used for
+	 *                        creating a new instance of the object
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with.
+	 * @return The instance of this class.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	public static Object newInstanceRethrowing(Constructor<?> constructor, Object... constructorArgs) throws Throwable {
+		return newInstanceRethrowingAccessible(constructor, false, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the method execution.
+	 * <p>
+	 * Forces the access to package-private, {@code protected}, and {@code private}
+	 * constructors. Use {@link #newInstance(Constructor, Object...)} if you do not
+	 * require this functionality.
+	 *
+	 * @param constructor     The actual constructor that should be used for
+	 *                        creating a new instance of the object
+	 * @param constructorArgs Parameter instances of the constructor of the class,
+	 *                        that it should use to get instantiated with.
+	 * @return The instance of this class.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	public static Object newInstanceFromNonPublicConstructorRethrowing(Constructor<?> constructor,
+			Object... constructorArgs) throws Throwable {
+		return newInstanceRethrowingAccessible(constructor, true, constructorArgs);
+	}
+
+	/**
+	 * Instantiate an object of a class by using a specific constructor and
+	 * constructor arguments, if applicable, and re-throw an exception if one occurs
+	 * during the construction.
+	 *
+	 * @param constructor     The constructor that should be used to instantiate an
+	 *                        object.
+	 * @param forceAccess     True, if access to a (package) private or protected
+	 *                        constructor should be forced. Might fail with an
+	 *                        {@link IllegalAccessException} otherwise.
+	 * @param constructorArgs Parameter instances the constructor should be called
+	 *                        with.
+	 * @return The object created by calling the given constructor.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
+	 */
+	private static Object newInstanceRethrowingAccessible(Constructor<?> constructor, boolean forceAccess,
+			Object[] constructorArgs) throws Throwable {
+		try {
 			if (forceAccess) {
 				constructor.setAccessible(true);
 			}
@@ -218,7 +282,7 @@ public final class ReflectionTestUtils {
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.constructor_access", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(),
-					getParameterTypesAsString(constructor.getParameterTypes()));
+					getParameterTypesAsString(constructor.getParameterTypes()), getIllegalAccessSource(constructor));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			throw localizedFailure("reflection_test_utils.constructor_arguments", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(),
@@ -226,12 +290,11 @@ public final class ReflectionTestUtils {
 		} catch (@SuppressWarnings("unused") InstantiationException ie) {
 			throw localizedFailure("reflection_test_utils.constructor_abstract_class", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName());
-		} catch (@SuppressWarnings("unused") InvocationTargetException ite) {
-			throw localizedFailure("reflection_test_utils.constructor_internal_exception", //$NON-NLS-1$
-					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
 		} catch (@SuppressWarnings("unused") ExceptionInInitializerError eiie) {
 			throw localizedFailure("reflection_test_utils.constructor_class_init", //$NON-NLS-1$
 					constructor.getDeclaringClass().getSimpleName(), constructorArgs.length);
+		} catch (InvocationTargetException ite) {
+			throw ite.getCause();
 		}
 	}
 
@@ -279,25 +342,90 @@ public final class ReflectionTestUtils {
 	 * @return The value that is stored in the attribute in the given object.
 	 */
 	private static Object valueForAttribute(Object object, String attributeName, boolean forceAccess) {
-		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
+		Field field = getAttribute(object, attributeName, forceAccess);
 		try {
-			Field field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
-			if (forceAccess) {
-				field.setAccessible(true);
-			}
 			return field.get(object);
-		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
-			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
-					object.getClass().getSimpleName());
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
-			throw localizedFailure("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
-					object.getClass().getSimpleName());
+			throw attributeAccessFailure(object, attributeName, field);
 		}
 	}
 
 	/**
-	 * Helper method that retrieves a method with arguments of a given object by its
+	 * Sets the attribute value of a given instance of a class by the attribute
 	 * name.
+	 *
+	 * @param object        The instance of the class that contains the attribute.
+	 *                      Must not be null, even for static fields.
+	 * @param attributeName The name of the attribute whose value should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 */
+	public static void setValueOfAttribute(Object object, String attributeName, Object newValue) {
+		setValueOfAttribute(object, attributeName, newValue, false);
+	}
+
+	/**
+	 * Sets the attribute value of a given instance of a class by the attribute
+	 * name.
+	 * <p>
+	 * Forces access to package-private, {@code protected}, and {@code private}
+	 * attributes. Use {@link #valueForAttribute(Object, String)} when reading
+	 * accessible attributes.
+	 *
+	 * @param object        The instance of the class that contains the attribute.
+	 *                      Must not be null, even for static fields.
+	 * @param attributeName The name of the attribute whose value should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 */
+	public static void setValueOfNonPublicAttribute(Object object, String attributeName, Object newValue) {
+		setValueOfAttribute(object, attributeName, newValue, true);
+	}
+
+	/**
+	 * Sets the attribute value of a given instance of a class by the attribute
+	 * name.
+	 *
+	 * @param object        The object for which the attribute should be set.
+	 * @param attributeName The name of the attribute that should be set.
+	 * @param newValue      The new value that should be assigned to the attribute.
+	 * @param forceAccess   True, if access to a (package) private or protected
+	 *                      attribute should be forced. Might fail with an
+	 *                      {@link IllegalAccessException} otherwise.
+	 */
+	private static void setValueOfAttribute(Object object, String attributeName, Object newValue, boolean forceAccess) {
+		Field field = getAttribute(object, attributeName, forceAccess);
+		if (Modifier.isFinal(field.getModifiers()))
+			throw localizedFailure("reflection_test_utils.attribute_set_final", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName());
+		try {
+			field.set(object, newValue);
+		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
+			throw attributeAccessFailure(object, attributeName, field);
+		}
+	}
+
+	private static Field getAttribute(Object object, String attributeName, boolean forceAccess) {
+		requireNonNull(object, "reflection_test_utils.attribute_null", attributeName); //$NON-NLS-1$
+		Field field;
+		try {
+			field = ClassMemberAccessor.getField(object.getClass(), attributeName, forceAccess);
+			if (forceAccess) {
+				field.setAccessible(true);
+			}
+		} catch (@SuppressWarnings("unused") NoSuchFieldException nsfe) {
+			throw localizedFailure("reflection_test_utils.attribute_not_found", attributeName, //$NON-NLS-1$
+					object.getClass().getSimpleName());
+		}
+		return field;
+	}
+
+	private static AssertionFailedError attributeAccessFailure(Object object, String attributeName, Field field) {
+		return localizedFailure("reflection_test_utils.attribute_access", attributeName, //$NON-NLS-1$
+				object.getClass().getSimpleName(), getIllegalAccessSource(field));
+	}
+
+	/**
+	 * Helper method that retrieves a public method with arguments of a given object
+	 * by its name.
 	 *
 	 * @param object         instance of the class that defines the method.
 	 * @param methodName     the name of the method.
@@ -310,7 +438,7 @@ public final class ReflectionTestUtils {
 	}
 
 	/**
-	 * Retrieve a method with arguments of a given class by its name.
+	 * Retrieve a public method with arguments of a given class by its name.
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param methodName     The name of this method.
@@ -319,6 +447,32 @@ public final class ReflectionTestUtils {
 	 */
 	public static Method getMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
 		return getMethodAccessible(declaringClass, methodName, false, parameterTypes);
+	}
+
+	/**
+	 * Helper method that retrieves a non-public method with arguments of a given
+	 * object by its name.
+	 *
+	 * @param object         Instance of the class that defines the method.
+	 * @param methodName     The name of the method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Object object, String methodName, Class<?>... parameterTypes) {
+		requireNonNull(object, "reflection_test_utils.method_null_target", methodName); //$NON-NLS-1$
+		return getNonPublicMethod(object.getClass(), methodName, parameterTypes);
+	}
+
+	/**
+	 * Retrieve a non-public method with arguments of a given class by its name.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param methodName     The name of this method.
+	 * @param parameterTypes The parameter types of this method.
+	 * @return The wanted method.
+	 */
+	public static Method getNonPublicMethod(Class<?> declaringClass, String methodName, Class<?>... parameterTypes) {
+		return getMethodAccessible(declaringClass, methodName, true, parameterTypes);
 	}
 
 	/**
@@ -458,13 +612,13 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters, and
-	 * rethrow an exception if one occurs during the method execution.
+	 * re-throw an exception if one occurs during the method execution.
 	 *
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
 	 */
 	public static Object invokeMethodRethrowing(Object object, Method method, Object... params) throws Throwable {
 		return invokeMethodRethrowingAccessible(object, method, false, params);
@@ -472,7 +626,7 @@ public final class ReflectionTestUtils {
 
 	/**
 	 * Invoke a given method of a given object with instances of the parameters, and
-	 * rethrow an exception if one occurs during the method execution.
+	 * re-throw an exception if one occurs during the method execution.
 	 * <p>
 	 * Forces access to package-private, {@code protected}, and {@code private}
 	 * methods. Use {@link #invokeMethodRethrowing(Object, Method, Object...)} when
@@ -481,8 +635,8 @@ public final class ReflectionTestUtils {
 	 * @param object The instance of the class that should invoke the method.
 	 * @param method The method that has to get invoked.
 	 * @param params Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be re-thrown
 	 */
 	public static Object invokeNonPublicMethodRethrowing(Object object, Method method, Object... params)
 			throws Throwable {
@@ -499,8 +653,8 @@ public final class ReflectionTestUtils {
 	 *                    should be forced. Might fail with an
 	 *                    {@link IllegalAccessException} otherwise.
 	 * @param params      Parameter instances of the method.
-	 * @throws Throwable the exception that was caught and which will be rethrown
 	 * @return The return value of the method.
+	 * @throws Throwable the exception that was caught and which will be rethrown
 	 */
 	private static Object invokeMethodRethrowingAccessible(Object object, Method method, boolean forceAccess,
 			Object[] params) throws Throwable {
@@ -512,7 +666,7 @@ public final class ReflectionTestUtils {
 			return method.invoke(object, params);
 		} catch (@SuppressWarnings("unused") IllegalAccessException iae) {
 			throw localizedFailure("reflection_test_utils.method_access", method.getName(), //$NON-NLS-1$
-					method.getDeclaringClass().getSimpleName());
+					method.getDeclaringClass().getSimpleName(), getIllegalAccessSource(method));
 		} catch (@SuppressWarnings("unused") IllegalArgumentException iae) {
 			throw localizedFailure("reflection_test_utils.method_parameters", method.getName(), //$NON-NLS-1$
 					method.getDeclaringClass().getSimpleName());
@@ -533,11 +687,28 @@ public final class ReflectionTestUtils {
 	 * @param declaringClass The class that declares this constructor.
 	 * @param parameterTypes The parameter types of this method.
 	 * @param <T>            The type parameter of the constructor and class
-	 * @return The wanted method.
+	 * @return The wanted constructor.
 	 */
 	public static <T> Constructor<T> getConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
 		try {
 			return declaringClass.getConstructor(parameterTypes);
+		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
+			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
+					describeParameters(parameterTypes), declaringClass.getSimpleName());
+		}
+	}
+
+	/**
+	 * Retrieve a non-public constructor with arguments of a given class.
+	 *
+	 * @param declaringClass The class that declares this constructor.
+	 * @param parameterTypes The parameter types of this method.
+	 * @param <T>            The type parameter of the constructor and class
+	 * @return The wanted method.
+	 */
+	public static <T> Constructor<T> getNonPublicConstructor(Class<T> declaringClass, Class<?>... parameterTypes) {
+		try {
+			return declaringClass.getDeclaredConstructor(parameterTypes);
 		} catch (@SuppressWarnings("unused") NoSuchMethodException nsme) {
 			throw localizedFailure("reflection_test_utils.constructor_not_found_params", //$NON-NLS-1$
 					describeParameters(parameterTypes), declaringClass.getSimpleName());
@@ -591,5 +762,12 @@ public final class ReflectionTestUtils {
 		if (object == null)
 			throw localizedFailure(key, messageArgs);
 		return object;
+	}
+
+	private static String getIllegalAccessSource(Member member) {
+		if (!Modifier.isPublic(member.getModifiers()))
+			return localized(
+					"reflection_test_utils.construct." + member.getClass().getSimpleName().toLowerCase(Locale.ROOT)); //$NON-NLS-1$
+		return localized("reflection_test_utils.construct.class"); //$NON-NLS-1$
 	}
 }

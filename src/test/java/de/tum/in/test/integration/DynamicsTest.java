@@ -30,9 +30,17 @@ class DynamicsTest {
 	private final String constructor_throwing = "constructor_throwing";
 	private final String field_check = "field_check";
 	private final String field_getInstance = "field_getInstance";
-	private final String field_getStatic = "field_getStatic";
+	private final String field_getStaticNull = "field_getStaticNull";
+	private final String field_getStaticSuccess = "field_getStaticSuccess";
+	private final String field_getWrongObject = "field_getWrongObject";
+	private final String field_getWrongType = "field_getWrongType";
 	private final String field_noSuchField = "field_noSuchField";
-	private final String field_wrongType = "field_wrongType";
+	private final String field_setOf = "field_setOf";
+	private final String field_setStaticFinal = "field_setStaticFinal";
+	private final String field_setStaticNull = "field_setStaticNull";
+	private final String field_setStaticSuccess = "field_setStaticSuccess";
+	private final String field_setWrongObject = "field_setWrongObject";
+	private final String field_setWrongType = "field_setWrongType";
 	private final String method_badCast = "method_badCast";
 	private final String method_check = "method_check";
 	private final String method_illegalArguments = "method_illegalArguments";
@@ -49,9 +57,9 @@ class DynamicsTest {
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist public.\n" //
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht final.\n" //
 						+ "	org.opentest4j.AssertionFailedError: Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[someattribute] ist nicht public.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist final.\n" //
-						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[some_constant] ist statisch." //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[someAttribute] ist nicht public.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[SOME_CONSTANT] ist final.\n" //
+						+ "	org.opentest4j.AssertionFailedError: Attribut de.tum.in.test.integration.testuser.subject.structural.SomeClass.[SOME_CONSTANT] ist statisch." //
 				, Option.MESSAGE_NORMALIZE_NEWLINE));
 	}
 
@@ -86,7 +94,7 @@ class DynamicsTest {
 	@TestTest
 	void test_class_searchPublicOrProtectedMethods() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(class_searchPublicOrProtectedMethods,
-				AssertionFailedError.class, "Methode nonAbstractProtected() darf nicht protected sein."));
+				AssertionFailedError.class, "Methode doSomething(java.lang.String) darf nicht public sein."));
 	}
 
 	@TestTest
@@ -134,8 +142,26 @@ class DynamicsTest {
 	}
 
 	@TestTest
-	void test_field_getStatic() {
-		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getStatic));
+	void test_field_getStaticNull() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getStaticNull, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch."));
+	}
+
+	@TestTest
+	void test_field_getStaticSuccess() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_getStaticSuccess));
+	}
+
+	@TestTest
+	void test_field_getWrongObject() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getWrongObject, AssertionFailedError.class,
+				"Attribut [someAttribute] von Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass wurde nicht auf einem passenden Objekt aufgerufen."));
+	}
+
+	@TestTest
+	void test_field_getWrongType() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_getWrongType, AssertionFailedError.class,
+				"Attribut [SOME_CONSTANT] konnte nicht gefunden werden."));
 	}
 
 	@TestTest
@@ -145,9 +171,37 @@ class DynamicsTest {
 	}
 
 	@TestTest
-	void test_field_wrongType() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(field_wrongType, AssertionFailedError.class,
-				"Attribut [some_constant] konnte nicht gefunden werden."));
+	void test_field_setOf() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_setOf));
+	}
+
+	@TestTest
+	void test_field_setStaticFinal() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setStaticFinal, AssertionFailedError.class,
+				"Attribut [SOME_CONSTANT] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass kann nicht gesetzt werden, da es final ist."));
+	}
+
+	@TestTest
+	void test_field_setStaticNull() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setStaticNull, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass ist nicht statisch."));
+	}
+
+	@TestTest
+	void test_field_setStaticSuccess() {
+		tests.assertThatEvents().haveExactly(1, finishedSuccessfully(field_setStaticSuccess));
+	}
+
+	@TestTest
+	void test_field_setWrongObject() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setWrongObject, AssertionFailedError.class,
+				"Attribut [someAttribute] von Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass wurde nicht auf einem passenden Objekt aufgerufen."));
+	}
+
+	@TestTest
+	void test_field_setWrongType() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(field_setWrongType, AssertionFailedError.class,
+				"Attribut [someAttribute] der Klasse de.tum.in.test.integration.testuser.subject.structural.SomeClass vom Typ java.lang.String kann keine Instanz der Klasse class java.lang.Integer zugewiesen werden."));
 	}
 
 	@TestTest

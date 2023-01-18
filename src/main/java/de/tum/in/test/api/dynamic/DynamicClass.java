@@ -103,11 +103,11 @@ public class DynamicClass<T> implements Checkable {
 	}
 
 	public <R> DynamicField<R> field(DynamicClass<R> type, String... possibleNames) {
-		return new DynamicField<>(this, type, true, possibleNames);
+		return new DynamicField<>(this, type, false, possibleNames);
 	}
 
 	public <R> DynamicField<R> field(Class<R> type, String... possibleNames) {
-		return new DynamicField<>(this, type, true, possibleNames);
+		return new DynamicField<>(this, type, false, possibleNames);
 	}
 
 	public static <T> DynamicClass<T> toDynamic(Class<T> clazz) {
@@ -176,7 +176,7 @@ public class DynamicClass<T> implements Checkable {
 			}
 			if (Modifier.isProtected(m.getModifiers())) {
 				String sig = DynamicMethod.signatureOf(m);
-				if (!objectMethods.contains(sig))
+				if (!objectMethods.contains(sig) && !publicMethods.contains(sig))
 					throw localizedFailure("dynamics.class.method_protected", sig); //$NON-NLS-1$
 			}
 			checked++;
@@ -206,5 +206,10 @@ public class DynamicClass<T> implements Checkable {
 			checked++;
 		}
 		return checked;
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends Throwable, R> R rethrowUnchecked(Throwable t) throws T {
+		throw (T) t;
 	}
 }

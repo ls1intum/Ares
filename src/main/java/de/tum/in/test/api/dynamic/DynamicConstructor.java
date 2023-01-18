@@ -9,8 +9,6 @@ import java.util.Objects;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.util.UnexpectedExceptionError;
-
 @API(status = Status.MAINTAINED)
 public class DynamicConstructor<T> implements Checkable {
 
@@ -58,9 +56,7 @@ public class DynamicConstructor<T> implements Checkable {
 		} catch (IllegalArgumentException e) {
 			throw localizedFailure(e, "dynamics.constructor.arguments", this, descArgs(params)); //$NON-NLS-1$
 		} catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof RuntimeException)
-				throw (RuntimeException) e.getTargetException();
-			throw UnexpectedExceptionError.wrap(e.getTargetException());
+			return DynamicClass.rethrowUnchecked(e.getCause());
 		}
 	}
 

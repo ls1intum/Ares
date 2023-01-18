@@ -9,8 +9,6 @@ import java.util.stream.*;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
-import de.tum.in.test.api.util.UnexpectedExceptionError;
-
 @API(status = Status.MAINTAINED)
 public class DynamicMethod<T> implements Checkable {
 
@@ -75,9 +73,7 @@ public class DynamicMethod<T> implements Checkable {
 			throw localizedFailure(e, "dynamics.method.arguments", this, descArgs(params), //$NON-NLS-1$
 					o.getClass().getCanonicalName());
 		} catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof RuntimeException)
-				throw (RuntimeException) e.getTargetException();
-			throw UnexpectedExceptionError.wrap(e.getTargetException());
+			return DynamicClass.rethrowUnchecked(e.getCause());
 		} catch (ClassCastException e) {
 			throw localizedFailure(e, "dynamics.method.cast", this, returnType); //$NON-NLS-1$
 		}

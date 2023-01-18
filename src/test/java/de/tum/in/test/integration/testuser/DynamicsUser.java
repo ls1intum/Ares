@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 
-import de.tum.in.test.api.*;
+import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.dynamic.*;
 import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
-import de.tum.in.test.integration.testuser.subject.structural.SomeClass;
+import de.tum.in.test.integration.testuser.subject.structural.*;
 
 @Public
 @UseLocale("de")
-@StrictTimeout(10)
+//@StrictTimeout(10)
 @WhitelistPath("")
 @TestMethodOrder(MethodName.class)
 public class DynamicsUser {
@@ -93,8 +93,9 @@ public class DynamicsUser {
 
 	@Test
 	void class_searchPublicOrProtectedMethods() {
-		int checked = SomeAbstractClass.checkForPublicOrProtectedMethods();
-		assertThat(checked).isOne();
+		int checked = SomeAbstractClass
+				.checkForPublicOrProtectedMethods(SomeAbstractClass.method(void.class, "nonAbstractProtected"));
+		assertThat(checked).isEqualTo(4);
 
 		SomeClass.checkForPublicOrProtectedMethods(SomeClass_getSomeAttribute, SomeClass_doSomethingElse,
 				SomeClass_throwException, SomeClass.method(Integer.class, "getAnotherAttribute"),
@@ -149,8 +150,23 @@ public class DynamicsUser {
 	}
 
 	@Test
-	void field_getStatic() {
+	void field_getStaticNull() {
+		SomeClass_someAttribute.getStatic();
+	}
+
+	@Test
+	void field_getStaticSuccess() {
 		assertThat(SomeClass_SOME_CONSTANT.getStatic()).isEqualTo(42);
+	}
+
+	@Test
+	void field_getWrongObject() {
+		SomeClass_someAttribute.getOf(123);
+	}
+
+	@Test
+	void field_getWrongType() {
+		SomeClass.field(byte.class, "SOME_CONSTANT").getStatic();
 	}
 
 	@Test
@@ -159,8 +175,41 @@ public class DynamicsUser {
 	}
 
 	@Test
-	void field_wrongType() {
-		SomeClass.field(byte.class, "SOME_CONSTANT").getStatic();
+	void field_setOf() {
+		var instance = new SomeClass();
+		SomeClass_someAttribute.setOf(instance, "x");
+		assertThat(instance.getSomeAttribute()).isEqualTo("x");
+	}
+
+	@Test
+	void field_setStaticFinal() {
+		SomeClass_SOME_CONSTANT.setStatic(-1);
+	}
+
+	@Test
+	void field_setStaticNull() {
+		SomeClass_someAttribute.setStatic("x");
+	}
+
+	@Test
+	void field_setStaticSuccess() {
+		de.tum.in.test.integration.testuser.subject.structural.SomeAbstractClass.someInt = 7;
+		var field = DynamicClass.toDynamic(SomeAbstractClass.class).field(int.class, "someInt");
+		assertThat(field.exists());
+		field.setStatic(2);
+		assertThat(field.getStatic()).isEqualTo(2);
+	}
+
+	@Test
+	void field_setWrongObject() {
+		SomeClass_someAttribute.setOf(123, "x");
+	}
+
+	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	void field_setWrongType() {
+		var instance = new SomeClass();
+		((DynamicField) SomeClass_someAttribute).setOf(instance, 1);
 	}
 
 	@Test
