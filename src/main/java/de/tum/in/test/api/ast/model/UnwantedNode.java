@@ -81,16 +81,6 @@ public class UnwantedNode {
 	 *                       nodes shall be detected
 	 * @return List of pairs of File-Path and their respective information about
 	 *         unwanted nodes
-	 *         <p>
-	 *         public static Map<Path, List<UnwantedNode>>
-	 *         getUnwantedNodesForFilesBelow( Path pathOfDirectory, Map<String,
-	 *         Class<? extends Node>> nodesDefinedAsUnwanted ) { return
-	 *         JavaFile.getJavaFilesFromFilesBelow(pathOfDirectory) .stream()
-	 *         .map(javaFile ->
-	 *         getUnwantedNodesForFileAt(javaFile.getJavaFilePath(),
-	 *         nodesDefinedAsUnwanted)) .filter(map -> !map.isEmpty()) .flatMap(map
-	 *         -> map.entrySet().stream())
-	 *         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)); }
 	 */
 
 	public static String getFormatedPositionString(String positionString) {
