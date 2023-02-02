@@ -107,6 +107,10 @@ public final class SecurityPenguin {
 		}
 	}
 
+	public static void tryLoadNativeLibrary() {
+		System.load(new File("path_to_lib.so").getAbsolutePath());
+	}
+
 	public static void tryManageProcess() {
 		ProcessHandle.current().destroy();
 	}

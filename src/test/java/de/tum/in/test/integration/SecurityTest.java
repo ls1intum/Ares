@@ -31,6 +31,7 @@ class SecurityTest {
 	private final String testNewClassLoader = "testNewClassLoader";
 	private final String testNewSecurityManager = "testNewSecurityManager";
 	private final String trustedPackageWithoutEnforcerRule = "trustedPackageWithoutEnforcerRule";
+	private final String tryLoadNativeLibrary = "tryLoadNativeLibrary";
 	private final String tryManageProcess = "tryManageProcess";
 	private final String trySetSecurityManager = "trySetSecurityManager";
 	private final String trySetSystemOut = "trySetSystemOut";
@@ -111,6 +112,11 @@ class SecurityTest {
 						+ "    See https://github.com/ls1intum/Ares#what-you-need-to-do-outside-ares for more information."));
 		// Make sure our link is actually valid
 		assertThat(Path.of("README.adoc")).content().contains("#what-you-need-to-do-outside-ares");
+	}
+
+	@TestTest
+	void test_tryLoadNativeLibrary() {
+		tests.assertThatEvents().haveExactly(1, testFailedWith(tryLoadNativeLibrary, SecurityException.class));
 	}
 
 	@TestTest

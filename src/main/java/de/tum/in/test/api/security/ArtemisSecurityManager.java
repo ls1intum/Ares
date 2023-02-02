@@ -185,15 +185,15 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	@Override
-    public void checkLink(String lib) {
-        try {
-            if (enterPublicInterface())
-                return;
-            throw new SecurityException(localized("security.error_link")); //$NON-NLS-1$
-        } finally {
-            exitPublicInterface();
-        }
-    }
+	public void checkLink(String lib) {
+		try {
+			if (enterPublicInterface())
+				return;
+			throw new SecurityException(localized("security.error_link")); //$NON-NLS-1$
+		} finally {
+			exitPublicInterface();
+		}
+	}
 
 	@Override
 	public void checkListen(int port) {
