@@ -9,7 +9,7 @@ public enum ExceptionHandlingType implements Type {
 	/**
 	 * Returns a list with all exception handling types
 	 */
-	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class, "Try-Statement", TryStmt.class,
+	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class,
 			"Catch-Statement", CatchClause.class)),
 	/**
 	 * Returns to assert type
@@ -22,7 +22,7 @@ public enum ExceptionHandlingType implements Type {
 	/**
 	 * Returns the try-catch exception handling type
 	 */
-	TRYCATCH(Map.of("Try-Statement", TryStmt.class, "Catch-Statement", CatchClause.class));
+	CATCH(Map.of("Catch-Statement", CatchClause.class));
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
