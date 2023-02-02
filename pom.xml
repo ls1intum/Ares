@@ -36,8 +36,8 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<junit-jupiter-version>5.9.2</junit-jupiter-version>
 		<junit-platform-version>1.9.2</junit-platform-version>
-		<jqwik-version>1.7.1</jqwik-version>
-		<spotless.version>2.30.0</spotless.version>
+		<jqwik-version>1.7.2</jqwik-version>
+		<spotless.version>2.31.0</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- if JaCoCo is not executed -->
