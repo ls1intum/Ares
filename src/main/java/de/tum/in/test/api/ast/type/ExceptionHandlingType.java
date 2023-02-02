@@ -9,8 +9,8 @@ public enum ExceptionHandlingType implements Type {
 	/**
 	 * Returns a list with all exception handling types
 	 */
-	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class,
-			"Catch-Statement", CatchClause.class)),
+	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class, "Catch-Statement",
+			CatchClause.class)),
 	/**
 	 * Returns to assert type
 	 */
