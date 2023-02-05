@@ -1,15 +1,13 @@
 package de.tum.in.test.api.ast.model;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.util.List;
-import java.util.Objects;
+import java.nio.file.*;
+import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,6 +15,7 @@ import com.github.javaparser.ast.CompilationUnit;
 /**
  * Stores all required information about a Java file to be analysed
  */
+@API(status = Status.INTERNAL)
 public class JavaFile {
 	private static final PathMatcher JAVAFILEMATCHER = FileSystems.getDefault().getPathMatcher("glob:*.java");
 	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);

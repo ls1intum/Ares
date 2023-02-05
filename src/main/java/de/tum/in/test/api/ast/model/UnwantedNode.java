@@ -1,17 +1,18 @@
 package de.tum.in.test.api.ast.model;
 
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.ast.Node;
 
 /**
  * Stores all unwanted nodes of an abstract syntax tree of a Java-file
  */
+@API(status = Status.INTERNAL)
 public class UnwantedNode {
 
 	private final String unwantedNodeName;

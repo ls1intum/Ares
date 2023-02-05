@@ -2,10 +2,13 @@ package de.tum.in.test.api.ast.type;
 
 import java.util.Map;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.stmt.*;
+
+@API(status = Status.MAINTAINED)
 public enum ConditionalType implements Type {
 	/**
 	 * Returns a list with all conditional types
@@ -31,6 +34,7 @@ public enum ConditionalType implements Type {
 	 *
 	 * @return List of all node-name/node-type pairs
 	 */
+	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;
 	}

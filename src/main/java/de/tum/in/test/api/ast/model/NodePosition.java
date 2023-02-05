@@ -1,7 +1,9 @@
 package de.tum.in.test.api.ast.model;
 
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.*;
+
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
@@ -10,6 +12,7 @@ import com.github.javaparser.utils.Pair;
 /**
  * Stores information about the beginning and the end of a node
  */
+@API(status = Status.INTERNAL)
 public class NodePosition implements Comparable<NodePosition> {
 
 	private final boolean hasBegin;

@@ -2,9 +2,13 @@ package de.tum.in.test.api.ast.type;
 
 import java.util.Map;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.*;
 
+@API(status = Status.MAINTAINED)
 public enum ExceptionHandlingType implements Type {
 	/**
 	 * Returns a list with all exception handling types
@@ -35,6 +39,7 @@ public enum ExceptionHandlingType implements Type {
 	 *
 	 * @return List of all node-name/node-type pairs
 	 */
+	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;
 	}

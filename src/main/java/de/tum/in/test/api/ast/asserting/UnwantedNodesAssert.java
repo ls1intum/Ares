@@ -3,17 +3,20 @@ package de.tum.in.test.api.ast.asserting;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.assertj.core.api.AbstractAssert;
 
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 
 import de.tum.in.test.api.ast.model.UnwantedNode;
-import de.tum.in.test.api.ast.type.*;
+import de.tum.in.test.api.ast.type.Type;
 
 /**
  * Checks whole Java-Files for unwanted nodes
  */
+@API(status = Status.MAINTAINED)
 public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Path> {
 
 	/**

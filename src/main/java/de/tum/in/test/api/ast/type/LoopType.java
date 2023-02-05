@@ -2,12 +2,13 @@ package de.tum.in.test.api.ast.type;
 
 import java.util.Map;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.stmt.*;
+
+@API(status = Status.MAINTAINED)
 public enum LoopType implements Type {
 	/**
 	 * Returns a list with all loop types
@@ -50,6 +51,7 @@ public enum LoopType implements Type {
 	 *
 	 * @return List of all node-name/node-type pairs
 	 */
+	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;
 	}
