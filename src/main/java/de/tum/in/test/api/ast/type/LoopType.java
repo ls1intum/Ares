@@ -11,34 +11,34 @@ import com.github.javaparser.ast.stmt.*;
 @API(status = Status.MAINTAINED)
 public enum LoopType implements Type {
 	/**
-	 * Returns a list with all loop types
+	 * All loop types
 	 */
-	ANY(Map.of("For-Statement", ForStmt.class, "For-Each-Statement", ForEachStmt.class, "While-Statement",
-			WhileStmt.class, "Do-While-Statement", DoStmt.class)),
+	ANY(Map.of("For-Statement", ForStmt.class, "For-Each-Statement", ForEachStmt.class, "While-Statement", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			WhileStmt.class, "Do-While-Statement", DoStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns a list with all for-related loop types
+	 * All for-related loop types
 	 */
-	ANYFOR(Map.of("For-Statement", ForStmt.class, "For-Each-Statement", ForEachStmt.class)),
+	ANY_FOR(Map.of("For-Statement", ForStmt.class, "For-Each-Statement", ForEachStmt.class)), //$NON-NLS-1$ //$NON-NLS-2$
 	/**
-	 * Returns the for loop type
+	 * The for loop type
 	 */
-	FOR(Map.of("For-Statement", ForStmt.class)),
+	FOR(Map.of("For-Statement", ForStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns the for each loop type
+	 * The for each loop type
 	 */
-	FOREACH(Map.of("For-Each-Statement", ForEachStmt.class)),
+	FOR_EACH(Map.of("For-Each-Statement", ForEachStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns a list with all while-related loop types
+	 * All while-related loop types
 	 */
-	ANYWHILE(Map.of("While-Statement", WhileStmt.class, "Do-While-Statement", DoStmt.class)),
+	ANY_WHILE(Map.of("While-Statement", WhileStmt.class, "Do-While-Statement", DoStmt.class)), //$NON-NLS-1$ //$NON-NLS-2$
 	/**
-	 * Returns the while loop type
+	 * The while loop type
 	 */
-	WHILE(Map.of("While-Statement", WhileStmt.class)),
+	WHILE(Map.of("While-Statement", WhileStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns the do while loop type
+	 * The do while loop type
 	 */
-	DOWHILE(Map.of("Do-While-Statement", DoStmt.class));
+	DO_WHILE(Map.of("Do-While-Statement", DoStmt.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
@@ -46,11 +46,6 @@ public enum LoopType implements Type {
 		this.nodeNameNodeMap = nodeNameNodeMap;
 	}
 
-	/**
-	 * Returns the list of all node-name/node-type pairs
-	 *
-	 * @return List of all node-name/node-type pairs
-	 */
 	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;

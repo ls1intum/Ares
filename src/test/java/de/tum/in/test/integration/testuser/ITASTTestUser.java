@@ -59,28 +59,28 @@ public class ITASTTestUser {
 		void testHasBelowNoForEachLoop_Success() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no"))
-					.asDirectory().hasNo(LoopType.FOREACH);
+					.asDirectory().hasNo(LoopType.FOR_EACH);
 		}
 
 		@Test
 		void testHasBelowNoForEachLoop_Fail() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes"))
-					.asDirectory().hasNo(LoopType.FOREACH);
+					.asDirectory().hasNo(LoopType.FOR_EACH);
 		}
 
 		@Test
 		void testHasAtNoForEachLoop_Success() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java"))
-					.asFile().hasNo(LoopType.FOREACH);
+					.asFile().hasNo(LoopType.FOR_EACH);
 		}
 
 		@Test
 		void testHasAtNoForEachLoop_Fail() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java"))
-					.asFile().hasNo(LoopType.FOREACH);
+					.asFile().hasNo(LoopType.FOR_EACH);
 		}
 	}
 
@@ -123,28 +123,28 @@ public class ITASTTestUser {
 		void testHasBelowNoDoWhileLoop_Success() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no"))
-					.asDirectory().hasNo(LoopType.DOWHILE);
+					.asDirectory().hasNo(LoopType.DO_WHILE);
 		}
 
 		@Test
 		void testHasBelowNoDoWhileLoop_Fail() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes"))
-					.asDirectory().hasNo(LoopType.DOWHILE);
+					.asDirectory().hasNo(LoopType.DO_WHILE);
 		}
 
 		@Test
 		void testHasAtNoDoWhileLoop_Success() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java"))
-					.asFile().hasNo(LoopType.DOWHILE);
+					.asFile().hasNo(LoopType.DO_WHILE);
 		}
 
 		@Test
 		void testHasAtNoDoWhileLoop_Fail() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java"))
-					.asFile().hasNo(LoopType.DOWHILE);
+					.asFile().hasNo(LoopType.DO_WHILE);
 		}
 	}
 
@@ -155,28 +155,28 @@ public class ITASTTestUser {
 		void testHasBelowNoAnyForLoop_Success() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no"))
-					.asDirectory().hasNo(LoopType.ANYFOR);
+					.asDirectory().hasNo(LoopType.ANY_FOR);
 		}
 
 		@Test
 		void testHasBelowNoAnyForLoop_Fail() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes"))
-					.asDirectory().hasNo(LoopType.ANYFOR);
+					.asDirectory().hasNo(LoopType.ANY_FOR);
 		}
 
 		@Test
 		void testHasAtNoAnyForLoop_Success() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java"))
-					.asFile().hasNo(LoopType.ANYFOR);
+					.asFile().hasNo(LoopType.ANY_FOR);
 		}
 
 		@Test
 		void testHasAtNoAnyForLoop_Fail() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java"))
-					.asFile().hasNo(LoopType.ANYFOR);
+					.asFile().hasNo(LoopType.ANY_FOR);
 		}
 	}
 
@@ -187,28 +187,28 @@ public class ITASTTestUser {
 		void testHasBelowNoAnyWhileLoop_Success() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/no"))
-					.asDirectory().hasNo(LoopType.ANYWHILE);
+					.asDirectory().hasNo(LoopType.ANY_WHILE);
 		}
 
 		@Test
 		void testHasBelowNoAnyWhileLoop_Fail() {
 			UnwantedNodesAssert
 					.assertThat(PathTool.getPath("integration/testuser/subject/structural/astTestFiles/loops/yes"))
-					.asDirectory().hasNo(LoopType.ANYWHILE);
+					.asDirectory().hasNo(LoopType.ANY_WHILE);
 		}
 
 		@Test
 		void testHasAtNoAnyWhileLoop_Success() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/no/ClassWithNoKindsOfConditionals.java"))
-					.asFile().hasNo(LoopType.ANYWHILE);
+					.asFile().hasNo(LoopType.ANY_WHILE);
 		}
 
 		@Test
 		void testHasAtNoAnyWhileLoop_Fail() {
 			UnwantedNodesAssert.assertThat(PathTool.getPath(
 					"integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java"))
-					.asFile().hasNo(LoopType.ANYWHILE);
+					.asFile().hasNo(LoopType.ANY_WHILE);
 		}
 	}
 

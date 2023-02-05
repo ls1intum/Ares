@@ -11,22 +11,22 @@ import com.github.javaparser.ast.stmt.*;
 @API(status = Status.MAINTAINED)
 public enum ExceptionHandlingType implements Type {
 	/**
-	 * Returns a list with all exception handling types
+	 * All exception handling types
 	 */
-	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class, "Catch-Statement",
+	ANY(Map.of("Assert-Statement", AssertStmt.class, "Throw-Statement", ThrowStmt.class, "Catch-Statement", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			CatchClause.class)),
 	/**
-	 * Returns to assert type
+	 * The assert type
 	 */
-	ASSERT(Map.of("Assert-Statement", AssertStmt.class)),
+	ASSERT(Map.of("Assert-Statement", AssertStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns the throw type
+	 * The throw type
 	 */
-	THROW(Map.of("Throw-Statement", ThrowStmt.class)),
+	THROW(Map.of("Throw-Statement", ThrowStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns the try-catch exception handling type
+	 * The try-catch exception handling type
 	 */
-	CATCH(Map.of("Catch-Statement", CatchClause.class));
+	CATCH(Map.of("Catch-Statement", CatchClause.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
@@ -34,11 +34,6 @@ public enum ExceptionHandlingType implements Type {
 		this.nodeNameNodeMap = nodeNameNodeMap;
 	}
 
-	/**
-	 * Returns the list of all node-name/node-type pairs
-	 *
-	 * @return List of all node-name/node-type pairs
-	 */
 	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;

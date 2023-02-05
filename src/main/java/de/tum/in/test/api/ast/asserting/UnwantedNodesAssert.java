@@ -5,16 +5,16 @@ import java.util.Optional;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.*;
 
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 
 import de.tum.in.test.api.ast.model.UnwantedNode;
-import de.tum.in.test.api.ast.type.Type;
+import de.tum.in.test.api.ast.type.*;
 
 /**
- * Checks whole Java-Files for unwanted nodes
+ * Checks whole Java files for unwanted nodes
  */
 @API(status = Status.MAINTAINED)
 public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Path> {
@@ -25,18 +25,10 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	private final boolean assertDirectory;
 
 	/**
-	 * The language level on which the JavaParser shall operate
+	 * The language level for the Java parser
 	 */
 	private final LanguageLevel level;
 
-	/**
-	 * Private constructor: Non-statically creates an unwanted node assertion object
-	 *
-	 * @param actual          The path from which on the Java-Files are checked
-	 * @param assertDirectory true when the path points to a directory, false if it
-	 *                        points to a file
-	 * @param level           The language level on which the JavaParser operates
-	 */
 	private UnwantedNodesAssert(Path actual, boolean assertDirectory, LanguageLevel level) {
 		super(actual, UnwantedNodesAssert.class);
 		this.assertDirectory = assertDirectory;
@@ -44,10 +36,10 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	}
 
 	/**
-	 * Statically creates an unwanted node assertion object (language level is
-	 * automatically set to Java 11 and the path points to a file)
+	 * Creates an unwanted node assertion object (language level is automatically
+	 * set to Java 11 and the path points to a file)
 	 *
-	 * @param actual The path from which on the Java-Files are checked
+	 * @param actual The path from which on the Java files are checked
 	 * @return An unwanted node assertion object (for chaining)
 	 */
 	public static UnwantedNodesAssert assertThat(Path actual) {
@@ -55,7 +47,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	}
 
 	/**
-	 * Determines the path to point to a File
+	 * Configures the path to be treated as a file
 	 *
 	 * @return An unwanted node assertion object (for chaining)
 	 */
@@ -64,7 +56,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	}
 
 	/**
-	 * Determines the path to point to a Directory
+	 * Configures the path to be treated as a directory
 	 *
 	 * @return An unwanted node assertion object (for chaining)
 	 */
@@ -73,21 +65,25 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	}
 
 	/**
-	 * Determines the language level on which the JavaParser operate
+	 * Configures the language level used by the Java parser
 	 *
-	 * @param level The language level on which the JavaParser shall operate
+	 * @param level The language level for the Java parser
 	 * @return An unwanted node assertion object (for chaining)
 	 */
-	public UnwantedNodesAssert withConfiguration(LanguageLevel level) {
+	public UnwantedNodesAssert withLanguageLevel(LanguageLevel level) {
 		return new UnwantedNodesAssert(actual, assertDirectory, level);
 	}
 
 	/**
-	 * Checks if the Java-files at and/or below the given path do not contain any
-	 * unwanted statement
+	 * Verifies that the selected Java files do not contain any syntax tree nodes
+	 * (statements, expressions, ...) of the given type.
 	 *
 	 * @param type Unwanted statements
 	 * @return This unwanted node assertion object (for chaining)
+	 * @see ClassType
+	 * @see ConditionalType
+	 * @see ExceptionHandlingType
+	 * @see LoopType
 	 */
 	public UnwantedNodesAssert hasNo(Type type) {
 		isNotNull();

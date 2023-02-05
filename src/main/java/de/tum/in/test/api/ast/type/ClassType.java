@@ -13,8 +13,7 @@ public enum ClassType implements Type {
 	/**
 	 * Returns a list with the local class type
 	 */
-
-	ANY(Map.of("Local-Class-Statement", LocalClassDeclarationStmt.class));
+	ANY(Map.of("Local-Class-Statement", LocalClassDeclarationStmt.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
@@ -22,11 +21,6 @@ public enum ClassType implements Type {
 		this.nodeNameNodeMap = nodeNameNodeMap;
 	}
 
-	/**
-	 * Returns the list of all node-name/node-type pairs
-	 *
-	 * @return List of all node-name/node-type pairs
-	 */
 	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;

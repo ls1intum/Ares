@@ -15,6 +15,9 @@ import com.github.javaparser.utils.Pair;
 @API(status = Status.INTERNAL)
 public class NodePosition implements Comparable<NodePosition> {
 
+	private static final Comparator<NodePosition> COMPARATOR = Comparator.comparing(NodePosition::getBeginLine)
+			.thenComparing(NodePosition::getBeginColumn);
+
 	private final boolean hasBegin;
 	private final Pair<Integer, Integer> begin;
 	private final boolean hasEnd;
@@ -49,7 +52,6 @@ public class NodePosition implements Comparable<NodePosition> {
 
 	@Override
 	public int compareTo(NodePosition o) {
-		return Comparator.comparing(NodePosition::getBeginLine).thenComparing(NodePosition::getBeginColumn)
-				.compare(this, o);
+		return COMPARATOR.compare(this, o);
 	}
 }

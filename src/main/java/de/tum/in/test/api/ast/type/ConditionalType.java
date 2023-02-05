@@ -11,17 +11,17 @@ import com.github.javaparser.ast.stmt.*;
 @API(status = Status.MAINTAINED)
 public enum ConditionalType implements Type {
 	/**
-	 * Returns a list with all conditional types
+	 * All conditional types
 	 */
-	ANY(Map.of("If-Statement", IfStmt.class, "Switch-Statement", SwitchStmt.class)),
+	ANY(Map.of("If-Statement", IfStmt.class, "Switch-Statement", SwitchStmt.class)), //$NON-NLS-1$ //$NON-NLS-2$
 	/**
-	 * Returns the if condition type
+	 * The if condition type
 	 */
-	IF(Map.of("If-Statement", IfStmt.class)),
+	IF(Map.of("If-Statement", IfStmt.class)), //$NON-NLS-1$
 	/**
-	 * Returns the switch condition type
+	 * The switch condition type
 	 */
-	SWITCH(Map.of("Switch-Statement", SwitchStmt.class));
+	SWITCH(Map.of("Switch-Statement", SwitchStmt.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
@@ -29,11 +29,6 @@ public enum ConditionalType implements Type {
 		this.nodeNameNodeMap = nodeNameNodeMap;
 	}
 
-	/**
-	 * Returns the list of all node-name/node-type pairs
-	 *
-	 * @return List of all node-name/node-type pairs
-	 */
 	@Override
 	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
 		return nodeNameNodeMap;

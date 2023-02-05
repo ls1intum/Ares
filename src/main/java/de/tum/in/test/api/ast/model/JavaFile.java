@@ -3,22 +3,24 @@ package de.tum.in.test.api.ast.model;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.slf4j.*;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
 /**
- * Stores all required information about a Java file to be analysed
+ * Stores all required information about a Java file to be analyzed
  */
 @API(status = Status.INTERNAL)
 public class JavaFile {
-	private static final PathMatcher JAVAFILEMATCHER = FileSystems.getDefault().getPathMatcher("glob:*.java");
-	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+	private static final PathMatcher JAVAFILEMATCHER = FileSystems.getDefault().getPathMatcher("glob:*.java"); //$NON-NLS-1$
+	private static final Logger LOG = LoggerFactory.getLogger(JavaFile.class);
+
 	private final Path javaFilePath;
 	private final CompilationUnit javaFileAST;
 
@@ -37,7 +39,7 @@ public class JavaFile {
 
 	/**
 	 * Turns the Java-file into an AST in case the provided path points to a
-	 * Java.-file
+	 * Java-file
 	 *
 	 * @param pathOfFile Path to the Java-file
 	 * @return The information of the Java-file packed into a JavaFile object (null
@@ -50,8 +52,7 @@ public class JavaFile {
 		try {
 			return new JavaFile(pathOfFile, StaticJavaParser.parse(pathOfFile));
 		} catch (IOException e) {
-			LOGGER.severe(
-					"IOException in JavaFile.convertFromFile(" + pathOfFile.toAbsolutePath() + "): " + e.getMessage());
+			LOG.error("Error reading Java file '{}'", pathOfFile.toAbsolutePath(), e); //$NON-NLS-1$
 			return null;
 		}
 	}
@@ -69,8 +70,7 @@ public class JavaFile {
 			return directoryContentStream.map(JavaFile::convertFromFile).filter(Objects::nonNull)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
-			LOGGER.severe("IOException in JavaFile.convertFromDirectory(" + pathOfDirectory.toAbsolutePath() + "): "
-					+ e.getMessage());
+			LOG.error("Error reading Java files in '{}'", pathOfDirectory.toAbsolutePath(), e); //$NON-NLS-1$
 			return List.of();
 		}
 	}
