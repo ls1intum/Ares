@@ -189,7 +189,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		try {
 			if (enterPublicInterface())
 				return;
-			throw new SecurityException(localized("security.error_link")); //$NON-NLS-1$
+			checkForNonWhitelistedStackFrames(() -> localized("security.error_link")); //$NON-NLS-1$
 		} finally {
 			exitPublicInterface();
 		}
