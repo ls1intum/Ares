@@ -271,6 +271,7 @@
 										<file>${project.build.outputDirectory}/org/opentest4j/</file>
 										<file>${project.build.outputDirectory}/sun/</file>
 										<file>${project.build.outputDirectory}/com/github/javaparser/</file>
+										<file>${project.build.outputDirectory}/com/github/javaparser/**/</file>
 										<!-- Required for de.tum.in.test.api.security.ArtemisSecurityConfigurationTest -->
 										<!-- <file>${project.build.outputDirectory}/abc/def/</file> -->
 										<file>${project.build.outputDirectory}/org/gradle/</file>

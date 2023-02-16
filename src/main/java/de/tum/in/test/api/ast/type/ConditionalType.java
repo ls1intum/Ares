@@ -2,26 +2,46 @@ package de.tum.in.test.api.ast.type;
 
 import java.util.Map;
 
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.SwitchExpr;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.*;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 @API(status = Status.MAINTAINED)
 public enum ConditionalType implements Type {
 	/**
 	 * All conditional types
 	 */
-	ANY(Map.of("If-Statement", IfStmt.class, "Switch-Statement", SwitchStmt.class)), //$NON-NLS-1$ //$NON-NLS-2$
+	ANY(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class, localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class, localized("ast.enum.conditional_type.switch"), SwitchStmt.class, localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)), //$NON-NLS-1$ //$NON-NLS-2$
 	/**
-	 * The if condition type
+	 * All if-related types
 	 */
-	IF(Map.of("If-Statement", IfStmt.class)), //$NON-NLS-1$
+	ANY_IF(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class,localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class)),
 	/**
-	 * The switch condition type
+	 * The if type (statements of the form: "if (" + condition + ")" + statement)
 	 */
-	SWITCH(Map.of("Switch-Statement", SwitchStmt.class)); //$NON-NLS-1$
+	IF(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class)), //$NON-NLS-1$
+	/**
+	 * The conditional expression type (expression of the form: condition + "?" + expression + ":" + expression)
+	 */
+	CONDITIONALEXPR(Map.of(localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class)),
+	/**
+	 * All switch-related types
+	 */
+	ANY_SWITCH(Map.of(localized("ast.enum.conditional_type.switch"), SwitchStmt.class, localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)),
+	/**
+	 * The switch type (statements of the form: "switch (" + name + ")" + statement)
+	 */
+	SWITCH(Map.of(localized("ast.enum.conditional_type.switch"), SwitchStmt.class)), //$NON-NLS-1$
+	/**
+	 * The switch expression type (expression of the form: "switch (" + name + ")" + statement)
+	 */
+	SWITCHEXPR(Map.of(localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class));
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 

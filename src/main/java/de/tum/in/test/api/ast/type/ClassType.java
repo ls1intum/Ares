@@ -8,12 +8,14 @@ import org.apiguardian.api.API.Status;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 @API(status = Status.MAINTAINED)
 public enum ClassType implements Type {
 	/**
-	 * Returns a list with the local class type
+	 * The local class type (statements of the form: "class" + statement)
 	 */
-	ANY(Map.of("Local-Class-Statement", LocalClassDeclarationStmt.class)); //$NON-NLS-1$
+	CLASS(Map.of(localized("ast.enum.class_type.class"), LocalClassDeclarationStmt.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 

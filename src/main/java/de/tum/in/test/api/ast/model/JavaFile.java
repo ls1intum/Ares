@@ -12,6 +12,8 @@ import org.slf4j.*;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 /**
  * Stores all required information about a Java file to be analyzed
  */
@@ -53,7 +55,7 @@ public class JavaFile {
 			return new JavaFile(pathOfFile, StaticJavaParser.parse(pathOfFile));
 		} catch (IOException e) {
 			LOG.error("Error reading Java file '{}'", pathOfFile.toAbsolutePath(), e); //$NON-NLS-1$
-			return null;
+			throw new AssertionError(localized("ast.method.convert_from_file", pathOfFile.toAbsolutePath()));
 		}
 	}
 
@@ -71,7 +73,7 @@ public class JavaFile {
 					.collect(Collectors.toList());
 		} catch (IOException e) {
 			LOG.error("Error reading Java files in '{}'", pathOfDirectory.toAbsolutePath(), e); //$NON-NLS-1$
-			return List.of();
+			throw new AssertionError(localized("ast.method.read_from_directory", pathOfDirectory.toAbsolutePath()));
 		}
 	}
 }
