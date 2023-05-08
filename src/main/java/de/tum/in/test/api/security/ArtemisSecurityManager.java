@@ -185,6 +185,17 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	}
 
 	@Override
+	public void checkLink(String lib) {
+		try {
+			if (enterPublicInterface())
+				return;
+			checkForNonWhitelistedStackFrames(() -> localized("security.error_link")); //$NON-NLS-1$
+		} finally {
+			exitPublicInterface();
+		}
+	}
+
+	@Override
 	public void checkListen(int port) {
 		try {
 			if (enterPublicInterface())

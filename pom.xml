@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tum.in.ase</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>1.11.2-SNAPSHOT</version>
+	<version>1.11.4-SNAPSHOT</version>
 	<name>Ares</name>
 	<description>The Artemis Java Test Sandbox. A JUnit 5 Extension for secure Artemis Java Testing.</description>
 	<url>https://github.com/ls1intum/Ares</url>
@@ -34,10 +34,10 @@
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-		<junit-jupiter-version>5.9.2</junit-jupiter-version>
-		<junit-platform-version>1.9.2</junit-platform-version>
-		<jqwik-version>1.7.1</jqwik-version>
-		<spotless.version>2.30.0</spotless.version>
+		<junit-jupiter-version>5.9.3</junit-jupiter-version>
+		<junit-platform-version>1.9.3</junit-platform-version>
+		<jqwik-version>1.7.2</jqwik-version>
+		<spotless.version>2.36.0</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- if JaCoCo is not executed -->
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.4.5</version>
+			<version>1.4.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -87,12 +87,12 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.24.1</version>
+			<version>3.24.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20220924</version>
+			<version>20230227</version>
 		</dependency>
 		<dependency>
 			<groupId>info.debatty</groupId>
@@ -127,7 +127,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
+				<version>3.11.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -144,7 +144,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.4.1</version>
+				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -210,7 +210,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M8</version>
+				<version>3.0.0</version>
 				<configuration>
 					<argLine>@{argLine} -Dfile.encoding=UTF-8</argLine>
 					<runOrder>alphabetical</runOrder>
@@ -219,12 +219,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>enforce-versions</id>
@@ -328,7 +328,7 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.8.8</version>
+						<version>0.8.10</version>
 						<executions>
 							<execution>
 								<goals>
@@ -371,7 +371,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.0.0-M8</version>
+						<version>3.0.0</version>
 						<configuration>
 							<forkCount>4</forkCount>
 							<reuseForks>true</reuseForks>

@@ -92,6 +92,11 @@ public class SecurityUser {
 	}
 
 	@Test
+	void tryLoadNativeLibrary() {
+		SecurityPenguin.tryLoadNativeLibrary();
+	}
+
+	@Test
 	void tryManageProcess() {
 		SecurityPenguin.tryManageProcess();
 	}
