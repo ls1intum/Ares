@@ -1,10 +1,11 @@
 package de.tum.in.test.api.ast.asserting;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Optional;
 
-import de.tum.in.test.api.ast.tool.PathTool;
+import de.tum.in.test.api.structural.testutils.ClassNameScanner;
+import net.jqwik.api.Tuple;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.assertj.core.api.*;
@@ -21,27 +22,21 @@ import static de.tum.in.test.api.localization.Messages.localized;
  * Checks whole Java files for unwanted nodes
  */
 @API(status = Status.MAINTAINED)
-public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Path> {
+public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tuple.Tuple2<String, String>> {
 
     /**
-     * true when the path is relative to the pom.xml or the build.gradle file, false if it is absolute to the file system's root
+     * Provides a path to the build files pom.xml or build.gradle file in case it is located differently, else it provides an empty optional
      */
-    private final Optional<Boolean> relative;
-
-    /**
-     * true when the path points to a directory, false if it points to a file
-     */
-    private final Optional<Boolean> assertDirectory;
+    private final Optional<Optional<Path>> delocatedBuildFile;
 
     /**
      * The language level for the Java parser
      */
     private final Optional<LanguageLevel> level;
 
-    public UnwantedNodesAssert(Path path, Optional<Boolean> relative, Optional<Boolean> assertDirectory, Optional<LanguageLevel> level) {
-        super(path, UnwantedNodesAssert.class);
-        this.relative = relative;
-        this.assertDirectory = assertDirectory;
+    public UnwantedNodesAssert(Tuple.Tuple2<String, String> pathComponents, Optional<Optional<Path>> delocatedBuildFile, Optional<LanguageLevel> level) {
+        super(pathComponents, UnwantedNodesAssert.class);
+        this.delocatedBuildFile = delocatedBuildFile;
         this.level = level;
     }
 
@@ -49,47 +44,31 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
      * Creates an unwanted node assertion object (language level is automatically
      * set to Java 11 and the path points to a file)
      *
-     * @param path The path from which on the Java files are checked
+     * @param expectedClassName   The class name of the expected class that is currently being searched after.
+     * @param expectedPackageName The package name of the expected class that is currently being searched after.
      * @return An unwanted node assertion object (for chaining)
      */
-    public static UnwantedNodesAssert assertThat(Path path) {
-        return new UnwantedNodesAssert(path, Optional.empty(), Optional.empty(), Optional.empty());
+    public static UnwantedNodesAssert assertThat(String expectedClassName, String expectedPackageName) {
+        return new UnwantedNodesAssert(Tuple.of(expectedClassName, expectedPackageName), Optional.empty(), Optional.empty());
     }
 
     /**
-     * Configures the path to be treated as relative to the pom.xml or the build.gradle file
+     * Configures the build files to be un-delocated
      *
      * @return An unwanted node assertion object (for chaining)
      */
-    public UnwantedNodesAssert asRelative() {
-        return new UnwantedNodesAssert(actual, Optional.of(true), assertDirectory, level);
+    public UnwantedNodesAssert asUndelocatedBuildFile() {
+        return new UnwantedNodesAssert(actual, Optional.of(Optional.empty()), level);
     }
 
     /**
-     * Configures the path to be treated as absolute to the file system's root
+     * Configures the build files to be delocated
      *
-     * @return An unwanted node assertion object (for chaining)
+     * @param path The Path to the delocated build file
+     * @return
      */
-    public UnwantedNodesAssert asAbsolute() {
-        return new UnwantedNodesAssert(actual, Optional.of(false), assertDirectory, level);
-    }
-
-    /**
-     * Configures the path to be treated as a file
-     *
-     * @return An unwanted node assertion object (for chaining)
-     */
-    public UnwantedNodesAssert asFile() {
-        return new UnwantedNodesAssert(actual, relative, Optional.of(false), level);
-    }
-
-    /**
-     * Configures the path to be treated as a directory
-     *
-     * @return An unwanted node assertion object (for chaining)
-     */
-    public UnwantedNodesAssert asDirectory() {
-        return new UnwantedNodesAssert(actual, relative, Optional.of(true), level);
+    public UnwantedNodesAssert asDelocatedBuildFile(String path) {
+        return new UnwantedNodesAssert(actual, Optional.of(Optional.of(Path.of(path))), level);
     }
 
     /**
@@ -99,7 +78,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
      * @return An unwanted node assertion object (for chaining)
      */
     public UnwantedNodesAssert withLanguageLevel(LanguageLevel level) {
-        return new UnwantedNodesAssert(actual, relative, assertDirectory, Optional.of(level));
+        return new UnwantedNodesAssert(actual, delocatedBuildFile, Optional.of(level));
     }
 
     /**
@@ -115,38 +94,57 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
      */
     public UnwantedNodesAssert hasNo(Type type) {
         isNotNull();
-        try {
-            if (relative.isPresent()) {
-                if (assertDirectory.isPresent()) {
-                    if (level.isPresent()) {
-                        StaticJavaParser.getParserConfiguration().setLanguageLevel(level.get());
-                        Optional<String> errorMessage = assertDirectory.get()
-                                ? UnwantedNode.getMessageForUnwantedNodesForAllFilesBelow(
-                                relative.get() ? PathTool.extractPath(this.actual, null) : this.actual,
-                                type.getNodeNameNodeMap()
-                        )
-                                : UnwantedNode.getMessageForUnwantedNodesForFileAt(
-                                relative.get() ? PathTool.extractPath(this.actual, null) : this.actual,
-                                type.getNodeNameNodeMap()
-                        );
-                        errorMessage.ifPresent(unwantedNodeMessageForAllJavaFiles -> failWithMessage(
-                                localized("ast.method.has_no") + "\n" + unwantedNodeMessageForAllJavaFiles
-                        ));
-                        return this;
-                    } else {
-                        failWithMessage("The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel).");
-                    }
-                } else {
-                    failWithMessage("The 'assertDirectory' flag is not set. Please use UnwantedNodesAssert.asFile() or UnwantedNodesAssert.asDirectory().");
-                }
+        if (delocatedBuildFile.isPresent()) {
+            if (level.isPresent()) {
+                StaticJavaParser.getParserConfiguration().setLanguageLevel(level.get());
+                Tuple.Tuple2<String, String> temporaryStorage = prepareClassNameScanner();
+                Path packagePath = Path.of("", Arrays.stream(actual.get2().split("\\.")).toArray(String[]::new));
+                Path filePath = Path.of(actual.get1());
+                Path postAssignmentFolderPath = Path.of(packagePath.toString(), filePath.toString());
+                Path fullPath = (new ClassNameScanner(actual.get1(), actual.get2()))
+                        .getAssignmentFolderName()
+                        .map(assignmentFolderPath -> Path.of(".", assignmentFolderPath))
+                        .map(preAssignmentFolderPath -> Path.of(preAssignmentFolderPath.toString(),postAssignmentFolderPath.toString()))
+                        .orElseThrow();
+                Optional<String> errorMessage = UnwantedNode.getMessageForUnwantedNodesForAllFilesBelow(
+                        fullPath, type.getNodeNameNodeMap()
+                );
+                restoreClassNameScanner(temporaryStorage);
+                errorMessage.ifPresent(unwantedNodeMessageForAllJavaFiles -> failWithMessage(
+                        localized("ast.method.has_no") + "\n" + unwantedNodeMessageForAllJavaFiles
+                ));
+                return this;
             } else {
-                failWithMessage("The 'relative' flag is not set. Please use UnwantedNodesAssert.asRelative() or UnwantedNodesAssert.asAbsolute().");
+                failWithMessage("The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel).");
             }
-            throw new RuntimeException();
+        } else {
+            failWithMessage("The 'delocatedBuildFile' is not set. Please use UnwantedNodesAssert.asUndelocatedBuildFile() or UnwantedNodesAssert.asDelocatedBuildFile(Path).");
+        }
+        throw new RuntimeException();
+    }
 
-        }
-        catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    private Tuple.Tuple2<String, String> prepareClassNameScanner() {
+        String temporaryStorageForBuildGradlePath = ClassNameScanner.getBuildGradlePath();
+        ClassNameScanner.setBuildGradlePath(getPath(true, temporaryStorageForBuildGradlePath));
+        String temporaryStorageForPomXmlPath = ClassNameScanner.getPomXmlPath();
+        ClassNameScanner.setPomXmlPath(getPath(false, temporaryStorageForPomXmlPath));
+        return Tuple.of(temporaryStorageForBuildGradlePath, temporaryStorageForPomXmlPath);
+    }
+
+    private void restoreClassNameScanner(Tuple.Tuple2<String, String> temporaryStorage) {
+        ClassNameScanner.setBuildGradlePath(temporaryStorage.get1());
+        ClassNameScanner.setPomXmlPath(temporaryStorage.get2());
+    }
+
+    private String getPath(boolean isGradle, String tempPath) {
+        return delocatedBuildFile.flatMap(buildFile -> buildFile
+                        .map(path -> {
+                            if (!path.toAbsolutePath().endsWith(isGradle ? "build.gradle" : "pom.xml")) {
+                                return Path.of(path.toAbsolutePath().toString(), isGradle ? "build.gradle" : "pom.xml").toString();
+                            } else {
+                                return path.toAbsolutePath().toString();
+                            }
+                        }))
+                .orElse(tempPath);
     }
 }

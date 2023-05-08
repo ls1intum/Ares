@@ -86,6 +86,8 @@ public class ClassNameScanner {
 	private static String pomXmlPath = "pom.xml"; //$NON-NLS-1$
 	private static String buildGradlePath = "build.gradle"; //$NON-NLS-1$
 
+	private Optional<String> assignmentFolderName = Optional.empty();
+
 	/**
 	 * Pattern for matching the assignment folder name for the build.gradle file of
 	 * a Gradle project
@@ -102,6 +104,10 @@ public class ClassNameScanner {
 
 	public ScanResult getScanResult() {
 		return scanResult;
+	}
+
+	public Optional<String> getAssignmentFolderName() {
+		return assignmentFolderName;
 	}
 
 	/**
@@ -220,21 +226,21 @@ public class ClassNameScanner {
 	 * defined in the project build file (pom.xml or build.gradle) of the project.
 	 */
 	private void findObservedClassesInProject() {
-		String assignmentFolderName;
 		if (isMavenProject()) {
-			assignmentFolderName = getAssignmentFolderNameForMavenProject();
+			assignmentFolderName = Optional.ofNullable(getAssignmentFolderNameForMavenProject());
 		} else if (isGradleProject()) {
-			assignmentFolderName = getAssignmentFolderNameForGradleProject();
+			assignmentFolderName = Optional.ofNullable(getAssignmentFolderNameForGradleProject());
 		} else {
 			LOG.error("Could not find any build file. Contact your instructor."); //$NON-NLS-1$
+			assignmentFolderName = Optional.empty();
 			return;
 		}
 
-		if (assignmentFolderName == null) {
-			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$
-			return;
+		if (assignmentFolderName.isPresent()) {
+			walkProjectFileStructure(assignmentFolderName.get(), new File(assignmentFolderName.get()), observedClasses);
+		} else {
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$´
 		}
-		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
 	}
 
 	private static boolean isMavenProject() {

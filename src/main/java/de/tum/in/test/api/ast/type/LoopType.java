@@ -24,11 +24,11 @@ public enum LoopType implements Type {
 	/**
 	 * The for type (statements of the form: "for (" + declaration + condition + statement + ")" + statement)
 	 */
-	FOR(Map.of(localized("ast.enum.loop_type.for"), ForStmt.class)), //$NON-NLS-1$
+	FORSTMT(Map.of(localized("ast.enum.loop_type.for"), ForStmt.class)), //$NON-NLS-1$
 	/**
 	 * The for each type (statements of the form: "for (" + declaration + ":" + iterateable: Iterateable ")" + statement)
 	 */
-	FOR_EACH(Map.of(localized("ast.enum.loop_type.for_each"), ForEachStmt.class)), //$NON-NLS-1$
+	FOR_EACHSTMT(Map.of(localized("ast.enum.loop_type.for_each"), ForEachStmt.class)), //$NON-NLS-1$
 	/**
 	 * All while-related types
 	 */
@@ -36,11 +36,11 @@ public enum LoopType implements Type {
 	/**
 	 * The while type (statements of the form: "while (" + condition + ")" + statement)
 	 */
-	WHILE(Map.of(localized("ast.enum.loop_type.while"), WhileStmt.class)), //$NON-NLS-1$
+	WHILESTMT(Map.of(localized("ast.enum.loop_type.while"), WhileStmt.class)), //$NON-NLS-1$
 	/**
 	 * The do while type (statements of the form: "do" + statement + "while (" + condition + ")")
 	 */
-	DO_WHILE(Map.of(localized("ast.enum.loop_type.do_while"), DoStmt.class)); //$NON-NLS-1$
+	DO_WHILESTMT(Map.of(localized("ast.enum.loop_type.do_while"), DoStmt.class)); //$NON-NLS-1$
 
 	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 

@@ -6,4 +6,10 @@ public class ClassWithAnyKindsOfClasses {
 		class localClass {
 		}
 	}
+
+	/*void localRecordContainingFunction() {
+		record localRecord(String id) {
+
+		}
+	}*/
 }
