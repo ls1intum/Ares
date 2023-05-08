@@ -36,13 +36,9 @@ public class ClassWithAnyKindsOfConditionals {
 		System.out.println(output);
 	}
 
-	/*public void switchExpression() {
-		System.out.println(
-				switch (new Random().nextInt(3)) {
-					case 1 -> "Hello";
-					case 0 -> "World";
-					default -> "!";
-				}
-		);
-	}*/
+	/*
+	 * public void switchExpression() { System.out.println( switch (new
+	 * Random().nextInt(3)) { case 1 -> "Hello"; case 0 -> "World"; default -> "!";
+	 * } ); }
+	 */
 }

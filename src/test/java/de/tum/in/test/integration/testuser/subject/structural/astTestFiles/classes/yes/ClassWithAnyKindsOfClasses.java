@@ -7,9 +7,7 @@ public class ClassWithAnyKindsOfClasses {
 		}
 	}
 
-	/*void localRecordContainingFunction() {
-		record localRecord(String id) {
-
-		}
-	}*/
+	/*
+	 * void localRecordContainingFunction() { record localRecord(String id) { } }
+	 */
 }

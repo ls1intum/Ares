@@ -1,5 +1,7 @@
 package de.tum.in.test.api.ast.model;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
@@ -11,8 +13,6 @@ import org.slf4j.*;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-
-import static de.tum.in.test.api.localization.Messages.localized;
 
 /**
  * Stores all required information about a Java file to be analyzed

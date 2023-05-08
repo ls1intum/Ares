@@ -1,5 +1,7 @@
 package de.tum.in.test.api.ast.type;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.util.Map;
 
 import org.apiguardian.api.API;
@@ -8,36 +10,38 @@ import org.apiguardian.api.API.Status;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.*;
 
-import static de.tum.in.test.api.localization.Messages.localized;
-
 @API(status = Status.MAINTAINED)
 public enum ExceptionHandlingType implements Type {
-    /**
-     * All exception handling types
-     */
-    ANY(Map.of(localized("ast.enum.exception_handling_type.assert"), AssertStmt.class, localized("ast.enum.exception_handling_type.throw"), ThrowStmt.class, localized("ast.enum.exception_handling_type.catch"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            CatchClause.class)),
-    /**
-     * The assert type (statements of the form: "assert" + condition: boolean + errorMessage: String)
-     */
-    ASSERT(Map.of(localized("ast.enum.exception_handling_type.assert"), AssertStmt.class)), //$NON-NLS-1$
-    /**
-     * The throw type (statements of the form: "throw" + exception: Exception)
-     */
-    THROW(Map.of(localized("ast.enum.exception_handling_type.throw"), ThrowStmt.class)), //$NON-NLS-1$
-    /**
-     * The catch type (statements of the form: "catch (" + exception declaration + ")" + statement)
-     */
-    CATCH(Map.of(localized("ast.enum.exception_handling_type.catch"), CatchClause.class)); //$NON-NLS-1$
+	/**
+	 * All exception handling types
+	 */
+	ANY(Map.of(localized("ast.enum.exception_handling_type.assert"), AssertStmt.class, //$NON-NLS-1$
+			localized("ast.enum.exception_handling_type.throw"), ThrowStmt.class, //$NON-NLS-1$
+			localized("ast.enum.exception_handling_type.catch"), //$NON-NLS-1$
+			CatchClause.class)),
+	/**
+	 * The assert type (statements of the form: "assert" + condition: boolean +
+	 * errorMessage: String)
+	 */
+	ASSERT(Map.of(localized("ast.enum.exception_handling_type.assert"), AssertStmt.class)), //$NON-NLS-1$
+	/**
+	 * The throw type (statements of the form: "throw" + exception: Exception)
+	 */
+	THROW(Map.of(localized("ast.enum.exception_handling_type.throw"), ThrowStmt.class)), //$NON-NLS-1$
+	/**
+	 * The catch type (statements of the form: "catch (" + exception declaration +
+	 * ")" + statement)
+	 */
+	CATCH(Map.of(localized("ast.enum.exception_handling_type.catch"), CatchClause.class)); //$NON-NLS-1$
 
-    private final Map<String, Class<? extends Node>> nodeNameNodeMap;
+	private final Map<String, Class<? extends Node>> nodeNameNodeMap;
 
-    ExceptionHandlingType(Map<String, Class<? extends Node>> nodeNameNodeMap) {
-        this.nodeNameNodeMap = nodeNameNodeMap;
-    }
+	ExceptionHandlingType(Map<String, Class<? extends Node>> nodeNameNodeMap) {
+		this.nodeNameNodeMap = nodeNameNodeMap;
+	}
 
-    @Override
-    public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
-        return nodeNameNodeMap;
-    }
+	@Override
+	public Map<String, Class<? extends Node>> getNodeNameNodeMap() {
+		return nodeNameNodeMap;
+	}
 }

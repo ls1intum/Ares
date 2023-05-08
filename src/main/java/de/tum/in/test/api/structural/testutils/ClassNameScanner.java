@@ -239,7 +239,7 @@ public class ClassNameScanner {
 		if (assignmentFolderName.isPresent()) {
 			walkProjectFileStructure(assignmentFolderName.get(), new File(assignmentFolderName.get()), observedClasses);
 		} else {
-			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$´
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$ ´
 		}
 	}
 

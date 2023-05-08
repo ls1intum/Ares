@@ -1,45 +1,54 @@
 package de.tum.in.test.api.ast.type;
 
+import static de.tum.in.test.api.localization.Messages.localized;
+
 import java.util.Map;
 
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.SwitchExpr;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.SwitchExpr;
 import com.github.javaparser.ast.stmt.*;
-
-import static de.tum.in.test.api.localization.Messages.localized;
 
 @API(status = Status.MAINTAINED)
 public enum ConditionalType implements Type {
 	/**
 	 * All conditional types
 	 */
-	ANY(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class, localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class, localized("ast.enum.conditional_type.switch"), SwitchStmt.class, localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)), //$NON-NLS-1$ //$NON-NLS-2$
+	ANY(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class, //$NON-NLS-1$
+			localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class, //$NON-NLS-1$
+			localized("ast.enum.conditional_type.switch"), SwitchStmt.class,
+			localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)),
 	/**
 	 * All if-related types
 	 */
-	ANY_IF(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class, localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class)),
+	ANY_IF(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class,
+			localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class)),
 	/**
-	 * The if statement type (statements of the form: "if (" + condition + ")" + statement)
+	 * The if statement type (statements of the form: "if (" + condition + ")" +
+	 * statement)
 	 */
 	IFSTMT(Map.of(localized("ast.enum.conditional_type.if"), IfStmt.class)), //$NON-NLS-1$
 	/**
-	 * The conditional expression type (expression of the form: condition + "?" + expression + ":" + expression)
+	 * The conditional expression type (expression of the form: condition + "?" +
+	 * expression + ":" + expression)
 	 */
 	CONDITIONALEXPR(Map.of(localized("ast.enum.conditional_type.conditional_expression"), ConditionalExpr.class)),
 	/**
 	 * All switch-related types
 	 */
-	ANY_SWITCH(Map.of(localized("ast.enum.conditional_type.switch"), SwitchStmt.class, localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)),
+	ANY_SWITCH(Map.of(localized("ast.enum.conditional_type.switch"), SwitchStmt.class,
+			localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class)),
 	/**
-	 * The switch statement type (statements of the form: "switch (" + name + ")" + statement)
+	 * The switch statement type (statements of the form: "switch (" + name + ")" +
+	 * statement)
 	 */
 	SWITCHSTMT(Map.of(localized("ast.enum.conditional_type.switch"), SwitchStmt.class)), //$NON-NLS-1$
 	/**
-	 * The switch expression type (expression of the form: "switch (" + name + ")" + statement)
+	 * The switch expression type (expression of the form: "switch (" + name + ")" +
+	 * statement)
 	 */
 	SWITCHEXPR(Map.of(localized("ast.enum.conditional_type.switch_expression"), SwitchExpr.class));
 
