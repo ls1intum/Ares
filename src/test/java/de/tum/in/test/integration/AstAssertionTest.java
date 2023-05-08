@@ -58,7 +58,7 @@ public class AstAssertionTest {
 					testFailedWith(testHasBelowNoForEachLoop_Fail, AssertionError.class, "Unwanted statement found:\n"
 							+ " - In ./src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n"
 							+ "  - For-Each-Statement was found:\n"
-							+ "   - Between line 15 (column 3) and line 17 (column 3)"));
+							+ "   - Between line 15 (column 3) and line 18 (column 3)"));
 		}
 	}
 
@@ -79,7 +79,7 @@ public class AstAssertionTest {
 					testFailedWith(testHasBelowNoWhileLoop_Fail, AssertionError.class, "Unwanted statement found:\n"
 							+ " - In ./src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n"
 							+ "  - While-Statement was found:\n"
-							+ "   - Between line 22 (column 3) and line 25 (column 3)"));
+							+ "   - Between line 23 (column 3) and line 26 (column 3)"));
 		}
 	}
 
@@ -100,7 +100,7 @@ public class AstAssertionTest {
 					testFailedWith(testHasBelowNoDoWhileLoop_Fail, AssertionError.class, "Unwanted statement found:\n"
 							+ " - In ./src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n"
 							+ "  - Do-While-Statement was found:\n"
-							+ "   - Between line 30 (column 3) and line 33 (column 42)"));
+							+ "   - Between line 31 (column 3) and line 34 (column 42)"));
 		}
 	}
 
@@ -123,7 +123,7 @@ public class AstAssertionTest {
 							+ "  - For-Statement was found:\n"
 							+ "   - Between line 9 (column 3) and line 11 (column 3)\n"
 							+ "  - For-Each-Statement was found:\n"
-							+ "   - Between line 15 (column 3) and line 17 (column 3)"));
+							+ "   - Between line 15 (column 3) and line 18 (column 3)"));
 		}
 	}
 
@@ -144,9 +144,9 @@ public class AstAssertionTest {
 					testFailedWith(testHasBelowNoAnyWhileLoop_Fail, AssertionError.class, "Unwanted statement found:\n"
 							+ " - In ./src/test/java/de/tum/in/test/integration/testuser/subject/structural/astTestFiles/loops/yes/ClassWithAnyKindsOfLoops.java:\n"
 							+ "  - While-Statement was found:\n"
-							+ "   - Between line 22 (column 3) and line 25 (column 3)\n"
+							+ "   - Between line 23 (column 3) and line 26 (column 3)\n"
 							+ "  - Do-While-Statement was found:\n"
-							+ "   - Between line 30 (column 3) and line 33 (column 42)"));
+							+ "   - Between line 31 (column 3) and line 34 (column 42)"));
 		}
 	}
 
@@ -169,11 +169,11 @@ public class AstAssertionTest {
 							+ "  - For-Statement was found:\n"
 							+ "   - Between line 9 (column 3) and line 11 (column 3)\n"
 							+ "  - For-Each-Statement was found:\n"
-							+ "   - Between line 15 (column 3) and line 17 (column 3)\n"
+							+ "   - Between line 15 (column 3) and line 18 (column 3)\n"
 							+ "  - While-Statement was found:\n"
-							+ "   - Between line 22 (column 3) and line 25 (column 3)\n"
+							+ "   - Between line 23 (column 3) and line 26 (column 3)\n"
 							+ "  - Do-While-Statement was found:\n"
-							+ "   - Between line 30 (column 3) and line 33 (column 42)"));
+							+ "   - Between line 31 (column 3) and line 34 (column 42)"));
 		}
 	}
 
