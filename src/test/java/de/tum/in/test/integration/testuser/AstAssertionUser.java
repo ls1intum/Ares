@@ -600,7 +600,7 @@ public class AstAssertionUser {
 		}
 
 		@Test
-		void testDelocatedBuildFileDoesNotExist() {
+		void testDelocatedBuildGradleFileDoesNotExist() {
 			UnwantedNodesAssert
 					.assertThat(
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
@@ -611,7 +611,7 @@ public class AstAssertionUser {
 		}
 
 		@Test
-		void testDelocatedBuildFileIsNull() {
+		void testDelocatedBuildGradleFileIsNull() {
 			UnwantedNodesAssert
 					.assertThat(
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
@@ -631,6 +631,45 @@ public class AstAssertionUser {
 					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
 							"integration", "testuser", "build.gradle").toString())
 					.withLanguageLevel(null).hasNo(LoopType.ANY);
+		}
+	}
+
+	@Nested
+	@DisplayName("Pom-Xml-Tests")
+	class PomXmlTests {
+
+		@Test
+		void testDelocatedPomXmlFileDoesExist() {
+			UnwantedNodesAssert
+					.assertThat(
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString(),
+							"de.tum.in.test")
+					.withDelocatedPomXmlFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
+							"integration", "testuser", "pom.xml").toString())
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FORSTMT);
+		}
+
+		@Test
+		void testDelocatedPomXmlFileDoesNotExist() {
+			UnwantedNodesAssert
+					.assertThat(
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString(),
+							"de.tum.in.test")
+					.withDelocatedPomXmlFile(Path.of("this", "path", "does", "not", "exist").toString())
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
+		}
+
+		@Test
+		void testDelocatedPomXmlFileIsNull() {
+			UnwantedNodesAssert
+					.assertThat(
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString(),
+							"de.tum.in.test")
+					.withDelocatedPomXmlFile(null).withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+					.hasNo(LoopType.ANY);
 		}
 	}
 }

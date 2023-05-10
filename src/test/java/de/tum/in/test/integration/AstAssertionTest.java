@@ -619,16 +619,16 @@ public class AstAssertionTest {
 		}
 
 		@TestTest
-		void test_testDelocatedBuildFileDoesNotExist() {
-			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedBuildFileDoesNotExist";
+		void test_testDelocatedBuildGradleFileDoesNotExist() {
+			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedBuildGradleFileDoesNotExist";
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
 					AssertionError.class,
 					"The delocatedBuildFile " + Path.of("this", "path", "does", "not", "exist") + " does not exist."));
 		}
 
 		@TestTest
-		void test_testDelocatedBuildFileIsNull() {
-			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedBuildFileIsNull";
+		void test_testDelocatedBuildGradleFileIsNull() {
+			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedBuildGradleFileIsNull";
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
 					AssertionError.class,
 					"The 'delocatedBuildFile' is not set. Please use UnwantedNodesAssert.withoutDelocatedBuildFile() or UnwantedNodesAssert.withDelocatedPomXmlFile(Path) or UnwantedNodesAssert.withDelocatedBuildGradleFile(Path)."));
@@ -640,6 +640,33 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
 					AssertionError.class,
 					"The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel)."));
+		}
+	}
+
+	@Nested
+	@DisplayName("Pom-Xml-Test-Tests")
+	class PomXmlTestTests {
+
+		@TestTest
+		void test_testDelocatedPomXmlFileDoesExist() {
+			String testHasBelowNoAnyExceptionHandling_Success = "testDelocatedPomXmlFileDoesExist";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testHasBelowNoAnyExceptionHandling_Success));
+		}
+
+		@TestTest
+		void test_testDelocatedPomXmlFileDoesNotExist() {
+			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedPomXmlFileDoesNotExist";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
+					AssertionError.class,
+					"The delocatedBuildFile " + Path.of("this", "path", "does", "not", "exist") + " does not exist."));
+		}
+
+		@TestTest
+		void test_testDelocatedPomXmlFileIsNull() {
+			String testHasBelowNoAnyExceptionHandling_Fail = "testDelocatedPomXmlFileIsNull";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyExceptionHandling_Fail,
+					AssertionError.class,
+					"The 'delocatedBuildFile' is not set. Please use UnwantedNodesAssert.withoutDelocatedBuildFile() or UnwantedNodesAssert.withDelocatedPomXmlFile(Path) or UnwantedNodesAssert.withDelocatedBuildGradleFile(Path)."));
 		}
 	}
 }

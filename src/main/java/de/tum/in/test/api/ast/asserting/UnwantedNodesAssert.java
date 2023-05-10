@@ -88,7 +88,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 	 * @return An unwanted node assertion object (for chaining)
 	 */
 	public UnwantedNodesAssert withDelocatedPomXmlFile(String path) {
-		return new UnwantedNodesAssert(actual, Path.of(path), true, false, level);
+		return new UnwantedNodesAssert(actual, path != null ? Path.of(path) : null, true, false, level);
 	}
 
 	/**
