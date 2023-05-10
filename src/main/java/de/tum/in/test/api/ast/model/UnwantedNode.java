@@ -88,15 +88,20 @@ public class UnwantedNode {
 	}
 
 	public static String getFormattedUnwantedNodeString(UnwantedNode unwantedNode) {
-		return unwantedNode.getUnwantedNodePositions().stream().map(String::valueOf)
-				.map(UnwantedNode::getFormattedPositionString)
-				.collect(Collectors.joining("\n", localized("ast.method.get_formatted_unwanted_node_string_prefix",
-						unwantedNode.getUnwantedNodeName()) + "\n", ""));
+		return unwantedNode
+				.getUnwantedNodePositions().stream().map(String::valueOf).map(
+						UnwantedNode::getFormattedPositionString)
+				.collect(Collectors.joining(System.lineSeparator(),
+						localized("ast.method.get_formatted_unwanted_node_string_prefix",
+								unwantedNode.getUnwantedNodeName()) + System.lineSeparator(),
+						""));
 	}
 
 	public static String getFormattedFileString(Path filePath, Map<Path, List<UnwantedNode>> unwantedNodes) {
-		return unwantedNodes.get(filePath).stream().map(UnwantedNode::getFormattedUnwantedNodeString).collect(Collectors
-				.joining("\n", localized("ast.method.get_formatted_file_string_prefix", filePath) + "\n", ""));
+		return unwantedNodes.get(filePath).stream().map(UnwantedNode::getFormattedUnwantedNodeString)
+				.collect(Collectors.joining(System.lineSeparator(),
+						localized("ast.method.get_formatted_file_string_prefix", filePath) + System.lineSeparator(),
+						""));
 	}
 
 	/**
@@ -132,7 +137,7 @@ public class UnwantedNode {
 				.sorted(Comparator.comparing(JavaFile::getJavaFilePath))
 				.map(javaFile -> getMessageForUnwantedNodesForFileAt(javaFile.getJavaFilePath(),
 						nodeNameUnwantedNodeMap))
-				.filter(Optional::isPresent).map(Optional::get).map(message -> message + "\n").reduce(String::concat)
-				.map(String::trim).map(message -> " " + message);
+				.filter(Optional::isPresent).map(Optional::get).map(message -> message + System.lineSeparator())
+				.reduce(String::concat).map(String::trim).map(message -> " " + message);
 	}
 }

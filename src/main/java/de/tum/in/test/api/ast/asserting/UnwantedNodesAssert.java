@@ -2,6 +2,7 @@ package de.tum.in.test.api.ast.asserting;
 
 import static de.tum.in.test.api.localization.Messages.localized;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
@@ -27,19 +28,33 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 
 	/**
 	 * Provides a path to the build files pom.xml or build.gradle file in case it is
-	 * located differently, else it provides an empty optional
+	 * located differently than in the root folder, else it provides null
 	 */
-	private final Optional<Optional<Path>> delocatedBuildFile;
+	private final Path delocatedBuildFile;
+
+	/**
+	 * True in case the pom.xml is located differently than in the root folder, else
+	 * false
+	 */
+	private final boolean pomXmlIsDelocated;
+
+	/**
+	 * True in case the build.gradle is located differently than in the root folder,
+	 * else false
+	 */
+	private final boolean buildGradleIsDelocated;
 
 	/**
 	 * The language level for the Java parser
 	 */
-	private final Optional<LanguageLevel> level;
+	private final LanguageLevel level;
 
-	public UnwantedNodesAssert(Tuple.Tuple2<String, String> pathComponents, Optional<Optional<Path>> delocatedBuildFile,
-			Optional<LanguageLevel> level) {
+	public UnwantedNodesAssert(Tuple.Tuple2<String, String> pathComponents, Path delocatedBuildFile,
+			boolean pomXmlIsDelocated, boolean buildGradleIsDelocated, LanguageLevel level) {
 		super(pathComponents, UnwantedNodesAssert.class);
 		this.delocatedBuildFile = delocatedBuildFile;
+		this.pomXmlIsDelocated = pomXmlIsDelocated;
+		this.buildGradleIsDelocated = buildGradleIsDelocated;
 		this.level = level;
 	}
 
@@ -54,8 +69,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 	 * @return An unwanted node assertion object (for chaining)
 	 */
 	public static UnwantedNodesAssert assertThat(String expectedClassName, String expectedPackageName) {
-		return new UnwantedNodesAssert(Tuple.of(expectedClassName, expectedPackageName), Optional.empty(),
-				Optional.empty());
+		return new UnwantedNodesAssert(Tuple.of(expectedClassName, expectedPackageName), null, false, false, null);
 	}
 
 	/**
@@ -63,18 +77,28 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 	 *
 	 * @return An unwanted node assertion object (for chaining)
 	 */
-	public UnwantedNodesAssert asUndelocatedBuildFile() {
-		return new UnwantedNodesAssert(actual, Optional.of(Optional.empty()), level);
+	public UnwantedNodesAssert withoutDelocatedBuildFile() {
+		return new UnwantedNodesAssert(actual, Path.of(""), false, false, level);
 	}
 
 	/**
 	 * Configures the build files to be delocated
 	 *
 	 * @param path The Path to the delocated build file
-	 * @return
+	 * @return An unwanted node assertion object (for chaining)
 	 */
-	public UnwantedNodesAssert asDelocatedBuildFile(String path) {
-		return new UnwantedNodesAssert(actual, Optional.of(Optional.of(Path.of(path))), level);
+	public UnwantedNodesAssert withDelocatedPomXmlFile(String path) {
+		return new UnwantedNodesAssert(actual, Path.of(path), true, false, level);
+	}
+
+	/**
+	 * Configures the build files to be delocated
+	 *
+	 * @param path The Path to the delocated build file
+	 * @return An unwanted node assertion object (for chaining)
+	 */
+	public UnwantedNodesAssert withDelocatedBuildGradleFile(String path) {
+		return new UnwantedNodesAssert(actual, path != null ? Path.of(path) : null, false, true, level);
 	}
 
 	/**
@@ -84,7 +108,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 	 * @return An unwanted node assertion object (for chaining)
 	 */
 	public UnwantedNodesAssert withLanguageLevel(LanguageLevel level) {
-		return new UnwantedNodesAssert(actual, delocatedBuildFile, Optional.of(level));
+		return new UnwantedNodesAssert(actual, delocatedBuildFile, pomXmlIsDelocated, buildGradleIsDelocated, level);
 	}
 
 	/**
@@ -100,55 +124,78 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Tup
 	 */
 	public UnwantedNodesAssert hasNo(Type type) {
 		isNotNull();
-		if (delocatedBuildFile.isPresent()) {
-			if (level.isPresent()) {
-				StaticJavaParser.getParserConfiguration().setLanguageLevel(level.get());
-				Tuple.Tuple2<String, String> temporaryStorage = prepareClassNameScanner();
-				Path packagePath = Path.of("", Arrays.stream(actual.get2().split("\\.")).toArray(String[]::new));
-				Path filePath = Path.of(actual.get1());
-				Path postAssignmentFolderPath = Path.of(packagePath.toString(), filePath.toString());
-				Path fullPath = (new ClassNameScanner(actual.get1(), actual.get2())).getAssignmentFolderName()
-						.map(assignmentFolderPath -> Path.of(".", assignmentFolderPath))
-						.map(preAssignmentFolderPath -> Path.of(preAssignmentFolderPath.toString(),
-								postAssignmentFolderPath.toString()))
-						.orElseThrow();
-				Optional<String> errorMessage = UnwantedNode.getMessageForUnwantedNodesForAllFilesBelow(fullPath,
-						type.getNodeNameNodeMap());
-				restoreClassNameScanner(temporaryStorage);
-				errorMessage.ifPresent(unwantedNodeMessageForAllJavaFiles -> failWithMessage(
-						localized("ast.method.has_no") + "\n" + unwantedNodeMessageForAllJavaFiles));
-				return this;
+		if (actual.get1() != null) {
+			if (actual.get2() != null) {
+				if (delocatedBuildFile != null) {
+					if (!(pomXmlIsDelocated && buildGradleIsDelocated)) {
+						if (Files.exists(delocatedBuildFile)) {
+							Path fullPath = getFullPath();
+							if (Files.exists(fullPath)) {
+								if (level != null) {
+									StaticJavaParser.getParserConfiguration().setLanguageLevel(level);
+									Optional<String> errorMessage = UnwantedNode
+											.getMessageForUnwantedNodesForAllFilesBelow(fullPath,
+													type.getNodeNameNodeMap());
+									errorMessage.ifPresent(unwantedNodeMessageForAllJavaFiles -> failWithMessage(
+											localized("ast.method.has_no") + System.lineSeparator()
+													+ unwantedNodeMessageForAllJavaFiles));
+									return this;
+								} else {
+									failWithMessage(
+											"The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel).");
+								}
+							} else {
+								failWithMessage("The path " + getFullPath() + " (resulting from the expectedClassName "
+										+ actual.get1() + " and the expectedPackageName " + actual.get2()
+										+ ") does not exist.");
+							}
+						} else {
+							failWithMessage("The delocatedBuildFile " + delocatedBuildFile + " does not exist.");
+						}
+					} else {
+						failWithMessage("Either the pom.xml or the build.gradle can be delocated, but not both.");
+					}
+				} else {
+					failWithMessage(
+							"The 'delocatedBuildFile' is not set. Please use UnwantedNodesAssert.withoutDelocatedBuildFile() or UnwantedNodesAssert.withDelocatedPomXmlFile(Path) or UnwantedNodesAssert.withDelocatedBuildGradleFile(Path).");
+				}
 			} else {
-				failWithMessage(
-						"The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel).");
+				failWithMessage("The 'expectedClassName' must not be null.");
 			}
 		} else {
-			failWithMessage(
-					"The 'delocatedBuildFile' is not set. Please use UnwantedNodesAssert.asUndelocatedBuildFile() or UnwantedNodesAssert.asDelocatedBuildFile(Path).");
+			failWithMessage("The 'expectedPackageName' must not be null.");
 		}
+
 		throw new RuntimeException();
 	}
 
+	private Path getFullPath() {
+		Tuple.Tuple2<String, String> temporaryStorage = prepareClassNameScanner();
+		Path packagePath = Path.of("", Arrays.stream(actual.get2().split("\\.")).toArray(String[]::new));
+		Path filePath = Path.of(actual.get1());
+		Path postAssignmentFolderPath = Path.of(packagePath.toString(), filePath.toString());
+		Path fullPath = (new ClassNameScanner(actual.get1(), actual.get2())).getAssignmentFolderName()
+				.map(assignmentFolderPath -> Path.of(".", assignmentFolderPath)).map(preAssignmentFolderPath -> Path
+						.of(preAssignmentFolderPath.toString(), postAssignmentFolderPath.toString()))
+				.orElseThrow();
+		restoreClassNameScanner(temporaryStorage);
+		return fullPath;
+	}
+
 	private Tuple.Tuple2<String, String> prepareClassNameScanner() {
-		String temporaryStorageForBuildGradlePath = ClassNameScanner.getBuildGradlePath();
-		ClassNameScanner.setBuildGradlePath(getPath(true, temporaryStorageForBuildGradlePath));
 		String temporaryStorageForPomXmlPath = ClassNameScanner.getPomXmlPath();
-		ClassNameScanner.setPomXmlPath(getPath(false, temporaryStorageForPomXmlPath));
+		ClassNameScanner.setPomXmlPath(
+				delocatedBuildFile != null ? (pomXmlIsDelocated ? delocatedBuildFile.toAbsolutePath().toString() : null)
+						: temporaryStorageForPomXmlPath);
+		String temporaryStorageForBuildGradlePath = ClassNameScanner.getBuildGradlePath();
+		ClassNameScanner.setBuildGradlePath(delocatedBuildFile != null
+				? (buildGradleIsDelocated ? delocatedBuildFile.toAbsolutePath().toString() : null)
+				: temporaryStorageForPomXmlPath);
 		return Tuple.of(temporaryStorageForBuildGradlePath, temporaryStorageForPomXmlPath);
 	}
 
 	private void restoreClassNameScanner(Tuple.Tuple2<String, String> temporaryStorage) {
 		ClassNameScanner.setBuildGradlePath(temporaryStorage.get1());
 		ClassNameScanner.setPomXmlPath(temporaryStorage.get2());
-	}
-
-	private String getPath(boolean isGradle, String tempPath) {
-		return delocatedBuildFile.flatMap(buildFile -> buildFile.map(path -> {
-			if (!path.toAbsolutePath().endsWith(isGradle ? "build.gradle" : "pom.xml")) {
-				return Path.of(path.toAbsolutePath().toString(), isGradle ? "build.gradle" : "pom.xml").toString();
-			} else {
-				return path.toAbsolutePath().toString();
-			}
-		})).orElse(tempPath);
 	}
 }
