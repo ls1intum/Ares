@@ -1,5 +1,6 @@
 package de.tum.in.test.integration.testuser;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.ParserConfiguration;
 
 import de.tum.in.test.api.StrictTimeout;
-import de.tum.in.test.api.WhitelistPath;
 import de.tum.in.test.api.ast.asserting.UnwantedNodesAssert;
 import de.tum.in.test.api.ast.type.*;
 import de.tum.in.test.api.jupiter.Public;
@@ -17,8 +17,7 @@ import de.tum.in.test.api.localization.UseLocale;
 
 @Public
 @UseLocale("en")
-@StrictTimeout(10000)
-@WhitelistPath("")
+@StrictTimeout(5)
 public class AstAssertionUser {
 
 	@Nested
@@ -27,24 +26,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoForLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FORSTMT);
 		}
 
 		@Test
 		void testHasBelowNoForLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FORSTMT);
 		}
 	}
@@ -55,24 +54,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoForEachLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FOR_EACHSTMT);
 		}
 
 		@Test
 		void testHasBelowNoForEachLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FOR_EACHSTMT);
 		}
 	}
@@ -83,24 +82,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoWhileLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.WHILESTMT);
 		}
 
 		@Test
 		void testHasBelowNoWhileLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.WHILESTMT);
 		}
 	}
@@ -111,24 +110,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoDoWhileLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.DO_WHILESTMT);
 		}
 
 		@Test
 		void testHasBelowNoDoWhileLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.DO_WHILESTMT);
 		}
 	}
@@ -139,24 +138,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyForLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY_FOR);
 		}
 
 		@Test
 		void testHasBelowNoAnyForLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY_FOR);
 		}
 	}
@@ -167,24 +166,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyWhileLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY_WHILE);
 		}
 
 		@Test
 		void testHasBelowNoAnyWhileLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY_WHILE);
 		}
 	}
@@ -195,24 +194,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyLoop_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
 		void testHasBelowNoAnyLoop_Fail() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "yes")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 	}
@@ -223,20 +222,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoIfStatement_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.IFSTMT);
 		}
 
 		@Test
 		void testHasBelowNoIfStatement_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.IFSTMT);
 		}
 	}
@@ -247,10 +250,12 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoIfExpression_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
 					.hasNo(ConditionalType.CONDITIONALEXPR);
 		}
@@ -258,10 +263,12 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoIfExpression_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
 					.hasNo(ConditionalType.CONDITIONALEXPR);
 		}
@@ -273,20 +280,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoSwitchStatement_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.SWITCHSTMT);
 		}
 
 		@Test
 		void testHasBelowNoSwitchStatement_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.SWITCHSTMT);
 		}
 	}
@@ -295,22 +306,18 @@ public class AstAssertionUser {
 	@DisplayName("Switch-Expression-Tests")
 	class SwitchExpressionTests {
 		@Test
-		void testHasBelowNoSwitchExpression_Success() {
+		void testHasBelowNoSwitchExpression_Success() throws IOException {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.SWITCHEXPR);
 		}
 
 		@Test
 		void testHasBelowNoSwitchExpression_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.SWITCHEXPR);
 		}
 	}
@@ -321,20 +328,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyIf_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY_IF);
 		}
 
 		@Test
 		void testHasBelowNoAnyIf_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "conditionals",
+									"yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY_IF);
 		}
 	}
@@ -345,20 +356,16 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnySwitch_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY_SWITCH);
 		}
 
 		@Test
 		void testHasBelowNoAnySwitch_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY_SWITCH);
 		}
 	}
@@ -369,20 +376,16 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyConditional_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY);
 		}
 
 		@Test
 		void testHasBelowNoAnyConditional_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"conditionals", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ConditionalType.ANY);
 		}
 	}
@@ -393,23 +396,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoClass_Success() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.CLASS);
 		}
 
 		@Test
 		void testHasBelowNoClass_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path
-							.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "yes")
-							.toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes",
+									"yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.CLASS);
 		}
 	}
@@ -420,23 +424,16 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoRecord_Success() {
 			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "classes", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.RECORD);
 		}
 
 		@Test
 		void testHasBelowNoRecord_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path
-							.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "yes")
-							.toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "classes", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.RECORD);
 		}
 	}
@@ -447,23 +444,16 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyClass_Success() {
 			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "classes", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.ANY);
 		}
 
 		@Test
 		void testHasBelowNoAnyClass_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path
-							.of("integration", "testuser", "subject", "structural", "astTestFiles", "classes", "yes")
-							.toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThat(Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+							"testuser", "javaClassesWithUnsupportedFeatures", "classes", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.ANY);
 		}
 	}
@@ -474,20 +464,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAssertExceptionHandling_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.ASSERT);
 		}
 
 		@Test
 		void testHasBelowNoAssertExceptionHandling_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.ASSERT);
 		}
 	}
@@ -498,20 +492,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoThrowExceptionHandling_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.THROW);
 		}
 
 		@Test
 		void testHasBelowNoThrowExceptionHandling_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.THROW);
 		}
 	}
@@ -522,20 +520,24 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoCatchExceptionHandling_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.CATCH);
 		}
 
 		@Test
 		void testHasBelowNoCatchExceptionHandling_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.CATCH);
 		}
 	}
@@ -546,130 +548,151 @@ public class AstAssertionUser {
 		@Test
 		void testHasBelowNoAnyExceptionHandling_Success() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "no").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "no").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.ANY);
 		}
 
 		@Test
 		void testHasBelowNoAnyExceptionHandling_Fail() {
 			UnwantedNodesAssert
-					.assertThat(Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
-							"exceptionHandlings", "yes").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles",
+									"exceptionHandlings", "yes").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ExceptionHandlingType.ANY);
+		}
+	}
+
+	@Nested
+	@DisplayName("PomXml-Tests")
+	class PomXmlTests {
+		@Test
+		void testDelocatedPomXmlFileDoesExist() {
+			UnwantedNodesAssert
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"pom.xml").toString(),
+							"de.tum.in.test",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString())
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FORSTMT);
+		}
+	}
+
+	@Nested
+	@DisplayName("UnwantedNodesAssert-Tests")
+	class UnwantedNodesAssertTests {
+		@Test
+		void testAssertThatAllProjectSourcesAtPackage() {
+			UnwantedNodesAssert
+					.assertThatAllProjectSourcesAtPackage(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test.integration.testuser.subject.structural.astTestFiles.loops.no")
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
+		}
+
+		@Test
+		void testAssertThatAllProjectSourcesAtPath() {
+			UnwantedNodesAssert
+					.assertThatAllProjectSourcesAtPath(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							Path.of("de", "tum", "in", "test", "integration", "testuser", "subject", "structural",
+									"astTestFiles", "loops", "no").toString())
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
+		}
+
+		@Test
+		void assertThatAllProjectSources() {
+			UnwantedNodesAssert
+					.assertThatAllProjectSources(Path.of("src", "test", "resources", "de", "tum", "in", "test",
+							"integration", "testuser", "build.gradle").toString())
+					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(ClassType.RECORD);
 		}
 	}
 
 	@Nested
 	@DisplayName("Error-Tests")
 	class ErrorTests {
+
 		@Test
-		void testExpectedClassNameDoesNotExist() {
-			UnwantedNodesAssert.assertThat(Path.of("this", "path", "does", "not", "exist").toString(), "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+		void testRelativePathDoesNotExist() {
+			UnwantedNodesAssert
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"de.tum.in.test", Path.of("this", "path", "does", "not", "exist").toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
-		void testExpectedClassNameIsNull() {
-			UnwantedNodesAssert.assertThat(null, "de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+		void testRelativePathIsNull() {
+			UnwantedNodesAssert
+					.assertThatProjectSources(Path.of("src", "test", "resources", "de", "tum", "in", "test",
+							"integration", "testuser", "build.gradle").toString(), "de.tum.in.test", null)
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
-		void testExpectedPackageNameDoesNotExist() {
-			UnwantedNodesAssert.assertThat("integration", "this.package.name.does.not.exist")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+		void testRelativePackageDoesNotExist() {
+			UnwantedNodesAssert
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							"this.package.name.does.not.exist",
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
-		void testExpectedPackageNameIsNull() {
-			UnwantedNodesAssert.assertThat("integration", null)
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
+		void testRelativePackageIsNull() {
+			UnwantedNodesAssert
+					.assertThatProjectSources(
+							Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"build.gradle").toString(),
+							null,
+							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
 		void testDelocatedBuildGradleFileDoesNotExist() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(Path.of("this", "path", "does", "not", "exist").toString(),
+							"de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("this", "path", "does", "not", "exist").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
 		void testDelocatedBuildGradleFileIsNull() {
 			UnwantedNodesAssert
-					.assertThat(
+					.assertThatProjectSources(null, "de.tum.in.test",
 							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(null).withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
-					.hasNo(LoopType.ANY);
-		}
-
-		@Test
-		void testLevelIsNull() {
-			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedBuildGradleFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "build.gradle").toString())
-					.withLanguageLevel(null).hasNo(LoopType.ANY);
-		}
-	}
-
-	@Nested
-	@DisplayName("Pom-Xml-Tests")
-	class PomXmlTests {
-
-		@Test
-		void testDelocatedPomXmlFileDoesExist() {
-			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedPomXmlFile(Path.of("src", "test", "resources", "de", "tum", "in", "test",
-							"integration", "testuser", "pom.xml").toString())
-					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.FORSTMT);
-		}
-
-		@Test
-		void testDelocatedPomXmlFileDoesNotExist() {
-			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedPomXmlFile(Path.of("this", "path", "does", "not", "exist").toString())
+									.toString())
 					.withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17).hasNo(LoopType.ANY);
 		}
 
 		@Test
-		void testDelocatedPomXmlFileIsNull() {
-			UnwantedNodesAssert
-					.assertThat(
-							Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-									.toString(),
-							"de.tum.in.test")
-					.withDelocatedPomXmlFile(null).withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
-					.hasNo(LoopType.ANY);
+		void testLevelIsNull() {
+			UnwantedNodesAssert.assertThatProjectSources(
+					Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+							"build.gradle").toString(),
+					"de.tum.in.test",
+					Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
+							.toString())
+					.withLanguageLevel(null).hasNo(LoopType.ANY);
 		}
 	}
 }

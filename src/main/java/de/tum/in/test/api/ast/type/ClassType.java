@@ -14,7 +14,7 @@ import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 @API(status = Status.MAINTAINED)
 public enum ClassType implements Type {
 	/**
-	 * All conditional types
+	 * All class types
 	 */
 	ANY(Map.of(localized("ast.enum.class_type.class"), LocalClassDeclarationStmt.class, //$NON-NLS-1$
 			localized("ast.enum.class_type.record"), LocalRecordDeclarationStmt.class)),

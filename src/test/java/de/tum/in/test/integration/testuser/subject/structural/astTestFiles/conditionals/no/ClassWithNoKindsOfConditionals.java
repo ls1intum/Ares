@@ -1,26 +1,24 @@
 package de.tum.in.test.integration.testuser.subject.structural.astTestFiles.conditionals.no;
 
-import java.util.Random;
 import java.util.stream.IntStream;
 
 public class ClassWithNoKindsOfConditionals {
 
 	public void forLoop() {
-		for (int i = 0; i < (new Random().nextInt(3)); i++) {
+		for (int i = 0; i < 3; i++) {
 			System.out.println("Hello World");
 		}
 	}
 
 	public void forEachLoop() {
-		for (int integer : new int[] { (new Random().nextInt(3)), (new Random().nextInt(3)),
-				(new Random().nextInt(3)) }) {
+		for (int integer : new int[] { 3, 3, 3 }) {
 			System.out.println("Hello World");
 		}
 	}
 
 	public void whileLoop() {
 		int i = 0;
-		while (i < (new Random().nextInt(3))) {
+		while (i < 3) {
 			System.out.println("Hello World");
 			i++;
 		}
@@ -31,15 +29,15 @@ public class ClassWithNoKindsOfConditionals {
 		do {
 			System.out.println("Hello World");
 			i++;
-		} while (i < (new Random().nextInt(3)));
+		} while (i < 3);
 	}
 
 	public void forEachStream() {
-		IntStream.range(0, (new Random().nextInt(3))).mapToObj((int i) -> "Hello World").forEach(System.out::println);
+		IntStream.range(0, 3).mapToObj((int i) -> "Hello World").forEach(System.out::println);
 	}
 
 	public void assertStatement() {
-		assert (new Random().nextInt(3)) == 0;
+		assert 3 == 0;
 	}
 
 	public void throwStatement() throws Exception {
@@ -57,8 +55,4 @@ public class ClassWithNoKindsOfConditionals {
 		class localClass {
 		}
 	}
-
-	/*
-	 * void localRecordContainingFunction() { record localRecord(String id) { } }
-	 */
 }

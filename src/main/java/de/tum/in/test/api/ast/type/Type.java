@@ -13,7 +13,7 @@ public interface Type {
 	/**
 	 * Returns the list of all node-name/node-type pairs
 	 *
-	 * @return List of all node-name/node-type pairs
+	 * @return Map of all node-name/node-type pairs
 	 */
 	Map<String, Class<? extends Node>> getNodeNameNodeMap();
 }
