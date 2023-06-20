@@ -8,9 +8,18 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
-import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
+import com.github.javaparser.ast.stmt.*;
 
+import de.tum.in.test.api.ast.asserting.UnwantedNodesAssert;
+
+/**
+ * Enumerates class Java statements which can be checked using
+ * {@link UnwantedNodesAssert}.
+ *
+ * @author Markus Paulsen
+ * @since 1.12.0
+ * @version 1.0.0
+ */
 @API(status = Status.MAINTAINED)
 public enum ClassType implements Type {
 	/**

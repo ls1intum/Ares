@@ -1,18 +1,14 @@
 package de.tum.in.test.integration;
 
-import static de.tum.in.test.testutilities.CustomConditions.finishedSuccessfully;
-import static de.tum.in.test.testutilities.CustomConditions.testFailedWith;
+import static de.tum.in.test.testutilities.CustomConditions.*;
 
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.*;
 import org.junit.platform.testkit.engine.Events;
 
 import de.tum.in.test.integration.testuser.AstAssertionUser;
-import de.tum.in.test.testutilities.TestTest;
-import de.tum.in.test.testutilities.UserBased;
-import de.tum.in.test.testutilities.UserTestResults;
+import de.tum.in.test.testutilities.*;
 
 @UserBased(AstAssertionUser.class)
 public class AstAssertionTest {
@@ -39,7 +35,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoForLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - For-Statement was found:"
@@ -63,7 +59,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoForEachLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - For-Each-Statement was found:"
@@ -88,7 +84,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoWhileLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - While-Statement was found:"
@@ -113,7 +109,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoDoWhileLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - Do-While-Statement was found:"
@@ -138,7 +134,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoAnyForLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - For-Statement was found:"
@@ -165,7 +161,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoAnyWhileLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - While-Statement was found:"
@@ -192,7 +188,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoAnyLoop_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "loops", "yes",
 											"ClassWithAnyKindsOfLoops.java")
 									+ ":" + System.lineSeparator() + "  - For-Statement was found:"
@@ -222,7 +218,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoIfConditional_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "conditionals", "yes",
 											"ClassWithAnyKindsOfConditionals.java")
 									+ ":" + System.lineSeparator() + "  - If-Statement was found:"
@@ -248,7 +244,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoIfConditional_Fail,
 					AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
+							+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
 									"subject", "structural", "astTestFiles", "conditionals", "yes",
 									"ClassWithAnyKindsOfConditionals.java")
 							+ ":" + System.lineSeparator() + "  - If-Expression was found:" + System.lineSeparator()
@@ -273,7 +269,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoSwitchConditional_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "conditionals", "yes",
 											"ClassWithAnyKindsOfConditionals.java")
 									+ ":" + System.lineSeparator() + "  - Switch-Statement was found:"
@@ -298,8 +294,8 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoSwitchConditional_Fail,
 					AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
-									"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes",
+							+ Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"javaClassesWithUnsupportedFeatures", "conditionals", "yes",
 									"ClassWithAnyKindsOfUnsupportedConditionals.java")
 							+ ":" + System.lineSeparator() + "  - Switch-Expression was found:" + System.lineSeparator()
 							+ "   - Between line 38 (column 28) and line 43 (column 9)"));
@@ -321,7 +317,7 @@ public class AstAssertionTest {
 			String testHasBelowNoAnyClass_Fail = "testHasBelowNoAnyIf_Fail";
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyClass_Fail, AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
+							+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
 									"subject", "structural", "astTestFiles", "conditionals", "yes",
 									"ClassWithAnyKindsOfConditionals.java")
 							+ ":" + System.lineSeparator() + "  - If-Statement was found:" + System.lineSeparator()
@@ -348,8 +344,8 @@ public class AstAssertionTest {
 			String testHasBelowNoAnyClass_Fail = "testHasBelowNoAnySwitch_Fail";
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyClass_Fail, AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
-									"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes",
+							+ Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"javaClassesWithUnsupportedFeatures", "conditionals", "yes",
 									"ClassWithAnyKindsOfUnsupportedConditionals.java")
 							+ ":" + System.lineSeparator() + "  - Switch-Statement was found:" + System.lineSeparator()
 							+ "   - Between line 23 (column 9) and line 33 (column 9)" + System.lineSeparator()
@@ -374,8 +370,8 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAnyConditional_Fail,
 					AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
-									"testuser", "javaClassesWithUnsupportedFeatures", "conditionals", "yes",
+							+ Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration", "testuser",
+									"javaClassesWithUnsupportedFeatures", "conditionals", "yes",
 									"ClassWithAnyKindsOfUnsupportedConditionals.java")
 							+ ":" + System.lineSeparator() + "  - If-Statement was found:" + System.lineSeparator()
 							+ "   - Between line 7 (column 9) and line 13 (column 9)" + System.lineSeparator()
@@ -408,7 +404,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoClass_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "classes", "yes",
 											"ClassWithAnyKindsOfClasses.java")
 									+ ":" + System.lineSeparator() + "  - Local-Class-Statement was found:"
@@ -432,7 +428,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoRecord_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration",
 											"testuser", "javaClassesWithUnsupportedFeatures", "classes", "yes",
 											"ClassWithAnyKindsOfUnsupportedClasses.java")
 									+ ":" + System.lineSeparator() + "  - Local-Record-Statement was found:"
@@ -457,7 +453,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoClass_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "resources", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "resources", "de", "tum", "in", "test", "integration",
 											"testuser", "javaClassesWithUnsupportedFeatures", "classes", "yes",
 											"ClassWithAnyKindsOfUnsupportedClasses.java")
 									+ ":" + System.lineSeparator() + "  - Local-Class-Statement was found:"
@@ -485,7 +481,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1, testFailedWith(testHasBelowNoAssertExceptionHandling_Fail,
 					AssertionError.class,
 					"Unwanted statement found:" + System.lineSeparator() + " - In "
-							+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
+							+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration", "testuser",
 									"subject", "structural", "astTestFiles", "exceptionHandlings", "yes",
 									"ClassWithAnyKindsOfExceptionHandlings.java")
 							+ ":" + System.lineSeparator() + "  - Assert-Statement was found:" + System.lineSeparator()
@@ -509,7 +505,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoThrowExceptionHandling_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "exceptionHandlings",
 											"yes", "ClassWithAnyKindsOfExceptionHandlings.java")
 									+ ":" + System.lineSeparator() + "  - Throw-Statement was found:"
@@ -534,7 +530,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoCatchExceptionHandling_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "exceptionHandlings",
 											"yes", "ClassWithAnyKindsOfExceptionHandlings.java")
 									+ ":" + System.lineSeparator() + "  - Catch-Statement was found:"
@@ -559,7 +555,7 @@ public class AstAssertionTest {
 			tests.assertThatEvents().haveExactly(1,
 					testFailedWith(testHasBelowNoAnyExceptionHandling_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
-									+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "integration",
+									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
 											"testuser", "subject", "structural", "astTestFiles", "exceptionHandlings",
 											"yes", "ClassWithAnyKindsOfExceptionHandlings.java")
 									+ ":" + System.lineSeparator() + "  - Assert-Statement was found:"
@@ -576,32 +572,9 @@ public class AstAssertionTest {
 	class PomXmlTestTests {
 
 		@TestTest
-		void test_testDelocatedPomXmlFileDoesExist() {
-			String testDelocatedPomXmlFileDoesExist = "testDelocatedPomXmlFileDoesExist";
-			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDelocatedPomXmlFileDoesExist));
-		}
-	}
-
-	@Nested
-	@DisplayName("UnwantedNodesAssert-Test-Tests")
-	class UnwantedNodesAssertTestTests {
-
-		@TestTest
-		void test_testAssertThatAllProjectSourcesAtPackage() {
-			String testAssertThatAllProjectSourcesAtPackage = "testAssertThatAllProjectSourcesAtPackage";
-			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testAssertThatAllProjectSourcesAtPackage));
-		}
-
-		@TestTest
-		void test_testAssertThatAllProjectSourcesAtPath() {
-			String testAssertThatAllProjectSourcesAtPath = "testAssertThatAllProjectSourcesAtPath";
-			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testAssertThatAllProjectSourcesAtPath));
-		}
-
-		@TestTest
-		void test_assertThatAllProjectSources() {
-			String assertThatAllProjectSources = "assertThatAllProjectSources";
-			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(assertThatAllProjectSources));
+		void test_testPomXmlFileDoesExist() {
+			String testPomXmlFileDoesExist = "testPomXmlFileDoesExist";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testPomXmlFileDoesExist));
 		}
 	}
 
@@ -610,63 +583,52 @@ public class AstAssertionTest {
 	class ErrorTestTests {
 
 		@TestTest
-		void test_testRelativePathDoesNotExist() {
-			String testRelativePathDoesNotExist = "testRelativePathDoesNotExist";
-			tests.assertThatEvents()
-					.haveExactly(1,
-							testFailedWith(testRelativePathDoesNotExist, AssertionError.class,
-									"The path "
-											+ Path.of(".", "src", "test", "java", "de", "tum", "in", "test", "this",
-													"path", "does", "not", "exist")
-											+ " (resulting from the relativePackage de.tum.in.test, the relativePath "
-											+ Path.of("this", "path", "does", "not", "exist")
-											+ " and the delocatedBuildFile " + Path.of("src", "test", "resources", "de",
-													"tum", "in", "test", "integration", "testuser", "build.gradle")
-											+ ") does not exist."));
+		void test_testPathDoesNotExist() {
+			String testPathDoesNotExist = "testPathDoesNotExist";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testPathDoesNotExist, AssertionError.class,
+					"The source directory " + Path.of("this/path/does/not/exist") + " does not exist"));
 		}
 
 		@TestTest
-		void test_testRelativePathIsNull() {
-			String testRelativePathIsNull = "testRelativePathIsNull";
-			tests.assertThatEvents().haveExactly(1, testFailedWith(testRelativePathIsNull, AssertionError.class,
-					"The 'relativePath' must not be null."));
+		void test_testPathIsNull() {
+			String testPathIsNull = "testPathIsNull";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testPathIsNull, NullPointerException.class,
+					"The given source path must not be null."));
 		}
 
 		@TestTest
-		void test_testRelativePackageDoesNotExist() {
-			String testRelativePackageDoesNotExist = "testRelativePackageDoesNotExist";
+		void test_testPackageDoesNotExist() {
+			String testPackageDoesNotExist = "testPackageDoesNotExist";
 			tests.assertThatEvents().haveExactly(1,
-					testFailedWith(testRelativePackageDoesNotExist, AssertionError.class, "The path "
-							+ Path.of(".", "src", "test", "java", "this", "package", "name", "does", "not", "exist",
-									"integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-							+ " (resulting from the relativePackage this.package.name.does.not.exist, the relativePath "
-							+ Path.of("integration", "testuser", "subject", "structural", "astTestFiles", "loops", "no")
-							+ " and the delocatedBuildFile " + Path.of("src", "test", "resources", "de", "tum", "in",
-									"test", "integration", "testuser", "build.gradle")
-							+ ") does not exist."));
+					testFailedWith(testPackageDoesNotExist, AssertionError.class, "The source directory "
+							+ Path.of("src/test/java/this/package/name/does/not/exist") + " does not exist"));
 		}
 
 		@TestTest
-		void test_testRelativePackageIsNull() {
-			String testRelativePackageIsNull = "testRelativePackageIsNull";
-			tests.assertThatEvents().haveExactly(1, testFailedWith(testRelativePackageIsNull, AssertionError.class,
-					"The 'relativePackage' must not be null."));
+		void test_testPackageIsNull() {
+			String testPackageIsNull = "testPackageIsNull";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testPackageIsNull, NullPointerException.class,
+					"The package name must not be null."));
 		}
 
 		@TestTest
-		void test_testDelocatedBuildGradleFileDoesNotExist() {
-			String testDelocatedBuildGradleFileDoesNotExist = "testDelocatedBuildGradleFileDoesNotExist";
+		void test_testBuildGradleFileDoesNotExist() {
+			String testBuildGradleFileDoesNotExist = "testBuildGradleFileDoesNotExist";
 			tests.assertThatEvents().haveExactly(1,
-					testFailedWith(testDelocatedBuildGradleFileDoesNotExist, AssertionError.class,
-							"The 'delocatedBuildFile' " + Path.of("this", "path", "does", "not", "exist")
-									+ " does not exist."));
+					testFailedWith(testBuildGradleFileDoesNotExist, AssertionError.class,
+							"Could not find project sources folder. Make sure the build file is configured correctly."
+									+ " If it is not located in the execution folder directly,"
+									+ " set the location using AresConfiguration methods."));
 		}
 
 		@TestTest
-		void test_testDelocatedBuildGradleFileIsNull() {
-			String testDelocatedBuildGradleFileIsNull = "testDelocatedBuildGradleFileIsNull";
-			tests.assertThatEvents().haveExactly(1, testFailedWith(testDelocatedBuildGradleFileIsNull,
-					AssertionError.class, "The 'delocatedBuildFile' must not be null."));
+		void test_testBuildGradleFileIsNull() {
+			String testBuildGradleFileIsNull = "testBuildGradleFileIsNull";
+			tests.assertThatEvents().haveExactly(1,
+					testFailedWith(testBuildGradleFileIsNull, AssertionError.class,
+							"Could not find project sources folder. Make sure the build file is configured correctly."
+									+ " If it is not located in the execution folder directly,"
+									+ " set the location using AresConfiguration methods."));
 		}
 
 		@TestTest
