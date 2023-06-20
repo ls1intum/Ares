@@ -14,6 +14,7 @@ import org.assertj.core.api.AbstractAssert;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 
+import de.tum.in.test.api.AresConfiguration;
 import de.tum.in.test.api.ast.model.UnwantedNode;
 import de.tum.in.test.api.ast.type.*;
 import de.tum.in.test.api.util.ProjectSourcesFinder;
@@ -42,8 +43,12 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	}
 
 	/**
-	 * Creates an unwanted node assertion object for all files below the relative
-	 * path
+	 * Creates an unwanted node assertion object for all project source files.
+	 * <p>
+	 * The project source directory gets extracted from the build configuration, and
+	 * a <code>pom.xml</code> or <code>build.gradle</code> in the execution path is
+	 * the default build configuration location. The configuration here is the same
+	 * as the one in the structural tests and uses {@link AresConfiguration}.
 	 *
 	 * @return An unwanted node assertion object (for chaining)
 	 */
