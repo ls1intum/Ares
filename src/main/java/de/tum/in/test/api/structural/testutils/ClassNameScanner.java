@@ -3,23 +3,19 @@ package de.tum.in.test.api.structural.testutils;
 import static de.tum.in.test.api.localization.Messages.localized;
 import static de.tum.in.test.api.structural.testutils.ScanResultType.*;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.*;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.slf4j.*;
-import org.w3c.dom.*;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import info.debatty.java.stringsimilarity.*;
+
+import de.tum.in.test.api.AresConfiguration;
+import de.tum.in.test.api.util.ProjectSourcesFinder;
 
 /**
  * This class scans the submission project if the current expected class is
@@ -82,16 +78,6 @@ public class ClassNameScanner {
 	 */
 	private final Map<String, List<String>> observedClasses = new HashMap<>();
 	private final ScanResult scanResult;
-
-	private static String pomXmlPath = "pom.xml"; //$NON-NLS-1$
-	private static String buildGradlePath = "build.gradle"; //$NON-NLS-1$
-
-	/**
-	 * Pattern for matching the assignment folder name for the build.gradle file of
-	 * a Gradle project
-	 */
-	private static final Pattern gradleSourceDirPattern = Pattern
-			.compile("def\\s+assignmentSrcDir\\s*=\\s*\"(?<dir>.+)\""); //$NON-NLS-1$
 
 	public ClassNameScanner(String expectedClassName, String expectedPackageName) {
 		this.expectedClassName = expectedClassName;
@@ -220,89 +206,12 @@ public class ClassNameScanner {
 	 * defined in the project build file (pom.xml or build.gradle) of the project.
 	 */
 	private void findObservedClassesInProject() {
-		String assignmentFolderName;
-		if (isMavenProject()) {
-			assignmentFolderName = getAssignmentFolderNameForMavenProject();
-		} else if (isGradleProject()) {
-			assignmentFolderName = getAssignmentFolderNameForGradleProject();
+		var assignmentFolderName = ProjectSourcesFinder.findProjectSourcesPath();
+		if (assignmentFolderName.isPresent()) {
+			walkProjectFileStructure(assignmentFolderName.get(), assignmentFolderName.get().toFile(), observedClasses);
 		} else {
-			LOG.error("Could not find any build file. Contact your instructor."); //$NON-NLS-1$
-			return;
+			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$ ´
 		}
-
-		if (assignmentFolderName == null) {
-			LOG.error("Could not retrieve source directory from project file. Contact your instructor."); //$NON-NLS-1$
-			return;
-		}
-		walkProjectFileStructure(assignmentFolderName, new File(assignmentFolderName), observedClasses);
-	}
-
-	private static boolean isMavenProject() {
-		if (pomXmlPath == null)
-			return false;
-		File projectFile = new File(pomXmlPath);
-		return projectFile.exists() && !projectFile.isDirectory();
-	}
-
-	private static boolean isGradleProject() {
-		if (buildGradlePath == null)
-			return false;
-		File projectFile = new File(buildGradlePath);
-		return projectFile.exists() && !projectFile.isDirectory();
-	}
-
-	/**
-	 * Retrieves the assignment folder name for a maven project from the pom.xml
-	 *
-	 * @return the folder name of the maven project, relative to project root
-	 */
-	private static String getAssignmentFolderNameForMavenProject() {
-		try {
-			var pomFile = new File(pomXmlPath);
-			var documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			// make sure to avoid loading external files which would not be compliant
-			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
-			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
-			var documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			var pomXmlDocument = documentBuilder.parse(pomFile);
-
-			NodeList buildNodes = pomXmlDocument.getElementsByTagName("build"); //$NON-NLS-1$
-			for (var i = 0; i < buildNodes.getLength(); i++) {
-				var buildNode = buildNodes.item(i);
-				if (buildNode.getNodeType() == Node.ELEMENT_NODE) {
-					var buildNodeElement = (Element) buildNode;
-					var sourceDirectoryPropertyValue = buildNodeElement.getElementsByTagName("sourceDirectory").item(0) //$NON-NLS-1$
-							.getTextContent();
-					return sourceDirectoryPropertyValue.substring(sourceDirectoryPropertyValue.indexOf("}") + 2); //$NON-NLS-1$
-				}
-			}
-		} catch (ParserConfigurationException | SAXException | IOException | NullPointerException e) {
-			LOG.error("Could not retrieve the source directory from the pom.xml file. Contact your instructor.", e); //$NON-NLS-1$
-		}
-		return null;
-	}
-
-	/**
-	 * Retrieves the assignment folder name for a gradle project from the
-	 * build.gradle
-	 *
-	 * @return the folder name of the gradle project, relative to project root
-	 */
-	private static String getAssignmentFolderNameForGradleProject() {
-		try {
-			var path = Path.of(buildGradlePath);
-			String fileContent = Files.readString(path);
-
-			var matcher = gradleSourceDirPattern.matcher(fileContent);
-			if (matcher.find()) {
-				return matcher.group("dir"); //$NON-NLS-1$
-			}
-			return null;
-		} catch (IOException | NullPointerException e) {
-			LOG.error("Could not retrieve the source directory from the build.gradle file. Contact your instructor.", //$NON-NLS-1$
-					e);
-		}
-		return null;
 	}
 
 	/**
@@ -310,14 +219,13 @@ public class ClassNameScanner {
 	 * the assignment folder and adds each type it finds e.g. filenames ending with
 	 * <code>.java</code> and <code>.kt</code> to the passed JSON object.
 	 *
-	 * @param assignmentFolderName The root folder where the method starts walking
-	 *                             the project structure.
-	 * @param node                 The current node the method is visiting.
-	 * @param foundClasses         The JSON object where the type names and packages
-	 *                             get appended.
+	 * @param assignmentFolder The root folder where the method starts walking the
+	 *                         project structure.
+	 * @param node             The current node the method is visiting.
+	 * @param foundClasses     The JSON object where the type names and packages get
+	 *                         appended.
 	 */
-	private void walkProjectFileStructure(String assignmentFolderName, File node,
-			Map<String, List<String>> foundClasses) {
+	private void walkProjectFileStructure(Path assignmentFolder, File node, Map<String, List<String>> foundClasses) {
 		// Example:
 		// * assignmentFolderName: assignment/src
 		// * fileName: assignment/src/de/tum/in/ase/eist/BubbleSort.java
@@ -328,7 +236,7 @@ public class ClassNameScanner {
 			var fileNameComponents = fileName.split("\\."); //$NON-NLS-1$
 			var className = fileNameComponents[fileNameComponents.length - 2];
 
-			Path packagePath = Path.of(assignmentFolderName).relativize(Path.of(node.getPath()).getParent());
+			Path packagePath = assignmentFolder.relativize(Path.of(node.getPath()).getParent());
 			var packageName = StreamSupport.stream(packagePath.spliterator(), false).map(Object::toString)
 					.collect(Collectors.joining(".")); //$NON-NLS-1$
 
@@ -342,24 +250,64 @@ public class ClassNameScanner {
 			String[] subNodes = node.list();
 			if (subNodes != null && subNodes.length > 0)
 				for (String currentSubNode : subNodes)
-					walkProjectFileStructure(assignmentFolderName, new File(node, currentSubNode), foundClasses);
+					walkProjectFileStructure(assignmentFolder, new File(node, currentSubNode), foundClasses);
 		}
 	}
 
+	/**
+	 * Returns the global Maven POM-file path used by Ares.
+	 * <p>
+	 * Defaults to the relative path <code>pom.xml</code>.
+	 *
+	 * @return the configured pom.xml file path as string
+	 * @deprecated Moved to a more general package. Please use
+	 *             {@link AresConfiguration#getPomXmlPath()} instead.
+	 */
+	@Deprecated(since = "1.12.0")
 	public static String getPomXmlPath() {
-		return pomXmlPath;
+		return AresConfiguration.getPomXmlPath();
 	}
 
+	/**
+	 * Sets the global Maven POM-file path to the given file path string.
+	 * <p>
+	 * Set by default to the relative path <code>pom.xml</code>.
+	 *
+	 * @param path the path as string, may be both relative or absolute
+	 * @deprecated Moved to a more general package. Please use
+	 *             {@link AresConfiguration#setPomXmlPath(String)} instead.
+	 */
+	@Deprecated(since = "1.12.0")
 	public static void setPomXmlPath(String path) {
-		pomXmlPath = path;
+		AresConfiguration.setPomXmlPath(path);
 	}
 
+	/**
+	 * Returns the global Gradle build file path used by Ares.
+	 * <p>
+	 * Defaults to the relative path <code>build.gradle</code>.
+	 *
+	 * @return the configured gradle.build file path as string
+	 * @deprecated Moved to a more general package. Please use
+	 *             {@link AresConfiguration#getBuildGradlePath()} instead.
+	 */
+	@Deprecated(since = "1.12.0")
 	public static String getBuildGradlePath() {
-		return buildGradlePath;
+		return AresConfiguration.getBuildGradlePath();
 	}
 
+	/**
+	 * Sets the global Gradle build file path to the given file path string.
+	 * <p>
+	 * Set by default to the relative path <code>build.gradle</code>.
+	 *
+	 * @param path the path as string, may be both relative or absolute
+	 * @deprecated Moved to a more general package. Please use
+	 *             {@link AresConfiguration#setBuildGradlePath(String)} instead.
+	 */
+	@Deprecated(since = "1.12.0")
 	public static void setBuildGradlePath(String path) {
-		buildGradlePath = path;
+		AresConfiguration.setBuildGradlePath(path);
 	}
 
 	static boolean isMisspelledWithHighProbability(String a, String b) {

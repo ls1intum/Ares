@@ -199,6 +199,7 @@ class StructuralTest {
 	@TestTest
 	void test_noBuildToolFile() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(noBuildToolFile, AssertionFailedError.class,
-				"[[ERROR] Could not find any build file. Contact your instructor.]"));
+				"[[ERROR] Could not find any build file. Contact your instructor., "
+						+ "[ERROR] Could not retrieve source directory from project file. Contact your instructor.]"));
 	}
 }

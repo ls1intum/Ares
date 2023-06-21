@@ -18,6 +18,8 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 
 	@Override
 	public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
+		if (isNotApplicableTo(context))
+			return;
 		var testClass = testInstance.getClass();
 		var testResults = getTestResults(context);
 		var varHandles = findSupportedVarHandles(testClass, context, false);
@@ -28,6 +30,8 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception {
+		if (isNotApplicableTo(context))
+			return;
 		var optionalAnnotation = AnnotationSupport.findAnnotation(context.getElement(), UserBased.class);
 		if (optionalAnnotation.isEmpty())
 			fail("No annotated element found for @UserBased");
@@ -97,5 +101,9 @@ class TestUserExtension implements BeforeAllCallback, TestInstancePostProcessor,
 
 	private Object getTestResults(ExtensionContext context) {
 		return getStore(context).get(TEST_RESULTS);
+	}
+
+	private static boolean isNotApplicableTo(ExtensionContext context) {
+		return context.getTestClass().map(Class::isMemberClass).orElse(true);
 	}
 }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.junit.jupiter.api.*;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,13 @@ import de.tum.in.test.api.jupiter.Public;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.api.structural.*;
 import de.tum.in.test.api.structural.testutils.ClassNameScanner;
+import de.tum.in.test.api.util.ProjectSourcesFinder;
 
 @Public
 @UseLocale("en")
 @StrictTimeout(10)
 @WhitelistPath("")
+@SuppressWarnings("deprecation")
 public class StructuralUser {
 
 	private static final String TESTUSER_POM_XML = "src/test/resources/de/tum/in/test/integration/testuser/pom.xml";
@@ -50,18 +53,19 @@ public class StructuralUser {
 	@Nested
 	class InvalidConfigurations {
 
-		private final Logger logger = ((Logger) LoggerFactory.getLogger(ClassNameScanner.class));
+		private final List<Logger> loggers = List.of((Logger) LoggerFactory.getLogger(ProjectSourcesFinder.class),
+				(Logger) LoggerFactory.getLogger(ClassNameScanner.class));
 		private final ListAppender<ILoggingEvent> logs = new ListAppender<>();
 
 		@BeforeEach
-		void addLogger() {
-			logger.addAppender(logs);
+		void addLoggers() {
+			loggers.forEach(logger -> logger.addAppender(logs));
 			logs.start();
 		}
 
 		@AfterEach
-		void removeLogger() {
-			logger.detachAppender(logs);
+		void removeLoggers() {
+			loggers.forEach(logger -> logger.detachAppender(logs));
 		}
 
 		@Test
