@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tum.in.ase</groupId>
 	<artifactId>artemis-java-test-sandbox</artifactId>
-	<version>1.11.4-SNAPSHOT</version>
+	<version>1.12.0-SNAPSHOT</version>
 	<name>Ares</name>
 	<description>The Artemis Java Test Sandbox. A JUnit 5 Extension for secure Artemis Java Testing.</description>
 	<url>https://github.com/ls1intum/Ares</url>
@@ -36,7 +36,7 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<junit-jupiter-version>5.9.3</junit-jupiter-version>
 		<junit-platform-version>1.9.3</junit-platform-version>
-		<jqwik-version>1.7.2</jqwik-version>
+		<jqwik-version>1.7.3</jqwik-version>
 		<spotless.version>2.37.0</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -126,8 +126,28 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.9.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
