@@ -151,16 +151,11 @@ public class ClassNameScanner {
 	}
 
 	private ScanResultType getScanResultTypeClassFound(List<String> observedPackageNames) {
-		ScanResultType scanResultType;
 		boolean classIsPresentMultipleTimes = observedPackageNames.size() > 1;
-		boolean classIsCorrectlyPlaced = !classIsPresentMultipleTimes
-				&& (observedPackageNames.contains(expectedPackageName));
-
 		if (classIsPresentMultipleTimes)
-			scanResultType = CORRECT_NAME_MULTIPLE;
-		else
-			scanResultType = classIsCorrectlyPlaced ? CORRECT_NAME_CORRECT_PLACE : CORRECT_NAME_MISPLACED;
-		return scanResultType;
+			return CORRECT_NAME_MULTIPLE;
+		boolean classIsCorrectlyPlaced = observedPackageNames.contains(expectedPackageName);
+		return classIsCorrectlyPlaced ? CORRECT_NAME_CORRECT_PLACE : CORRECT_NAME_MISPLACED;
 	}
 
 	private ScanResult createScanResult(ScanResultType scanResultType, String foundClassName, String foundPackageName) {
@@ -238,7 +233,7 @@ public class ClassNameScanner {
 			var fileNameComponents = fileName.split("\\."); //$NON-NLS-1$
 			var className = fileNameComponents[fileNameComponents.length - 2];
 
-			Path packagePath = assignmentFolder.relativize(Path.of(node.getPath()).getParent());
+			Path packagePath = assignmentFolder.relativize(node.toPath().getParent());
 			var packageName = StreamSupport.stream(packagePath.spliterator(), false).map(Object::toString)
 					.collect(Collectors.joining(".")); //$NON-NLS-1$
 
