@@ -156,4 +156,10 @@
     "parameters" : [ "int", "String" ],
     "strictOrder" : true
   } ]
+}, {
+  "class" : {
+    "name" : "DoesNotExistDefault",
+    "package" : "",
+    "isInterface" : true
+  }
 } ]

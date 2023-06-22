@@ -27,6 +27,7 @@ class StructuralTest {
 	private final String testClassSomeAbstractClass = "testClasses()/dynamic-test:#6";
 	private final String testClassMisspelledclass = "testClasses()/dynamic-test:#7";
 	private final String testClassSomeFailingClass = "testClasses()/dynamic-test:#8";
+	private final String testClassDoesNotExistDefault = "testClasses()/dynamic-test:#9";
 	private final String testConstructorsSomeClass = "testConstructors()/dynamic-test:#1";
 	private final String testConstructorsSomeEnum = "testConstructors()/dynamic-test:#2";
 	private final String testConstructorsSomeAbstractClass = "testConstructors()/dynamic-test:#3";
@@ -125,6 +126,14 @@ class StructuralTest {
 		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassSomeFailingClass,
 				AssertionFailedError.class,
 				"The modifier(s) (access type, abstract, etc.) of SomeFailingClass are not implemented as expected."));
+	}
+
+	@TestTest
+	void test_testClassDoesNotExistDefault() {
+		tests.assertThatEvents().haveExactly(COUNT, testFailedWith(testClassDoesNotExistDefault,
+				AssertionFailedError.class,
+				"The exercise expects a class with the name DoesNotExistDefault in the package <default> (i.e., no package). "
+						+ "You did not implement the class in the exercise."));
 	}
 
 	@TestTest

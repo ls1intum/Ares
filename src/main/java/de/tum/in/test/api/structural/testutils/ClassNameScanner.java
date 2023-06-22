@@ -170,31 +170,33 @@ public class ClassNameScanner {
 
 	private String createScanResultMessage(ScanResultType scanResultType, String foundClassName,
 			String foundPackageName) {
+		var expectedPackageDescription = describePackageNameLocalized(expectedPackageName);
+		var foundPackageDescription = describePackageNameLocalized(foundPackageName);
 		switch (scanResultType) {
 		case CORRECT_NAME_CORRECT_PLACE:
 			return localized("structural.scan.correctNameCorrectPlace", foundClassName); //$NON-NLS-1$
 		case CORRECT_NAME_MISPLACED:
-			return localized("structural.scan.correctNameMisplaced", foundClassName, foundPackageName); //$NON-NLS-1$
+			return localized("structural.scan.correctNameMisplaced", foundClassName, foundPackageDescription); //$NON-NLS-1$
 		case CORRECT_NAME_MULTIPLE:
-			return localized("structural.scan.correctNameMultiple", foundClassName, foundPackageName); //$NON-NLS-1$
+			return localized("structural.scan.correctNameMultiple", foundClassName, foundPackageDescription); //$NON-NLS-1$
 		case WRONG_CASE_CORRECT_PLACE:
 			return localized("structural.scan.wrongCaseCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case WRONG_CASE_MISPLACED:
-			return localized("structural.scan.wrongCaseMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
-					foundClassName, foundPackageName);
+			return localized("structural.scan.wrongCaseMisplaced", expectedClassName, expectedPackageDescription, //$NON-NLS-1$
+					foundClassName, foundPackageDescription);
 		case WRONG_CASE_MULTIPLE:
-			return localized("structural.scan.wrongCaseMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
-					foundClassName, foundPackageName);
+			return localized("structural.scan.wrongCaseMultiple", expectedClassName, expectedPackageDescription, //$NON-NLS-1$
+					foundClassName, foundPackageDescription);
 		case TYPOS_CORRECT_PLACE:
 			return localized("structural.scan.typosCorrectPlace", expectedClassName, foundClassName); //$NON-NLS-1$
 		case TYPOS_MISPLACED:
-			return localized("structural.scan.typosMisplaced", expectedClassName, expectedPackageName, //$NON-NLS-1$
-					foundClassName, foundPackageName);
+			return localized("structural.scan.typosMisplaced", expectedClassName, expectedPackageDescription, //$NON-NLS-1$
+					foundClassName, foundPackageDescription);
 		case TYPOS_MULTIPLE:
-			return localized("structural.scan.typosMultiple", expectedClassName, expectedPackageName, //$NON-NLS-1$
+			return localized("structural.scan.typosMultiple", expectedClassName, expectedPackageDescription, //$NON-NLS-1$
 					foundClassName, observedClasses.get(foundClassName).toString());
 		case NOTFOUND:
-			return localized("structural.scan.notFound", expectedClassName, expectedPackageName); //$NON-NLS-1$
+			return localized("structural.scan.notFound", expectedClassName, expectedPackageDescription); //$NON-NLS-1$
 		default:
 			return localized("structural.scan.default"); //$NON-NLS-1$
 		}
@@ -346,5 +348,11 @@ public class ClassNameScanner {
 		 * benefits for long strings).
 		 */
 		return JARO_WINKLER.similarity(a, b) > 0.9 || NORMALIZED_LEVENSHTEIN.similarity(a, b) > 0.9;
+	}
+
+	static String describePackageNameLocalized(String packageName) {
+		if (packageName == null || packageName.isBlank())
+			return localized("structural.scan.defaultPackage"); //$NON-NLS-1$
+		return packageName;
 	}
 }
