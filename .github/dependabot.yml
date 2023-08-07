@@ -14,3 +14,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      junit-5:
+        patterns:
+          - "junit-jupiter-version"
+          - "junit-platform-version"
