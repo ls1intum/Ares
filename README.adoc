@@ -362,6 +362,7 @@ Maven:
                 <files>
                     <!--2-->
                     <file>${project.build.outputDirectory}/ch/qos/logback/</file>
+                    <file>${project.build.outputDirectory}/com/github/javaparser/</file>
                     <file>${project.build.outputDirectory}/com/intellij/</file>
                     <file>${project.build.outputDirectory}/com/sun/</file>
                     <file>${project.build.outputDirectory}/de/tum/in/test/api/</file>
@@ -392,6 +393,7 @@ Gradle:
 
 def forbiddenPackageFolders = [ //<2>
     "$studentOutputDir/ch/qos/logback/",
+    "$studentOutputDir/com/github/javaparser/",
     "$studentOutputDir/com/intellij/",
     "$studentOutputDir/com/sun/",
     "$studentOutputDir/de/tum/in/test/api/",
