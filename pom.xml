@@ -34,9 +34,9 @@
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-		<junit-jupiter-version>5.10.1</junit-jupiter-version>
-		<junit-platform-version>1.10.1</junit-platform-version>
-		<jqwik-version>1.7.4</jqwik-version>
+		<junit-jupiter-version>5.10.2</junit-jupiter-version>
+		<junit-platform-version>1.10.2</junit-platform-version>
+		<jqwik-version>1.8.4</jqwik-version>
 		<spotless.version>2.43.0</spotless.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.4.14</version>
+			<version>1.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -87,12 +87,12 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.25.2</version>
+			<version>3.25.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20231013</version>
+			<version>20240303</version>
 		</dependency>
 		<dependency>
 			<groupId>info.debatty</groupId>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>com.github.javaparser</groupId>
 			<artifactId>javaparser-core</artifactId>
-			<version>3.25.8</version>
+			<version>3.25.9</version>
 		</dependency>
 		<!-- For testing we use a test framework testing framework -->
 		<dependency>
