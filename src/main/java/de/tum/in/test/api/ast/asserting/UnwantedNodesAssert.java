@@ -34,8 +34,19 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	 */
 	private final LanguageLevel level;
 
+	/**
+	 * Whether to enable the main method for the Java parser
+	 * Default is set to false
+	 */
+	private final boolean excludeMainMethod;
+
 	private UnwantedNodesAssert(Path path, LanguageLevel level) {
+		this(path, level, false);
+	}
+
+	private UnwantedNodesAssert(Path path, LanguageLevel level, boolean excludeMainMethod) {
 		super(requireNonNull(path), UnwantedNodesAssert.class);
+		this.excludeMainMethod = excludeMainMethod;
 		this.level = level;
 		if (!Files.isDirectory(path)) {
 			fail("The source directory %s does not exist", path); //$NON-NLS-1$
@@ -90,7 +101,16 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	public UnwantedNodesAssert withinPackage(String packageName) {
 		Objects.requireNonNull(packageName, "The package name must not be null."); //$NON-NLS-1$
 		var newPath = actual.resolve(Path.of("", packageName.split("\\."))); //$NON-NLS-1$ //$NON-NLS-2$
-		return new UnwantedNodesAssert(newPath, level);
+		return new UnwantedNodesAssert(newPath, level, excludeMainMethod);
+	}
+
+	/**
+	 * Configures if the main method should be excluded from the AST
+	 *
+	 * @return An unwanted node assertion object (for chaining)
+	 */
+	public UnwantedNodesAssert excludeMainMethod() {
+		return new UnwantedNodesAssert(actual, level, true);
 	}
 
 	/**
@@ -100,7 +120,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	 * @return An unwanted node assertion object (for chaining)
 	 */
 	public UnwantedNodesAssert withLanguageLevel(LanguageLevel level) {
-		return new UnwantedNodesAssert(actual, level);
+		return new UnwantedNodesAssert(actual, level, excludeMainMethod);
 	}
 
 	/**
@@ -120,7 +140,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 		}
 		StaticJavaParser.getParserConfiguration().setLanguageLevel(level);
 		Optional<String> errorMessage = UnwantedNode.getMessageForUnwantedNodesForAllFilesBelow(actual,
-				type.getNodeNameNodeMap());
+				type.getNodeNameNodeMap(), excludeMainMethod);
 		errorMessage.ifPresent(unwantedNodeMessageForAllJavaFiles -> failWithMessage(
 				localized("ast.method.has_no") + System.lineSeparator() + unwantedNodeMessageForAllJavaFiles)); //$NON-NLS-1$
 		return this;
