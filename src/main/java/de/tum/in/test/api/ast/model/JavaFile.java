@@ -7,14 +7,14 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.slf4j.*;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 
 /**
  * Stores all required information about a Java file to be analyzed
@@ -37,11 +37,11 @@ public class JavaFile {
 	}
 
 	private static void excludeMainMethod(CompilationUnit javaFileAST) {
-		javaFileAST.findAll(MethodDeclaration.class)
-				.stream()
-				.filter(method -> method.isStatic() && method.getNameAsString().equals("main") && method.getParameters().size() == 1 && method.getType().isVoidType() && method.getParameter(0).getTypeAsString().equals("String[]"))
-				.findAny()
-				.ifPresent(Node::remove);
+		javaFileAST.findAll(MethodDeclaration.class).stream()
+				.filter(method -> method.isStatic() && method.getNameAsString().equals("main")
+						&& method.getParameters().size() == 1 && method.getType().isVoidType()
+						&& method.getParameter(0).getTypeAsString().equals("String[]"))
+				.findAny().ifPresent(Node::remove);
 	}
 
 	public Path getJavaFilePath() {

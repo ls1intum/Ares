@@ -13,6 +13,4 @@ public class ClassWithLoopOutsideMainMethod {
 			System.out.println("Hello World");
 		}
 	}
-
-
 }

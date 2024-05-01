@@ -656,8 +656,8 @@ public class AstAssertionTest {
 					testFailedWith(testExcludeMain_Fail, AssertionError.class,
 							"Unwanted statement found:" + System.lineSeparator() + " - In "
 									+ Path.of("src", "test", "java", "de", "tum", "in", "test", "integration",
-									"testuser", "subject", "structural", "astTestFiles", "excludeMain", "yes",
-									"ClassWithLoopOutsideMainMethod.java")
+											"testuser", "subject", "structural", "astTestFiles", "excludeMain", "yes",
+											"ClassWithLoopOutsideMainMethod.java")
 									+ ":" + System.lineSeparator() + "  - For-Statement was found:"
 									+ System.lineSeparator() + "   - Between line 6 (column 3) and line 8 (column 3)"));
 		}

@@ -43,7 +43,7 @@ public class UnwantedNode {
 	 *                               UnwantedNode objects)
 	 */
 	public static List<UnwantedNode> getUnwantedNodesInJavaFile(JavaFile javaFile,
-																Map<String, Class<? extends Node>> nodesDefinedAsUnwanted) {
+			Map<String, Class<? extends Node>> nodesDefinedAsUnwanted) {
 		return nodesDefinedAsUnwanted.keySet().stream()
 				.map(unwantedNodeName -> new UnwantedNode(javaFile, unwantedNodeName,
 						nodesDefinedAsUnwanted.get(unwantedNodeName)))
@@ -62,7 +62,7 @@ public class UnwantedNode {
 	 *         information (packed into UnwantedNode objects)
 	 */
 	public static Map<Path, List<UnwantedNode>> getUnwantedNodesForFileAt(Path pathOfJavaFile,
-																		  Map<String, Class<? extends Node>> nodesDefinedAsUnwanted, boolean excludeMainMethod) {
+			Map<String, Class<? extends Node>> nodesDefinedAsUnwanted, boolean excludeMainMethod) {
 		JavaFile javaFile = JavaFile.convertFromFile(pathOfJavaFile, excludeMainMethod);
 		if (javaFile == null) {
 			return Map.of();
@@ -113,9 +113,9 @@ public class UnwantedNode {
 	 * @return Error message
 	 */
 	public static Optional<String> getMessageForUnwantedNodesForFileAt(Path pathOfJavaFile,
-																	   Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
-		Map<Path, List<UnwantedNode>> unwantedNodes = getUnwantedNodesForFileAt(pathOfJavaFile,
-				nodeNameUnwantedNodeMap, excludeMainMethod);
+			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
+		Map<Path, List<UnwantedNode>> unwantedNodes = getUnwantedNodesForFileAt(pathOfJavaFile, nodeNameUnwantedNodeMap,
+				excludeMainMethod);
 		if (unwantedNodes.isEmpty()) {
 			return Optional.empty();
 		}
@@ -132,7 +132,7 @@ public class UnwantedNode {
 	 * @return Error message
 	 */
 	public static Optional<String> getMessageForUnwantedNodesForAllFilesBelow(Path pathOfDirectory,
-																			  Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
+			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
 		return JavaFile.readFromDirectory(pathOfDirectory, excludeMainMethod).stream()
 				.sorted(Comparator.comparing(JavaFile::getJavaFilePath))
 				.map(javaFile -> getMessageForUnwantedNodesForFileAt(javaFile.getJavaFilePath(),

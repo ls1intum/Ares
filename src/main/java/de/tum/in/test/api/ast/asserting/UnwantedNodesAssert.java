@@ -35,8 +35,7 @@ public class UnwantedNodesAssert extends AbstractAssert<UnwantedNodesAssert, Pat
 	private final LanguageLevel level;
 
 	/**
-	 * Whether to enable the main method for the Java parser
-	 * Default is set to false
+	 * Whether to enable the main method for the Java parser Default is set to false
 	 */
 	private final boolean excludeMainMethod;
 
