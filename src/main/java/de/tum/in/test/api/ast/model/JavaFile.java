@@ -41,7 +41,7 @@ public class JavaFile {
 				.filter(method -> method.isStatic() && method.getNameAsString().equals("main")
 						&& method.getParameters().size() == 1 && method.getType().isVoidType()
 						&& method.getParameter(0).getTypeAsString().equals("String[]"))
-				.findAny().ifPresent(Node::remove);
+				.forEach(Node::remove);
 	}
 
 	public Path getJavaFilePath() {
