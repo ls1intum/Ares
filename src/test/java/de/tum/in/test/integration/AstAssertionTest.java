@@ -638,4 +638,82 @@ public class AstAssertionTest {
 					"The 'level' is not set. Please use UnwantedNodesAssert.withLanguageLevel(LanguageLevel)."));
 		}
 	}
+
+	@Nested
+	@DisplayName("Recursion-Test-Tests")
+	class RecursionTestTests {
+
+		@TestTest
+		void test_testExcludesPassedMethods_Success() {
+			String testExcludesPassedMethods_Success = "testExcludesPassedMethods_Success";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testExcludesPassedMethods_Success));
+		}
+
+		@TestTest
+		void test_testExcludesPassedMethod_Fail() {
+			String testExcludesPassedMethod_Fail = "testExcludesPassedMethod_Fail";
+			tests.assertThatEvents().haveExactly(1, testFailedWith(testExcludesPassedMethod_Fail, AssertionError.class, "Unwanted recursion found in methods:\n" +
+					"de.tum.in.test.integration.testuser.subject.structural.astTestFiles.recursions.excludeMethods.ClassWithNoExcludeMethods.something(de.tum.in.test.integration.testuser.subject.structural.astTestFiles.recursions.excludeMethods.RandomParameterThatShouldBeResolved)"));
+		}
+
+		@TestTest
+		void test_testShouldDetectRecursionGivenStartingNode() {
+			String testShouldDetectRecursionGivenStartingNode = "testShouldDetectRecursionGivenStartingNode";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testShouldDetectRecursionGivenStartingNode));
+		}
+
+		@TestTest
+		void test_testShouldNotDetectRecursionGivenStartingNode() {
+			String testShouldNotDetectRecursionGivenStartingNode = "testShouldNotDetectRecursionGivenStartingNode";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testShouldNotDetectRecursionGivenStartingNode));
+		}
+
+		@TestTest
+		void test_testDetectComplexNoRecursion() {
+			String testDetectComplexNoRecursion = "testDetectComplexNoRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectComplexNoRecursion));
+		}
+
+		@TestTest
+		void test_testDetectComplexRecursion() {
+			String testDetectComplexRecursion = "testDetectComplexRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectComplexRecursion));
+		}
+
+		@TestTest
+		void test_testDetectDynamicDispatchRecursion() {
+			String testDetectDynamicDispatchRecursion = "testDetectDynamicDispatchRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectDynamicDispatchRecursion));
+		}
+
+		@TestTest
+		void test_testDetectOverloadedRecursion() {
+			String testDetectOverloadedRecursion = "testDetectOverloadedRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectOverloadedRecursion));
+		}
+
+		@TestTest
+		void test_testDetectOverloadedNoRecursion() {
+			String testDetectOverloadedNoRecursion = "testDetectOverloadedNoRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectOverloadedNoRecursion));
+		}
+
+		@TestTest
+		void test_testDetectOverriddenRecursion() {
+			String testDetectOverriddenRecursion = "testDetectOverriddenRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectOverriddenRecursion));
+		}
+
+		@TestTest
+		void test_testDetectSimpleRecursion() {
+			String testDetectSimpleRecursion = "testDetectSimpleRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectSimpleRecursion));
+		}
+
+		@TestTest
+		void test_testDetectLambdaRecursion() {
+			String testDetectLambdaRecursion = "testDetectLambdaRecursion";
+			tests.assertThatEvents().haveExactly(1, finishedSuccessfully(testDetectLambdaRecursion));
+		}
+	}
 }
