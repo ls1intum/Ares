@@ -62,8 +62,8 @@ public class UnwantedNode {
 	 *         information (packed into UnwantedNode objects)
 	 */
 	public static Map<Path, List<UnwantedNode>> getUnwantedNodesForFileAt(Path pathOfJavaFile,
-			Map<String, Class<? extends Node>> nodesDefinedAsUnwanted) {
-		JavaFile javaFile = JavaFile.convertFromFile(pathOfJavaFile);
+			Map<String, Class<? extends Node>> nodesDefinedAsUnwanted, boolean excludeMainMethod) {
+		JavaFile javaFile = JavaFile.convertFromFile(pathOfJavaFile, excludeMainMethod);
 		if (javaFile == null) {
 			return Map.of();
 		}
@@ -113,9 +113,9 @@ public class UnwantedNode {
 	 * @return Error message
 	 */
 	public static Optional<String> getMessageForUnwantedNodesForFileAt(Path pathOfJavaFile,
-			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap) {
-		Map<Path, List<UnwantedNode>> unwantedNodes = getUnwantedNodesForFileAt(pathOfJavaFile,
-				nodeNameUnwantedNodeMap);
+			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
+		Map<Path, List<UnwantedNode>> unwantedNodes = getUnwantedNodesForFileAt(pathOfJavaFile, nodeNameUnwantedNodeMap,
+				excludeMainMethod);
 		if (unwantedNodes.isEmpty()) {
 			return Optional.empty();
 		}
@@ -132,11 +132,11 @@ public class UnwantedNode {
 	 * @return Error message
 	 */
 	public static Optional<String> getMessageForUnwantedNodesForAllFilesBelow(Path pathOfDirectory,
-			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap) {
-		return JavaFile.readFromDirectory(pathOfDirectory).stream()
+			Map<String, Class<? extends Node>> nodeNameUnwantedNodeMap, boolean excludeMainMethod) {
+		return JavaFile.readFromDirectory(pathOfDirectory, excludeMainMethod).stream()
 				.sorted(Comparator.comparing(JavaFile::getJavaFilePath))
 				.map(javaFile -> getMessageForUnwantedNodesForFileAt(javaFile.getJavaFilePath(),
-						nodeNameUnwantedNodeMap))
+						nodeNameUnwantedNodeMap, excludeMainMethod))
 				.filter(Optional::isPresent).map(Optional::get).map(message -> message + System.lineSeparator())
 				.reduce(String::concat).map(String::trim).map(message -> " " + message);
 	}
