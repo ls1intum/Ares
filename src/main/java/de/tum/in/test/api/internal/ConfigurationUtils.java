@@ -111,7 +111,7 @@ public final class ConfigurationUtils {
 				.orElse(TrustScope.MINIMAL);
 	}
 
-	public static Boolean isThreadGroupCheckDisabled(TestContext context) {
+	public static boolean isThreadGroupCheckDisabled(TestContext context) {
 		return TestContextUtils.findAnnotationIn(context, DisableThreadGroupCheck.class).isPresent();
 	}
 }
