@@ -592,6 +592,11 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	 */
 	@SuppressWarnings("deprecation")
 	private Thread[] checkThreadGroup() {
+		if (configuration.isThreadGroupCheckDisabled()) {
+			LOG.debug("Thread group check is disabled"); //$NON-NLS-1$
+			return new Thread[0];
+		}
+
 		blockThreadCreation = true;
 		int originalCount = testThreadGroup.activeCount();
 		if (originalCount == 0)

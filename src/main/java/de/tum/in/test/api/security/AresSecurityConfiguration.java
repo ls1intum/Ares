@@ -26,12 +26,14 @@ public final class AresSecurityConfiguration {
 	private final Set<PackageRule> whitelistedPackages;
 	private final Set<PackageRule> trustedPackages;
 	private final TrustScope threadTrustScope;
+	private final boolean isThreadGroupCheckDisabled;
 
 	AresSecurityConfiguration(Optional<Class<?>> testClass, Optional<Method> testMethod, Path executionPath, // NOSONAR
 			Collection<String> whitelistedClassNames, Optional<Collection<PathRule>> whitelistedPaths,
 			Collection<PathRule> blacklistedPaths, Set<Integer> allowedLocalPorts, OptionalInt allowLocalPortsAbove,
 			Set<Integer> excludedLocalPorts, OptionalInt allowedThreadCount, Set<PackageRule> blacklistedPackages,
-			Set<PackageRule> whitelistedPackages, Set<PackageRule> trustedPackages, TrustScope threadTrustScope) {
+			Set<PackageRule> whitelistedPackages, Set<PackageRule> trustedPackages, TrustScope threadTrustScope,
+			boolean isThreadGroupCheckDisabled) {
 		this.testClass = Objects.requireNonNull(testClass);
 		this.testMethod = Objects.requireNonNull(testMethod);
 		this.executionPath = executionPath.toAbsolutePath();
@@ -46,6 +48,7 @@ public final class AresSecurityConfiguration {
 		this.whitelistedPackages = Set.copyOf(whitelistedPackages);
 		this.trustedPackages = Set.copyOf(trustedPackages);
 		this.threadTrustScope = threadTrustScope;
+		this.isThreadGroupCheckDisabled = isThreadGroupCheckDisabled;
 	}
 
 	public Optional<Class<?>> testClass() {
@@ -104,6 +107,10 @@ public final class AresSecurityConfiguration {
 		return threadTrustScope;
 	}
 
+	public boolean isThreadGroupCheckDisabled() {
+		return isThreadGroupCheckDisabled;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -122,13 +129,15 @@ public final class AresSecurityConfiguration {
 				&& Objects.equals(blacklistedPaths, other.blacklistedPaths)
 				&& Objects.equals(blacklistedPackages, other.blacklistedPackages)
 				&& Objects.equals(whitelistedPackages, other.whitelistedPackages)
-				&& Objects.equals(threadTrustScope, other.threadTrustScope);
+				&& Objects.equals(threadTrustScope, other.threadTrustScope)
+				&& Objects.equals(isThreadGroupCheckDisabled, other.isThreadGroupCheckDisabled);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(executionPath, testClass, testMethod, whitelistedClassNames, allowedThreadCount,
-				whitelistedPaths, blacklistedPaths, blacklistedPackages, whitelistedPackages, threadTrustScope);
+				whitelistedPaths, blacklistedPaths, blacklistedPackages, whitelistedPackages, threadTrustScope,
+				isThreadGroupCheckDisabled);
 	}
 
 	@Override
@@ -136,10 +145,11 @@ public final class AresSecurityConfiguration {
 		return String.format("AresSecurityConfiguration [whitelistedClassNames=%s, executionPath=%s," //$NON-NLS-1$
 				+ " testClass=%s, testMethod=%s, whitelistedPaths=%s, blacklistedPaths=%s, allowedLocalPorts=%s," //$NON-NLS-1$
 				+ " allowLocalPortsAbove=%s, excludedLocalPorts=%s, allowedThreadCount=%s," //$NON-NLS-1$
-				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s, threadTrustScope=%s]", //$NON-NLS-1$
+				+ " blacklistedPackages=%s, whitelistedPackages=%s, trustedPackages=%s, threadTrustScope=%s," //$NON-NLS-1$
+				+ " isThreadGroupCheckDisabled=%b]", //$NON-NLS-1$
 				whitelistedClassNames, executionPath, testClass, testMethod, whitelistedPaths, blacklistedPaths,
 				allowedLocalPorts, allowLocalPortsAbove, excludedLocalPorts, allowedThreadCount, blacklistedPackages,
-				whitelistedPackages, trustedPackages, threadTrustScope);
+				whitelistedPackages, trustedPackages, threadTrustScope, isThreadGroupCheckDisabled);
 	}
 
 	public String shortDesc() {

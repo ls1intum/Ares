@@ -60,6 +60,7 @@ public final class AresSecurityConfigurationBuilder {
 	private OptionalInt allowedThreadCount;
 	private Set<PackageRule> trustedPackages;
 	private TrustScope threadTrustScope;
+	private boolean isThreadGroupCheckDisabled;
 
 	private AresSecurityConfigurationBuilder() {
 		testClass = Optional.empty();
@@ -74,6 +75,7 @@ public final class AresSecurityConfigurationBuilder {
 		allowedThreadCount = OptionalInt.empty();
 		trustedPackages = Set.of();
 		threadTrustScope = TrustScope.MINIMAL;
+		isThreadGroupCheckDisabled = false;
 	}
 
 	public AresSecurityConfigurationBuilder withPath(Path executionPath) {
@@ -142,12 +144,17 @@ public final class AresSecurityConfigurationBuilder {
 		return this;
 	}
 
+	public AresSecurityConfigurationBuilder withIsThreadGroupCheckDisabled(boolean isThreadGroupCheckDisabled) {
+		this.isThreadGroupCheckDisabled = isThreadGroupCheckDisabled;
+		return this;
+	}
+
 	public AresSecurityConfiguration build() {
 		validate();
 		return new AresSecurityConfiguration(testClass, testMethod, executionPath, whitelistedClassNames,
 				Optional.ofNullable(whitelistedPaths), blacklistedPaths, allowedLocalPorts, allowLocalPortsAbove,
 				excludedLocalPorts, allowedThreadCount, blacklistedPackages, whitelistedPackages, trustedPackages,
-				threadTrustScope);
+				threadTrustScope, isThreadGroupCheckDisabled);
 	}
 
 	private void validate() {
