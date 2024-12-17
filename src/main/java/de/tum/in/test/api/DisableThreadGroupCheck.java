@@ -21,6 +21,6 @@ import org.apiguardian.api.API;
 @Inherited
 @Documented
 @Retention(RUNTIME)
-@Target({ TYPE, METHOD, ANNOTATION_TYPE })
+@Target({ TYPE, ANNOTATION_TYPE })
 public @interface DisableThreadGroupCheck {
 }
