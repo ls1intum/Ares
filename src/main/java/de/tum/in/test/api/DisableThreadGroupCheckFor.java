@@ -11,7 +11,8 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 
 /**
- * Disables the Thread Group Check.
+ * Allows to disable the thread group check for threads which names start with
+ * any of the given prefixes.
  *
  * @author Benjamin Schmitz
  * @since 1.14.0
@@ -22,5 +23,6 @@ import org.apiguardian.api.API;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE, ANNOTATION_TYPE })
-public @interface DisableThreadGroupCheck {
+public @interface DisableThreadGroupCheckFor {
+	String[] value();
 }
