@@ -104,6 +104,16 @@
 			<artifactId>javaparser-core</artifactId>
 			<version>3.25.9</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.javaparser</groupId>
+			<artifactId>javaparser-symbol-solver-core</artifactId>
+			<version>3.25.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jgrapht</groupId>
+			<artifactId>jgrapht-core</artifactId>
+			<version>1.5.2</version>
+		</dependency>
 		<!-- For testing we use a test framework testing framework -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>

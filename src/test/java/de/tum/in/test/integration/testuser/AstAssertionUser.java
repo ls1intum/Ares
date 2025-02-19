@@ -3,6 +3,11 @@ package de.tum.in.test.integration.testuser;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import de.tum.in.test.api.ast.asserting.UnwantedRecursionAssert;
+import de.tum.in.test.api.util.ReflectionTestUtils;
+import de.tum.in.test.integration.testuser.subject.structural.astTestFiles.recursions.excludeMethods.ClassWithNoExcludeMethods;
+import de.tum.in.test.integration.testuser.subject.structural.astTestFiles.recursions.excludeMethods.RandomParameterThatShouldBeResolved;
+import de.tum.in.test.integration.testuser.subject.structural.astTestFiles.recursions.startingNode.ClassWithMethodsCallingEachOther;
 import org.junit.jupiter.api.*;
 
 import com.github.javaparser.ParserConfiguration;
@@ -436,4 +441,109 @@ public class AstAssertionUser {
 			UnwantedNodesAssert.assertThatProjectSources().hasNo(LoopType.ANY);
 		}
 	}
+
+    @Nested
+    @DisplayName("Recursion-Tests")
+    class RecursionTests {
+        @Test
+        void testExcludesPassedMethods_Success() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.excludeMethods")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .excludeMethods(ReflectionTestUtils.getMethod(ClassWithNoExcludeMethods.class, "something", RandomParameterThatShouldBeResolved.class))
+                    .hasNoRecursion();
+        }
+
+        @Test
+        void testExcludesPassedMethod_Fail() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.excludeMethods")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .excludeMethods(ReflectionTestUtils.getMethod(ClassWithNoExcludeMethods.class, "main", String[].class))
+                    .hasNoRecursion();
+        }
+
+        @Test
+        void testShouldDetectRecursionGivenStartingNode() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.startingNode")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .startingWithMethod(ReflectionTestUtils.getMethod(ClassWithMethodsCallingEachOther.class, "main", String[].class))
+                    .hasRecursion();
+        }
+
+        @Test
+        void testShouldNotDetectRecursionGivenStartingNode() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.startingNode")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .startingWithMethod(ReflectionTestUtils.getMethod(ClassWithMethodsCallingEachOther.class, "method3"))
+                    .hasNoRecursion();
+        }
+
+        @Test
+        void testDetectComplexNoRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.complex.no")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasNoRecursion();
+        }
+
+        @Test
+        void testDetectComplexRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.complex.yes")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+
+        @Test
+        void testDetectDynamicDispatchRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.dynamicDispatch")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+
+        @Test
+        void testDetectOverloadedRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.overloaded.yes")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+
+        @Test
+        void testDetectOverloadedNoRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.overloaded.no")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .excludeMethods(ReflectionTestUtils.getMethod(ClassWithNoExcludeMethods.class, "something", RandomParameterThatShouldBeResolved.class))
+                    .hasNoRecursion();
+        }
+
+        @Test
+        void testDetectOverriddenRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.overridden")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+
+        @Test
+        void testDetectSimpleRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.simple")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+
+        @Test
+        void testDetectLambdaRecursion() {
+            UnwantedRecursionAssert.assertThatProjectSources()
+                    .withinPackage(BASE_PACKAGE + ".recursions.lambda")
+                    .withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                    .hasRecursion();
+        }
+    }
 }
