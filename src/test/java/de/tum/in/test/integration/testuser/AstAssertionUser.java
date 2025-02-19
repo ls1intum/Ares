@@ -436,4 +436,22 @@ public class AstAssertionUser {
 			UnwantedNodesAssert.assertThatProjectSources().hasNo(LoopType.ANY);
 		}
 	}
+
+	@Nested
+	@DisplayName("Exclude-Main-Tests")
+	class ExcludeErrorTests {
+		@Test
+		void testHasBelowNoLoopsOutsideMainMethod_Success() {
+			UnwantedNodesAssert.assertThatProjectSources().withinPackage(BASE_PACKAGE + ".excludeMain.no")
+					.excludeMainMethod().withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+					.hasNo(LoopType.ANY);
+		}
+
+		@Test
+		void testHasBelowNoLoopsOutsideMainMethod_Fail() {
+			UnwantedNodesAssert.assertThatProjectSources().withinPackage(BASE_PACKAGE + ".excludeMain.yes")
+					.excludeMainMethod().withLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+					.hasNo(LoopType.ANY);
+		}
+	}
 }
