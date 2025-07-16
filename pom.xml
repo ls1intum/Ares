@@ -50,32 +50,32 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.5.3</version>
+			<version>1.5.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit-jupiter-version}</version>
+			<version>5.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit-platform-version}</version>
+			<version>1.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit-jupiter-version}</version>
+			<version>5.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-			<version>${junit-jupiter-version}</version>
+			<version>5.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
-			<version>${junit-jupiter-version}</version>
+			<version>5.10.2</version>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
@@ -109,14 +109,14 @@
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-testkit</artifactId>
 			<scope>test</scope>
-			<version>${junit-platform-version}</version>
+			<version>1.10.2</version>
 		</dependency>
 		<!-- For testing the property based testing framework jqwik is supported -->
 		<!-- (but it is not a required dependency) -->
 		<dependency>
 			<groupId>net.jqwik</groupId>
 			<artifactId>jqwik</artifactId>
-			<version>${jqwik-version}</version>
+			<version>1.8.4</version>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
