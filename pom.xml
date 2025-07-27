@@ -38,6 +38,8 @@
 	</scm>
 
 	<properties>
+		<sonar.organization>ls1intum</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<junit-jupiter-version>5.13.4</junit-jupiter-version>
