@@ -37,7 +37,8 @@ class ThrowableUtilsTest {
 			"junit.framework.AssertionFailedError", // deviation for null message is not an issue
 			"java.util.IllformedLocaleException", // we don't need the index attribute itself
 			"java.awt.HeadlessException", // CI systems don't like this, but the constructor works
-			"org.assertj.core.util.introspection.IntrospectionError" // this is a wrapper for a Throwable, so it is not an issue
+			"org.assertj.core.util.introspection.IntrospectionError" // this is a wrapper for a Throwable, so it is not
+																		// an issue
 	);
 
 	private static final Set<Class<?>> SAFE_PROPERTY_TYPES = Set.of(Throwable.class, Throwable[].class);
@@ -90,16 +91,17 @@ class ThrowableUtilsTest {
 				.map(Method::getReturnType).distinct().filter(type -> {
 					Class<?> containedType;
 					if (type.isArray())
-						containedType = Stream.<Class<?>>iterate(type, Objects::nonNull, Class::getComponentType).reduce(null, (a, b) -> b);
+						containedType = Stream.<Class<?>>iterate(type, Objects::nonNull, Class::getComponentType)
+								.reduce(null, (a, b) -> b);
 					else
 						containedType = type;
-                    assertThat(containedType).isNotNull();
-                    if (containedType.isPrimitive())
+					assertThat(containedType).isNotNull();
+					if (containedType.isPrimitive())
 						return false;
 					if (Modifier.isFinal(containedType.getModifiers()))
 						return false;
-                    return SAFE_PROPERTY_TYPES.stream().noneMatch(safeType -> safeType.isAssignableFrom(containedType));
-                }).collect(Collectors.toSet());
+					return SAFE_PROPERTY_TYPES.stream().noneMatch(safeType -> safeType.isAssignableFrom(containedType));
+				}).collect(Collectors.toSet());
 		assertThat(potentiallyUnsafeProperties).as("property types are all safe or sanitizable").isEmpty();
 	}
 
