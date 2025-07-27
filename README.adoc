@@ -12,12 +12,9 @@
 
 The Artemis Java Test Sandbox
 
-image:https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=main[Java
-CI]
-https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox[image:https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox[Maven
-Central]]
-image:https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org[Sonatype
-Nexus (Snapshots)]
+image:https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=main[Java CI]
+https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/ls1intum_Ares[image:https://img.shields.io/maven-central/v/de.tum.in.ase/ls1intum_Ares[Maven Central]]
+image:https://img.shields.io/nexus/s/de.tum.in.ase/ls1intum_Ares?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots)]
 
 // ----------------------------------------------------------
 // Display the following for standard GitHub AsciiDoc display
@@ -28,7 +25,7 @@ https://ls1intum.github.io/Ares/[*View this documentation on GitHub Pages!*]
 
 endif::env-github[]
 
-Ares, also known as Artemis Java Test Sandbox _(abbr. AJTS)_, is a JUnit
+Ares, also known as Artemis Java Test Sandbox, is a JUnit
 5 extension for easy and secure Java testing on the interactive learning
 platform https://github.com/ls1intum/Artemis[Artemis].
 
@@ -43,24 +40,17 @@ Its main features are:
 
 *Project Status*
 
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=alert_status[Quality
-Gate Status]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_rating[Maintainability
-Rating]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=security_rating[Security
-Rating]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=reliability_rating[Reliability
-Rating]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=alert_status[Quality Gate Status]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=sqale_rating[Maintainability Rating]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=security_rating[Security Rating]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=reliability_rating[Reliability Rating]]
 
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=ncloc[Lines
-of Code]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=coverage[Coverage]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=sqale_index[Technical
-Debt]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=vulnerabilities[Vulnerabilities]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=bugs[Bugs]]
-https://sonarcloud.io/dashboard?id=artemis-java-test-sandbox[image:https://sonarcloud.io/api/project_badges/measure?project=artemis-java-test-sandbox&metric=duplicated_lines_density[Duplicated
-Lines (%)]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=ncloc[Lines of Code]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=coverage[Coverage]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=sqale_index[Technical Debt]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=vulnerabilities[Vulnerabilities]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=bugs[Bugs]]
+https://sonarcloud.io/dashboard?id=ls1intum_Ares[image:https://sonarcloud.io/api/project_badges/measure?project=ls1intum_Ares&metric=duplicated_lines_density[Duplicated Lines (%)]]
 
 == Installation
 
@@ -73,7 +63,7 @@ environment of a Maven project, include
 ----
 <dependency>
     <groupId>de.tum.in.ase</groupId>
-    <artifactId>artemis-java-test-sandbox</artifactId>
+    <artifactId>ls1intum_Ares</artifactId>
     <version>1.14.0</version>
     <scope>test</scope>
 </dependency>
@@ -84,7 +74,7 @@ in the `dependencies` section.
 For Gradle projects, include
 [source,groovy]
 ----
-testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.14.0'
+testImplementation 'de.tum.in.ase:ls1intum_Ares:1.14.0'
 ----
 
 in the `dependencies` section.
@@ -117,7 +107,7 @@ looks like this:
 <dependencies>
     <dependency>
         <groupId>de.tum.in.ase</groupId>
-        <artifactId>artemis-java-test-sandbox</artifactId>
+        <artifactId>ls1intum_Ares</artifactId>
         <version>1.14.0</version>
         <scope>test</scope>
     </dependency>
