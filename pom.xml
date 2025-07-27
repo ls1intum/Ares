@@ -47,7 +47,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- if JaCoCo is not executed -->
-		<argLine></argLine>
+		<argLine/>
 		<!-- full certificate fingerprint: B58E410970742EF7AD0FDD48D1A045E1DD48B876 -->
 		<gpg.key.id>D1A045E1DD48B876</gpg.key.id>
 	</properties>

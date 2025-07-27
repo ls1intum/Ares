@@ -64,7 +64,7 @@ jobs:
       with:
         gradle-version: 8.14.3
     - name: Run Gradle tests
-      run: ./gradlew test
+      run: gradle test
   code-style:
     runs-on: ubuntu-latest
     name: Check Code Style
