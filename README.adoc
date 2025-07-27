@@ -13,8 +13,8 @@
 The Artemis Java Test Sandbox
 
 image:https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=main[Java CI]
-https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/ls1intum_Ares[image:https://img.shields.io/maven-central/v/de.tum.in.ase/ls1intum_Ares[Maven Central]]
-image:https://img.shields.io/nexus/s/de.tum.in.ase/ls1intum_Ares?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots)]
+https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox[image:https://img.shields.io/maven-central/v/de.tum.in.ase/ls1intum_Ares[Maven Central]]
+image:https://img.shields.io/nexus/s/de.tum.in.ase/artemis-java-test-sandbox?label=latest%20snapshot&server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots)]
 
 // ----------------------------------------------------------
 // Display the following for standard GitHub AsciiDoc display
