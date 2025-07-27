@@ -602,6 +602,8 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		for (Thread thread : threads) {
 			if (thread == null)
 				continue;
+			if (checkIfThreadNameStartsWithAny(thread, configuration.getAllowedThreadsInThreadGroup()))
+				continue;
 			try {
 				thread.interrupt();
 				thread.join(500 / originalCount + 1L);
@@ -612,6 +614,13 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		}
 		if (testThreadGroup.activeCount() == 0)
 			return new Thread[0];
+
+		if (Arrays.stream(threads).filter(Thread::isAlive)
+				.allMatch(t -> checkIfThreadNameStartsWithAny(t, configuration.getAllowedThreadsInThreadGroup()))) {
+			LOG.debug("All threads in the test thread group are allowed to run."); //$NON-NLS-1$
+			return new Thread[0];
+		}
+
 		// try forceful shutdown
 		var securityException = new SecurityException(
 				localized("security.error_threads_not_stoppable", Arrays.toString(threads))); //$NON-NLS-1$
@@ -655,6 +664,10 @@ public final class ArtemisSecurityManager extends SecurityManager {
 		if (testThreadGroup.activeCount() > 0)
 			throw securityException;
 		return threads;
+	}
+
+	private boolean checkIfThreadNameStartsWithAny(Thread thread, Set<String> allowedThreadStarts) {
+		return allowedThreadStarts.stream().anyMatch(thread.getName()::startsWith);
 	}
 
 	private void checkCommonThreadPool() {
