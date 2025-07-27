@@ -64,7 +64,7 @@ Lines (%)]]
 
 == Installation
 
-_Note: Ares requires at least Java 11._
+_Note: Ares requires at least Java 17._
 
 Ares is provided as Maven/Gradle dependency. To use Ares in the test
 environment of a Maven project, include
@@ -74,7 +74,7 @@ environment of a Maven project, include
 <dependency>
     <groupId>de.tum.in.ase</groupId>
     <artifactId>artemis-java-test-sandbox</artifactId>
-    <version>1.13.0</version>
+    <version>1.14.0</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -84,7 +84,7 @@ in the `dependencies` section.
 For Gradle projects, include
 [source,groovy]
 ----
-testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.13.0'
+testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.14.0'
 ----
 
 in the `dependencies` section.
@@ -104,21 +104,21 @@ in production._
 
 === Setup
 
-Assume you have a Java 11 Maven project, and the inside of `pom.xml`
+Assume you have a Java 17 Maven project, and the inside of `pom.xml`
 looks like this:
 
 [source,xml]
 ----
 <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
 </properties>
 
 <dependencies>
     <dependency>
         <groupId>de.tum.in.ase</groupId>
         <artifactId>artemis-java-test-sandbox</artifactId>
-        <version>1.13.0</version>
+        <version>1.14.0</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -731,6 +731,5 @@ use
 
 == License
 
-Ares was created by Christian Femers and is licensed under the
-https://github.com/ls1intum/Ares/blob/master/LICENSE[MIT License, see
-`LICENSE.md`].
+Ares was initially created by Christian Femers and is maintained by Applied Education Technologies
+It is licensed under the https://github.com/ls1intum/Ares/blob/master/LICENSE[MIT License, see `LICENSE.md`].
