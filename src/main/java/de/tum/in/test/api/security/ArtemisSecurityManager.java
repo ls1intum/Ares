@@ -90,7 +90,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private AresSecurityConfiguration configuration;
 	private String accessToken;
-	private Set<Thread> whitelistedThreads = new HashSet<>();
+	private final Set<Thread> whitelistedThreads = new HashSet<>();
 	private volatile boolean isPartlyDisabled;
 	private volatile boolean blockThreadCreation;
 	private volatile boolean lastUninstallFailed;
@@ -417,9 +417,9 @@ public final class ArtemisSecurityManager extends SecurityManager {
 
 	private boolean isPathWhitelisted(Path pa, PathActionLevel pathActionLevel) {
 		var pathWhitelist = configuration.whitelistedPaths();
-		if (pathWhitelist.isEmpty())
-			return pa.startsWith(configuration.executionPath());
-		return pathWhitelist.get().stream().anyMatch(pm -> pm.matchesWithLevel(pa, pathActionLevel));
+		return pathWhitelist
+				.map(pathRules -> pathRules.stream().anyMatch(pm -> pm.matchesWithLevel(pa, pathActionLevel)))
+				.orElseGet(() -> pa.startsWith(configuration.executionPath()));
 	}
 
 	private boolean isPathBlacklisted(Path pa, PathActionLevel pathActionLevel) {
@@ -587,7 +587,7 @@ public final class ArtemisSecurityManager extends SecurityManager {
 	 * <li>Otherwise, return the list of threads.</li>
 	 * </ol>
 	 *
-	 * @return the list of threads in the test thread group
+	 * @return an array of threads in the test thread group
 	 * @throws SecurityException if there are still threads in the test thread group
 	 */
 	@SuppressWarnings("deprecation")

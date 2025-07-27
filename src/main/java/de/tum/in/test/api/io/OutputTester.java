@@ -40,17 +40,16 @@ public final class OutputTester implements LineAcceptor {
 
 	private final List<Line> actualOutput = new ArrayList<>();
 
-	private final long randomBits;
 	private final String randomString;
 
 	public OutputTester() {
-		randomBits = SECURE_RANDOM.nextLong();
+		long randomBits = SECURE_RANDOM.nextLong();
 		randomString = Long.toUnsignedString(randomBits, 16);
 	}
 
 	@Override
 	public void acceptOutput(CharBuffer output) {
-		if (output.length() == 0)
+		if (output.isEmpty())
 			return;
 		DynamicLine currentLine;
 		if (getCurrentLine().map(Line::isComplete).orElse(true)) {
@@ -122,7 +121,7 @@ public final class OutputTester implements LineAcceptor {
 	}
 
 	public List<String> getLinesAsString(OutputTestOptions... outputOptions) {
-		return processLines(outputOptions).stream().map(Line::text).collect(Collectors.toUnmodifiableList());
+		return processLines(outputOptions).stream().map(Line::text).toList();
 	}
 
 	public AbstractStringAssert<?> assertThat(OutputTestOptions... outputOptions) {
