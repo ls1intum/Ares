@@ -77,8 +77,7 @@ final class ThrowableUtils {
 		var classPropertyTypeCount = getRelevantPropertiesWithMethods(type, IGNORE_PROPERTIES).stream()
 				.collect(Collectors.groupingBy(property -> property.getValue().getReturnType(), Collectors.counting()));
 		return Stream.of(allConstructors)
-				.filter(constructor -> isSatisfiableByProperties(constructor, classPropertyTypeCount))
-				.sorted(getConstructorPreferenceOrder()).findFirst().orElse(allConstructors[0]);
+                .filter(constructor -> isSatisfiableByProperties(constructor, classPropertyTypeCount)).min(getConstructorPreferenceOrder()).orElse(allConstructors[0]);
 	}
 
 	static boolean isSatisfiableByProperties(Constructor<?> constructor,

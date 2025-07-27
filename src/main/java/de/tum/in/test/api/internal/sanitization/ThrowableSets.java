@@ -33,19 +33,19 @@ final class ThrowableSets {
 	private static final String OPENTEST4J_CHECK_CLASS = "org.opentest4j.AssertionFailedError"; //$NON-NLS-1$
 
 	static {
-		HashSet<Class<? extends Throwable>> join = new HashSet<>(Java.SAFE_TYPES);
-		join.addAll(Own.SAFE_TYPES);
+		HashSet<Class<? extends Throwable>> safeTypesJoin = new HashSet<>(Java.SAFE_TYPES);
+		safeTypesJoin.addAll(Own.SAFE_TYPES);
 		if (classCanBeFound(JUNIT4_CHECK_CLASS))
-			join.addAll(JUnit4.SAFE_TYPES);
+			safeTypesJoin.addAll(JUnit4.SAFE_TYPES);
 		if (classCanBeFound(JUNIT5_CHECK_CLASS))
-			join.addAll(JUnit5.SAFE_TYPES);
+			safeTypesJoin.addAll(JUnit5.SAFE_TYPES);
 		if (classCanBeFound(JQWIK_CHECK_CLASS))
-			join.addAll(Jqwik.SAFE_TYPES);
+			safeTypesJoin.addAll(Jqwik.SAFE_TYPES);
 		if (classCanBeFound(ASSERTJ_CHECK_CLASS))
-			join.addAll(AssertJ.SAFE_TYPES);
+			safeTypesJoin.addAll(AssertJ.SAFE_TYPES);
 		if (classCanBeFound(OPENTEST4J_CHECK_CLASS))
-			join.addAll(OpenTest4J.SAFE_TYPES);
-		SAFE_TYPES = Collections.unmodifiableSet(join);
+			safeTypesJoin.addAll(OpenTest4J.SAFE_TYPES);
+		SAFE_TYPES = Collections.unmodifiableSet(safeTypesJoin);
 	}
 
 	private ThrowableSets() {
