@@ -51,7 +51,7 @@
 		<!-- if JaCoCo is not executed -->
 		<argLine/>
 		<!-- full certificate fingerprint: B58E410970742EF7AD0FDD48D1A045E1DD48B876 -->
-		<gpg.key.id>D1A045E1DD48B876</gpg.key.id>
+		<gpg.key.id>92961D574B5D1A7B</gpg.key.id>
 	</properties>
 
 	<dependencies>
@@ -343,6 +343,15 @@
 					</java>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.8.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -446,16 +455,6 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.14</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
