@@ -12,7 +12,7 @@
 
 The Artemis Java Test Sandbox
 
-image:https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=master[Java
+image:https://github.com/ls1intum/Ares/workflows/Java%20CI/badge.svg?branch=main[Java
 CI]
 https://maven-badges.herokuapp.com/maven-central/de.tum.in.ase/artemis-java-test-sandbox[image:https://img.shields.io/maven-central/v/de.tum.in.ase/artemis-java-test-sandbox[Maven
 Central]]
@@ -647,7 +647,7 @@ void testSquareCorrect(IOTester tester) { //<1>
     blocks, be aware of their newline handling).
 
 Note that Ares normalizes the line breaks to `\n`, and
-https://github.com/ls1intum/Ares/blob/master/src/main/java/de/tum/in/test/api/io/OutputTester.java[`OutputTester`]
+https://github.com/ls1intum/Ares/blob/main/src/main/java/de/tum/in/test/api/io/OutputTester.java[`OutputTester`]
 offers many different approaches to checking output (e.g. single string, list of strings, ...).
 
 If students read more lines than provided, they get the following feedback:
@@ -656,7 +656,7 @@ java.lang.IllegalStateException: no further console input request after the last
 ...
 
 See also `IOTester` and for more examples, the
-https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/InputOutputUser.java[`InputOutputUser`]
+https://github.com/ls1intum/Ares/blob/main/src/test/java/de/tum/in/test/integration/testuser/InputOutputUser.java[`InputOutputUser`]
 test.
 
 <<showing-standard-output>> covers how the student output is
@@ -669,7 +669,7 @@ you can provide a custom implementation by applying `@WithIOManager(MyCustomOne.
 to e.g. the test class or individual methods. This also allows you to register
 a custom parameter to control IO testing with ease inside the test method.
 Have a look into the test class linked above to learn more or read the documentation of
-https://github.com/ls1intum/Ares/blob/master/src/main/java/de/tum/in/test/api/io/IOManager.java[`IOManager`].
+https://github.com/ls1intum/Ares/blob/main/src/main/java/de/tum/in/test/api/io/IOManager.java[`IOManager`].
 ====
 
 ==== Networking
@@ -684,7 +684,7 @@ a way that they cannot be stopped (waiting in native code), so we
 recommend using timeouts for connections at least on one end consistently.
 
 For examples, have a look at the test
-https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/NetworkUser.java[`NetworkUser`].
+https://github.com/ls1intum/Ares/blob/main/src/test/java/de/tum/in/test/integration/testuser/NetworkUser.java[`NetworkUser`].
 
 ==== Locale
 
@@ -697,7 +697,7 @@ where the annotation is applied.
 Ares is currently localized in German (`de_DE`) and English (`en_US`),
 where `en_US` is the fallback for any other locale.
 
-See also the https://github.com/ls1intum/Ares/blob/master/src/test/java/de/tum/in/test/integration/testuser/LocaleUser.java[`LocaleUser`]
+See also the https://github.com/ls1intum/Ares/blob/main/src/test/java/de/tum/in/test/integration/testuser/LocaleUser.java[`LocaleUser`]
 test for more examples.
 
 == Additional Notes
@@ -706,7 +706,7 @@ test for more examples.
 
 For versions prior to `1.0.0`, a repository block had to be added to
 `<repositories>` section of the `pom.xml` that referenced the Maven
-repository URL `https://gitlab.com/ajts-mvn/repo/raw/master/`.
+repository URL `https://gitlab.com/ajts-mvn/repo/raw/main/`.
 
 *Using older Ares versions is highly discouraged, remove these
 repository declarations and update to the newest Ares version if they
@@ -732,4 +732,4 @@ use
 == License
 
 Ares was initially created by Christian Femers and is maintained by Applied Education Technologies
-It is licensed under the https://github.com/ls1intum/Ares/blob/master/LICENSE[MIT License, see `LICENSE.md`].
+It is licensed under the https://github.com/ls1intum/Ares/blob/main/LICENSE[MIT License, see `LICENSE.md`].

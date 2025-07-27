@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Currently, the only supported Ares version is whatever the current one is (as shown in the [README](https://github.com/ls1intum/Ares/blob/master/README.md)).
+Currently, the only supported Ares version is whatever the current one is (as shown in the [README](https://github.com/ls1intum/Ares/blob/main/README.md)).
 See the [Wiki](https://github.com/ls1intum/Ares/wiki) for the changes and how to adjust your tests to them.
 
 ## Reporting a Vulnerability
