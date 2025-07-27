@@ -59,11 +59,12 @@ jobs:
       run: mv ./src/test/resources/build.gradle ./build.gradle
     - name: Build and Install with Maven and JDK ${{ matrix.java }}
       run: mvn -B clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true
-    - name: Test with Gradle and JDK ${{ matrix.java }}
+    - name: Set up Gradle with JDK ${{ matrix.java }}
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: 8.14.3
-        arguments: test
+    - name: Run Gradle tests
+      run: ./gradlew test
   code-style:
     runs-on: ubuntu-latest
     name: Check Code Style
