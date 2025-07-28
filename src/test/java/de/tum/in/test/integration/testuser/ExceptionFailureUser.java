@@ -1,9 +1,9 @@
 package de.tum.in.test.integration.testuser;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.Serial;
 import java.util.*;
 
 import org.assertj.core.api.SoftAssertionError;
@@ -27,6 +27,7 @@ public class ExceptionFailureUser {
 
 	static class FaultyGetCauseException extends RuntimeException {
 
+		@Serial
 		private static final long serialVersionUID = 487618816288959774L;
 
 		public FaultyGetCauseException() {
@@ -41,6 +42,7 @@ public class ExceptionFailureUser {
 
 	static class FaultyToStringException extends RuntimeException {
 
+		@Serial
 		private static final long serialVersionUID = -3215361616244777479L;
 
 		public FaultyToStringException() {
@@ -62,20 +64,16 @@ public class ExceptionFailureUser {
 
 	@PublicTest
 	void assertJMultipleFailures() {
-		assertThat("ABC").satisfiesAnyOf(s -> {
-			fail("A");
-		}, s -> {
-			fail("B");
-		});
+		assertThat("ABC").satisfiesAnyOf(s -> fail("A"), s -> fail("B"));
 	}
 
 	@PublicTest
-	void assertionFailOnly() throws Exception {
+	void assertionFailOnly() {
 		org.junit.jupiter.api.Assertions.fail("This test failed. Penguin.");
 	}
 
 	@PublicTest
-	void assertionFailed() throws Exception {
+	void assertionFailed() {
 		assertEquals(1, 2);
 	}
 
@@ -107,11 +105,7 @@ public class ExceptionFailureUser {
 
 	@PublicTest
 	void multipleFailures() {
-		assertAll(() -> {
-			fail("A");
-		}, () -> {
-			fail("B");
-		});
+		assertAll(() -> fail("A"), () -> fail("B"));
 	}
 
 	@PublicTest

@@ -1,6 +1,6 @@
 package de.tum.in.test.integration.testuser;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

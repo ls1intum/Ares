@@ -7,10 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Supplier;
 
-import org.junit.experimental.theories.internal.ParameterizedAssertionError;
 import org.slf4j.*;
-
-import junit.framework.*;
 
 import de.tum.in.test.api.internal.sanitization.ThrowableInfo.PropertyKey;
 import de.tum.in.test.api.util.LruCache;
@@ -38,11 +35,7 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 			entry("java.net.HttpRetryException", new HttpRetryExceptionCreator()), //$NON-NLS-1$
 			entry("java.time.format.DateTimeParseException", new DateTimeParseExceptionCreator()), //$NON-NLS-1$
 			entry("java.util.IllformedLocaleException", new IllformedLocaleExceptionCreator()), //$NON-NLS-1$
-			entry("java.util.MissingResourceException", new MissingResourceExceptionCreator()), //$NON-NLS-1$
-			entry("junit.framework.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //$NON-NLS-1$
-			entry("org.junit.ComparisonFailure", new ThrowableCreatorWrapper(ComparisonFailureCreator::new)), //$NON-NLS-1$
-			entry("org.junit.experimental.theories.internal.ParameterizedAssertionError", //$NON-NLS-1$
-					new ThrowableCreatorWrapper(ParameterizedAssertionErrorCreator::new)) //
+			entry("java.util.MissingResourceException", new MissingResourceExceptionCreator()) //$NON-NLS-1$
 	);
 
 	final Map<Class<? extends Throwable>, ThrowableCreator> cachedThrowableCreators = Collections
@@ -144,49 +137,6 @@ enum SafeTypeThrowableSanitizer implements SpecificThrowableSanitizer {
 			var className = info.getProperty(CLASS_NAME);
 			var key = info.getProperty(KEY);
 			return new MissingResourceException(message, className, key);
-		}
-	}
-
-	private static class ComparisonFailureCreator implements ThrowableCreator {
-
-		private static final int MAX_CONTEXT_LENGTH = 20;
-
-		private static final PropertyKey<String> EXPECTED = new PropertyKey<>(String.class, "expected"); //$NON-NLS-1$
-		private static final PropertyKey<String> ACTUAL = new PropertyKey<>(String.class, "actual"); //$NON-NLS-1$
-
-		@Override
-		public Throwable create(ThrowableInfo info) {
-			var message = info.getMessage();
-			var expected = info.getProperty(EXPECTED);
-			var actual = info.getProperty(ACTUAL);
-			String withoutMessage = new ComparisonCompactor(MAX_CONTEXT_LENGTH, expected, actual).compact(""); //$NON-NLS-1$
-			var start = SanitizationUtils.removeSuffixMatching(message, withoutMessage);
-			if (start == null)
-				message = ""; //$NON-NLS-1$
-			else
-				message = start.trim();
-			if (ComparisonFailure.class.isAssignableFrom(info.getType()))
-				return new ComparisonFailure(message, expected, actual);
-			return new org.junit.ComparisonFailure(message, expected, actual);
-		}
-	}
-
-	private static class ParameterizedAssertionErrorCreator implements ThrowableCreator {
-
-		@Override
-		public Throwable create(ThrowableInfo info) {
-			var targetException = info.getCause();
-			var message = info.getMessage();
-			var methodName = message;
-			var params = new Object[0];
-			try {
-				var parts = message.substring(0, message.length() - 1).split("\\(", 2); //$NON-NLS-1$
-				methodName = parts[0];
-				params = parts[1].split(","); //$NON-NLS-1$
-			} catch (@SuppressWarnings("unused") RuntimeException e) {
-				// ignore
-			}
-			return new ParameterizedAssertionError(targetException, methodName, params);
 		}
 	}
 }
