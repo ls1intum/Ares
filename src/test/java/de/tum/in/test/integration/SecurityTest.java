@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
 
-import org.junit.ComparisonFailure;
 import org.junit.platform.testkit.engine.Events;
 import org.opentest4j.AssertionFailedError;
 
@@ -53,7 +52,7 @@ class SecurityTest {
 
 	@TestTest
 	void test_longOutputJUnit4() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, ComparisonFailure.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(longOutputJUnit4, AssertionFailedError.class));
 	}
 
 	@TestTest

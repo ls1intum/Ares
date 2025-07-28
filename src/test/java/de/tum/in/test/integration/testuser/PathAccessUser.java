@@ -1,7 +1,5 @@
 package de.tum.in.test.integration.testuser;
 
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +12,8 @@ import de.tum.in.test.api.MirrorOutput.MirrorOutputPolicy;
 import de.tum.in.test.api.jupiter.PublicTest;
 import de.tum.in.test.api.localization.UseLocale;
 import de.tum.in.test.integration.testuser.subject.PathAccessPenguin;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 @UseLocale("en")
 @MirrorOutput(MirrorOutputPolicy.DISABLED)
