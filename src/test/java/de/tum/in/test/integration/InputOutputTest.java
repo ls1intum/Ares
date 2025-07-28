@@ -6,10 +6,10 @@ import java.lang.annotation.AnnotationFormatError;
 
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.platform.testkit.engine.Events;
+import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.integration.testuser.InputOutputUser;
 import de.tum.in.test.testutilities.*;
-import org.opentest4j.AssertionFailedError;
 
 @UserBased(InputOutputUser.class)
 class InputOutputTest {
