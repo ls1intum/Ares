@@ -8,6 +8,8 @@ import java.util.function.*;
 
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.assertj.core.error.AssertJMultipleFailuresError;
+import org.assertj.core.util.Throwables;
 
 /**
  * Contains information about a Throwable without the Throwable instance itself.
@@ -172,11 +174,41 @@ public final class ThrowableInfo {
 	}
 
 	public static ThrowableInfo getEssentialInfosSafeFrom(Throwable source) {
-		String message = invoke(source::getMessage);
+		String message = (source instanceof AssertJMultipleFailuresError)
+				? saveAssertJMultipleFailuresMessage((AssertJMultipleFailuresError) source)
+				: invoke(source::getMessage);
 		Throwable cause = invoke(source::getCause);
 		StackTraceElement[] stackTrace = invoke(source::getStackTrace);
 		Throwable[] suppressed = source.getSuppressed(); // OK: final method
 		return ThrowableInfo.of(source.getClass(), message, cause, stackTrace, suppressed, Map.of());
+	}
+
+	/**
+	 * Custom reconstruction of {@link AssertJMultipleFailuresError#getMessage()}.
+	 * <p>
+	 * AssertJ's own getMessage() implementation introspects nested failures and can
+	 * trigger reflection, which breaks when using {@link de.tum.in.test.api.internal.BlacklistedInvoker}.
+	 * To avoid that, we extract the failures, their messages,
+	 * and the first user-relevant stack frame ourselves without reflections.
+	 */
+	private static String saveAssertJMultipleFailuresMessage(AssertJMultipleFailuresError e) {
+		return invoke(() -> {
+			List<Throwable> failures = e.getFailures();
+			StringBuilder sb = new StringBuilder();
+			sb.append("Multiple Failures (").append(failures.size()).append(" failures)");
+			for (int i = 0; i < failures.size(); i++) {
+				Throwable failure = failures.get(i);
+				sb.append("\n-- failure ").append(i + 1).append(" --");
+				sb.append(failure.getMessage());
+
+				StackTraceElement[] stackTrace = failure.getStackTrace();
+				StackTraceElement firstUserFrame = Throwables.getFirstStackTraceElementFromTest(stackTrace);
+				if (firstUserFrame != null) {
+					sb.append("\n").append(formatStackTraceElement(firstUserFrame));
+				}
+			}
+			return sb.toString();
+		});
 	}
 
 	public static class PropertyKey<T> {

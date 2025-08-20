@@ -149,4 +149,11 @@ final class ThrowableUtils {
 			return null;
 		}).toArray();
 	}
+
+	static String formatStackTraceElement(StackTraceElement ste) {
+		String className = ste.getClassName();
+		String simpleName = className.substring(className.lastIndexOf('.') + 1);
+		return "at " + simpleName + "." + ste.getMethodName() +
+				"(" + ste.getFileName() + ":" + ste.getLineNumber() + ")";
+	}
 }
