@@ -187,9 +187,10 @@ public final class ThrowableInfo {
 	 * Custom reconstruction of {@link AssertJMultipleFailuresError#getMessage()}.
 	 * <p>
 	 * AssertJ's own getMessage() implementation introspects nested failures and can
-	 * trigger reflection, which breaks when using {@link de.tum.in.test.api.internal.BlacklistedInvoker}.
-	 * To avoid that, we extract the failures, their messages,
-	 * and the first user-relevant stack frame ourselves without reflections.
+	 * trigger reflection, which breaks when using
+	 * {@link de.tum.in.test.api.internal.BlacklistedInvoker}. To avoid that, we
+	 * extract the failures, their messages, and the first user-relevant stack frame
+	 * ourselves without reflections.
 	 */
 	private static String saveAssertJMultipleFailuresMessage(AssertJMultipleFailuresError e) {
 		return invoke(() -> {
