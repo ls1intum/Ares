@@ -26,7 +26,6 @@ final class ThrowableSets {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ThrowableSets.class);
 
-	private static final String JUNIT4_CHECK_CLASS = "junit.framework.AssertionFailedError"; //$NON-NLS-1$
 	private static final String JUNIT5_CHECK_CLASS = "org.junit.platform.commons.JUnitException"; //$NON-NLS-1$
 	private static final String JQWIK_CHECK_CLASS = "net.jqwik.api.JqwikException"; //$NON-NLS-1$
 	private static final String ASSERTJ_CHECK_CLASS = "org.assertj.core.api.Assertions"; //$NON-NLS-1$
@@ -35,8 +34,6 @@ final class ThrowableSets {
 	static {
 		HashSet<Class<? extends Throwable>> safeTypesJoin = new HashSet<>(Java.SAFE_TYPES);
 		safeTypesJoin.addAll(Own.SAFE_TYPES);
-		if (classCanBeFound(JUNIT4_CHECK_CLASS))
-			safeTypesJoin.addAll(JUnit4.SAFE_TYPES);
 		if (classCanBeFound(JUNIT5_CHECK_CLASS))
 			safeTypesJoin.addAll(JUnit5.SAFE_TYPES);
 		if (classCanBeFound(JQWIK_CHECK_CLASS))
@@ -204,25 +201,6 @@ final class ThrowableSets {
 				java.util.prefs.InvalidPreferencesFormatException.class, java.util.regex.PatternSyntaxException.class,
 				java.util.zip.DataFormatException.class, java.util.zip.ZipError.class,
 				java.util.zip.ZipException.class);
-	}
-
-	static final class JUnit4 {
-
-		private JUnit4() {
-		}
-
-		static final Set<Class<? extends Throwable>> SAFE_TYPES = Set.of(junit.framework.AssertionFailedError.class,
-				junit.framework.ComparisonFailure.class, org.junit.ComparisonFailure.class, org.junit.Test.None.class,
-				org.junit.TestCouldNotBeSkippedException.class,
-				org.junit.experimental.max.CouldNotReadCoreException.class,
-				org.junit.experimental.theories.PotentialAssignment.CouldNotGenerateValueException.class,
-				org.junit.experimental.theories.internal.ParameterizedAssertionError.class,
-				org.junit.internal.ArrayComparisonFailure.class,
-				org.junit.runner.FilterFactory.FilterNotCreatedException.class,
-				org.junit.runner.manipulation.InvalidOrderingException.class,
-				org.junit.runner.manipulation.NoTestsRemainException.class,
-				org.junit.runner.notification.StoppedByUserException.class,
-				org.junit.runners.model.TestTimedOutException.class);
 	}
 
 	static final class JUnit5 {

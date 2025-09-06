@@ -18,19 +18,19 @@ class ExceptionFailureTest {
 	@UserTestResults
 	private static Events tests;
 
-	private final String assertJMultipleFailures = "assertJMultipleFailures";
-	private final String assertionFailOnly = "assertionFailOnly";
-	private final String assertionFailed = "assertionFailed";
-	private final String customException = "customException";
-	private final String exceptionInInitializer = "exceptionInInitializer";
-	private final String faultyGetCauseException = "faultyGetCauseException";
-	private final String faultyToStringException = "faultyToStringException";
-	private final String multipleAssertions = "multipleAssertions";
-	private final String multipleFailures = "multipleFailures";
-	private final String nullPointer = "nullPointer";
-	private final String softAssertion = "softAssertion";
-	private final String throwExceptionInInitializerError = "throwExceptionInInitializerError";
-	private final String throwNullPointerException = "throwNullPointerException";
+	private static final String assertJMultipleFailures = "assertJMultipleFailures";
+	private static final String assertionFailOnly = "assertionFailOnly";
+	private static final String assertionFailed = "assertionFailed";
+	private static final String customException = "customException";
+	private static final String exceptionInInitializer = "exceptionInInitializer";
+	private static final String faultyGetCauseException = "faultyGetCauseException";
+	private static final String faultyToStringException = "faultyToStringException";
+	private static final String multipleAssertions = "multipleAssertions";
+	private static final String multipleFailures = "multipleFailures";
+	private static final String nullPointer = "nullPointer";
+	private static final String softAssertion = "softAssertion";
+	private static final String throwExceptionInInitializerError = "throwExceptionInInitializerError";
+	private static final String throwNullPointerException = "throwNullPointerException";
 
 	@TestTest
 	void test_assertJMultipleFailures() {
@@ -120,8 +120,8 @@ class ExceptionFailureTest {
 	void test_multipleFailures() {
 		tests.assertThatEvents().haveExactly(1, testFailedWith(multipleFailures, MultipleFailuresError.class, //
 				"Multiple Failures (2 failures)\n" + //
-						"\tjava.lang.AssertionError: A\n" + //
-						"\tjava.lang.AssertionError: B", //
+						"\torg.opentest4j.AssertionFailedError: A\n" + //
+						"\torg.opentest4j.AssertionFailedError: B", //
 				new Condition<>(t -> t.getSuppressed().length == 2, "two suppressed exceptions"),
 				Option.MESSAGE_NORMALIZE_NEWLINE));
 	}

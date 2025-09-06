@@ -1,6 +1,5 @@
 package de.tum.in.test.integration.testuser;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;

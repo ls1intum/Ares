@@ -4,9 +4,9 @@ import static de.tum.in.test.testutilities.CustomConditions.*;
 
 import java.lang.annotation.AnnotationFormatError;
 
-import org.junit.ComparisonFailure;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.platform.testkit.engine.Events;
+import org.opentest4j.AssertionFailedError;
 
 import de.tum.in.test.integration.testuser.InputOutputUser;
 import de.tum.in.test.testutilities.*;
@@ -58,7 +58,7 @@ class InputOutputTest {
 
 	@TestTest
 	void test_testPenguin2() {
-		tests.assertThatEvents().haveExactly(1, testFailedWith(testPenguin2, ComparisonFailure.class));
+		tests.assertThatEvents().haveExactly(1, testFailedWith(testPenguin2, AssertionFailedError.class));
 	}
 
 	@TestTest

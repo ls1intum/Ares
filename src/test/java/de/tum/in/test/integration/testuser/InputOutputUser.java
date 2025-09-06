@@ -2,8 +2,8 @@ package de.tum.in.test.integration.testuser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -231,7 +231,7 @@ public class InputOutputUser {
 
 		var out = tester.out().getLines();
 
-		assertEquals("Keine Fehlerausgabe erwartet", 3, out.size());
+		assertEquals(3, out.size(), "Keine Fehlerausgabe erwartet");
 		assertEquals("Zahl eingeben:", out.get(0).text());
 		assertEquals("Ausgabe:", out.get(1).text());
 		assertEquals("25", out.get(2).text());
@@ -241,7 +241,7 @@ public class InputOutputUser {
 	void testSquareWrong(IOTester tester) {
 		InputOutputPenguin.calculateSquare();
 
-		assertEquals("Keine Fehlerausgabe erwartet", 0, tester.err().getLines().size());
+		assertEquals(0, tester.err().getLines().size(), "Keine Fehlerausgabe erwartet");
 	}
 
 	@Test
