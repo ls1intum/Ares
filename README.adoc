@@ -63,8 +63,8 @@ environment of a Maven project, include
 ----
 <dependency>
     <groupId>de.tum.in.ase</groupId>
-    <artifactId>ls1intum_Ares</artifactId>
-    <version>1.14.0</version>
+    <artifactId>artemis-java-test-sandbox</artifactId>
+    <version>1.15.0</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -74,7 +74,7 @@ in the `dependencies` section.
 For Gradle projects, include
 [source,groovy]
 ----
-testImplementation 'de.tum.in.ase:ls1intum_Ares:1.14.0'
+testImplementation 'de.tum.in.ase:artemis-java-test-sandbox:1.15.0'
 ----
 
 in the `dependencies` section.
@@ -107,8 +107,8 @@ looks like this:
 <dependencies>
     <dependency>
         <groupId>de.tum.in.ase</groupId>
-        <artifactId>ls1intum_Ares</artifactId>
-        <version>1.14.0</version>
+        <artifactId>artemis-java-test-sandbox</artifactId>
+        <version>1.15.0</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
