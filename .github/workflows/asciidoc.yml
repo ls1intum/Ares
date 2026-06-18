@@ -16,7 +16,7 @@ jobs:
     name: Build AsciiDoc documentation
     steps:
       - name: Checkout into ./repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           path: repo
       - name: Extract revision info
