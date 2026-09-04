@@ -46,7 +46,7 @@
 		<junit-platform-version>1.13.4</junit-platform-version>
 		<jqwik-version>1.9.3</jqwik-version>
 		<spotless.version>2.46.1</spotless.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sour3.10.2</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- if JaCoCo is not executed -->
 		<argLine/>
